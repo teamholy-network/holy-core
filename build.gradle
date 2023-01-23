@@ -1,0 +1,107 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id('com.github.johnrengelman.shadow') version('7.1.2')
+    id('net.kyori.blossom') version('1.2.0')
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'net.kyori.blossom'
+    apply plugin: 'maven-publish'
+
+    group("$projectGroup")
+    version("$projectVersion")
+
+    repositories {
+        mavenCentral()
+        maven {
+            name('koboo-repo')
+            url('https://reposilite.koboo.eu/releases')
+        }
+        maven {
+            name('jitpack-repo')
+            url('https://jitpack.io/')
+        }
+    }
+
+    dependencies {
+        // Version-specific spigot dependency
+        compileOnly("org.spigotmc:spigot:$spigotVersion")
+        compileOnly("org.spigotmc:spigot-api:$spigotVersion")
+
+        // Eliminate some boilerplate
+        compileOnly("org.projectlombok:lombok:$lombokVersion")
+        annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+    }
+
+
+    compileJava.options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    // Move all plugins to one "output/" directory in the project directory
+    task movePlugin(type: Copy) {
+        var outputDir = rootProject.projectDir.getAbsolutePath() + "/output/"
+        var targetName = project.name + "-$projectVersion-all.jar"
+        // Delete previous build jar
+        delete(outputDir + targetName)
+
+        // Copy current build jar
+        from('build/libs/')
+        into(outputDir)
+
+        include(targetName)
+    }
+    shadowJar.finalizedBy(movePlugin)
+
+    // Replace tokens in plugin.yml files
+    processResources {
+        filesMatching('**/plugin.yml') {
+            filter(ReplaceTokens, tokens: [
+                    'PROJECT_VERSION'   : "$projectVersion".toString(),
+                    'API_PLUGIN_VERSION': "$apiPluginVersion".toString()
+            ])
+        }
+    }
+
+    // Replace token in "com.modify.core.utils.constants.Project"
+    blossom {
+        replaceToken('PROJECT_TIME_FORMAT', new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()))
+        replaceToken('PROJECT_TIME_MILLIS', String.valueOf(System.currentTimeMillis()))
+        replaceToken('PROJECT_COMMIT', 'git rev-parse --verify --short HEAD'.execute().text.trim())
+        replaceToken('PROJECT_COMMIT_COUNT', 'git rev-list --count HEAD'.execute().text.trim())
+        replaceToken('PROJECT_BRANCH', 'git rev-parse --abbrev-ref HEAD'.execute().text.trim())
+        replaceToken('PROJECT_SEC_OF_DAY', Calendar.getInstance().getTime().toLocalTime().toSecondOfDay())
+        replaceToken('PROJECT_JDK', System.getProperty("java.version"))
+        replaceToken('PROJECT_OS', "${System.properties['os.name']}/${System.properties['os.arch']}")
+        replaceToken('PROJECT_GRADLE', "$gradle.gradleVersion")
+        replaceToken('PROJECT_VERSION', "$projectVersion")
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url('https://reposilite.koboo.eu/releases')
+                credentials {
+                    username(System.getenv('REPO_USER'))
+                    password(System.getenv('REPO_TOKEN'))
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+}
