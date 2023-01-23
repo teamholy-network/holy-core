@@ -1,5 +1,10 @@
 dependencies {
+    compileOnly("org.spigotmc:spigot:$spigotVersion")
+    compileOnly("org.spigotmc:spigot-api:$spigotVersion")
+
     implementation("eu.koboo:en2do:$en2doVersion")
     implementation("org.redisson:redisson:$redissonVersion")
     implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+
+    implementation(project(':holy-core-api'))
 }

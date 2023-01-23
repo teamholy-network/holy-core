@@ -1,4 +1,37 @@
 package de.teamholy.core.bukkit;
 
-public class BukkitCore {
+import de.teamholy.core.api.CoreAPI;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import org.bukkit.plugin.java.JavaPlugin;
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class BukkitCore extends JavaPlugin {
+
+    @Getter
+    private static BukkitCore instance;
+
+    @Getter
+    CoreAPI coreAPI;
+
+    public BukkitCore() {
+        instance = this;
+    }
+
+    @Override
+    public void onEnable() {
+        coreAPI = new CoreAPI();
+        super.onEnable();
+    }
+
+    @Override
+    public void onDisable() {
+        coreAPI.onDisable();
+        super.onDisable();
+    }
+
+    public static CoreAPI getAPI() {
+        return instance.getCoreAPI();
+    }
 }

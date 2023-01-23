@@ -2,4 +2,5 @@ dependencies {
     compileOnly("eu.koboo:en2do:$en2doVersion")
     compileOnly("org.redisson:redisson:$redissonVersion")
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    compileOnly("net.md-5:bungeecord-chat:$bungeecordVersion")
 }

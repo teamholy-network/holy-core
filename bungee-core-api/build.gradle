@@ -1,5 +1,9 @@
 dependencies {
+    compileOnly("net.md-5:bungeecord-api:$bungeecordVersion")
+
     implementation("eu.koboo:en2do:$en2doVersion")
     implementation("org.redisson:redisson:$redissonVersion")
     implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    
+    implementation(project(':holy-core-api'))
 }
