@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Util class for time-based operations
  */
+@SuppressWarnings("unused")
 public class TimeUtil {
 
     /**

@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class Pagifier<T> {
 

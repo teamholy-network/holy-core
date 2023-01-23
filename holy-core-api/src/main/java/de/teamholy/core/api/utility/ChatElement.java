@@ -3,6 +3,7 @@ package de.teamholy.core.api.utility;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 
+@SuppressWarnings("unused")
 public class ChatElement {
 
     public static ChatElement empty() {

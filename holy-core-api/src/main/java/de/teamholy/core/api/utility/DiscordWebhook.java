@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class DiscordWebhook {
 
     private final String url;
