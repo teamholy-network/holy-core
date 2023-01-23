@@ -23,6 +23,14 @@ subprojects {
             url('https://reposilite.koboo.eu/releases')
         }
         maven {
+            name('spigot-repo')
+            url('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
+        }
+        maven {
+            name('bungeecord-repo')
+            url('https://oss.sonatype.org/content/repositories/snapshots')
+        }
+        maven {
             name('jitpack-repo')
             url('https://jitpack.io/')
         }
@@ -68,8 +76,10 @@ subprojects {
     processResources {
         filesMatching('**/plugin.yml') {
             filter(ReplaceTokens, tokens: [
+                    'PROJECT_NAME'   : project.name.toString(),
                     'PROJECT_VERSION'   : "$projectVersion".toString(),
-                    'API_PLUGIN_VERSION': "$apiPluginVersion".toString()
+                    'PROJECT_DESCRIPTION'   : "The Core-Plugin of the TeamHoly.de server".toString(),
+                    'PROJECT_AUTHOR'   : "[Koboo, Yassino]".toString(),
             ])
         }
     }

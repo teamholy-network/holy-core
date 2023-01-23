@@ -1,0 +1,7 @@
+name: @PROJECT_NAME@
+version: @PROJECT_VERSION@
+description: @PROJECT_DESCRIPTION@
+authors: @PROJECT_AUTHOR@
+main: eu.teamholy.core.bukkit.BukkitCore
+load: STARTUP
+commands:

@@ -1,0 +1,5 @@
+name: @PROJECT_NAME@
+main: de.teamholy.core.bungee.BungeeCore
+version: @PROJECT_VERSION@
+author: @PROJECT_AUTHOR@
+description: @PROJECT_DESCRIPTION@
