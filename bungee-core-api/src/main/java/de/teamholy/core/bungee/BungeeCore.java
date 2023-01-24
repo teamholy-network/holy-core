@@ -22,6 +22,7 @@ public class BungeeCore extends Plugin {
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
+        coreAPI.onEnable();
         super.onEnable();
     }
 

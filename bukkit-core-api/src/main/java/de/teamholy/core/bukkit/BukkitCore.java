@@ -22,6 +22,7 @@ public class BukkitCore extends JavaPlugin {
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
+        coreAPI.onEnable();
         super.onEnable();
     }
 
