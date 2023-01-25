@@ -1,6 +1,8 @@
 package de.teamholy.core.api;
 
 import de.teamholy.core.api.entities.player.PlayerService;
+import de.teamholy.core.api.entities.punish.PunishService;
+import de.teamholy.core.api.entities.stats.StatsService;
 import de.teamholy.core.api.manager.RedissonManager;
 import eu.koboo.en2do.MongoManager;
 import lombok.AccessLevel;
@@ -19,6 +21,8 @@ public class CoreAPI {
     ExecutorService executor;
 
     PlayerService playerService;
+    PunishService punishService;
+    StatsService statsService;
 
     public CoreAPI() {
         this.mongoManager = new MongoManager();
@@ -26,6 +30,8 @@ public class CoreAPI {
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
         this.playerService = new PlayerService(this);
+        this.punishService = new PunishService(this);
+        this.statsService = new StatsService(this);
     }
 
     public void onEnable() {
