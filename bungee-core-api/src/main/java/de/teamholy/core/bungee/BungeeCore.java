@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee;
 
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.bungee.listener.LoginListener;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -23,13 +24,14 @@ public class BungeeCore extends Plugin {
     public void onEnable() {
         coreAPI = new CoreAPI();
         coreAPI.onEnable();
-        super.onEnable();
+
+
+        new LoginListener();
     }
 
     @Override
     public void onDisable() {
         coreAPI.onDisable();
-        super.onDisable();
     }
 
     public static CoreAPI getAPI() {

@@ -23,13 +23,13 @@ public class BukkitCore extends JavaPlugin {
     public void onEnable() {
         coreAPI = new CoreAPI();
         coreAPI.onEnable();
-        super.onEnable();
+
+
     }
 
     @Override
     public void onDisable() {
         coreAPI.onDisable();
-        super.onDisable();
     }
 
     public static CoreAPI getAPI() {

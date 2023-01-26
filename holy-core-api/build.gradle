@@ -3,4 +3,6 @@ dependencies {
     compileOnly("org.redisson:redisson:$redissonVersion")
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
     compileOnly("net.md-5:bungeecord-chat:$bungeecordVersion")
+    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
+    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:3.4.0-RELEASE")
 }

@@ -7,6 +7,7 @@ import org.redisson.api.RMapCache;
 import org.redisson.api.map.event.EntryExpiredListener;
 
 import java.time.Duration;
+import java.util.function.Consumer;
 
 @Getter
 public class AbstractService<E, K, R extends Repository<E, K>> {
@@ -59,6 +60,11 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
             return handleRetriever(retriever);
         }
         return cacheEntity;
+    }
+
+
+    public void getEntityAsync(K key, EntityRetriever<E> retriever, Consumer<E> consumer) {
+        coreAPI.getExecutor().execute(() -> consumer.accept(getEntity(key,retriever)));
     }
 
     public void saveEntity(E entity, boolean toDatabase) {

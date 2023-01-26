@@ -2,19 +2,23 @@ package de.teamholy.core.bukkit.listener;
 
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerService;
+import de.teamholy.core.api.entities.stats.StatsProfile;
 import de.teamholy.core.bukkit.BukkitCore;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class JoinListener {
+public class JoinListener implements Listener {
 
     BukkitCore bukkitCore;
+
+
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -24,6 +28,7 @@ public class JoinListener {
         // Get entity from service, findFirstById is called if entity can't be found in redis by key.
         PlayerProfile playerProfile = playerService.getEntity(player.getUniqueId(),
                 () -> playerService.getRepository().findFirstById(player.getUniqueId()));
+
 
         // Create new player profile
         if(playerProfile == null) {
@@ -44,8 +49,5 @@ public class JoinListener {
 
         // Save entity through service
         playerService.saveEntity(playerProfile, true);
-
-        // Save directly to database
-        playerService.getRepository().save(playerProfile);
     }
 }
