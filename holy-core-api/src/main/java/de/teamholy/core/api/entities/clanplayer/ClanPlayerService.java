@@ -9,6 +9,6 @@ import java.util.UUID;
 public class ClanPlayerService extends AbstractService<ClanPlayerProfile, UUID, ClanPlayerRepository> {
 
     public ClanPlayerService(CoreAPI coreAPI) {
-        super(coreAPI, ClanPlayerRepository.class, Duration.ofMinutes(15), false);
+        super(coreAPI, ClanPlayerRepository.class, false);
     }
 }

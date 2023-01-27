@@ -11,6 +11,6 @@ import java.util.UUID;
 public class StatsService extends AbstractService<StatsProfile, UUID, StatsRepository> {
 
     public StatsService(CoreAPI coreAPI) {
-        super(coreAPI, StatsRepository.class, Duration.ofMinutes(15), false);
+        super(coreAPI, StatsRepository.class, false);
     }
 }

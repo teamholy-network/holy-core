@@ -9,6 +9,6 @@ import java.util.UUID;
 public class SkinService extends AbstractService<SkinProfile, UUID, SkinRepository> {
 
     public SkinService(CoreAPI coreAPI) {
-        super(coreAPI, SkinRepository.class, Duration.ofMinutes(15), false);
+        super(coreAPI, SkinRepository.class,  false);
     }
 }

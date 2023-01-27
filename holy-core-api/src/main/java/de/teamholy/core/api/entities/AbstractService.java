@@ -7,6 +7,7 @@ import org.redisson.api.RMapCache;
 import org.redisson.api.map.event.EntryExpiredListener;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 @Getter
@@ -16,11 +17,10 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
     R repository;
     RMapCache<K, E> redisCache;
 
-    public AbstractService(CoreAPI coreAPI, Class<R> repoClass, Duration duration, boolean saveOnExpiration) {
+    public AbstractService(CoreAPI coreAPI, Class<R> repoClass,, boolean saveOnExpiration) {
         this.coreAPI = coreAPI;
         this.repository = coreAPI.getMongoManager().create(repoClass);
         this.redisCache = coreAPI.getRedissonManager().getRedissonClient().getMapCache(repository.getCollectionName());
-        this.redisCache.expire(duration);
 
         if(saveOnExpiration) {
             redisCache.addListener((EntryExpiredListener<K, E>) event -> {
@@ -67,8 +67,12 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
         coreAPI.getExecutor().execute(() -> consumer.accept(getEntity(key,retriever)));
     }
 
-    public void saveEntity(E entity, boolean toDatabase) {
-        redisCache.fastPut(getId(entity), entity);
+    public void saveEntity(E entity, boolean forceCache, boolean toDatabase) {
+        if (forceCache)
+            redisCache.fastPut(getId(entity), entity);
+        else
+            redisCache.fastPut(getId(entity),entity,15, TimeUnit.MINUTES);
+
         if(toDatabase) {
             repository.save(entity);
         }

@@ -9,6 +9,6 @@ import java.util.UUID;
 public class PunishHistoryService extends AbstractService<PunishHistoryProfile, UUID, PunishHistoryRepository> {
 
     public PunishHistoryService(CoreAPI coreAPI) {
-        super(coreAPI, PunishHistoryRepository.class, Duration.ofMinutes(15), false);
+        super(coreAPI, PunishHistoryRepository.class,  false);
     }
 }
