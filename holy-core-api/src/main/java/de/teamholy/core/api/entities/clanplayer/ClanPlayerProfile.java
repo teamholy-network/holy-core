@@ -1,5 +1,6 @@
-package de.teamholy.core.api.entities.skin;
+package de.teamholy.core.api.entities.clanplayer;
 
+import de.teamholy.core.api.utility.ClanRank;
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,12 +12,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class SkinProfile {
+public class ClanPlayerProfile {
 
     @Id
     UUID playerId;
 
-    String value;
-    String signature;
-
+    UUID clanId;
+    ClanRank clanRank;
 }

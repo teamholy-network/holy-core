@@ -5,6 +5,7 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.player.PlayerProfile;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -62,13 +63,10 @@ public class CloudManager {
             String uuid;
             String string;
             if (nameOrUuid.contains("-")) {
-                coreAPI.getPlayerService().getEntity(nameOrUuid,)
-                Document document = holyAPI.getMongoManager().find("player_profile_collection", Filters.eq("playerUuid", nameOrUuid));
-                string = document.getString("playerName");
+                string = coreAPI.getPlayerService().getEntity(UUID.fromString(nameOrUuid),() -> coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid))).getPlayerName();
                 uuid = nameOrUuid;
             } else {
-                Document document = holyAPI.getMongoManager().find("player_profile_collection", MongoFilters.eqIgn("playerName", nameOrUuid));
-                uuid = document.getString("playerUuid");
+                uuid = String.valueOf(coreAPI.getPlayerService().getEntity(UUID.fromString(nameOrUuid),() -> coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid))).getPlayerId());
                 string = nameOrUuid;
             }
             String[] strings = new String[]{string, uuid};

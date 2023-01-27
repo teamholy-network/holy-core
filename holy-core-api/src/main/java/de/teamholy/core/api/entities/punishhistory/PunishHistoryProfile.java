@@ -1,9 +1,11 @@
-package de.teamholy.core.api.entities.skin;
+package de.teamholy.core.api.entities.punishhistory;
 
+import de.teamholy.core.api.entities.punish.PunishProfile;
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -11,12 +13,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class SkinProfile {
+public class PunishHistoryProfile {
 
     @Id
     UUID playerId;
 
-    String value;
-    String signature;
-
+    Map<String, PunishProfile> punishProfileMap;
 }
