@@ -17,7 +17,7 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
     R repository;
     RMapCache<K, E> redisCache;
 
-    public AbstractService(CoreAPI coreAPI, Class<R> repoClass,, boolean saveOnExpiration) {
+    public AbstractService(CoreAPI coreAPI, Class<R> repoClass, boolean saveOnExpiration) {
         this.coreAPI = coreAPI;
         this.repository = coreAPI.getMongoManager().create(repoClass);
         this.redisCache = coreAPI.getRedissonManager().getRedissonClient().getMapCache(repository.getCollectionName());
@@ -38,7 +38,7 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
         return uniqueId;
     }
 
-    private E handleRetriever(EntityRetriever<E> retriever) {
+    private E handleRetriever(EntityRetriever<E> retriever, boolean forceCache) {
         if(retriever == null) {
             return null;
         }
@@ -47,21 +47,21 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
             return null;
         }
         K uniqueId = getId(entity);
-        redisCache.fastPut(uniqueId, entity);
+        if (forceCache) redisCache.fastPut(uniqueId, entity);
+        else redisCache.fastPut(uniqueId, entity,15, TimeUnit.MINUTES);
         return entity;
     }
 
     public E getEntity(K key, EntityRetriever<E> retriever) {
         if(key == null) {
-            return handleRetriever(retriever);
+            return handleRetriever(retriever, false);
         }
         E cacheEntity = redisCache.get(key);
         if(cacheEntity == null) {
-            return handleRetriever(retriever);
+            return handleRetriever(retriever, false);
         }
         return cacheEntity;
     }
-
 
     public void getEntityAsync(K key, EntityRetriever<E> retriever, Consumer<E> consumer) {
         coreAPI.getExecutor().execute(() -> consumer.accept(getEntity(key,retriever)));

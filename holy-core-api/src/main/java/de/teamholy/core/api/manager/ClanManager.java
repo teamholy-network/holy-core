@@ -5,12 +5,13 @@ import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clan.ClanService;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-@Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ClanManager {
 
@@ -26,23 +27,9 @@ public class ClanManager {
     public boolean loadAndForce(UUID profileId, UUID clanId) {
         Clan clan = clanService.getEntity(clanId,
                 () -> coreAPI.getClanService().getRepository().findFirstById(clanId));
-        if (clan != null)
-        ClanImpl clan = clanMapCache.get(clanId);
         if (clan != null) {
-            if (clan.getClanMember().contains(profileId)) {
-
-                clanMapCache.put(clan.getClanId(),clan);
-
-                return true;
-            }
-        }
-        Document document = manager.find(COLL, Filters.eq("clanId", clanId.toString()));
-        if (document != null && !document.isEmpty()) {
-            clan = new ClanImpl();
-            readDocument(clan, document);
-            if (clan.getClanMember().contains(profileId)) {
-
-                clanMapCache.put(clan.getClanId(),clan);
+            if (clan.getMembers().contains(profileId)) {
+                clanService.saveEntity(clan,true,false);
                 return true;
             }
         }
@@ -50,114 +37,89 @@ public class ClanManager {
     }
 
     public void unforce(UUID clanId) {
-        clanMapCache.remove(clanId);
+        clanService.getRedisCache().updateEntryExpiration(clanId,15,TimeUnit.MINUTES,0,TimeUnit.SECONDS);
     }
 
-    @Override
     public boolean existsClanName(String name) {
 
-
-        for (ClanImpl clan : clanMapCache.values()) {
-            if (clan != null && clan.getName().equalsIgnoreCase(name))
+        for (Clan clan : clanService.getRedisCache().values()) {
+            if (clan != null && clan.getName().equalsIgnoreCase(name)) {
                 return true;
+            }
         }
 
 
-        Document document = manager.find(COLL, MongoFilters.eqIgn("name", name));
-        if (document != null && !document.isEmpty()) {
-            ClanImpl clan = new ClanImpl();
-            readDocument(clan, document);
-            clanMapCache.put(clan.getClanId(),clan,10,TimeUnit.MINUTES);
-
+        Clan clan = clanService.getRepository().findFirstByName(name);
+        if (clan != null) {
+            clanService.getRedisCache().fastPut(clan.getClanId(),clan,15, TimeUnit.MINUTES);
             return true;
         }
         return false;
     }
 
-    @Override
     public boolean existsClanTag(String tag) {
 
-        for (ClanImpl clan : clanMapCache.values()) {
-            if (clan != null && clan.getTag().equalsIgnoreCase(tag))
+        for (Clan clan : clanService.getRedisCache().values()) {
+            if (clan != null && clan.getTag().equalsIgnoreCase(tag)) {
                 return true;
+            }
         }
 
-        Document document = manager.find(COLL, MongoFilters.eqIgn("tag", tag));
-        if (document != null && !document.isEmpty()) {
-            ClanImpl clan = new ClanImpl();
-            readDocument(clan, document);
-            clanMapCache.put(clan.getClanId(),clan,10,TimeUnit.MINUTES);
-
+        Clan clan = clanService.getRepository().findFirstByTag(tag);
+        if (clan != null) {
+            clanService.getRedisCache().fastPut(clan.getClanId(),clan,15, TimeUnit.MINUTES);
             return true;
         }
         return false;
     }
 
-    @Override
     public Clan createClan(String name, String tag, UUID leader) {
         UUID clanId = UUID.randomUUID();
         List<UUID> members = new ArrayList<>();
         members.add(leader);
         long creationDate = System.currentTimeMillis();
-        List<String> announcements = new ArrayList<>();
         List<UUID> requestsTo = new ArrayList<>();
-        ClanImpl clan = new ClanImpl();
-        clan.setClanId(clanId)
-                .setTag(tag)
-                .setName(name)
-                .setColor("§e");
-        clan.setCreationDate(creationDate)
-                .setMembers(members)
-                .setRequestsTo(requestsTo);
-        clanMapCache.put(clan.getClanId(),clan,10,TimeUnit.MINUTES);
 
-        manager.update(COLL,Filters.eq("clanId", clanId), toDocument(clan));
+        Clan clan = new Clan();
+        clan.setClanId(clanId);
+        clan.setTag(tag);
+        clan.setName(name);
+        clan.setColor("§e");
+        clan.setCreationDate(creationDate);
+        clan.setMembers(members);
+        clan.setRequestsTo(requestsTo);
+
+        clanService.saveEntity(clan,false,true);
+
         return clan;
     }
 
-    @Override
     public Clan getClanByTag(String tag) {
-        for (ClanImpl clan : clanMapCache.values()) {
-            if (clan != null && clan.getTag().equalsIgnoreCase(tag))
+
+        for (Clan clan : clanService.getRedisCache().values()) {
+            if (clan != null && clan.getTag().equalsIgnoreCase(tag)) {
                 return clan;
+            }
         }
-        // Search for clans in MongoDB
-        Document document = manager.find(COLL, MongoFilters.eqIgn("tag", tag));
-        if (document != null && !document.isEmpty()) {
-            ClanImpl clan = new ClanImpl();
-            readDocument(clan, document);
-            clanMapCache.put(clan.getClanId(),clan,10,TimeUnit.MINUTES);
-            return clan;
-        }
-        return null;
-    }
-    @Override
-    public Clan getClanById(UUID clanId) {
-        ClanImpl clan = clanMapCache.get(clanId);
+
+        Clan clan = clanService.getRepository().findFirstByTag(tag);
         if (clan != null) {
-            return clan;
-        }
-        Document document = manager.find(COLL, Filters.eq("clanId", clanId.toString()));
-        if (document != null && !document.isEmpty()) {
-            clan = new ClanImpl();
-            readDocument(clan, document);
-            clanMapCache.put(clan.getClanId(),clan,10,TimeUnit.MINUTES);
+            clanService.getRedisCache().fastPut(clan.getClanId(),clan,15, TimeUnit.MINUTES);
             return clan;
         }
         return null;
     }
 
-    @Override
-    public void updateClan(Clan clan) {
-        clanMapCache.put(clan.getClanId(), (ClanImpl) clan,10,TimeUnit.MINUTES);
-
-        manager.update(COLL, Filters.eq("clanId", clan.getClanId().toString()), toDocument(clan));
+    public Clan getClanById(UUID clanId) {
+        return clanService.getEntity(clanId,() -> clanService.getRepository().findFirstById(clanId));
     }
 
-    @Override
+    public void updateClan(Clan clan) {
+        clanService.saveEntity(clan,false,true);
+    }
+
     public void deleteClan(Clan clan) {
-        clanMapCache.remove(clan.getClanId());
-        manager.delete(COLL, Filters.eq("clanId", clan.getClanId().toString()));
+        clanService.deleteEntity(clan);
     }
 
 }

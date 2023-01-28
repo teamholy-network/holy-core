@@ -47,34 +47,9 @@ public class PlayerJoinListener implements Listener {
             if (!skinProfile.getSignature().equals(signature) || !skinProfile.getValue().equals(value)) {
                 skinProfile.setSignature(signature);
                 skinProfile.setValue(value);
-                skinService.saveEntity(skinProfile,true);
+                skinService.saveEntity(skinProfile,true,true);
             }
 
         });
-
-        // Get entity from service, findFirstById is called if entity can't be found in redis by key.
-        PlayerProfile playerProfile = playerService.getEntity(player.getUniqueId(),
-                () -> playerService.getRepository().findFirstById(player.getUniqueId()));
-
-
-        // Create new player profile
-        if(playerProfile == null) {
-            playerProfile = new PlayerProfile();
-            playerProfile.setPlayerId(player.getUniqueId());
-            playerProfile.setOnline(true);
-            playerProfile.setCoins(0);
-            playerProfile.setOnlineTime(0);
-            playerProfile.setJoinMeTokens(0);
-            playerProfile.setStatsResetTokens(0);
-            playerProfile.setServerName("lobby");
-        }
-
-        // Update this values always
-        playerProfile.setPlayerName(player.getName());
-        playerProfile.setIp(player.getAddress().getAddress().getHostAddress());
-        playerProfile.setServerName("lobby");
-
-        // Save entity through service
-        playerService.saveEntity(playerProfile, true);
     }
 }

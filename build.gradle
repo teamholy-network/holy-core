@@ -18,7 +18,10 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url 'https://repo.cloudnetservice.eu/repository/releases/' }
+        maven {
+            name('cloudnet-repo')
+            url 'https://repo.cloudnetservice.eu/repository/releases/'
+        }
         maven {
             name('koboo-repo')
             url('https://reposilite.koboo.eu/releases')
@@ -50,8 +53,8 @@ subprojects {
     }
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     // Move all plugins to one "output/" directory in the project directory
@@ -89,7 +92,6 @@ subprojects {
         replaceToken('PROJECT_COMMIT_COUNT', 'git rev-list --count HEAD'.execute().text.trim())
         replaceToken('PROJECT_BRANCH', 'git rev-parse --abbrev-ref HEAD'.execute().text.trim())
         replaceToken('PROJECT_SEC_OF_DAY', Calendar.getInstance().getTime().toLocalTime().toSecondOfDay())
-        replaceToken('PROJECT_JDK', System.getProperty("java.version"))
         replaceToken('PROJECT_OS', "${System.properties['os.name']}/${System.properties['os.arch']}")
         replaceToken('PROJECT_GRADLE', "$gradle.gradleVersion")
         replaceToken('PROJECT_VERSION', "$projectVersion")

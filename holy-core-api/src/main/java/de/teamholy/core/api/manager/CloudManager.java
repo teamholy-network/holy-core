@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.utility.Punish;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -21,6 +22,7 @@ public class CloudManager {
     }
 
     public String getColor(UUID uuid) {
+        if (uuid == Punish.getConsoleUuid()) return "§4§l";
         IPermissionUser iPermissionUser = null;
         try {
             iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUserAsync(uuid).get();
@@ -31,7 +33,7 @@ public class CloudManager {
         if (iPermissionUser != null) {
             return CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser).getDisplay();
         }
-        return "§6";
+        return "§c";
     }
 
     public void announceClanUpdate(UUID uuid) {

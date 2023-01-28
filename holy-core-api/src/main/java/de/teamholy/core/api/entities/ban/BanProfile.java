@@ -1,6 +1,9 @@
-package de.teamholy.core.api.entities.punish;
+package de.teamholy.core.api.entities.ban;
 
 import eu.koboo.en2do.repository.entity.Id;
+import eu.koboo.en2do.repository.entity.NonIndex;
+import eu.koboo.en2do.repository.entity.compound.CompoundIndex;
+import eu.koboo.en2do.repository.entity.compound.Index;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,9 +14,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class PunishProfile {
+public class BanProfile {
 
     @Id
+    @NonIndex
     UUID playerId;
 
     String reason;
@@ -21,7 +25,6 @@ public class PunishProfile {
     long createDate;
     long duration;
     String evidence;
-    PunishType type;
 
     public long getValidUntilDate() {
         return createDate + duration;
