@@ -37,7 +37,7 @@ public class UUIDManager {
         }
 
         String[] userData = coreAPI.getCloudManager().getUserInfo(name);
-        if (userData[0] != null && userData[1] != null) {
+        if (userData != null && userData[0] != null && userData[1] != null) {
             uuid = UUID.fromString(userData[1]);
             remotePlayerUuidMap.put(name, uuid);
             return uuid;

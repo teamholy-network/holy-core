@@ -3,6 +3,8 @@ package de.teamholy.core.bungee.listener;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.ban.BanProfile;
+import de.teamholy.core.api.entities.game.GameProfile;
+import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.bungee.BungeeCore;
@@ -28,6 +30,8 @@ public class CacheListener implements Listener {
         ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
         FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
         PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+        GameProfile gameProfile = BungeeCore.getAPI().getGameService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getGameService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+        PerkPlayerProfile perkPlayerProfile = BungeeCore.getAPI().getPerkPlayerService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getPerkPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
         if (skinProfile != null) {
             BungeeCore.getAPI().getSkinService().saveEntity(skinProfile,true,false);
@@ -43,6 +47,14 @@ public class CacheListener implements Listener {
 
         if (punishHistoryProfile != null) {
             BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,false);
+        }
+
+        if (gameProfile != null) {
+            BungeeCore.getAPI().getGameService().saveEntity(gameProfile,true,false);
+        }
+
+        if (perkPlayerProfile != null) {
+            BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,false);
         }
 
     }

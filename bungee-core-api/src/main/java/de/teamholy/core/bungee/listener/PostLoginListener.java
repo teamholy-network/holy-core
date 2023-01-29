@@ -3,6 +3,8 @@ package de.teamholy.core.bungee.listener;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.entities.friend.FriendProfile;
+import de.teamholy.core.api.entities.game.GameProfile;
+import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
@@ -17,6 +19,7 @@ import net.md_5.bungee.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 /* copyright by Yassino */
 public class PostLoginListener implements Listener {
@@ -61,6 +64,18 @@ public class PostLoginListener implements Listener {
             punishHistoryProfile.setBanProfileMap(new HashMap<>());
             punishHistoryProfile.setMuteProfileMap(new HashMap<>());
 
+            GameProfile gameProfile = new GameProfile();
+            gameProfile.setPlayerId(proxiedPlayer.getUniqueId());
+            gameProfile.setSettingsMap(new HashMap<>());
+            gameProfile.setStatsMap(new HashMap<>());
+
+            PerkPlayerProfile perkPlayerProfile = new PerkPlayerProfile();
+            perkPlayerProfile.setPlayerId(proxiedPlayer.getUniqueId());
+            perkPlayerProfile.setBlockPerk(0);
+            perkPlayerProfile.setStickPerk(100);
+            perkPlayerProfile.setChatPerk(200);
+            perkPlayerProfile.setOwnedPerks(new ArrayList<>());
+
             if (proxiedPlayer.hasPermission("teamholy.team")) {
 
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),
@@ -80,7 +95,9 @@ public class PostLoginListener implements Listener {
 
             BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
             BungeeCore.getAPI().getFriendService().saveEntity(friendProfile,true,true);
+            BungeeCore.getAPI().getGameService().saveEntity(gameProfile,true,true);
             BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,true);
+            BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,true);
             return;
         }
 

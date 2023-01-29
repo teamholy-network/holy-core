@@ -20,16 +20,15 @@ public class GameProfile {
     UUID playerId;
 
     Map<String, Map<String, Map<String, Long>>> statsMap = new HashMap<>();
-    Map<String, Map<String, Object>> settingsMap = new HashMap<>();
+    Map<String, Map<String, String>> settingsMap = new HashMap<>();
 
-
-    public Object getSetting(String game, String setting) {
+    public String getSetting(String game, String setting) {
         return settingsMap.get(game).get(setting);
     }
 
 
-    public GameProfile setSetting(String gameKey, String key, Object value) {
-        Map<String, Object> gameMap = settingsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
+    public GameProfile setSetting(String gameKey, String key, String value) {
+        Map<String, String> gameMap = settingsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
         gameMap.put(key, value);
         settingsMap.put(gameKey, gameMap);
         return this;

@@ -80,7 +80,7 @@ public class UnmuteCommand extends SenderCommand {
     }
 
     public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban (name)");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unmute (name)");
     }
 
 }

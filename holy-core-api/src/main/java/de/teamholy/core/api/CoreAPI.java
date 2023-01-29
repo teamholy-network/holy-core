@@ -4,6 +4,8 @@ import de.teamholy.core.api.entities.clan.ClanService;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerService;
 import de.teamholy.core.api.entities.friend.FriendService;
 import de.teamholy.core.api.entities.mute.MuteService;
+import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
+import de.teamholy.core.api.entities.perkplayer.PerkPlayerService;
 import de.teamholy.core.api.entities.player.PlayerService;
 import de.teamholy.core.api.entities.ban.BanService;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryService;
@@ -44,6 +46,7 @@ public class CoreAPI {
     ClanService clanService;
     ClanPlayerService clanPlayerService;
     StaffService staffService;
+    PerkPlayerService perkPlayerService;
 
     public CoreAPI() {
 
@@ -63,6 +66,7 @@ public class CoreAPI {
         this.staffService = new StaffService(this);
         this.nickManager = new NickManager(this);
         this.muteService = new MuteService(this);
+        this.perkPlayerService = new PerkPlayerService(this);
 
 
         this.cloudManager = new CloudManager(this);

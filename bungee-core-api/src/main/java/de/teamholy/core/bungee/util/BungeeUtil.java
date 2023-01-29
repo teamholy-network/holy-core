@@ -30,6 +30,7 @@ public class BungeeUtil {
     }
 
     public static UUID parseTargetArgument(String target) {
+
         if (target.contains("-")) {
             try{
                 return UUID.fromString(target);
