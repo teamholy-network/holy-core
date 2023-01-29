@@ -2,7 +2,6 @@ package de.teamholy.core.bungee.commands.mute;
 
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
-import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;

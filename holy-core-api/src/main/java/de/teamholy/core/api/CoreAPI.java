@@ -11,6 +11,7 @@ import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
 import de.teamholy.core.api.entities.stats.StatsService;
 import de.teamholy.core.api.manager.*;
+import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,7 +46,8 @@ public class CoreAPI {
     StaffService staffService;
 
     public CoreAPI() {
-        this.mongoManager = new MongoManager();
+        ConfigManager config = new ConfigManager();
+        this.mongoManager = new MongoManager(new Credentials("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin","holy"));
         this.redissonManager = new RedissonManager(this);
         this.cloudManager = new CloudManager(this);
         this.uuidManager = new UUIDManager(this);
@@ -65,12 +67,6 @@ public class CoreAPI {
         this.staffService = new StaffService(this);
         this.nickManager = new NickManager(this);
         this.muteService = new MuteService(this);
-    }
-
-    public void onEnable() {
-        if (redissonManager != null) {
-            redissonManager.onEnable();
-        }
     }
 
     public void onDisable() {

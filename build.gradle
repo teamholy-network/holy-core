@@ -19,6 +19,9 @@ subprojects {
     repositories {
         mavenCentral()
         maven {
+            url 'https://papermc.io/repo/repository/maven-public/'
+        }
+        maven {
             name('cloudnet-repo')
             url 'https://repo.cloudnetservice.eu/repository/releases/'
         }
@@ -29,10 +32,6 @@ subprojects {
         maven {
             name('spigot-repo')
             url('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
-        }
-        maven {
-            name('bungeecord-repo')
-            url('https://oss.sonatype.org/content/repositories/snapshots')
         }
         maven {
             name('jitpack-repo')
@@ -71,18 +70,6 @@ subprojects {
         include(targetName)
     }
     shadowJar.finalizedBy(movePlugin)
-
-    // Replace tokens in plugin.yml files
-    processResources {
-        filesMatching('**/plugin.yml') {
-            filter(ReplaceTokens, tokens: [
-                    'PROJECT_NAME'   : project.name.toString(),
-                    'PROJECT_VERSION'   : "$projectVersion".toString(),
-                    'PROJECT_DESCRIPTION'   : "The Core-Plugin of the TeamHoly.de server".toString(),
-                    'PROJECT_AUTHOR'   : "[Koboo, Yassino]".toString(),
-            ])
-        }
-    }
 
     // Replace token in "com.modify.core.utils.constants.Project"
     blossom {

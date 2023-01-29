@@ -1,4 +1,4 @@
-package de.teamholy.core.api.utility;
+package de.teamholy.core.bungee.util;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;

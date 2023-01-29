@@ -1,5 +1,3 @@
-name: @PROJECT_NAME@
+name: bungee-core
 main: de.teamholy.core.bungee.BungeeCore
-version: @PROJECT_VERSION@
-author: @PROJECT_AUTHOR@
-description: @PROJECT_DESCRIPTION@
+version: 1.0

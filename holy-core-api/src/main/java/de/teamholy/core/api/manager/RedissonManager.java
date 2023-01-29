@@ -34,11 +34,9 @@ public class RedissonManager {
         config.useSingleServer().setTimeout(10000);
         config.useSingleServer().setConnectionPoolSize(500);
         config.useSingleServer().setRetryInterval(2000);
+        this.redissonClient = Redisson.create();
     }
 
-    public void onEnable() {
-        redissonClient = Redisson.create(this.config);
-    }
 
     public void onDisable() {
         if (config == null) {

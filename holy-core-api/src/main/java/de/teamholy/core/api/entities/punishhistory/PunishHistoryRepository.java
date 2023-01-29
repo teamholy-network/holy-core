@@ -10,10 +10,4 @@ import java.util.UUID;
 
 @Collection("punishHistory_profile_collection")
 public interface PunishHistoryRepository extends Repository<PunishHistoryProfile, UUID> {
-
-    @Transform("findManyByPlayerId")
-    List<BanProfile> findAllOfPlayer(UUID playerId);
-
-    @Transform("findFirstByPlayerIdAndPunishId")
-    BanProfile findPunishOfPlayer(UUID playerId, String punishId);
 }

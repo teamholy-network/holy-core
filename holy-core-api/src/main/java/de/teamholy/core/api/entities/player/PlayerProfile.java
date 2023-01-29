@@ -19,7 +19,7 @@ public class PlayerProfile {
     String playerName;
     String ip;
     String serverName;
-    boolean isOnline;
+    boolean online;
     long coins;
     String rank;
     long onlineTime;

@@ -47,7 +47,7 @@ public class BanLoginListener implements Listener {
             String ipAddress = loginEvent.getConnection().getAddress().getAddress().getHostAddress();
 
             if (punishProfile != null) {
-                if (punishProfile.isActive()) {
+                if (punishProfile.active()) {
                     loginEvent.setCancelled(true);
                     loginEvent.setCancelReason(BanUtil.generateBanScreen(punishProfile));
                 } else {
@@ -85,7 +85,7 @@ public class BanLoginListener implements Listener {
 
 
                 BanProfile punishProfile = punishService.getEntity(playerAcc.getPlayerId(), () -> punishService.getRepository().findFirstById(playerAcc.getPlayerId()));
-                if (punishProfile.isActive() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
+                if (punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
                     Punish.BanReason banReason = Punish.BanReason.BAN_BYPASS;
                     BanProfile banProfile = new BanProfile();
                     banProfile.setDuration(TimeUnit.HOURS.toMillis(5));

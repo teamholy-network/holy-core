@@ -81,7 +81,7 @@ public class BanCommand extends SenderCommand {
                 UUID finalUuid = uuid;
                 BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
-                if (punishProfile != null || punishProfile.isActive()) {
+                if (punishProfile != null || punishProfile.active()) {
                     sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is already banned!");
                     return;
                 }

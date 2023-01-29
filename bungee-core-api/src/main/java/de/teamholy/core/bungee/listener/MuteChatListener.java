@@ -38,7 +38,7 @@ public class MuteChatListener implements Listener {
                                 () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
 
                         if (punishProfile != null) {
-                            if (punishProfile.isActive()) {
+                            if (punishProfile.active()) {
                                 event.setCancelled(true);
                                 player.sendMessage(BanUtil.generateMuteChatMessage(punishProfile));
                             } else {

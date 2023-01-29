@@ -34,7 +34,6 @@ public class BungeeCore extends Plugin {
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
-        coreAPI.onEnable();
 
         bungeePlayerManager = new BungeePlayerManager(this.coreAPI);
 

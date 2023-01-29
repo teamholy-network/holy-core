@@ -17,7 +17,6 @@ import java.util.UUID;
 public class BanProfile {
 
     @Id
-    @NonIndex
     UUID playerId;
 
     String reason;
@@ -30,7 +29,7 @@ public class BanProfile {
         return createDate + duration;
     }
 
-    public boolean isActive() {
+    public boolean active() {
         if(duration == -1) {
             return true;
         }
