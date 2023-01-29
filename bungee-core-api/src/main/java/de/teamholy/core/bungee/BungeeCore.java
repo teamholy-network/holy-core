@@ -4,6 +4,8 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.bungee.commands.LookupCommand;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
+import de.teamholy.core.bungee.commands.clan.AdminClanCommand;
+import de.teamholy.core.bungee.commands.clan.ClanCommand;
 import de.teamholy.core.bungee.commands.mute.MuteCommand;
 import de.teamholy.core.bungee.commands.mute.UnmuteCommand;
 import de.teamholy.core.bungee.commands.punish.EvidenceCommand;
@@ -54,6 +56,8 @@ public class BungeeCore extends Plugin {
         new MuteCommand();
         new UnmuteCommand();
         new LookupCommand();
+        new AdminClanCommand();
+        new ClanCommand();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.teamholy.core.api.entities.stats;
+package de.teamholy.core.api.entities.game;
 
 public enum StatsType {
 

@@ -48,6 +48,8 @@ public class MuteChatListener implements Listener {
                                 if (punishHistoryProfile == null)
                                     punishHistoryProfile = new PunishHistoryProfile();
 
+                                punishHistoryProfile.setPlayerId(player.getUniqueId());
+
                                 punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(),punishProfile);
 
                                 BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,true);

@@ -85,9 +85,11 @@ public class BanLoginListener implements Listener {
 
 
                 BanProfile punishProfile = punishService.getEntity(playerAcc.getPlayerId(), () -> punishService.getRepository().findFirstById(playerAcc.getPlayerId()));
+                if (punishProfile == null) return false;
                 if (punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
                     Punish.BanReason banReason = Punish.BanReason.BAN_BYPASS;
                     BanProfile banProfile = new BanProfile();
+                    banProfile.setPlayerId(playerAcc.getPlayerId());
                     banProfile.setDuration(TimeUnit.HOURS.toMillis(5));
                     banProfile.setReason(banReason.getEnglishText());
                     banProfile.setEvidence("Tried bypassing the ban of " + playerAcc.getPlayerName());

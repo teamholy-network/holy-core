@@ -6,6 +6,7 @@ import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,6 +20,6 @@ public class PunishHistoryProfile {
     @Id
     UUID playerId;
 
-    Map<String, BanProfile> banProfileMap;
-    Map<String, MuteProfile> muteProfileMap;
+    Map<String, BanProfile> banProfileMap = new HashMap<>();
+    Map<String, MuteProfile> muteProfileMap = new HashMap<>();
 }

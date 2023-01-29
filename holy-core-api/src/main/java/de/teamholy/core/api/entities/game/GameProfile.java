@@ -1,4 +1,4 @@
-package de.teamholy.core.api.entities.stats;
+package de.teamholy.core.api.entities.game;
 
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
@@ -14,22 +14,36 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-public class StatsProfile {
+public class GameProfile {
 
     @Id
     UUID playerId;
 
     Map<String, Map<String, Map<String, Long>>> statsMap = new HashMap<>();
+    Map<String, Map<String, Object>> settingsMap = new HashMap<>();
 
 
-    public long get(String gameKey, StatsType stats, String key) {
+    public Object getSetting(String game, String setting) {
+        return settingsMap.get(game).get(setting);
+    }
+
+
+    public GameProfile setSetting(String gameKey, String key, Object value) {
+        Map<String, Object> gameMap = settingsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
+        gameMap.put(key, value);
+        settingsMap.put(gameKey, gameMap);
+        return this;
+    }
+
+
+    public long getStat(String gameKey, StatsType stats, String key) {
         //  Game        Duration    Key     Value
         Map<String, Map<String, Long>> gameMap = statsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
         Map<String, Long> keyMap = gameMap.getOrDefault(stats.name(), new ConcurrentHashMap<>());
         return keyMap.getOrDefault(key, 0L);
     }
 
-    public StatsProfile set(String gameKey, StatsType stats, String key, long value) {
+    public GameProfile setStat(String gameKey, StatsType stats, String key, long value) {
         Map<String, Map<String, Long>> gameMap = statsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
         Map<String, Long> durationMap = gameMap.getOrDefault(stats.name(), new ConcurrentHashMap<>());
         durationMap.put(key, value);
@@ -38,7 +52,7 @@ public class StatsProfile {
         return this;
     }
 
-    public StatsProfile add(String gameKey, StatsType stats, String key, long addition) {
+    public GameProfile addStat(String gameKey, StatsType stats, String key, long addition) {
         Map<String, Map<String, Long>> gameMap = statsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
         Map<String, Long> durationMap = gameMap.getOrDefault(stats.name(), new ConcurrentHashMap<>());
         long value = durationMap.getOrDefault(key, 0L);
@@ -49,7 +63,7 @@ public class StatsProfile {
         return this;
     }
 
-    public StatsProfile remove(String gameKey, StatsType stats, String key, long remove) {
+    public GameProfile removeStat(String gameKey, StatsType stats, String key, long remove) {
         Map<String, Map<String, Long>> gameMap = statsMap.getOrDefault(gameKey, new ConcurrentHashMap<>());
         Map<String, Long> durationMap = gameMap.getOrDefault(stats.name(), new ConcurrentHashMap<>());
         long value = durationMap.getOrDefault(key, 0L);
@@ -57,6 +71,12 @@ public class StatsProfile {
         durationMap.put(key, value);
         gameMap.put(stats.name(), durationMap);
         statsMap.put(gameKey, gameMap);
+        return this;
+    }
+
+
+    public GameProfile delete(String gameKey) {
+        Map<String, Map<String, Long>> gameMap = statsMap.remove(gameKey);
         return this;
     }
 

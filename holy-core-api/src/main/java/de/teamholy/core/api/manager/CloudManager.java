@@ -62,16 +62,16 @@ public class CloudManager {
     public String[] getUserInfo(String nameOrUuid) {
         CompletableFuture<String[]> userinfo = new CompletableFuture<>();
         coreAPI.getExecutor().submit(() -> {
-            String uuid;
+            UUID uuid;
             String string;
             if (nameOrUuid.contains("-")) {
-                string = coreAPI.getPlayerService().getEntity(UUID.fromString(nameOrUuid),() -> coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid))).getPlayerName();
-                uuid = nameOrUuid;
+                string = coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid)).getPlayerName();
+                uuid = UUID.fromString(nameOrUuid);
             } else {
-                uuid = String.valueOf(coreAPI.getPlayerService().getEntity(UUID.fromString(nameOrUuid),() -> coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid))).getPlayerId());
+                uuid = coreAPI.getPlayerService().getRepository().findFirstByPlayerName(nameOrUuid).getPlayerId();
                 string = nameOrUuid;
             }
-            String[] strings = new String[]{string, uuid};
+            String[] strings = new String[]{string, String.valueOf(uuid)};
             userinfo.complete(strings);
         });
 

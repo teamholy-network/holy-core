@@ -4,6 +4,7 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.PartyInviteAllowance;
 import de.teamholy.core.api.utility.PlayerRank;
@@ -15,6 +16,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /* copyright by Yassino */
 public class PostLoginListener implements Listener {
@@ -43,12 +45,21 @@ public class PostLoginListener implements Listener {
             playerProfile.setRank(PlayerRank.PLAYER.getName());
             playerProfile.setStatsResetTokens(0L);
             playerProfile.setJoinMeTokens(0L);
+            playerProfile.setCollectables(new HashMap<>());
 
 
             FriendProfile friendProfile = new FriendProfile();
+            friendProfile.setPlayerId(proxiedPlayer.getUniqueId());
             friendProfile.setAllowFriendRequests(true);
             friendProfile.setPartyInviteAllowance(PartyInviteAllowance.EVERYONE);
             friendProfile.setAllowFriendJump(true);
+            friendProfile.setFriendList(new ArrayList<>());
+            friendProfile.setFriendReqeustsList(new ArrayList<>());
+
+            PunishHistoryProfile punishHistoryProfile = new PunishHistoryProfile();
+            punishHistoryProfile.setPlayerId(proxiedPlayer.getUniqueId());
+            punishHistoryProfile.setBanProfileMap(new HashMap<>());
+            punishHistoryProfile.setMuteProfileMap(new HashMap<>());
 
             if (proxiedPlayer.hasPermission("teamholy.team")) {
 
@@ -57,6 +68,7 @@ public class PostLoginListener implements Listener {
 
                 if (staffProfile == null)  {
                     staffProfile = new StaffProfile();
+                    staffProfile.setPlayerId(proxiedPlayer.getUniqueId());
                     staffProfile.setNotify(true);
                     staffProfile.setBanProfileList(new ArrayList<>());
                     staffProfile.setMuteProfileList(new ArrayList<>());
@@ -68,6 +80,7 @@ public class PostLoginListener implements Listener {
 
             BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
             BungeeCore.getAPI().getFriendService().saveEntity(friendProfile,true,true);
+            BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,true);
             return;
         }
 

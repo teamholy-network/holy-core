@@ -15,6 +15,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -46,21 +47,22 @@ public class LookupCommand extends SenderCommand {
                     return;
                 }
 
-                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),
-                        () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
-                ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(),
-                        () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
-                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(player.getUniqueId(),
-                        () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(player.getUniqueId()));
-                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(player.getUniqueId(),
-                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
-                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(player.getUniqueId(),
-                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(player.getUniqueId()));
+                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,
+                        () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
+                ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
+                        () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
+                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,
+                        () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
+                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,
+                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
+                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
+                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+
 
                 player.sendMessage(Message.LINE);
                 player.sendMessage("");
                 TextComponent nameComp = new TextComponent("§7Name §8» ");
-                nameComp.addExtra(new ChatAction().text("§6" + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7Click to copy uuid").component());
+                nameComp.addExtra(new ChatAction().text(BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7Click to copy uuid").component());
                 player.sendMessage(nameComp);
 
                 TextComponent onlineComp = new TextComponent("§7Status §8» ");
@@ -73,6 +75,15 @@ public class LookupCommand extends SenderCommand {
 
                 TextComponent onlinetimeComp = new TextComponent("§7Onlinetime §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(), TimeUnit.MILLISECONDS));
                 player.sendMessage(onlinetimeComp);
+
+                TextComponent coins = new TextComponent("§7Coins §8» §6" + BungeeCore.getAPI().getCoinManager().formatInteger(playerProfile.getCoins()));
+                player.sendMessage(coins);
+
+                TextComponent tokens = new TextComponent("§7Tokens §8» §6");
+                tokens.addExtra(new ChatAction().text("§a" + playerProfile.getJoinMeTokens() + " JT").hover("§a" + playerProfile.getJoinMeTokens() + " Joinme Tokens").component());
+                tokens.addExtra(" §8┃ ");
+                tokens.addExtra(new ChatAction().text("§c" + playerProfile.getJoinMeTokens() + " ST").hover("§c" + playerProfile.getJoinMeTokens() + " Statsreset Tokens").component());
+                player.sendMessage(tokens);
 
                 if (player.hasPermission("teamholy.check.admin")) {
                     TextComponent ipComp = new TextComponent("§7IP §8» ");
@@ -140,8 +151,8 @@ public class LookupCommand extends SenderCommand {
                     switch (num) {
                         case 1:
                             if (args[2].equalsIgnoreCase("ban")) {
-                                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(player.getUniqueId(),
-                                        () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(player.getUniqueId()));
+                                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,
+                                        () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                                 if (banProfile != null) {
                                     String author = BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
                                     String until = BungeeUtil.parseDate(banProfile.getValidUntilDate()) + " §7(" + TimeUtil.beautifyTime(banProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
@@ -150,8 +161,8 @@ public class LookupCommand extends SenderCommand {
                                     player.sendMessage(Message.LOOKUP_PREFIX + "§cThe player §e" + targetName + "§c isn't banned!");
                                 }
                             } else if (args[2].equalsIgnoreCase("mute")) {
-                                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(player.getUniqueId(),
-                                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
+                                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,
+                                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                                 if (muteProfile != null) {
                                     String author = BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
                                     String until = BungeeUtil.parseDate(muteProfile.getValidUntilDate()) + " §7(" + TimeUtil.beautifyTime(muteProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
@@ -165,8 +176,8 @@ public class LookupCommand extends SenderCommand {
                             break;
                         case 2:
                             if (args[2].equalsIgnoreCase("ban")) {
-                                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(player.getUniqueId(),
-                                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(player.getUniqueId()));
+                                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
+                                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
                                 if (punishHistoryProfile.getBanProfileMap().size() > 0) {
                                     player.sendMessage(Message.LINE);
                                     player.sendMessage("");
@@ -174,7 +185,7 @@ public class LookupCommand extends SenderCommand {
                                     for (BanProfile banProfile : punishHistoryProfile.getBanProfileMap().values()) {
                                         String date = BungeeUtil.parseDate(banProfile.getCreateDate());
                                         String reason = banProfile.getReason();
-                                        String author = BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
+                                        String author = BungeeCore.getAPI().getCloudManager().getColor(banProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
                                         String evidence = banProfile.getEvidence();
                                         TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8|§7 " + reason + " §8|§7 " + author + " §8|§7 ");
                                         punishComp.addExtra(new ChatAction().text(evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence").hover("Copy evidence: " + evidence).suggest(evidence).component());
@@ -188,8 +199,8 @@ public class LookupCommand extends SenderCommand {
                                     player.sendMessage(Message.LOOKUP_PREFIX + "§cNo history found about §e" + targetName + "§c!");
                                 }
                             } else if (args[2].equalsIgnoreCase("mute")) {
-                                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(player.getUniqueId(),
-                                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(player.getUniqueId()));
+                                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
+                                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
                                 if (punishHistoryProfile.getMuteProfileMap().size() > 0) {
                                     player.sendMessage(Message.LINE);
                                     player.sendMessage("");
@@ -197,7 +208,7 @@ public class LookupCommand extends SenderCommand {
                                     for (MuteProfile muteProfile : punishHistoryProfile.getMuteProfileMap().values()) {
                                         String date = BungeeUtil.parseDate(muteProfile.getCreateDate());
                                         String reason = muteProfile.getReason();
-                                        String author = BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
+                                        String author = BungeeCore.getAPI().getCloudManager().getColor(muteProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
                                         String evidence = muteProfile.getEvidence();
                                         TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8|§7 " + reason + " §8|§7 " + author + " §8|§7 ");
                                         punishComp.addExtra(new ChatAction().text(evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence").hover("Copy evidence: " + evidence).suggest(evidence).component());

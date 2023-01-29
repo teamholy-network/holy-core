@@ -45,6 +45,7 @@ public class PlayerJoinListener implements Listener {
 
             if (skinProfile == null) skinProfile = new SkinProfile();
             if (!skinProfile.getSignature().equals(signature) || !skinProfile.getValue().equals(value)) {
+                skinProfile.setPlayerId(player.getUniqueId());
                 skinProfile.setSignature(signature);
                 skinProfile.setValue(value);
                 skinService.saveEntity(skinProfile,true,true);

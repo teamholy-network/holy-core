@@ -19,9 +19,9 @@ public class ClanManager {
     ClanService clanService;
 
 
-    public ClanManager(CoreAPI coreAPI) {
+    public ClanManager(CoreAPI coreAPI, ClanService clanService) {
         this.coreAPI = coreAPI;
-        this.clanService = coreAPI.getClanService();
+        this.clanService = clanService;
     }
 
     public boolean loadAndForce(UUID profileId, UUID clanId) {

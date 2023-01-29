@@ -12,4 +12,6 @@ public interface PlayerRepository extends Repository<PlayerProfile, UUID> {
 
     List<PlayerProfile> findManyByIp(String Ip);
 
+    PlayerProfile findFirstByPlayerName(String name);
+
 }

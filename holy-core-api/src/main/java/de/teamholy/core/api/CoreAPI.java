@@ -9,7 +9,7 @@ import de.teamholy.core.api.entities.ban.BanService;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryService;
 import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
-import de.teamholy.core.api.entities.stats.StatsService;
+import de.teamholy.core.api.entities.game.GameService;
 import de.teamholy.core.api.manager.*;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
@@ -37,7 +37,7 @@ public class CoreAPI {
     PlayerService playerService;
     BanService banService;
     MuteService muteService;
-    StatsService statsService;
+    GameService gameService;
     FriendService friendService;
     SkinService skinService;
     PunishHistoryService punishHistoryService;
@@ -46,19 +46,15 @@ public class CoreAPI {
     StaffService staffService;
 
     public CoreAPI() {
+
         ConfigManager config = new ConfigManager();
         this.mongoManager = new MongoManager(new Credentials("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin","holy"));
         this.redissonManager = new RedissonManager(this);
-        this.cloudManager = new CloudManager(this);
-        this.uuidManager = new UUIDManager(this);
-        this.reportManager = new ReportManager(this);
-        this.clanManager = new ClanManager(this);
-        coinManager = new CoinManager(this);
-        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+
 
         this.playerService = new PlayerService(this);
         this.banService = new BanService(this);
-        this.statsService = new StatsService(this);
+        this.gameService = new GameService(this);
         this.friendService = new FriendService(this);
         this.skinService = new SkinService(this);
         this.punishHistoryService = new PunishHistoryService(this);
@@ -67,6 +63,15 @@ public class CoreAPI {
         this.staffService = new StaffService(this);
         this.nickManager = new NickManager(this);
         this.muteService = new MuteService(this);
+
+
+        this.cloudManager = new CloudManager(this);
+        this.uuidManager = new UUIDManager(this);
+        this.reportManager = new ReportManager(this);
+        this.clanManager = new ClanManager(this, clanService);
+        this.coinManager = new CoinManager(this);
+        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+
     }
 
     public void onDisable() {

@@ -80,7 +80,7 @@ public class AdminClanCommand extends SenderCommand {
                     printUsage(sender);
                 }
             } else if (args.length == 3){
-                if (args[2].equalsIgnoreCase("changecolor")) {
+                if (args[0].equalsIgnoreCase("changecolor")) {
                     String tag = args[1];
                     Clan clan = BungeeCore.getAPI().getClanManager().getClanByTag(tag);
                     String color = args[2];

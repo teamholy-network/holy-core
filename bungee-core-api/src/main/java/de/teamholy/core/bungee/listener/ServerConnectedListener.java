@@ -20,6 +20,7 @@ public class ServerConnectedListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),
                 () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+        if (playerProfile == null) return;
         playerProfile.setServerName(event.getServer().getInfo().getName());
         BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
     }

@@ -12,6 +12,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.checkerframework.checker.units.qual.C;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,32 +52,23 @@ public class ClanCommand extends SenderCommand {
                 } else if (args[0].equalsIgnoreCase("togglejoin")) {
                     onToggleJoin(player);
                 } else if (args[0].equalsIgnoreCase("promote")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote <name>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote (name)");
                 } else if (args[0].equalsIgnoreCase("demote")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote <name>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote (name)");
                 } else if (args[0].equalsIgnoreCase("invite")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite <name>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite (name)");
                 } else if (args[0].equalsIgnoreCase("accept")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan accept <tag>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan accept (tag)");
                 } else if (args[0].equalsIgnoreCase("kick")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick <name>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick (name)");
                 } else if (args[0].equalsIgnoreCase("create")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create <name> <tag>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (name) (tag)");
                 } else if (args[0].equalsIgnoreCase("rename")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename <name> <tag>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (name) (tag)");
                 } else if (args[0].equalsIgnoreCase("chat")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat <message>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat (message)");
                 } else if (args[0].equalsIgnoreCase("join")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan join <tag>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan join (tag)");
                 } else {
                     try {
                         int page = Integer.parseInt(args[0]);
@@ -155,11 +147,9 @@ public class ClanCommand extends SenderCommand {
                     String tag = args[1];
                     onInfo(player, tag);
                 } else if (args[0].equalsIgnoreCase("create")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create <name> <tag>");
+                                        player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (name) (tag)");
                 } else if (args[0].equalsIgnoreCase("rename")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§6§lHelp");
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename <name> <tag>");
+                                        player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (name) (tag)");
                 } else if (args[0].equalsIgnoreCase("chat")) {
                     onClanChat(player, args);
                 } else if (args[0].equalsIgnoreCase("color")) {
@@ -226,6 +216,8 @@ public class ClanCommand extends SenderCommand {
             player.sendMessage(Message.CLAN_PREFIX + "§cThe clan reached the limit of " + MAX_CLAN_MEMBERS + " members!");
             return;
         }
+        clanProfile = new ClanPlayerProfile();
+        clanProfile.setPlayerId(player.getUniqueId());
         clanProfile.setClanId(clan.getClanId());
         clanProfile.setClanRank(ClanRank.MEMBER);
         BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile,true,true);
@@ -352,27 +344,27 @@ public class ClanCommand extends SenderCommand {
             case 2:
                 player.sendMessage(Message.CLAN_LINE_TOP);
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan info");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan info <tag>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan userinfo <name>");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan info (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan userinfo (name)");
                 if (player.hasPermission("teamholy.clan.color"))
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan color <color>");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan color (color)");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan delete");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan accept <tag>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan join <tag>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename <name> <tag>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat <message>");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan accept (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan join (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (name) (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat (message)");
                 player.sendMessage(Message.CLAN_LINE_DOWN);
                 break;
             default:
                 player.sendMessage(Message.CLAN_LINE_TOP);
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan help 1");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan help 2");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick <name>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite <name>");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick (name)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite (name)");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan leave");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan create <name> <tag>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote <name>");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote <name>");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (name) (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote (name)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote (name)");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan togglejoin");
                 player.sendMessage(Message.CLAN_LINE_DOWN);
                 break;
@@ -488,7 +480,7 @@ public class ClanCommand extends SenderCommand {
             return;
         }
         ClanPlayerProfile inviteProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(toInvite, () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(toInvite));
-        if (inviteProfile == null) {
+        if (inviteProfile != null) {
             player.sendMessage(Message.CLAN_PREFIX + "§cThe player already has a clan!");
             return;
         }
@@ -499,6 +491,10 @@ public class ClanCommand extends SenderCommand {
         }
         if (clan.getMembers().size() >= MAX_CLAN_MEMBERS) {
             player.sendMessage(Message.CLAN_PREFIX + "§cThe clan reached the limit of " + MAX_CLAN_MEMBERS + " members!");
+            return;
+        }
+        if (clan.getRequestsTo().contains(toInvite)) {
+            player.sendMessage(Message.CLAN_PREFIX + "§cThe player is already invited!!");
             return;
         }
         final UUID clanId = clan.getClanId();
@@ -522,7 +518,7 @@ public class ClanCommand extends SenderCommand {
 
     public void onAccept(ProxiedPlayer player, String tag) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
-        if (clanProfile == null) {
+        if (clanProfile != null) {
             player.sendMessage(Message.CLAN_PREFIX + "§cYou already have a clan!");
             return;
         }
@@ -540,6 +536,8 @@ public class ClanCommand extends SenderCommand {
         clan.getRequestsTo().remove(player.getUniqueId());
         clan.getMembers().add(player.getUniqueId());
 
+        clanProfile = new ClanPlayerProfile();
+        clanProfile.setPlayerId(player.getUniqueId());
         clanProfile.setClanRank(ClanRank.MEMBER);
         clanProfile.setClanId(clan.getClanId());
 
@@ -653,6 +651,8 @@ public class ClanCommand extends SenderCommand {
         }
 
         Clan clan = BungeeCore.getAPI().getClanManager().createClan(name, tag, player.getUniqueId());
+        clanProfile = new ClanPlayerProfile();
+        clanProfile.setPlayerId(player.getUniqueId());
         clanProfile.setClanId(clan.getClanId());
         clanProfile.setClanRank(ClanRank.LEADER);
         BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile,true,true);

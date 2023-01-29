@@ -30,11 +30,18 @@ public class BungeeUtil {
     }
 
     public static UUID parseTargetArgument(String target) {
-        if (target.contains("-"))
-            return UUID.fromString(target);
+        if (target.contains("-")) {
+            try{
+                return UUID.fromString(target);
+            } catch (IllegalArgumentException exception){
+                return null;
+            }
+        }
+
         ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(target);
         if (proxiedPlayer != null && proxiedPlayer.isConnected())
             return proxiedPlayer.getUniqueId();
+
         return BungeeCore.getAPI().getUuidManager().getUUID(target);
     }
 

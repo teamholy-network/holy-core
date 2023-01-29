@@ -77,7 +77,7 @@ public class MuteCommand extends SenderCommand {
                 UUID finalUuid = uuid;
                 MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
 
-                if (punishProfile != null || punishProfile.active()) {
+                if (punishProfile != null) {
                     sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is already muted!");
                     return;
                 }
@@ -90,6 +90,7 @@ public class MuteCommand extends SenderCommand {
 
 
                 punishProfile = new MuteProfile();
+                punishProfile.setPlayerId(uuid);
                 punishProfile.setAuthorId(author);
                 punishProfile.setReason(banReason.getEnglishText());
                 punishProfile.setDuration(duration);

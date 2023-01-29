@@ -17,31 +17,25 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UUIDManager {
 
     CoreAPI coreAPI;
-    Map<String, UUID> onlinePlayerUuidMap;
     RMapCache<String, UUID> remotePlayerUuidMap;
 
 
     public UUIDManager(CoreAPI coreAPI) {
         this.coreAPI = coreAPI;
         this.remotePlayerUuidMap = coreAPI.getRedissonManager().getRedissonClient().getMapCache("playerUuidMap");
-        this.onlinePlayerUuidMap = new ConcurrentHashMap<>();
         this.remotePlayerUuidMap.expire(Duration.ofMinutes(15));
     }
 
     public UUID getUUID(String name) {
-
         if (name.equalsIgnoreCase("console")) {
             return Punish.getConsoleUuid();
         }
 
-        UUID uuid = onlinePlayerUuidMap.get(name);
+        UUID uuid = remotePlayerUuidMap.get(name);
         if (uuid != null) {
             return uuid;
         }
-        uuid = remotePlayerUuidMap.get(name);
-        if (uuid != null) {
-            return uuid;
-        }
+
         String[] userData = coreAPI.getCloudManager().getUserInfo(name);
         if (userData[0] != null && userData[1] != null) {
             uuid = UUID.fromString(userData[1]);
@@ -57,39 +51,26 @@ public class UUIDManager {
             return "console";
         }
 
-        String[] userData = coreAPI.getCloudManager().getUserInfo(uuid.toString());
-        if (userData[0] != null && userData[1] != null) {
-            String name = userData[0];
-            if (!remotePlayerUuidMap.containsKey(name)) {
-                remotePlayerUuidMap.put(name, uuid);
-            }
-            return name;
-        }
-
-        for (String username : onlinePlayerUuidMap.keySet()) {
-            UUID id = onlinePlayerUuidMap.get(username);
-            if (id.equals(uuid)) {
-                return username;
-            }
-        }
-
         for (String username : remotePlayerUuidMap.keySet()) {
             UUID id = remotePlayerUuidMap.get(username);
             if (id.equals(uuid)) {
                 return username;
             }
         }
+
+        String[] userData = coreAPI.getCloudManager().getUserInfo(uuid.toString());
+        if (userData[0] != null && userData[1] != null) {
+            String name = userData[0];
+            remotePlayerUuidMap.put(name, uuid);
+            return name;
+        }
+
         return null;
     }
 
     public void register(String name, UUID uuid) {
-        remotePlayerUuidMap.remove(name);
-        onlinePlayerUuidMap.put(name,uuid);
+        remotePlayerUuidMap.fastPut(name,uuid);
     }
 
 
-    public void unregister(String name, UUID uuid) {
-        onlinePlayerUuidMap.remove(name);
-        remotePlayerUuidMap.put(name,uuid);
-    }
 }

@@ -4,6 +4,8 @@ import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -25,4 +27,5 @@ public class PlayerProfile {
     long onlineTime;
     long joinMeTokens;
     long statsResetTokens;
+    Map<String, Long> collectables;
 }
