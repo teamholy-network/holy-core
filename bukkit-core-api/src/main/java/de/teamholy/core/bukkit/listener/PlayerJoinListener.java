@@ -40,28 +40,28 @@ public class PlayerJoinListener implements Listener {
             PerkPlayerService perkPlayerService = bukkitCore.getCoreAPI().getPerkPlayerService();
 
             SkinProfile skinProfile = skinService.getEntity(player.getUniqueId(), () -> skinService.getRepository().findFirstById(player.getUniqueId()));
-            PerkPlayerProfile perkPlayerProfile = perkPlayerService.getEntity(player.getUniqueId(),() -> perkPlayerService.getRepository().findFirstById(player.getUniqueId()));
+//            PerkPlayerProfile perkPlayerProfile = perkPlayerService.getEntity(player.getUniqueId(),() -> perkPlayerService.getRepository().findFirstById(player.getUniqueId()));
+//
+//            Perk stick = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
+//            Perk block = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
+//            Perk chat = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getChatPerk());
+//
+//            boolean needUpdate = false;
+//
+//            if (!player.hasPermission(PerkRankType.PREMIUM.getPermission())) {
+//                if (!stick.isBuyAble() && stick.getId() != 100) needUpdate = true;
+//                if (!block.isBuyAble() && block.getId() != 0) needUpdate = true;
+//                if (!chat.isBuyAble() && chat.getId() != 200) needUpdate = true;
+//            }
+//
+//            if (needUpdate){
+//                perkPlayerProfile.setStickPerk(100);
+//                perkPlayerProfile.setChatPerk(200);
+//                perkPlayerProfile.setBlockPerk(0);
+//                bukkitCore.getCoreAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,true);
+//            }
 
-            Perk stick = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
-            Perk block = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
-            Perk chat = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getChatPerk());
-
-            boolean needUpdate = false;
-
-            if (!player.hasPermission(PerkRankType.PREMIUM.getPermission())) {
-                if (!stick.isBuyAble() && stick.getId() != 100) needUpdate = true;
-                if (!block.isBuyAble() && block.getId() != 0) needUpdate = true;
-                if (!chat.isBuyAble() && chat.getId() != 200) needUpdate = true;
-            }
-
-            if (needUpdate){
-                perkPlayerProfile.setStickPerk(100);
-                perkPlayerProfile.setChatPerk(200);
-                perkPlayerProfile.setBlockPerk(0);
-                bukkitCore.getCoreAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,true);
-            }
-
-            bukkitCore.getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(),perkPlayerProfile);
+            //bukkitCore.getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(),perkPlayerProfile);
 
 
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
@@ -71,9 +71,8 @@ public class PlayerJoinListener implements Listener {
             String signature = property.getSignature();
 
 
-
             if (skinProfile == null) skinProfile = new SkinProfile();
-            if (!skinProfile.getSignature().equals(signature) || !skinProfile.getValue().equals(value)) {
+            if (skinProfile.getValue() == null|| !skinProfile.getSignature().equals(signature) || !skinProfile.getValue().equals(value)) {
                 skinProfile.setPlayerId(player.getUniqueId());
                 skinProfile.setSignature(signature);
                 skinProfile.setValue(value);

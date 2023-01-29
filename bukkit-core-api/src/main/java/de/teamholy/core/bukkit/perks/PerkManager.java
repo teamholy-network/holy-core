@@ -66,7 +66,7 @@ public class PerkManager {
         }
 
         for (int i = inventorySize - 9; i < inventorySize; i++) {
-            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 8).setName("§8//").build(), i);
+            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
 
 
