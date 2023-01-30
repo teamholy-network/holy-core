@@ -37,6 +37,7 @@ public class PostLoginListener implements Listener {
 
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
                 () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+
         FriendProfile friendProfile;
         PunishHistoryProfile punishHistoryProfile;
         GameProfile gameProfile;
@@ -46,7 +47,9 @@ public class PostLoginListener implements Listener {
 
         String ipAddress = proxiedPlayer.getAddress().getAddress().getHostAddress();
 
+        boolean save = false;
         if (playerProfile == null) {
+            save = true;
             playerProfile = new PlayerProfile();
             playerProfile.setPlayerId(proxiedPlayer.getUniqueId());
             playerProfile.setPlayerName(proxiedPlayer.getName());
@@ -127,25 +130,26 @@ public class PostLoginListener implements Listener {
 
         ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
+        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,save);
 
         if (clanPlayerProfile != null) {
-            BungeeCore.getAPI().getClanPlayerService().saveEntity(clanPlayerProfile,true,false);
+            BungeeCore.getAPI().getClanPlayerService().saveEntity(clanPlayerProfile,true,save);
         }
 
         if (friendProfile != null) {
-            BungeeCore.getAPI().getFriendService().saveEntity(friendProfile,true,false);
+            BungeeCore.getAPI().getFriendService().saveEntity(friendProfile,true,save);
         }
 
         if (punishHistoryProfile != null) {
-            BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,false);
+            BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,save);
         }
 
         if (gameProfile != null) {
-            BungeeCore.getAPI().getGameService().saveEntity(gameProfile,true,false);
+            BungeeCore.getAPI().getGameService().saveEntity(gameProfile,true,save);
         }
 
         if (perkPlayerProfile != null) {
-            BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,false);
+            BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,save);
         }
     }
 

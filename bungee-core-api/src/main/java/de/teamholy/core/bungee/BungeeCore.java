@@ -46,7 +46,6 @@ public class BungeeCore extends Plugin {
         new ServerConnectedListener();
         new PostLoginListener();
         new PostDisconnectListener();
-        new CacheListener();
 
 
         new BanCommand();

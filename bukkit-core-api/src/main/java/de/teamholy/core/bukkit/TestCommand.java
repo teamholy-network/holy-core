@@ -19,7 +19,9 @@ public class TestCommand implements CommandExecutor {
                 System.out.println("----------");
                 System.out.println("pattern ->");
                 for (Pattern pattern : bannerMeta.getPatterns()) {
-                    System.out.println(pattern);
+                    System.out.println(pattern.getPattern());
+                    System.out.println(pattern.getColor());
+                    System.out.println("-");
                 }
                 System.out.println("-CYE---");
                 System.out.println(bannerMeta.getBaseColor());
