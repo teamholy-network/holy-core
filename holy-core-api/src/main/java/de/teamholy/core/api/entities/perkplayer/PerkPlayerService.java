@@ -8,6 +8,6 @@ import java.util.UUID;
 public class PerkPlayerService extends AbstractService<PerkPlayerProfile, UUID, PerkPlayerRepository> {
 
     public PerkPlayerService(CoreAPI coreAPI) {
-        super(coreAPI, PerkPlayerRepository.class, false);
+        super(coreAPI, PerkPlayerRepository.class, true);
     }
 }

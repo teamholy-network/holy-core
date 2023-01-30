@@ -8,6 +8,6 @@ import java.util.UUID;
 public class GameService extends AbstractService<GameProfile, UUID, GameRepository> {
 
     public GameService(CoreAPI coreAPI) {
-        super(coreAPI, GameRepository.class, false);
+        super(coreAPI, GameRepository.class, true);
     }
 }

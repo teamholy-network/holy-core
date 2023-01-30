@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee;
 
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.bungee.commands.CoinsCommand;
 import de.teamholy.core.bungee.commands.LookupCommand;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -57,6 +58,7 @@ public class BungeeCore extends Plugin {
         new LookupCommand();
         new AdminClanCommand();
         new ClanCommand();
+        new CoinsCommand();
     }
 
     @Override

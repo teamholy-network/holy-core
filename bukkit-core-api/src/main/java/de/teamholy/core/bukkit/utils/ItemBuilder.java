@@ -135,6 +135,13 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setAttribut(ItemFlag itemFlag) {
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        itemMeta.addItemFlags(itemFlag);
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
     public ItemBuilder getSkull(String url) {
         SkullMeta itemMeta = (SkullMeta)this.itemStack.getItemMeta();
         try {

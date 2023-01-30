@@ -9,8 +9,10 @@ import java.util.UUID;
 @Collection("clans_collection")
 public interface ClanRepository extends Repository<Clan, UUID> {
 
+    @Transform("findFirstByTagIgn")
     Clan findFirstByTag(String tag);
 
+    @Transform("findFirstByNameIgn")
     Clan findFirstByName(String name);
 
 }

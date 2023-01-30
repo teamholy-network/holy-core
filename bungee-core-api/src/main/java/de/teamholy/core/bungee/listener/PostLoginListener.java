@@ -56,7 +56,7 @@ public class PostLoginListener implements Listener {
             playerProfile.setIp(ipAddress);
             playerProfile.setCoins(0L);
             playerProfile.setOnlineTime(0L);
-            playerProfile.setRank(PlayerRank.PLAYER.getName());
+            playerProfile.setRank(PlayerRank.PLAYER.toString());
             playerProfile.setStatsResetTokens(0L);
             playerProfile.setJoinMeTokens(0L);
             playerProfile.setCollectables(new HashMap<>());

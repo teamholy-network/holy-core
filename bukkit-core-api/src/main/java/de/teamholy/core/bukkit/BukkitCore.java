@@ -61,7 +61,7 @@ public class BukkitCore extends JavaPlugin {
                 new Perk(104,"Raw fish", Material.RAW_FISH, (byte) 0, PerkType.STICK, -1,PerkRankType.PREMIUM, null));
 
         getPerkCache().getPerkHashMap().put(105,
-                new Perk(105,"Raw fish", Material.RAW_FISH, (byte) 0, PerkType.STICK, -1,PerkRankType.PREMIUM, null));
+                new Perk(105,"Puffer fish", Material.RAW_FISH, (byte) 3, PerkType.STICK, -1,PerkRankType.PREMIUM, null));
 
         getPerkCache().getPerkHashMap().put(106,
                 new Perk(106,"Germany banner", Material.BANNER, (byte) 0, PerkType.STICK, 1100,null, null, DyeColor.BLACK,
