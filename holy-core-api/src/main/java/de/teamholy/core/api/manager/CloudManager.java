@@ -46,6 +46,16 @@ public class CloudManager {
                 .send();
     }
 
+    public void sendCloudMessage(String channel, String message, JsonDocument data) {
+        ChannelMessage.builder()
+                .channel(channel)
+                .message(message)
+                .json(data)
+                .targetAll()
+                .build()
+                .send();
+    }
+
     public boolean isPunishable(UUID uuid) {
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
         if (iPermissionUser != null) {

@@ -34,6 +34,8 @@ public class CoreAPI {
     UUIDManager uuidManager;
     CoinManager coinManager;
     NickManager nickManager;
+    StaffManager staffManager;
+    FriendManager friendManager;
     ExecutorService executor;
 
     PlayerService playerService;
@@ -74,6 +76,8 @@ public class CoreAPI {
         this.reportManager = new ReportManager(this);
         this.clanManager = new ClanManager(this, clanService);
         this.coinManager = new CoinManager(this);
+        this.staffManager = new StaffManager(this);
+        this.friendManager = new FriendManager(this);
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
     }

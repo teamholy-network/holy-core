@@ -21,7 +21,7 @@ public class PerkManager {
 
     private String prefix = "§6Perks§8× §7";
 
-    private ItemBuilder getPerk(Player player, PerkType perkType) {
+    public ItemBuilder getPerk(Player player, PerkType perkType) {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
         Perk perk;
         ItemBuilder itemBuilder = null;
@@ -206,7 +206,7 @@ public class PerkManager {
                     perkPlayerProfile.setChatPerk(perk.getId());
                 }
                 player.closeInventory();
-                player.sendMessage(perks + "§7You selected the §e" + finalName + " §6perk!");
+                player.sendMessage(prefix + "§7You selected the §e" + finalName + " §6perk!");
                 player.playSound(player.getLocation(), Sound.NOTE_PLING,2f,2f);
 
                 BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(),perkPlayerProfile);
@@ -254,7 +254,7 @@ public class PerkManager {
             player.closeInventory();
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),() -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
             if (!(playerProfile.getCoins() >= perk.getPrice())) {
-                player.sendMessage("§cYou dont have enough coins!");
+                player.sendMessage(prefix + "§cYou dont have enough coins!");
                 player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 2f, 2f);
                 return;
             }
@@ -301,11 +301,11 @@ public class PerkManager {
 
 
 
-    enum SortOptionPerk {
+    public enum SortOptionPerk {
         NORMAL, COINS, RANK;
     }
 
-    enum SortOptionPlayer {
+    public enum SortOptionPlayer {
         ALL, OWNED, UNOWNED;
     }
 

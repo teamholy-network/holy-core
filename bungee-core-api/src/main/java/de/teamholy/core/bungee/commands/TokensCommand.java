@@ -1,0 +1,105 @@
+package de.teamholy.core.bungee.commands;
+
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.driver.permission.PermissionCheckResult;
+import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.bungee.BungeeCore;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.Command;
+
+import java.util.Locale;
+import java.util.UUID;
+
+/* copyright by Yassino */
+public class TokensCommand extends Command {
+
+
+    CoreAPI coreAPI = BungeeCore.getAPI();
+
+    public TokensCommand(String name) {
+        super(name);
+    }
+
+    @Override
+    public void execute(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof ProxiedPlayer) {
+            ProxiedPlayer proxiedPlayer = (ProxiedPlayer) commandSender;
+            if (args.length == 0 || !proxiedPlayer.hasPermission("teamholy.tokens")) {
+
+                PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
+                        () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+
+
+                if (proxiedPlayer.hasPermission("teamholy.joinme")) {
+                    proxiedPlayer.sendMessage("§8§m-------------§f§lTOKENS§8§m---------------");
+                    proxiedPlayer.sendMessage("§dJoinme Tokens §8» §a§lUNLIMITED §8(§e" + playerProfile.getJoinMeTokens() + "§8)");
+                } else {
+                    proxiedPlayer.sendMessage("§dJoinme Tokens §8» §e" + playerProfile.getJoinMeTokens());
+                }
+                proxiedPlayer.sendMessage("§cStatsreset Tokens §8» §e" + playerProfile.getStatsResetTokens());
+                proxiedPlayer.sendMessage("§8§m----------------------------------");
+                return;
+            }
+
+            if (args.length != 4) {
+                commandSender.sendMessage("/tokens joinme (player) add (amount)");
+                commandSender.sendMessage("/tokens statsreset (player) add (amount)");
+            } else {
+
+                String type;
+
+                if (args[0].toLowerCase(Locale.ROOT).equals("joinme")) {
+                    type = "joinmeTokens";
+                } else if (args[0].toLowerCase(Locale.ROOT).equals("statsreset")) {
+                    type = "statsresetTokens";
+                } else {
+                    commandSender.sendMessage("not a valid arg (joinme/statsreset)!");
+                    return;
+                }
+
+                UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
+                if (uuid == null) {
+                    commandSender.sendMessage("not a valid player!");
+                    return;
+                }
+
+                if (args[2].toLowerCase(Locale.ROOT).equals("add")) {
+                    try {
+                        int number = Integer.parseInt(args[3]);
+
+                        PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
+                                () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
+
+                        if (type.equalsIgnoreCase("joinmeTokens")) {
+                            playerProfile.setJoinMeTokens(playerProfile.getJoinMeTokens() + number);
+                        } else {
+                            playerProfile.setStatsResetTokens(playerProfile.getStatsResetTokens() + number);
+                        }
+                        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, ProxyServer.getInstance().getPlayer(uuid) != null,true);
+                        commandSender.sendMessage("Added player " + args[1] + " " + number + " " + type + " tokens!");
+
+                        ProxiedPlayer proxiedPlayer1 = ProxyServer.getInstance().getPlayer(uuid);
+                        if (proxiedPlayer1 != null) {
+                            if (type.equalsIgnoreCase("statsresetTokens")) {
+                                proxiedPlayer1.sendMessage("§f§lWhoooosh! §7You received §a" + number + " §7statsreset " + (number == 1 ? "token" : "tokens"));
+                            } else {
+                                proxiedPlayer1.sendMessage("§f§lWhoooosh! §7You received §a" + number + " §7joinme " + (number == 1 ? "token" : "tokens"));
+                            }
+                        }
+
+                    } catch (NumberFormatException e) {
+                        commandSender.sendMessage("not a valid number!");
+                    }
+                }
+
+
+            }
+        }
+
+    }
+
+}

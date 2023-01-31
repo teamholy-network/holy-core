@@ -3,6 +3,7 @@ package de.teamholy.core.api.manager;
 import de.teamholy.core.api.CoreAPI;
 import jodd.util.collection.MapEntry;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.redisson.api.RMapCache;
 
@@ -11,7 +12,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /* copyright by Yassino */
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
+@Getter
 public class NickManager {
 
     RMapCache<UUID, String> nickList;
