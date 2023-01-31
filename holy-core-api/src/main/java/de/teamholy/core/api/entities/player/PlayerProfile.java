@@ -27,5 +27,9 @@ public class PlayerProfile {
     long onlineTime;
     long joinMeTokens;
     long statsResetTokens;
+
+    long firstJoin;
+    long lastJoin;
+
     Map<String, Long> collectables;
 }

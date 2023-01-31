@@ -156,6 +156,8 @@ public class ReportStaffCommand extends Command {
                 } else {
                     message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(BungeeCore.getAPI().getCloudManager().getColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()) + " §7already took over the report")));
                 }
+
+                player.sendMessage(message);
             }
         }
         player.sendMessage(prefix + "");

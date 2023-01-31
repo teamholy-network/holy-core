@@ -61,6 +61,8 @@ public class PostLoginListener implements Listener {
             playerProfile.setStatsResetTokens(0L);
             playerProfile.setJoinMeTokens(0L);
             playerProfile.setCollectables(new HashMap<>());
+            playerProfile.setFirstJoin(System.currentTimeMillis());
+            playerProfile.setLastJoin(System.currentTimeMillis());
 
 
             friendProfile = new FriendProfile();
@@ -100,6 +102,7 @@ public class PostLoginListener implements Listener {
 
 
                 finalPlayerProfile.setOnline(true);
+                finalPlayerProfile.setLastJoin(System.currentTimeMillis());
                 if (!finalPlayerProfile.getPlayerName().equalsIgnoreCase(proxiedPlayer.getName())) {
                     finalPlayerProfile.setPlayerName(proxiedPlayer.getName());
                 }
