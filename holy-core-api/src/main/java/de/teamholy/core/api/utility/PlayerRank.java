@@ -1,5 +1,13 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Getter
 public enum PlayerRank {
 
     ADMIN("Admin", "§4Admin §8┃ §4", "§4Admin §8┃ §4", "§4", 7100,
@@ -49,57 +57,10 @@ public enum PlayerRank {
     PLAYER("Player", "§7", "§7", "§7", 9000,
             80, 80, 80);
 
-
-    private String name;
-    private String chatPrefix;
-    private String tabPrefix;
-    private String colorCode;
-    private int sortId;
-    private int red, green, blue;
-
-
-    PlayerRank(String name, String chatPrefix, String tabPrefix, String colorCode, int sortId, int red, int green, int blue) {
-        this.name = name;
-        this.chatPrefix = chatPrefix;
-        this.tabPrefix = tabPrefix;
-        this.colorCode = colorCode;
-        this.sortId = sortId;
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-    }
-
-    public String getTabPrefix() {
-        return tabPrefix;
-    }
-
-    public int getBlue() {
-        return blue;
-    }
-
-    public int getGreen() {
-        return green;
-    }
-
-    public int getRed() {
-        return red;
-    }
-
-    public int getSortId() {
-        return sortId;
-    }
-
-    public String getChatPrefix() {
-        return chatPrefix;
-    }
-
-    public String getColorCode() {
-        return colorCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
+    String name;
+    String chatPrefix;
+    String tabPrefix;
+    String colorCode;
+    int sortId;
+    int red, green, blue;
 }

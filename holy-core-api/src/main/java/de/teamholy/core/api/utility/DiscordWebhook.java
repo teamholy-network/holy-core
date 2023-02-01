@@ -1,5 +1,10 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
 import java.io.IOException;
@@ -10,14 +15,15 @@ import java.util.List;
 import java.util.*;
 
 @SuppressWarnings("unused")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DiscordWebhook {
 
-    private final String url;
-    private String content;
-    private String username;
-    private String avatarUrl;
-    private boolean tts;
-    private List<EmbedObject> embeds = new ArrayList<>();
+    final String url;
+    String content;
+    String username;
+    String avatarUrl;
+    boolean tts;
+    final List<EmbedObject> embeds = new ArrayList<>();
 
     public DiscordWebhook(String url) {
         this.url = url;
@@ -152,17 +158,19 @@ public class DiscordWebhook {
         }
     }
 
+    @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class EmbedObject {
-        private String title;
-        private String description;
-        private String url;
-        private Color color;
 
-        private Footer footer;
-        private Thumbnail thumbnail;
-        private Image image;
-        private Author author;
-        private List<Field> fields = new ArrayList<>();
+        String title;
+        String description;
+        String url;
+        Color color;
+
+        Footer footer;
+        Thumbnail thumbnail;
+        Image image;
+        Author author;
+        final List<Field> fields = new ArrayList<>();
 
         public String getTitle() {
             return title;
@@ -245,100 +253,56 @@ public class DiscordWebhook {
             return this;
         }
 
-        private class Footer {
-            private String text;
-            private String iconUrl;
+        @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+        @RequiredArgsConstructor
+        @Getter
+        private static class Footer {
 
-            private Footer(String text, String iconUrl) {
-                this.text = text;
-                this.iconUrl = iconUrl;
-            }
-
-            private String getText() {
-                return text;
-            }
-
-            private String getIconUrl() {
-                return iconUrl;
-            }
+            String text;
+            String iconUrl;
         }
 
-        private class Thumbnail {
-            private String url;
+        @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+        @RequiredArgsConstructor
+        @Getter
+        private static class Thumbnail {
 
-            private Thumbnail(String url) {
-                this.url = url;
-            }
-
-            private String getUrl() {
-                return url;
-            }
+            String url;
         }
 
-        private class Image {
-            private String url;
+        @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+        @RequiredArgsConstructor
+        @Getter
+        private static class Image {
 
-            private Image(String url) {
-                this.url = url;
-            }
-
-            private String getUrl() {
-                return url;
-            }
+            String url;
         }
 
-        private class Author {
-            private String name;
-            private String url;
-            private String iconUrl;
+        @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+        @RequiredArgsConstructor
+        @Getter
+        private static class Author {
 
-            private Author(String name, String url, String iconUrl) {
-                this.name = name;
-                this.url = url;
-                this.iconUrl = iconUrl;
-            }
-
-            private String getName() {
-                return name;
-            }
-
-            private String getUrl() {
-                return url;
-            }
-
-            private String getIconUrl() {
-                return iconUrl;
-            }
+            String name;
+            String url;
+            String iconUrl;
         }
 
-        private class Field {
-            private String name;
-            private String value;
-            private boolean inline;
+        @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+        @RequiredArgsConstructor
+        @Getter
+        private static class Field {
 
-            private Field(String name, String value, boolean inline) {
-                this.name = name;
-                this.value = value;
-                this.inline = inline;
-            }
-
-            private String getName() {
-                return name;
-            }
-
-            private String getValue() {
-                return value;
-            }
-
-            private boolean isInline() {
-                return inline;
-            }
+            String name;
+            String value;
+            boolean inline;
         }
     }
 
-    private class JSONObject {
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    private static class JSONObject {
 
-        private final HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
 
         void put(String key, Object value) {
             if (value != null) {
@@ -364,7 +328,7 @@ public class DiscordWebhook {
                 } else if (val instanceof Boolean) {
                     builder.append(val);
                 } else if (val instanceof JSONObject) {
-                    builder.append(val.toString());
+                    builder.append(val);
                 } else if (val.getClass().isArray()) {
                     builder.append("[");
                     int len = Array.getLength(val);

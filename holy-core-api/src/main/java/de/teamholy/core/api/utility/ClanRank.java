@@ -1,5 +1,13 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Getter
 public enum ClanRank {
 
     LEADER("Leader"),
@@ -7,10 +15,6 @@ public enum ClanRank {
     MEMBER("Member");
 
     String fancy;
-
-    ClanRank(String fancy) {
-        this.fancy = fancy;
-    }
 
     public static String parsePrefix(ClanRank clanRank) {
         switch (clanRank) {

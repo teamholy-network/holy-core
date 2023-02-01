@@ -1,12 +1,15 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
 @AllArgsConstructor
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum Gamemodes {
 
     MLGRUSH("6", "won_games", List.of("kills", "deaths", "played_games", "won_games", "destroyed_beds"), List.of("MLGRush")),
@@ -15,8 +18,7 @@ public enum Gamemodes {
     SGFFA("a", "kills", List.of("kills", "deaths"), List.of("SGFFA")),
     CLUTCHES("§b", "", List.of(""), List.of("Clutches"));
 
-
-    private String color, rankingKey;
-    private List<String> statKeys;
-    private List<String> cloudGroups;
+    String color, rankingKey;
+    List<String> statKeys;
+    List<String> cloudGroups;
 }

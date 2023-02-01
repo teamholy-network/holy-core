@@ -1,18 +1,19 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Report {
 
-    private UUID sender, target;
-    private UUID viewer;
-    private Long time;
-    private String reason;
-
-
+    UUID sender, target;
+    UUID viewer;
+    Long time;
+    String reason;
 }
