@@ -15,8 +15,6 @@ public class StatsResetTask implements Runnable {
 
     @Override
     public void run() {
-        CloudModule.getInstance().getLogger().info("Started Stats reset Task!");
-
 
         Long currentTime = System.currentTimeMillis();
 
@@ -57,6 +55,9 @@ public class StatsResetTask implements Runnable {
                 iCloudPlayer.getPlayerExecutor().sendChatMessage("       §f§lSTATSRESET     ");
                 iCloudPlayer.getPlayerExecutor().sendChatMessage("§7The " + statsType.toBeauty() + " §7stats have been reset");
             });
+
+            CloudModule.getInstance().getLogger().info("         Statsreset         " + statsType.toString());
+
         });
     }
 
