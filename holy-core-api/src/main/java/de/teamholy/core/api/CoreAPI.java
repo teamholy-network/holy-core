@@ -1,17 +1,16 @@
 package de.teamholy.core.api;
 
+import de.teamholy.core.api.entities.ban.BanService;
 import de.teamholy.core.api.entities.clan.ClanService;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerService;
 import de.teamholy.core.api.entities.friend.FriendService;
+import de.teamholy.core.api.entities.game.GameService;
 import de.teamholy.core.api.entities.mute.MuteService;
-import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerService;
 import de.teamholy.core.api.entities.player.PlayerService;
-import de.teamholy.core.api.entities.ban.BanService;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryService;
 import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
-import de.teamholy.core.api.entities.game.GameService;
 import de.teamholy.core.api.manager.*;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
@@ -53,7 +52,7 @@ public class CoreAPI {
     public CoreAPI() {
 
         ConfigManager config = new ConfigManager();
-        this.mongoManager = new MongoManager(new Credentials("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin","holy"));
+        this.mongoManager = new MongoManager(new Credentials("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin", "holy"));
         this.redissonManager = new RedissonManager(this);
 
 

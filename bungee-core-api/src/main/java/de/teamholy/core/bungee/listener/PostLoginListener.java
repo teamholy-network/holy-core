@@ -123,7 +123,7 @@ public class PostLoginListener implements Listener {
         }
 
         if (proxiedPlayer.hasPermission("teamholy.team")) {
-            StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+            StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
             boolean updateStaffDB = false;
             if (staffProfile == null) {
                 updateStaffDB = true;
@@ -135,7 +135,7 @@ public class PostLoginListener implements Listener {
                 staffProfile.setReportList(new ArrayList<>());
             }
 
-            BungeeCore.getAPI().getStaffService().saveEntity(staffProfile,true,updateStaffDB);
+            BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, updateStaffDB);
             BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName() + " §7is now §aonline");
         }
 

@@ -6,7 +6,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 
-import javax.persistence.GeneratedValue;
 import java.util.List;
 
 /* copyright by Yassino */

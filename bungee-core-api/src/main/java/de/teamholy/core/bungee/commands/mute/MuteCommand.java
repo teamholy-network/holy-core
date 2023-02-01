@@ -2,9 +2,7 @@ package de.teamholy.core.bungee.commands.mute;
 
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
-import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
-import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
@@ -18,7 +16,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.awt.*;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -97,12 +94,12 @@ public class MuteCommand extends SenderCommand {
                 punishProfile.setCreateDate(System.currentTimeMillis());
                 punishProfile.setEvidence(evidence);
 
-                BungeeCore.getAPI().getMuteService().saveEntity(punishProfile,isOnline,true);
+                BungeeCore.getAPI().getMuteService().saveEntity(punishProfile, isOnline, true);
 
-                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(author,() -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(author));
+                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(author, () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(author));
                 staffProfile.getMuteProfileList().add(punishProfile);
                 if (staffProfile != null) {
-                    BungeeCore.getAPI().getStaffService().saveEntity(staffProfile,true,true);
+                    BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
                 }
 
 

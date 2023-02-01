@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public enum PerkRankType {
 
-    PLAYER("teamholy.perk.player","§7Player"),
-    PREMIUM("teamholy.perk.premium","§6Premium"),
-    VIP("teamholy.perk.vip","§dVIP"),
-    HOLY("teamholy.perk.holy","§fHoly");
+    PLAYER("teamholy.perk.player", "§7Player"),
+    PREMIUM("teamholy.perk.premium", "§6Premium"),
+    VIP("teamholy.perk.vip", "§dVIP"),
+    HOLY("teamholy.perk.holy", "§fHoly");
 
     private String permission;
     private String rankName;

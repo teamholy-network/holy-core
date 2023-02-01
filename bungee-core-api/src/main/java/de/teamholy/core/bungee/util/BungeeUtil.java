@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.util;
 
-import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
@@ -32,9 +31,9 @@ public class BungeeUtil {
     public static UUID parseTargetArgument(String target) {
 
         if (target.contains("-")) {
-            try{
+            try {
                 return UUID.fromString(target);
-            } catch (IllegalArgumentException exception){
+            } catch (IllegalArgumentException exception) {
                 return null;
             }
         }

@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.friend;
 
-import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -19,7 +18,7 @@ public class FriendCommand extends Command {
     public static String MSGPREFIX = "§6MSG §8× §7";
     public static final String prefix = "§6Friend §8× §7";
 
-    
+
     public static final HashMap<UUID, UUID> LASTREPLYS = new HashMap<>();
 
     public FriendCommand(String name, String permission, String... aliases) {
@@ -37,7 +36,7 @@ public class FriendCommand extends Command {
             } else if (args[0].equalsIgnoreCase("requests")) {
 
 
-                BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
+                BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
                     friendProfile.getFriendReqeustsList().forEach(uuid -> {
                         String nameColor = getColor(uuid) + getName(uuid);
                         proxiedPlayer.sendMessage(new ComponentBuilder(" §8» " + nameColor + " §8× ").append("§a§lACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + getName(uuid)))
@@ -66,12 +65,12 @@ public class FriendCommand extends Command {
                     return;
                 }
 
-                if (BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(),target)) {
+                if (BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(), target)) {
                     proxiedPlayer.sendMessage(prefix + "You are already friends with " + getColor(target) + getName(target));
                     return;
                 }
 
-                if(target.toString().equals(proxiedPlayer.getUniqueId().toString())) {
+                if (target.toString().equals(proxiedPlayer.getUniqueId().toString())) {
                     proxiedPlayer.sendMessage(prefix + "You can't add yourself!");
                     return;
                 }
@@ -81,7 +80,7 @@ public class FriendCommand extends Command {
                     return;
                 }
 
-                if (BungeeCore.getAPI().getFriendManager().isFriendRequest(proxiedPlayer.getUniqueId(),target)) {
+                if (BungeeCore.getAPI().getFriendManager().isFriendRequest(proxiedPlayer.getUniqueId(), target)) {
                     proxiedPlayer.sendMessage(prefix + "You already send " + getColor(target) + getName(target) + " §7a friend request");
                     return;
                 }
@@ -91,7 +90,7 @@ public class FriendCommand extends Command {
                     return;
                 }
 
-                if (BungeeCore.getAPI().getFriendManager().isFriendRequest(target,proxiedPlayer.getUniqueId())) {
+                if (BungeeCore.getAPI().getFriendManager().isFriendRequest(target, proxiedPlayer.getUniqueId())) {
                     ProxyServer.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "friend accept " + getName(target));
                     return;
                 }
@@ -100,7 +99,7 @@ public class FriendCommand extends Command {
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
                 proxiedPlayer.sendMessage(prefix + "You send a friend request to " + getColor(target) + getName(target));
-                BungeeCore.getAPI().getFriendManager().sendFriendRequest(proxiedPlayer.getUniqueId(),target,isOnline);
+                BungeeCore.getAPI().getFriendManager().sendFriendRequest(proxiedPlayer.getUniqueId(), target, isOnline);
 
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
 
@@ -123,7 +122,7 @@ public class FriendCommand extends Command {
                     return;
                 }
 
-                if (!BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(),target)) {
+                if (!BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(), target)) {
                     proxiedPlayer.sendMessage(prefix + "You are not friends with " + getColor(target) + getName(target));
                     return;
                 }
@@ -131,8 +130,8 @@ public class FriendCommand extends Command {
                 ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(target);
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
-                BungeeCore.getAPI().getFriendManager().removeFriend(proxiedPlayer.getUniqueId(),target,isOnline);
-                BungeeCore.getAPI().getFriendManager().removeFriend(target,proxiedPlayer.getUniqueId(),true);
+                BungeeCore.getAPI().getFriendManager().removeFriend(proxiedPlayer.getUniqueId(), target, isOnline);
+                BungeeCore.getAPI().getFriendManager().removeFriend(target, proxiedPlayer.getUniqueId(), true);
 
                 proxiedPlayer.sendMessage(prefix + "You removed " + getColor(target) + getName(target) + " §7as your friend");
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
@@ -163,12 +162,12 @@ public class FriendCommand extends Command {
                 ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(target);
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
-                BungeeCore.getAPI().getFriendManager().addFriend(proxiedPlayer.getUniqueId(),target,isOnline);
-                BungeeCore.getAPI().getFriendManager().removeFriendRequest(proxiedPlayer.getUniqueId(),target,isOnline);
+                BungeeCore.getAPI().getFriendManager().addFriend(proxiedPlayer.getUniqueId(), target, isOnline);
+                BungeeCore.getAPI().getFriendManager().removeFriendRequest(proxiedPlayer.getUniqueId(), target, isOnline);
 
 
-                BungeeCore.getAPI().getFriendManager().addFriend(target,proxiedPlayer.getUniqueId(),true);
-                BungeeCore.getAPI().getFriendManager().removeFriendRequest(target,proxiedPlayer.getUniqueId(),true);
+                BungeeCore.getAPI().getFriendManager().addFriend(target, proxiedPlayer.getUniqueId(), true);
+                BungeeCore.getAPI().getFriendManager().removeFriendRequest(target, proxiedPlayer.getUniqueId(), true);
 
                 proxiedPlayer.sendMessage(prefix + "You accepted the friend request from " + getColor(target) + getName(target));
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
@@ -191,7 +190,7 @@ public class FriendCommand extends Command {
                     return;
                 }
 
-                BungeeCore.getAPI().getFriendManager().removeFriendRequest(target, proxiedPlayer.getUniqueId(),true);
+                BungeeCore.getAPI().getFriendManager().removeFriendRequest(target, proxiedPlayer.getUniqueId(), true);
                 proxiedPlayer.sendMessage(prefix + "You denied the friend request of " + getColor(target) + getName(target));
 
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
@@ -213,7 +212,7 @@ public class FriendCommand extends Command {
                     return;
                 }
 
-                if (!BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(),target)) {
+                if (!BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(), target)) {
                     proxiedPlayer.sendMessage(prefix + "You are not friends with " + getColor(target) + getName(target));
                     return;
                 }
@@ -236,16 +235,17 @@ public class FriendCommand extends Command {
     private static String getColor(UUID uuid) {
         return BungeeCore.getAPI().getCloudManager().getColor(uuid);
     }
+
     private static String getName(UUID uuid) {
         return BungeeCore.getAPI().getUuidManager().getName(uuid);
-    } 
-
+    }
 
 
     public static void printFriendList(ProxiedPlayer proxiedPlayer) {
-        BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
+        BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
             proxiedPlayer.sendMessage(prefix + "Friend list §a" + friendProfile.getFriendList().size() + "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8»");
-            StringBuilder online = new StringBuilder();;
+            StringBuilder online = new StringBuilder();
+            ;
             AtomicInteger i = new AtomicInteger();
             for (UUID uuid : friendProfile.getFriendList()) {
                 i.getAndIncrement();
@@ -274,7 +274,7 @@ public class FriendCommand extends Command {
         proxiedPlayer.sendMessage(prefix + "/msg (player)");
         proxiedPlayer.sendMessage("§8§m-----------------------------");
     }
-    
+
 
     public static void msg(UUID sender, UUID getter, String message) {
         ProxiedPlayer senderPlayer = ProxyServer.getInstance().getPlayer(sender);
@@ -283,7 +283,7 @@ public class FriendCommand extends Command {
         senderPlayer.sendMessage(MSGPREFIX + BungeeCore.getAPI().getCloudManager().getColor(sender) + senderPlayer.getName() + " §7» " + BungeeCore.getAPI().getCloudManager().getColor(getterPlayer.getUniqueId()) + getterPlayer.getName() + " §8» §a" + message);
         getterPlayer.sendMessage(MSGPREFIX + BungeeCore.getAPI().getCloudManager().getColor(sender) + senderPlayer.getName() + " §7» " + BungeeCore.getAPI().getCloudManager().getColor(getterPlayer.getUniqueId()) + getterPlayer.getName() + " §8» §a" + message);
 
-        LASTREPLYS.put(sender,getter);
-        LASTREPLYS.put(getter,sender);
+        LASTREPLYS.put(sender, getter);
+        LASTREPLYS.put(getter, sender);
     }
 }

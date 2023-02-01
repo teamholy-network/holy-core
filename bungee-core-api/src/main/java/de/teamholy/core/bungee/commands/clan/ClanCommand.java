@@ -12,7 +12,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.checkerframework.checker.units.qual.C;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class ClanCommand extends SenderCommand {
     private static final Pattern pattern = Pattern.compile("[a-zA-z0-9]*");
 
     public ClanCommand() {
-        super(new String[]{"clan","guild"},null);
+        super(new String[]{"clan", "guild"}, null);
     }
 
     @Override
@@ -147,9 +146,9 @@ public class ClanCommand extends SenderCommand {
                     String tag = args[1];
                     onInfo(player, tag);
                 } else if (args[0].equalsIgnoreCase("create")) {
-                                        player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (name) (tag)");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (name) (tag)");
                 } else if (args[0].equalsIgnoreCase("rename")) {
-                                        player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (name) (tag)");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (name) (tag)");
                 } else if (args[0].equalsIgnoreCase("chat")) {
                     onClanChat(player, args);
                 } else if (args[0].equalsIgnoreCase("color")) {
@@ -220,7 +219,7 @@ public class ClanCommand extends SenderCommand {
         clanProfile.setPlayerId(player.getUniqueId());
         clanProfile.setClanId(clan.getClanId());
         clanProfile.setClanRank(ClanRank.MEMBER);
-        BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile,true,true);
+        BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile, true, true);
         clan.getMembers().add(player.getUniqueId());
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 joined the clan.");
@@ -410,7 +409,7 @@ public class ClanCommand extends SenderCommand {
 
             ClanRank promote = promoteProfile.getClanRank() == ClanRank.MOD ? ClanRank.LEADER : ClanRank.MOD;
             promoteProfile.setClanRank(promote);
-            BungeeCore.getAPI().getClanPlayerService().saveEntity(promoteProfile,isOnline,true);
+            BungeeCore.getAPI().getClanPlayerService().saveEntity(promoteProfile, isOnline, true);
 
             Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
 
@@ -454,7 +453,7 @@ public class ClanCommand extends SenderCommand {
             ClanRank demote = demoteProfile.getClanRank() == ClanRank.MOD ? ClanRank.MEMBER : ClanRank.MOD;
 
             demoteProfile.setClanRank(demote);
-            BungeeCore.getAPI().getClanPlayerService().saveEntity(demoteProfile,isOnline,true);
+            BungeeCore.getAPI().getClanPlayerService().saveEntity(demoteProfile, isOnline, true);
 
             Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
 
@@ -541,7 +540,7 @@ public class ClanCommand extends SenderCommand {
         clanProfile.setClanRank(ClanRank.MEMBER);
         clanProfile.setClanId(clan.getClanId());
 
-        BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile,true,true);
+        BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile, true, true);
 
 
         BungeeCore.getAPI().getClanManager().updateClan(clan);
@@ -655,7 +654,7 @@ public class ClanCommand extends SenderCommand {
         clanProfile.setPlayerId(player.getUniqueId());
         clanProfile.setClanId(clan.getClanId());
         clanProfile.setClanRank(ClanRank.LEADER);
-        BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile,true,true);
+        BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile, true, true);
 
         player.sendMessage(Message.CLAN_PREFIX + "§7You have created the §6" + name + "§7 clan!");
 
@@ -721,7 +720,7 @@ public class ClanCommand extends SenderCommand {
         BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7Your clan has been renamed!");
 
 
-        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () ->{
+        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
             for (UUID member : clan.getMembers()) {
                 BungeeCore.getAPI().getCloudManager().announceClanUpdate(member);
             }
@@ -788,7 +787,7 @@ public class ClanCommand extends SenderCommand {
             message.append(args[i]).append(" ");
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
-        BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + ClanRank.parsePrefix(clanProfile.getClanRank()) + "§l" +  clanProfile.getClanRank().getFancy() + " " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§8 » §7" + message);
+        BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + ClanRank.parsePrefix(clanProfile.getClanRank()) + "§l" + clanProfile.getClanRank().getFancy() + " " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§8 » §7" + message);
     }
 
 }

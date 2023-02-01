@@ -19,8 +19,6 @@ import java.util.UUID;
 public class PartyCommand extends Command {
 
 
-
-
     private String prefix = "§5Party §8× §7";
     private final PartyManager partyHandler = BungeeCore.getInstance().getPartyManager();
 
@@ -74,7 +72,7 @@ public class PartyCommand extends Command {
                 ProxiedPlayer leader = ProxyServer.getInstance().getPlayer(party.getPartyPlayers().get(0));
                 player.sendMessage(" " + getColor(leader.getUniqueId()) + leader.getName());
                 player.sendMessage("");
-                player.sendMessage("§aMembers §8» §7" + (party.getPartyPlayers().size()-1) + "§8/§c" + (party.getMaxSize() == -1 ? "-1" : (party.getMaxSize() - 1)));
+                player.sendMessage("§aMembers §8» §7" + (party.getPartyPlayers().size() - 1) + "§8/§c" + (party.getMaxSize() == -1 ? "-1" : (party.getMaxSize() - 1)));
                 for (int i = 1; i < party.getPartyPlayers().size(); i++) {
                     ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(party.getPartyPlayers().get(i));
                     player.sendMessage(" " + getColor(partyPlayer.getUniqueId()) + partyPlayer.getName());
@@ -166,7 +164,7 @@ public class PartyCommand extends Command {
                     return;
                 }
 
-                if (!canInvite(target.getUniqueId(),player.getUniqueId())) {
+                if (!canInvite(target.getUniqueId(), player.getUniqueId())) {
                     player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7toggled their party invites!");
                     return;
                 }
@@ -250,8 +248,8 @@ public class PartyCommand extends Command {
                     return;
                 }
 
-                if (!partyHandler.gotInvited(player,target.getUniqueId())) {
-                    player.sendMessage(prefix + "The player "+ getColor(target.getUniqueId()) + target.getName() + " §7did not invite you!");
+                if (!partyHandler.gotInvited(player, target.getUniqueId())) {
+                    player.sendMessage(prefix + "The player " + getColor(target.getUniqueId()) + target.getName() + " §7did not invite you!");
                     return;
                 }
 
@@ -279,8 +277,8 @@ public class PartyCommand extends Command {
                     return;
                 }
 
-                if (!partyHandler.gotInvited(player,target.getUniqueId())) {
-                    player.sendMessage(prefix + "The player "+ getColor(target.getUniqueId()) + target.getName() + " §7did not invite you!");
+                if (!partyHandler.gotInvited(player, target.getUniqueId())) {
+                    player.sendMessage(prefix + "The player " + getColor(target.getUniqueId()) + target.getName() + " §7did not invite you!");
                     return;
                 }
 
@@ -365,10 +363,11 @@ public class PartyCommand extends Command {
     }
 
     private boolean canInvite(UUID uuid, UUID player) {
-        FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(uuid,() -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(uuid));
+        FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(uuid, () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(uuid));
         if (friendProfile.getPartyInviteAllowance() == PartyInviteAllowance.NONE) return false;
         if (friendProfile.getPartyInviteAllowance() == PartyInviteAllowance.EVERYONE) return true;
-        if (friendProfile.getPartyInviteAllowance() == PartyInviteAllowance.ONLY_FRIENDS && friendProfile.getFriendList().contains(player)) return true;
+        if (friendProfile.getPartyInviteAllowance() == PartyInviteAllowance.ONLY_FRIENDS && friendProfile.getFriendList().contains(player))
+            return true;
 
         return false;
     }

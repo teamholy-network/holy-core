@@ -7,13 +7,11 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Listener;
 
 import java.util.UUID;
 
 /* copyright by Yassino */
 public class PartyChatCommand extends Command {
-
 
 
     private String prefix = "§5Party §8× §7";
@@ -55,7 +53,6 @@ public class PartyChatCommand extends Command {
             player.sendMessage(prefix + "/partychat (message)");
         }
     }
-
 
 
     private String getColor(UUID uuid) {

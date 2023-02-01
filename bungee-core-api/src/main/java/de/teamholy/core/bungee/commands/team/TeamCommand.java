@@ -30,7 +30,7 @@ public class TeamCommand extends Command {
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
             if (proxiedPlayer.hasPermission("teamholy.team")) {
 
-                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),() -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
                 String name = BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
                 TextComponent message = new TextComponent(prefix + name + " §8(§a" + proxiedPlayer.getServer().getInfo().getName() + "§8)");

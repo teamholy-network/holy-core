@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.clan;
 
-import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
@@ -18,7 +17,7 @@ public class AdminClanCommand extends SenderCommand {
 
 
     public AdminClanCommand() {
-        super(new String[]{"adminclan", "aclan"},"teamholy.adminclan");
+        super(new String[]{"adminclan", "aclan"}, "teamholy.adminclan");
     }
 
     @Override
@@ -33,7 +32,7 @@ public class AdminClanCommand extends SenderCommand {
                     sender.sendMessage(Message.CLAN_PREFIX + "§7/adminclan delete (tag)");
                 } else if (args[0].equalsIgnoreCase("kick")) {
                     sender.sendMessage(Message.CLAN_PREFIX + "§7/adminclan kick (player)");
-                } else if (args[0].equalsIgnoreCase("changecolor")){
+                } else if (args[0].equalsIgnoreCase("changecolor")) {
                     sender.sendMessage(Message.CLAN_PREFIX + "§7/adminclan changecolor (tag) (color)");
                 } else printUsage(sender);
             } else if (args.length == 2) {
@@ -79,7 +78,7 @@ public class AdminClanCommand extends SenderCommand {
                 } else {
                     printUsage(sender);
                 }
-            } else if (args.length == 3){
+            } else if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("changecolor")) {
                     String tag = args[1];
                     Clan clan = BungeeCore.getAPI().getClanManager().getClanByTag(tag);
@@ -97,9 +96,9 @@ public class AdminClanCommand extends SenderCommand {
                     BungeeCore.getAPI().getClanManager().updateClan(clan);
                     BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7Your clan got the color§8: " + clan.getColor() + clan.getName());
                     for (UUID member : clan.getMembers()) {
-                        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(),() -> {
+                        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
                             BungeeCore.getAPI().getCloudManager().announceClanUpdate(member);
-                        },2,TimeUnit.SECONDS);
+                        }, 2, TimeUnit.SECONDS);
                     }
                 }
             } else printUsage(sender);

@@ -14,7 +14,7 @@ public class MSGCommand extends Command {
     private String prefix = "§6MSG §8× §7";
 
     public MSGCommand(String name, String... aliases) {
-        super(name,null,aliases);
+        super(name, null, aliases);
     }
 
 
@@ -35,7 +35,7 @@ public class MSGCommand extends Command {
             return;
         }
 
-        if (!BungeeCore.getAPI().getFriendManager().isFriend(player.getUniqueId(),target) && !player.hasPermission("teamholy.team")) {
+        if (!BungeeCore.getAPI().getFriendManager().isFriend(player.getUniqueId(), target) && !player.hasPermission("teamholy.team")) {
             player.sendMessage(prefix + "You are not friends with " + getColor(target) + getName(target));
             return;
         }
@@ -47,7 +47,7 @@ public class MSGCommand extends Command {
         }
 
 
-        if(target.toString().equals(player.getUniqueId().toString())) {
+        if (target.toString().equals(player.getUniqueId().toString())) {
             player.sendMessage(prefix + "You can't msg yourself!");
             return;
         }
@@ -62,13 +62,14 @@ public class MSGCommand extends Command {
             return;
         }
 
-        FriendCommand.msg(player.getUniqueId(),target,stringBuilder.toString());
+        FriendCommand.msg(player.getUniqueId(), target, stringBuilder.toString());
     }
 
 
     private String getColor(UUID uuid) {
         return BungeeCore.getAPI().getCloudManager().getColor(uuid);
     }
+
     private String getName(UUID uuid) {
         return BungeeCore.getAPI().getUuidManager().getName(uuid);
     }

@@ -62,7 +62,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(Material material, int amount, byte subID) {
-        this.itemStack = new ItemStack(material, amount, (short)subID);
+        this.itemStack = new ItemStack(material, amount, (short) subID);
     }
 
 
@@ -101,9 +101,9 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setSkullOwner(String skullOwner) {
-        SkullMeta skullMeta = (SkullMeta)this.itemStack.getItemMeta();
+        SkullMeta skullMeta = (SkullMeta) this.itemStack.getItemMeta();
         skullMeta.setOwner(skullOwner);
-        this.itemStack.setItemMeta((ItemMeta)skullMeta);
+        this.itemStack.setItemMeta((ItemMeta) skullMeta);
         return this;
     }
 
@@ -115,9 +115,9 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setLeatherColor(Color color) {
-        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta)this.itemStack.getItemMeta();
+        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) this.itemStack.getItemMeta();
         leatherArmorMeta.setColor(color);
-        this.itemStack.setItemMeta((ItemMeta)leatherArmorMeta);
+        this.itemStack.setItemMeta((ItemMeta) leatherArmorMeta);
         return this;
     }
 
@@ -143,31 +143,31 @@ public class ItemBuilder {
     }
 
     public ItemBuilder getSkull(String url) {
-        SkullMeta itemMeta = (SkullMeta)this.itemStack.getItemMeta();
+        SkullMeta itemMeta = (SkullMeta) this.itemStack.getItemMeta();
         try {
             Field field = skullMetaClass.getDeclaredField("profile");
             field.setAccessible(true);
             field.set(itemMeta, getProfile(url));
-        } catch (NoSuchFieldException|IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        itemStack.setItemMeta((ItemMeta)itemMeta);
+        itemStack.setItemMeta((ItemMeta) itemMeta);
         return this;
     }
 
     public ItemBuilder setSkullMeta(String value, String signature) {
         if (this.itemStack.getType() != Material.SKULL_ITEM) {
             this.itemStack.setType(Material.SKULL_ITEM);
-            this.itemStack.setDurability((short)3);
+            this.itemStack.setDurability((short) 3);
         }
         try {
-            SkullMeta skullMeta = (SkullMeta)itemStack.getItemMeta();
+            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
             GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
             gameProfile.getProperties().put("textures", new Property("textures", value, signature));
             Field profileField = skullMeta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
             profileField.set(skullMeta, gameProfile);
-            this.itemStack.setItemMeta((ItemMeta)skullMeta);
+            this.itemStack.setItemMeta((ItemMeta) skullMeta);
         } catch (Exception e) {
             e.printStackTrace();
         }

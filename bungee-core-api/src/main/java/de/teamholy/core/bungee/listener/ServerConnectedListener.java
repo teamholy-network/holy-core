@@ -22,7 +22,7 @@ public class ServerConnectedListener implements Listener {
                 () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (playerProfile == null) return;
         playerProfile.setServerName(event.getServer().getInfo().getName());
-        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
+        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
     }
 
 }

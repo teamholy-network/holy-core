@@ -37,10 +37,10 @@ public class Pagifier<T> {
             return null;
         }
         pageNum -= 1;
-        if(pageNum < 0) {
+        if (pageNum < 0) {
             return null;
         }
-        if(pageNum > (pages.size() - 1)) {
+        if (pageNum > (pages.size() - 1)) {
             return null;
         }
         return this.pages.get(pageNum);

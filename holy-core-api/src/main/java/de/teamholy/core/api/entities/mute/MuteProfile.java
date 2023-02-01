@@ -1,9 +1,6 @@
 package de.teamholy.core.api.entities.mute;
 
 import eu.koboo.en2do.repository.entity.Id;
-import eu.koboo.en2do.repository.entity.NonIndex;
-import eu.koboo.en2do.repository.entity.compound.CompoundIndex;
-import eu.koboo.en2do.repository.entity.compound.Index;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -30,14 +27,14 @@ public class MuteProfile {
     }
 
     public boolean active() {
-        if(duration == -1) {
+        if (duration == -1) {
             return true;
         }
         return getValidUntilDate() > System.currentTimeMillis();
     }
 
     public long getMillisLeft() {
-        if(duration == -1) {
+        if (duration == -1) {
             return duration;
         }
         return getValidUntilDate() - System.currentTimeMillis();

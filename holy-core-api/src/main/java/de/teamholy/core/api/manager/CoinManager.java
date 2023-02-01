@@ -38,11 +38,11 @@ public class CoinManager {
         if (playerProfile == null)
             return;
         playerProfile.setCoins(coins);
-        coreAPI.getPlayerService().saveEntity(playerProfile,forceCache,true);
+        coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
     public void setCoinsAsync(UUID uuid, long coins, boolean forceCache) {
-        coreAPI.getExecutor().execute(() -> setCoins(uuid,coins,forceCache));
+        coreAPI.getExecutor().execute(() -> setCoins(uuid, coins, forceCache));
     }
 
     public void addCoins(UUID uuid, long coins, boolean forceCache) {
@@ -51,11 +51,11 @@ public class CoinManager {
         if (playerProfile == null)
             return;
         playerProfile.setCoins(playerProfile.getCoins() + coins);
-        coreAPI.getPlayerService().saveEntity(playerProfile,forceCache,true);
+        coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
     public void addCoinsAsync(UUID uuid, long coins, boolean forceCache) {
-        coreAPI.getExecutor().execute(() -> addCoinsAsync(uuid,coins,forceCache));
+        coreAPI.getExecutor().execute(() -> addCoinsAsync(uuid, coins, forceCache));
     }
 
     public void removeCoins(UUID uuid, long coins, boolean forceCache) {
@@ -64,11 +64,11 @@ public class CoinManager {
         if (playerProfile == null)
             return;
         playerProfile.setCoins(playerProfile.getCoins() - coins);
-        coreAPI.getPlayerService().saveEntity(playerProfile,forceCache,true);
+        coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
     public void removeCoinsAsync(UUID uuid, long coins, boolean forceCache) {
-        coreAPI.getExecutor().execute(() -> addCoinsAsync(uuid,coins,forceCache));
+        coreAPI.getExecutor().execute(() -> addCoinsAsync(uuid, coins, forceCache));
     }
 
     public String formatInteger(long integer) {

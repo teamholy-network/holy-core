@@ -24,7 +24,7 @@ public class ReportStaffCommand extends Command {
     private ReportManager reportHandler = BungeeCore.getAPI().getReportManager();
 
     public ReportStaffCommand(String name) {
-        super(name,"teamholy.reports","reports");
+        super(name, "teamholy.reports", "reports");
     }
 
     @Override
@@ -42,17 +42,15 @@ public class ReportStaffCommand extends Command {
 
 
                 for (Report reportTemp : reportHandler.getAllReports().values()) {
-                    if (reportTemp.getViewer() != null && reportTemp.getViewer().equals(player.getUniqueId())) report = reportTemp;
+                    if (reportTemp.getViewer() != null && reportTemp.getViewer().equals(player.getUniqueId()))
+                        report = reportTemp;
                 }
-
-
 
 
                 if (report == null) {
                     player.sendMessage(prefix + "You dont edit any report!");
                     return;
                 }
-
 
 
                 player.sendMessage(prefix + "You finished the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + "§7!");
@@ -75,7 +73,7 @@ public class ReportStaffCommand extends Command {
 
 
             }
-        } else if(args.length == 2) {
+        } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("accept")) {
                 String name = args[1];
                 UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(name);

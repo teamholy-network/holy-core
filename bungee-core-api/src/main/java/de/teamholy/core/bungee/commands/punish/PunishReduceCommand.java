@@ -19,7 +19,7 @@ public class PunishReduceCommand extends SenderCommand {
 
 
     public PunishReduceCommand() {
-        super(new String[]{"punishreduce"},"teamholy.punishreduce");
+        super(new String[]{"punishreduce"}, "teamholy.punishreduce");
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PunishReduceCommand extends SenderCommand {
                 boolean isOnline = player != null && player.isConnected();
 
                 if (isBan) {
-                    BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,() -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
+                    BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                     if (banProfile == null) {
                         sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c isn't banned!");
                         return;
@@ -68,12 +68,12 @@ public class PunishReduceCommand extends SenderCommand {
                         return;
                     }
                     banProfile.setDuration(newDuration);
-                    BungeeCore.getAPI().getBanService().saveEntity(banProfile,false,true);
+                    BungeeCore.getAPI().getBanService().saveEntity(banProfile, false, true);
                     String timeLeft = TimeUtil.beautifyTime(banProfile.getMillisLeft(), TimeUnit.MILLISECONDS);
                     sender.sendMessage(Message.PUNISH_PREFIX + "§7You changed the ban-time of §e" + target + "§7 to §c" + timeLeft + "§7!");
 
                 } else {
-                    MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,() -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
+                    MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                     if (muteProfile == null) {
                         sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c isn't muted!");
                         return;
@@ -88,7 +88,7 @@ public class PunishReduceCommand extends SenderCommand {
                         return;
                     }
                     muteProfile.setDuration(newDuration);
-                    BungeeCore.getAPI().getMuteService().saveEntity(muteProfile,isOnline,true);
+                    BungeeCore.getAPI().getMuteService().saveEntity(muteProfile, isOnline, true);
                     String timeLeft = TimeUtil.beautifyTime(muteProfile.getMillisLeft(), TimeUnit.MILLISECONDS);
                     sender.sendMessage(Message.PUNISH_PREFIX + "§7You changed the mute-time of §e" + target + "§7 to §c" + timeLeft + "§7!");
                 }

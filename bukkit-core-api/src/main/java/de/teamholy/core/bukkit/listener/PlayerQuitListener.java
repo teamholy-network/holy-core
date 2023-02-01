@@ -1,6 +1,5 @@
 package de.teamholy.core.bukkit.listener;
 
-import com.avaje.ebean.validation.Email;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

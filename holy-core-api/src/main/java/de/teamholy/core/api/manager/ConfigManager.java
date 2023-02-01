@@ -7,8 +7,6 @@ import eu.koboo.config.FileConfig;
 public class ConfigManager {
 
 
-
-
     private final String username;
     private final String password;
     private final String host;
@@ -57,7 +55,6 @@ public class ConfigManager {
     public boolean isUseAuthSource() {
         return useAuthSource;
     }
-
 
 
 }

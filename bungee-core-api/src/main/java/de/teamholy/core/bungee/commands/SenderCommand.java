@@ -10,7 +10,7 @@ import java.util.Arrays;
 /* copyright by Yassino */
 public abstract class SenderCommand extends Command {
 
-    public SenderCommand(String[] commands,String permission) {
+    public SenderCommand(String[] commands, String permission) {
         super(Arrays.asList(commands).get(0), permission, commands);
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), this);
     }

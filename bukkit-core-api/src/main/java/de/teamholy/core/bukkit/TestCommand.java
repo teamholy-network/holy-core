@@ -1,8 +1,6 @@
 package de.teamholy.core.bukkit;
 
 import de.teamholy.core.api.entities.game.StatsType;
-import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
-import de.teamholy.core.api.entities.perkplayer.PerkPlayerService;
 import de.teamholy.core.api.utility.Gamemodes;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -32,15 +30,16 @@ public class TestCommand implements CommandExecutor {
                 System.out.println("-CYE---");
                 System.out.println(bannerMeta.getBaseColor());
                 System.out.println("-----------");
-                BukkitCore.getAPI().getGameService().getEntityAsync(player.getUniqueId(),() -> BukkitCore.getAPI().getGameService().getRepository().findFirstById(player.getUniqueId()) , gameProfile -> {
+                BukkitCore.getAPI().getGameService().getEntityAsync(player.getUniqueId(), () -> BukkitCore.getAPI().getGameService().getRepository().findFirstById(player.getUniqueId()), gameProfile -> {
                     for (Gamemodes value : Gamemodes.values()) {
                         for (StatsType statsType : StatsType.values()) {
                             for (String statKey : value.getStatKeys()) {
-                                if (!statKey.isEmpty()) gameProfile.setStat(value.toString(),statsType,statKey,new Random().nextInt(1000));
+                                if (!statKey.isEmpty())
+                                    gameProfile.setStat(value.toString(), statsType, statKey, new Random().nextInt(1000));
                             }
                         }
                     }
-                    BukkitCore.getAPI().getGameService().saveEntity(gameProfile,true,true);
+                    BukkitCore.getAPI().getGameService().saveEntity(gameProfile, true, true);
                 });
             } else {
                 BukkitCore.getInstance().getPerkManager().openMainPerkInventory(player);

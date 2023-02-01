@@ -40,9 +40,8 @@ public class PartyListener implements Listener {
             ArrayList<String> uuids = new ArrayList<>();
             party.getPartyPlayers().forEach(partyPlayer -> uuids.add(partyPlayer.toString()));
             if (uuids.size() == 1) return;
-            BungeeCore.getAPI().getCloudManager().sendCloudMessage(player.getServer().getInfo().getName().split("-")[0],"autoteam",JsonDocument.newDocument("players",uuids));
+            BungeeCore.getAPI().getCloudManager().sendCloudMessage(player.getServer().getInfo().getName().split("-")[0], "autoteam", JsonDocument.newDocument("players", uuids));
         }
-
 
 
         party.getPartyPlayers().forEach(all -> {

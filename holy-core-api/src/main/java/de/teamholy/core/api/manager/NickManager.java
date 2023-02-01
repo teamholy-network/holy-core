@@ -1,7 +1,6 @@
 package de.teamholy.core.api.manager;
 
 import de.teamholy.core.api.CoreAPI;
-import jodd.util.collection.MapEntry;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +8,6 @@ import org.redisson.api.RMapCache;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
@@ -23,7 +21,7 @@ public class NickManager {
     }
 
     public void addNick(UUID uuid, String string) {
-        nickList.fastPut(uuid,string);
+        nickList.fastPut(uuid, string);
     }
 
     public void removeNick(UUID uuid) {

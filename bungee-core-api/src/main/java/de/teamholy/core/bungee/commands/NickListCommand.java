@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;

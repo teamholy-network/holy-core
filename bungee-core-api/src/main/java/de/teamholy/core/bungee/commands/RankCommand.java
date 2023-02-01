@@ -17,11 +17,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
 import java.awt.*;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -113,11 +111,11 @@ public class RankCommand extends Command {
                 BungeeCore.getAPI().getExecutor().submit(() -> {
 
                     if (target != null) {
-                        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(target.getUniqueId(),() -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(target.getUniqueId()));
+                        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(target.getUniqueId()));
                         playerProfile.setRank(playerRank.toString());
-                        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
+                        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
 
-                        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(target.getUniqueId(),() -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(target.getUniqueId()));
+                        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(target.getUniqueId()));
                         if (staffProfile == null) {
                             staffProfile = new StaffProfile();
                             staffProfile.setPlayerId(target.getUniqueId());
@@ -125,7 +123,7 @@ public class RankCommand extends Command {
                             staffProfile.setBanProfileList(new ArrayList<>());
                             staffProfile.setMuteProfileList(new ArrayList<>());
                             staffProfile.setReportList(new ArrayList<>());
-                            BungeeCore.getAPI().getStaffService().saveEntity(staffProfile,true,true);
+                            BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
                         }
 
                     }

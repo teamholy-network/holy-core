@@ -5,13 +5,11 @@ import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,41 +25,41 @@ public class PerkManager {
         ItemBuilder itemBuilder = null;
         if (perkType == PerkType.STICK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
-            itemBuilder = new ItemBuilder(perk.getMaterial(),1,perk.getSubId());
+            itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
 
             if (perk.isBanner()) {
-                itemBuilder.setBannerMeta(perk.getBaseColor(),perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);
+                itemBuilder.setBannerMeta(perk.getBaseColor(), perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);
             }
 
         } else if (perkType == PerkType.BLOCK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
-            itemBuilder = new ItemBuilder(perk.getMaterial(),1,perk.getSubId());
+            itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
         }
 
         return itemBuilder;
     }
 
     public void openMainPerkInventory(Player player) {
-        Inventory inventory = new Inventory("§8» §6Perks Type",9);
+        Inventory inventory = new Inventory("§8» §6Perks Type", 9);
         for (int i = 0; i < 9; i++) {
-            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE,1,(byte) 15).setName("§8//").build(),i);
+            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 15).setName("§8//").build(), i);
         }
 
-        inventory.setItem(new ItemBuilder(Material.STICK,1).setName("§8» §6Stick").build(),2,(event) ->
-                openSecondPerkInventory(player,PerkType.STICK,SortOptionPerk.NORMAL,SortOptionPlayer.ALL));
+        inventory.setItem(new ItemBuilder(Material.STICK, 1).setName("§8» §6Stick").build(), 2, (event) ->
+                openSecondPerkInventory(player, PerkType.STICK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
-        inventory.setItem(new ItemBuilder(Material.PAPER,1).setName("§8» §6Chat").build(),4,(event) ->
-                openSecondPerkInventory(player,PerkType.CHAT,SortOptionPerk.NORMAL,SortOptionPlayer.ALL));
+        inventory.setItem(new ItemBuilder(Material.PAPER, 1).setName("§8» §6Chat").build(), 4, (event) ->
+                openSecondPerkInventory(player, PerkType.CHAT, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
-        inventory.setItem(new ItemBuilder(Material.SANDSTONE,1).setName("§8» §6Block").build(),6,(event) ->
-                openSecondPerkInventory(player,PerkType.BLOCK,SortOptionPerk.NORMAL,SortOptionPlayer.ALL));
+        inventory.setItem(new ItemBuilder(Material.SANDSTONE, 1).setName("§8» §6Block").build(), 6, (event) ->
+                openSecondPerkInventory(player, PerkType.BLOCK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
         player.openInventory(inventory.getInventory());
     }
 
     public void openSecondPerkInventory(Player player, PerkType perkType, PerkManager.SortOptionPerk sortOptionPerk, PerkManager.SortOptionPlayer sortOptionPlayer) {
         int inventorySize = checkInventorySize((int) BukkitCore.getInstance().getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == perkType).count()) + 9;
-        Inventory inventory = new Inventory("§8» §6Perks",inventorySize);
+        Inventory inventory = new Inventory("§8» §6Perks", inventorySize);
 
         player.playSound(player.getLocation(), Sound.CLICK, 1F, 100F);
         for (int i = 0; i < inventorySize; i++) {
@@ -86,34 +84,38 @@ public class PerkManager {
 
 
         // sort perk
-        inventory.setItem(sortPerk.build(),(inventorySize - 9) + 1, event -> {
+        inventory.setItem(sortPerk.build(), (inventorySize - 9) + 1, event -> {
 
             if (sortOptionPerk == SortOptionPerk.NORMAL) {
-                openSecondPerkInventory(player,perkType,SortOptionPerk.COINS,sortOptionPlayer);
-            } if (sortOptionPerk == SortOptionPerk.COINS) {
-                openSecondPerkInventory(player,perkType,SortOptionPerk.RANK,sortOptionPlayer);
-            }if (sortOptionPerk == SortOptionPerk.RANK) {
-                openSecondPerkInventory(player,perkType,SortOptionPerk.NORMAL,sortOptionPlayer);
+                openSecondPerkInventory(player, perkType, SortOptionPerk.COINS, sortOptionPlayer);
+            }
+            if (sortOptionPerk == SortOptionPerk.COINS) {
+                openSecondPerkInventory(player, perkType, SortOptionPerk.RANK, sortOptionPlayer);
+            }
+            if (sortOptionPerk == SortOptionPerk.RANK) {
+                openSecondPerkInventory(player, perkType, SortOptionPerk.NORMAL, sortOptionPlayer);
             }
 
         });
 
-        inventory.setItem(new ItemBuilder(Material.BARRIER,1).setName("§8» §cReset Filter & Sort").build(), (inventorySize - 9 ) + 4, event -> {
-            openSecondPerkInventory(player,perkType,SortOptionPerk.NORMAL,SortOptionPlayer.ALL);
+        inventory.setItem(new ItemBuilder(Material.BARRIER, 1).setName("§8» §cReset Filter & Sort").build(), (inventorySize - 9) + 4, event -> {
+            openSecondPerkInventory(player, perkType, SortOptionPerk.NORMAL, SortOptionPlayer.ALL);
         });
 
         // sort player perk
-        inventory.setItem(sortPlayer.build(),(inventorySize - 9) + 7, event -> {
+        inventory.setItem(sortPlayer.build(), (inventorySize - 9) + 7, event -> {
             if (sortOptionPlayer == SortOptionPlayer.ALL) {
-                openSecondPerkInventory(player,perkType,sortOptionPerk,SortOptionPlayer.OWNED);
-            } if (sortOptionPlayer == SortOptionPlayer.OWNED) {
-                openSecondPerkInventory(player,perkType,sortOptionPerk,SortOptionPlayer.UNOWNED);
-            }if (sortOptionPlayer == SortOptionPlayer.UNOWNED) {
-                openSecondPerkInventory(player,perkType,sortOptionPerk,SortOptionPlayer.ALL);
+                openSecondPerkInventory(player, perkType, sortOptionPerk, SortOptionPlayer.OWNED);
+            }
+            if (sortOptionPlayer == SortOptionPlayer.OWNED) {
+                openSecondPerkInventory(player, perkType, sortOptionPerk, SortOptionPlayer.UNOWNED);
+            }
+            if (sortOptionPlayer == SortOptionPlayer.UNOWNED) {
+                openSecondPerkInventory(player, perkType, sortOptionPerk, SortOptionPlayer.ALL);
             }
         });
 
-        showPerks(player,perkType,sortOptionPerk,sortOptionPlayer, inventory);
+        showPerks(player, perkType, sortOptionPerk, sortOptionPlayer, inventory);
 
         player.openInventory(inventory.getInventory());
     }
@@ -123,11 +125,12 @@ public class PerkManager {
 
 
         List<Perk> perks = BukkitCore.getInstance().getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == perkType).filter(perk -> switch (sortOptionPlayer) {
-            case OWNED -> (perk.isBuyAble() && perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission()));
-            case UNOWNED -> (perk.isBuyAble() && !perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && !player.hasPermission(perk.getPerkRankType().getPermission()));
+            case OWNED ->
+                    (perk.isBuyAble() && perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission()));
+            case UNOWNED ->
+                    (perk.isBuyAble() && !perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && !player.hasPermission(perk.getPerkRankType().getPermission()));
             default -> true;
         }).collect(Collectors.toList());
-
 
 
         if (sortOptionPerk == SortOptionPerk.RANK) {
@@ -137,7 +140,7 @@ public class PerkManager {
         } else if (sortOptionPerk == SortOptionPerk.COINS) {
             perks.removeIf(perk -> !perk.isBuyAble());
             perks.sort(Comparator.comparing(Perk::getPrice));
-        } else  {
+        } else {
             perks.sort(Comparator.comparing(Perk::getId));
         }
 
@@ -152,11 +155,11 @@ public class PerkManager {
             }
 
 
-            ItemBuilder itemBuilder = new ItemBuilder(perk.getMaterial(),1,perk.getSubId()).setName("§8» §6" + name);
+            ItemBuilder itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId()).setName("§8» §6" + name);
             if (perk.isBanner()) {
-                itemBuilder.setBannerMeta(perk.getBaseColor(),perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);;
+                itemBuilder.setBannerMeta(perk.getBaseColor(), perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);
+                ;
             }
-
 
 
             List<String> list = new ArrayList<>();
@@ -179,14 +182,14 @@ public class PerkManager {
 
             if (perkPlayerProfile.getChatPerk() == perk.getId() || perkPlayerProfile.getBlockPerk() == perk.getId() || perkPlayerProfile.getStickPerk() == perk.getId()) {
                 itemBuilder.setLore("§2selected");
-                itemBuilder.setEnchantments(Enchantment.PROTECTION_ENVIRONMENTAL,1).setAttributs();
+                itemBuilder.setEnchantments(Enchantment.PROTECTION_ENVIRONMENTAL, 1).setAttributs();
             } else {
                 itemBuilder.setLore(list);
             }
 
 
             String finalName = name;
-            inventory.setItem(itemBuilder.build(),i, event -> {
+            inventory.setItem(itemBuilder.build(), i, event -> {
 
                 if (perk.isBuyAble()) {
                     if (!perkPlayerProfile.getOwnedPerks().contains(perk.getId())) {
@@ -207,10 +210,10 @@ public class PerkManager {
                 }
                 player.closeInventory();
                 player.sendMessage(prefix + "§7You selected the §e" + finalName + " §6perk!");
-                player.playSound(player.getLocation(), Sound.NOTE_PLING,2f,2f);
+                player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
 
-                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(),perkPlayerProfile);
-                BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,false);
+                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+                BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, false);
 
             });
 
@@ -221,18 +224,19 @@ public class PerkManager {
     }
 
 
-    private void buyPerk(Player player,PerkPlayerProfile perkPlayerProfile, Perk perk, String name) {
-        Inventory inventory = new Inventory("§8» §6Perks",9);
+    private void buyPerk(Player player, PerkPlayerProfile perkPlayerProfile, Perk perk, String name) {
+        Inventory inventory = new Inventory("§8» §6Perks", 9);
 
 
         for (int i = 0; i < 9; i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 15).setName("§8//").build(), i);
         }
 
-        ItemBuilder itemBuilder = new ItemBuilder(perk.getMaterial(),1,perk.getSubId());
+        ItemBuilder itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
 
         if (perk.isBanner()) {
-            itemBuilder.setBannerMeta(perk.getBaseColor(),perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);;
+            itemBuilder.setBannerMeta(perk.getBaseColor(), perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);
+            ;
         }
 
         itemBuilder.setName(name);
@@ -248,11 +252,11 @@ public class PerkManager {
 
         itemBuilder.setLore(list);
         itemBuilder.setName("§8» §6" + name);
-        inventory.setItem(itemBuilder.build(),4);
+        inventory.setItem(itemBuilder.build(), 4);
 
         inventory.setItem(new ItemBuilder(Material.INK_SACK, 1, (byte) 10).setName("§8» §aYes").build(), 2, event -> {
             player.closeInventory();
-            PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),() -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
             if (!(playerProfile.getCoins() >= perk.getPrice())) {
                 player.sendMessage(prefix + "§cYou dont have enough coins!");
                 player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 2f, 2f);
@@ -260,12 +264,12 @@ public class PerkManager {
             }
             playerProfile.setCoins(playerProfile.getCoins() - perk.getPrice());
             player.sendMessage(prefix + "§aYou successfully bought the §e" + perk.getName() + " §aperk for §a" + perk.getPrice() + " §6coins!");
-            player.playSound(player.getLocation(),Sound.LEVEL_UP,2f,2f);
+            player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 2f);
 
             perkPlayerProfile.getOwnedPerks().add(perk.getId());
-            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(),perkPlayerProfile);
-            BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,true);
-            BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
+            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+            BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
+            BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
         });
 
 
@@ -278,7 +282,6 @@ public class PerkManager {
         itemBuilder.setLore(list);
         player.openInventory(inventory.getInventory());
     }
-
 
 
     private int checkInventorySize(int items) {
@@ -298,7 +301,6 @@ public class PerkManager {
         }
         return size;
     }
-
 
 
     public enum SortOptionPerk {

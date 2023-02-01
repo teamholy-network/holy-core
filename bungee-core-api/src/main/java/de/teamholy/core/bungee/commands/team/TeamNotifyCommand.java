@@ -20,10 +20,10 @@ public class TeamNotifyCommand extends Command {
         if (!player.hasPermission("teamholy.team")) return;
 
 
-        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(),() -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
+        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
 
         staffProfile.setNotify(!staffProfile.isNotify());
-        BungeeCore.getAPI().getStaffService().saveEntity(staffProfile,true,true);
+        BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
 
 
         String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();

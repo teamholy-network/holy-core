@@ -3,15 +3,11 @@ package de.teamholy.core.bukkit.listener;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
-import de.teamholy.core.api.entities.perkplayer.PerkPlayerService;
-import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
-import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.perks.Perk;
 import de.teamholy.core.bukkit.perks.PerkRankType;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
@@ -38,7 +34,7 @@ public class PlayerJoinListener implements Listener {
         bukkitCore.getCoreAPI().getExecutor().submit(() -> {
 
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
-            PerkPlayerProfile perkPlayerProfile = BukkitCore.getAPI().getPerkPlayerService().getEntity(player.getUniqueId(),() -> BukkitCore.getAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            PerkPlayerProfile perkPlayerProfile = BukkitCore.getAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
             Perk stick = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
             Perk block = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
@@ -52,14 +48,14 @@ public class PlayerJoinListener implements Listener {
                 if (!chat.isBuyAble() && chat.getId() != 200) needUpdate = true;
             }
 
-            if (needUpdate){
+            if (needUpdate) {
                 perkPlayerProfile.setStickPerk(100);
                 perkPlayerProfile.setChatPerk(200);
                 perkPlayerProfile.setBlockPerk(0);
-                BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().saveEntity(perkPlayerProfile,true,true);
+                BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
             }
 
-            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(),perkPlayerProfile);
+            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
 
 
             EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
@@ -70,11 +66,11 @@ public class PlayerJoinListener implements Listener {
 
 
             if (skinProfile == null) skinProfile = new SkinProfile();
-            if (skinProfile.getValue() == null|| !skinProfile.getSignature().equals(signature) || !skinProfile.getValue().equals(value)) {
+            if (skinProfile.getValue() == null || !skinProfile.getSignature().equals(signature) || !skinProfile.getValue().equals(value)) {
                 skinProfile.setPlayerId(player.getUniqueId());
                 skinProfile.setSignature(signature);
                 skinProfile.setValue(value);
-                BukkitCore.getAPI().getSkinService().saveEntity(skinProfile,true,true);
+                BukkitCore.getAPI().getSkinService().saveEntity(skinProfile, true, true);
             }
 
         });

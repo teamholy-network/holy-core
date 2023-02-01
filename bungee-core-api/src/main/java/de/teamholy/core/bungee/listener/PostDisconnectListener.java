@@ -30,9 +30,8 @@ public class PostDisconnectListener implements Listener {
                 () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
 
-
         playerProfile.setOnline(false);
-        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,false,true);
+        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, false, true);
 
         ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(),
                 () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
@@ -84,16 +83,15 @@ public class PostDisconnectListener implements Listener {
         }
 
 
-
-        BungeeCore.getAPI().getStaffService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getClanPlayerService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getFriendService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getSkinService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getBanService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getMuteService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getGameService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getPunishHistoryService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
-        BungeeCore.getAPI().getPerkPlayerService().getRedisCache().updateEntryExpiration(player.getUniqueId(),15, TimeUnit.MINUTES,0,TimeUnit.SECONDS);
+        BungeeCore.getAPI().getStaffService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getClanPlayerService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getFriendService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getSkinService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getBanService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getMuteService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getGameService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getPunishHistoryService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
+        BungeeCore.getAPI().getPerkPlayerService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
         BungeeCore.getAPI().getNickManager().removeNick(player.getUniqueId());
 
     }

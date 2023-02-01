@@ -17,7 +17,7 @@ public class EvidenceCommand extends SenderCommand {
 
 
     public EvidenceCommand() {
-        super(new String[]{"evidence", "beweis"},"teamholy.evidence");
+        super(new String[]{"evidence", "beweis"}, "teamholy.evidence");
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -35,17 +35,17 @@ public class EvidenceCommand extends SenderCommand {
             boolean isBan = args[1].equalsIgnoreCase("ban");
 
             if (isBan) {
-                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,() -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
+                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                 if (banProfile == null) {
                     sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c isn't banned!");
                     return;
                 }
                 banProfile.setEvidence(args[2]);
-                BungeeCore.getAPI().getBanService().saveEntity(banProfile,false,true);
+                BungeeCore.getAPI().getBanService().saveEntity(banProfile, false, true);
                 sender.sendMessage(Message.PUNISH_PREFIX + "§7You changed the ban-evidence of §e" + target + "§7!");
 
             } else {
-                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,() -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
+                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                 if (muteProfile == null) {
                     sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c isn't muted!");
                     return;
@@ -53,7 +53,7 @@ public class EvidenceCommand extends SenderCommand {
                 ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
                 boolean isOnline = player != null && player.isConnected();
                 muteProfile.setEvidence(args[2]);
-                BungeeCore.getAPI().getMuteService().saveEntity(muteProfile,isOnline,true);
+                BungeeCore.getAPI().getMuteService().saveEntity(muteProfile, isOnline, true);
                 sender.sendMessage(Message.PUNISH_PREFIX + "§7You changed the mute-evidence of §e" + target + "§7!");
 
             }

@@ -34,7 +34,7 @@ public class KickCommand extends Command {
 
             UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(args[0]);
             if (nickUUID == null) {
-                player.sendMessage(prefix +"This player is not online");
+                player.sendMessage(prefix + "This player is not online");
                 return;
             }
             target = ProxyServer.getInstance().getPlayer(nickUUID);

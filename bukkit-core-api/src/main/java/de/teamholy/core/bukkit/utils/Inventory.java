@@ -22,13 +22,13 @@ public class Inventory implements Listener {
     private Consumer<InventoryCloseEvent> onClose;
     private boolean cancelClick = true;
 
-    public Inventory(String title, int size){
+    public Inventory(String title, int size) {
         inventory = Bukkit.createInventory(null, size, title);
         BukkitCore.getInstance().getServer().getPluginManager().registerEvents(this, BukkitCore.getInstance());
         items = new HashMap<>();
     }
 
-    public Inventory(String title, int size, boolean cancelClick){
+    public Inventory(String title, int size, boolean cancelClick) {
         inventory = Bukkit.createInventory(null, size, title);
         BukkitCore.getInstance().getServer().getPluginManager().registerEvents(this, BukkitCore.getInstance());
         items = new HashMap<>();
@@ -40,17 +40,17 @@ public class Inventory implements Listener {
     }
 
     @EventHandler
-    public void onClose(InventoryCloseEvent event){
-        if(event.getInventory().equals(inventory)){
-            if(onClose != null){
+    public void onClose(InventoryCloseEvent event) {
+        if (event.getInventory().equals(inventory)) {
+            if (onClose != null) {
                 onClose.accept(event);
             }
         }
     }
 
     @EventHandler
-    public void onClick(InventoryClickEvent event){
-        if(event.getInventory().equals(inventory) && event.getRawSlot() < event.getInventory().getSize()){
+    public void onClick(InventoryClickEvent event) {
+        if (event.getInventory().equals(inventory) && event.getRawSlot() < event.getInventory().getSize()) {
             event.setCancelled(cancelClick);
             for (Integer integer : items.keySet()) {
                 if (integer == event.getSlot()) {
@@ -60,12 +60,12 @@ public class Inventory implements Listener {
         }
     }
 
-    public void setItem(ItemStack itemStack, int slot, Consumer<InventoryClickEvent> onClick){
+    public void setItem(ItemStack itemStack, int slot, Consumer<InventoryClickEvent> onClick) {
         inventory.setItem(slot, itemStack);
         items.put(slot, onClick);
     }
 
-    public void setItem(ItemStack itemStack, int slot){
+    public void setItem(ItemStack itemStack, int slot) {
         inventory.setItem(slot, itemStack);
     }
 

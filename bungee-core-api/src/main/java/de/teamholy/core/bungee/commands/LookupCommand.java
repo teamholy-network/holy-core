@@ -20,7 +20,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class LookupCommand extends SenderCommand {
 
     public LookupCommand() {
-        super(new String[]{"lookup","check","info"},"teamholy.check");
+        super(new String[]{"lookup", "check", "info"}, "teamholy.check");
     }
 
     @Override
@@ -106,7 +105,7 @@ public class LookupCommand extends SenderCommand {
 
                 player.sendMessage("§7First Join §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
                 player.sendMessage("§7Last Join §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
-                player.sendMessage("§7Registered since §8» §6" + TimeUtil.beautifyTime(playerProfile.getLastJoin() - playerProfile.getFirstJoin(),TimeUnit.MILLISECONDS,true));
+                player.sendMessage("§7Registered since §8» §6" + TimeUtil.beautifyTime(playerProfile.getLastJoin() - playerProfile.getFirstJoin(), TimeUnit.MILLISECONDS, true));
 
                 player.sendMessage("");
 
@@ -116,7 +115,8 @@ public class LookupCommand extends SenderCommand {
                 long rankTime = 0;
 
                 for (PermissionUserGroupInfo group : permissionUser.getGroups()) {
-                    if (group.getGroup().equalsIgnoreCase(permissionGroup.getName())) rankTime = group.getTimeOutMillis();
+                    if (group.getGroup().equalsIgnoreCase(permissionGroup.getName()))
+                        rankTime = group.getTimeOutMillis();
                 }
 
                 TextComponent rankComp = new TextComponent("§7Highest Rank §8» ");
@@ -265,7 +265,7 @@ public class LookupCommand extends SenderCommand {
                                 player.sendMessage("");
                                 player.sendMessage("§7Accounts of §6" + targetName);
                                 for (PlayerProfile profile : profileList) {
-                                    if(!profile.getPlayerName().equalsIgnoreCase(targetName)) {
+                                    if (!profile.getPlayerName().equalsIgnoreCase(targetName)) {
                                         String prefix = BungeeCore.getAPI().getCloudManager().getColor(profile.getPlayerId());
                                         TextComponent comp = new ChatAction().text(" §8- " + prefix + profile.getPlayerName()).hover("§7Click to lookup").execute("lookup " + profile.getPlayerName()).component();
                                         player.sendMessage(comp);

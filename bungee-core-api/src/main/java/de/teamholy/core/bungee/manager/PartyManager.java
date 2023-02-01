@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.manager;
 
-import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.Party;
 import lombok.Getter;
@@ -16,7 +15,6 @@ import java.util.UUID;
 public class PartyManager {
 
     private final HashMap<UUID, Party> parties = new HashMap<>();
-
 
 
     public void removePlayerFromParty(ProxiedPlayer proxiedPlayer) {
@@ -49,7 +47,7 @@ public class PartyManager {
     }
 
     public boolean isPartyLeader(UUID uuid) {
-        for (Map.Entry<UUID,Party> map : parties.entrySet()) {
+        for (Map.Entry<UUID, Party> map : parties.entrySet()) {
             if (map.getKey().equals(uuid)) {
                 return true;
             }
@@ -59,7 +57,7 @@ public class PartyManager {
 
 
     public Party getPartyByPlayerUUID(UUID uuid) {
-        for (Map.Entry<UUID,Party> map : parties.entrySet()) {
+        for (Map.Entry<UUID, Party> map : parties.entrySet()) {
             for (UUID player : map.getValue().getPartyPlayers()) {
                 if (player.equals(uuid)) {
                     return map.getValue();

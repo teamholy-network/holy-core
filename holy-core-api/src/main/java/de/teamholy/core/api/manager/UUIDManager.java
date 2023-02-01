@@ -4,13 +4,10 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.Punish;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.redisson.api.RMap;
 import org.redisson.api.RMapCache;
 
 import java.time.Duration;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -69,7 +66,7 @@ public class UUIDManager {
     }
 
     public void register(String name, UUID uuid) {
-        remotePlayerUuidMap.fastPut(name,uuid);
+        remotePlayerUuidMap.fastPut(name, uuid);
     }
 
 

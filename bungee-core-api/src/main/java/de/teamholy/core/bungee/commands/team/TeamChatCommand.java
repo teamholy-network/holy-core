@@ -3,7 +3,6 @@ package de.teamholy.core.bungee.commands.team;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -20,7 +19,7 @@ public class TeamChatCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
         if (!player.hasPermission("teamholy.team")) return;
 
-        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(),() -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
+        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
 
         if (!staffProfile.isNotify()) {
             player.sendMessage("§cYou are not logged in! /notify");
@@ -40,7 +39,7 @@ public class TeamChatCommand extends Command {
             stringBuilder.append(strings[a] + " ");
         }
 
-        BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeamchat §8× " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §8» §7" + stringBuilder.toString().replace("&","§"));
+        BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeamchat §8× " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §8» §7" + stringBuilder.toString().replace("&", "§"));
 
     }
 

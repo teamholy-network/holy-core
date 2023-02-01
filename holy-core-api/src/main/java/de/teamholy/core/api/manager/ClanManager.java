@@ -4,7 +4,6 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clan.ClanService;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class ClanManager {
                 () -> coreAPI.getClanService().getRepository().findFirstById(clanId));
         if (clan != null) {
             if (clan.getMembers().contains(profileId)) {
-                clanService.saveEntity(clan,true,false);
+                clanService.saveEntity(clan, true, false);
                 return true;
             }
         }
@@ -37,7 +36,7 @@ public class ClanManager {
     }
 
     public void unforce(UUID clanId) {
-        clanService.getRedisCache().updateEntryExpiration(clanId,15,TimeUnit.MINUTES,0,TimeUnit.SECONDS);
+        clanService.getRedisCache().updateEntryExpiration(clanId, 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
     }
 
     public boolean existsClanName(String name) {
@@ -51,7 +50,7 @@ public class ClanManager {
 
         Clan clan = clanService.getRepository().findFirstByName(name);
         if (clan != null) {
-            clanService.getRedisCache().fastPut(clan.getClanId(),clan,15, TimeUnit.MINUTES);
+            clanService.getRedisCache().fastPut(clan.getClanId(), clan, 15, TimeUnit.MINUTES);
             return true;
         }
         return false;
@@ -67,7 +66,7 @@ public class ClanManager {
 
         Clan clan = clanService.getRepository().findFirstByTag(tag);
         if (clan != null) {
-            clanService.getRedisCache().fastPut(clan.getClanId(),clan,15, TimeUnit.MINUTES);
+            clanService.getRedisCache().fastPut(clan.getClanId(), clan, 15, TimeUnit.MINUTES);
             return true;
         }
         return false;
@@ -89,7 +88,7 @@ public class ClanManager {
         clan.setMembers(members);
         clan.setRequestsTo(requestsTo);
 
-        clanService.saveEntity(clan,false,true);
+        clanService.saveEntity(clan, false, true);
 
         return clan;
     }
@@ -104,18 +103,18 @@ public class ClanManager {
 
         Clan clan = clanService.getRepository().findFirstByTag(tag);
         if (clan != null) {
-            clanService.getRedisCache().fastPut(clan.getClanId(),clan,15, TimeUnit.MINUTES);
+            clanService.getRedisCache().fastPut(clan.getClanId(), clan, 15, TimeUnit.MINUTES);
             return clan;
         }
         return null;
     }
 
     public Clan getClanById(UUID clanId) {
-        return clanService.getEntity(clanId,() -> clanService.getRepository().findFirstById(clanId));
+        return clanService.getEntity(clanId, () -> clanService.getRepository().findFirstById(clanId));
     }
 
     public void updateClan(Clan clan) {
-        clanService.saveEntity(clan,false,true);
+        clanService.saveEntity(clan, false, true);
     }
 
     public void deleteClan(Clan clan) {

@@ -1,6 +1,5 @@
 package de.teamholy.core.api.entities.player;
 
-import de.teamholy.core.api.entities.clan.Clan;
 import eu.koboo.en2do.repository.Collection;
 import eu.koboo.en2do.repository.Repository;
 import eu.koboo.en2do.repository.methods.transform.Transform;

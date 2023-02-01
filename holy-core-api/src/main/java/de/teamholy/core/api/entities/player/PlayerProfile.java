@@ -4,7 +4,6 @@ import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 

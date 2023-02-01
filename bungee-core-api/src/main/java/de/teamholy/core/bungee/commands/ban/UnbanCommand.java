@@ -4,29 +4,22 @@ import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
-import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
-import de.teamholy.core.api.utility.Punish;
-import de.teamholy.core.api.utility.TimeUtil;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.commands.SenderCommand;
 import de.teamholy.core.bungee.util.BanUtil;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.awt.*;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /* copyright by Yassino */
 public class UnbanCommand extends SenderCommand {
 
 
     public UnbanCommand() {
-        super(new String[] {"unban"},"teamholy.unban");
+        super(new String[]{"unban"}, "teamholy.unban");
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -57,17 +50,13 @@ public class UnbanCommand extends SenderCommand {
                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid, () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(finalUuid));
 
 
-
-
                 BungeeCore.getAPI().getBanService().deleteEntity(punishProfile);
-                punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(),punishProfile);
+                punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
-                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,false,true);
-
-
+                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
 
 
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(),punishProfile));
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
 

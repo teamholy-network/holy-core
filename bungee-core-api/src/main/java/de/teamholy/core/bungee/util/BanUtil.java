@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 /* copyright by Yassino */
 public class BanUtil {
 
-    
 
     public static TextComponent generateBanMessage(BanProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());

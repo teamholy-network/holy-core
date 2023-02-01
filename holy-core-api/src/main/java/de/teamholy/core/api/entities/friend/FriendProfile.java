@@ -23,5 +23,5 @@ public class FriendProfile {
     PartyInviteAllowance partyInviteAllowance;
     List<UUID> friendList;
     List<UUID> friendReqeustsList;
-    
+
 }

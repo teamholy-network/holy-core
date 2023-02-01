@@ -17,7 +17,7 @@ public class ReportManager {
     }
 
     public void addReport(Report report) {
-        reportRMap.put(report.getTarget(),report);
+        reportRMap.put(report.getTarget(), report);
     }
 
     public void removeReport(UUID uuid) {

@@ -2,7 +2,6 @@ package de.teamholy.core.api.entities.staff;
 
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
-import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.api.utility.Report;
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;

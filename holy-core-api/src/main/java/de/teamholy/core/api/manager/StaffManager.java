@@ -19,7 +19,7 @@ public class StaffManager {
     }
 
     public boolean exists(UUID uuid) {
-        return coreAPI.getStaffService().getEntity(uuid,() -> coreAPI.getStaffService().getRepository().findFirstById(uuid)).isNotify();
+        return coreAPI.getStaffService().getEntity(uuid, () -> coreAPI.getStaffService().getRepository().findFirstById(uuid)).isNotify();
     }
 
 

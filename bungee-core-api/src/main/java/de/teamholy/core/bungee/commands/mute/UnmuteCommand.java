@@ -19,7 +19,7 @@ public class UnmuteCommand extends SenderCommand {
 
 
     public UnmuteCommand() {
-        super(new String[] {"unmute"},"teamholy.unmute");
+        super(new String[]{"unmute"}, "teamholy.unmute");
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -50,17 +50,13 @@ public class UnmuteCommand extends SenderCommand {
                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid, () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(finalUuid));
 
 
-
-
                 BungeeCore.getAPI().getMuteService().deleteEntity(punishProfile);
-                punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(),punishProfile);
+                punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
-                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,false,true);
-
-
+                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
 
 
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage(sender.getName(),punishProfile));
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage(sender.getName(), punishProfile));
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
 

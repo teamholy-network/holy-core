@@ -1,9 +1,8 @@
 package de.teamholy.core.bungee.listener;
 
-import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.ban.BanService;
-import de.teamholy.core.api.utility.PunishType;
+import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
@@ -55,9 +54,9 @@ public class BanLoginListener implements Listener {
                     if (punishHistoryProfile == null)
                         punishHistoryProfile = new PunishHistoryProfile();
 
-                    punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(),punishProfile);
+                    punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
-                    bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,true);
+                    bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, true, true);
                     bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("Console", punishProfile));
                     punishService.deleteEntity(punishProfile);
                 }
@@ -96,7 +95,7 @@ public class BanLoginListener implements Listener {
                     banProfile.setAuthorId(Punish.getConsoleUuid());
                     banProfile.setCreateDate(System.currentTimeMillis());
 
-                    bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile,false,true);
+                    bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, false, true);
 
                     loginEvent.setCancelled(true);
                     loginEvent.setCancelReason(BanUtil.generateBanScreen(banProfile));

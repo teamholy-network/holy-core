@@ -1,8 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
-import de.teamholy.core.api.utility.PunishType;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BanUtil;
@@ -50,9 +48,9 @@ public class MuteChatListener implements Listener {
 
                                 punishHistoryProfile.setPlayerId(player.getUniqueId());
 
-                                punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(),punishProfile);
+                                punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
-                                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile,true,true);
+                                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, true, true);
                                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage("Console", punishProfile));
                                 BungeeCore.getInstance().getCoreAPI().getMuteService().deleteEntity(punishProfile);
 

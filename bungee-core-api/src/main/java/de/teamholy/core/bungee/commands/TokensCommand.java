@@ -1,8 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.driver.permission.IPermissionUser;
-import de.dytanic.cloudnet.driver.permission.PermissionCheckResult;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
@@ -79,7 +76,7 @@ public class TokensCommand extends Command {
                         } else {
                             playerProfile.setStatsResetTokens(playerProfile.getStatsResetTokens() + number);
                         }
-                        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, ProxyServer.getInstance().getPlayer(uuid) != null,true);
+                        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, ProxyServer.getInstance().getPlayer(uuid) != null, true);
                         commandSender.sendMessage("Added player " + args[1] + " " + number + " " + type + " tokens!");
 
                         ProxiedPlayer proxiedPlayer1 = ProxyServer.getInstance().getPlayer(uuid);

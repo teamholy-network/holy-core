@@ -12,7 +12,6 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 /* copyright by Yassino */
@@ -20,7 +19,7 @@ public class ReportCommand extends Command {
 
     private String prefix = "§cReport §8× §7";
     private ReportManager reportHandler = BungeeCore.getAPI().getReportManager();
-    private String[] reportReasons = new String[]{"Hacking","Autoclicker","Bugusing","Trolling","Skin","Boosting","Name","Spam","Provocation","Insult","Advertising"};
+    private String[] reportReasons = new String[]{"Hacking", "Autoclicker", "Bugusing", "Trolling", "Skin", "Boosting", "Name", "Spam", "Provocation", "Insult", "Advertising"};
 
     public ReportCommand(String name) {
         super(name);
@@ -38,7 +37,7 @@ public class ReportCommand extends Command {
 
                 UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(args[0]);
                 if (nickUUID == null) {
-                    player.sendMessage(prefix +"This player is not online");
+                    player.sendMessage(prefix + "This player is not online");
                     return;
                 }
                 isNicked = true;
