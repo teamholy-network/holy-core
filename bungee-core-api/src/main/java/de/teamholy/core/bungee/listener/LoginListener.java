@@ -15,17 +15,13 @@ public class LoginListener implements Listener {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
     }
 
-
     @EventHandler
     public void onJoin(LoginEvent loginEvent) {
-
 
         UUID uuid = loginEvent.getConnection().getUniqueId();
         String name = loginEvent.getConnection().getName();
 
-
         BungeeCore.getAPI().getUuidManager().register(name, uuid);
-
 
         BungeeCore.getAPI().getClanPlayerService().getEntityAsync(uuid,
                 () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid), clanPlayerProfile -> {
@@ -37,5 +33,4 @@ public class LoginListener implements Listener {
                 });
 
     }
-
 }

@@ -28,12 +28,11 @@ import java.util.UUID;
 /* copyright by Yassino */
 public class PostLoginListener implements Listener {
 
-
     public PostLoginListener() {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
     }
 
-    @EventHandler(priority = 0)
+    @EventHandler
     public void onLogin(PostLoginEvent loginEvent) {
         ProxiedPlayer proxiedPlayer = loginEvent.getPlayer();
 

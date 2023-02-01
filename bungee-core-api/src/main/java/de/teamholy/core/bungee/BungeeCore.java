@@ -37,12 +37,12 @@ public class BungeeCore extends Plugin {
 
     @Getter
     private static BungeeCore instance;
-    BungeePlayerManager bungeePlayerManager;
-    PartyManager partyManager;
-
 
     @Getter
     CoreAPI coreAPI;
+
+    BungeePlayerManager bungeePlayerManager;
+    PartyManager partyManager;
 
     public BungeeCore() {
         instance = this;

@@ -39,9 +39,7 @@ public class BanLoginListener implements Listener {
 
             UUID uuid = loginEvent.getConnection().getUniqueId();
 
-
             BanProfile punishProfile = punishService.getEntity(uuid, () -> punishService.getRepository().findFirstById(uuid));
-
 
             String ipAddress = loginEvent.getConnection().getAddress().getAddress().getHostAddress();
 
@@ -79,31 +77,33 @@ public class BanLoginListener implements Listener {
     }
 
     private boolean filterBanBypass(List<PlayerProfile> profileList, LoginEvent loginEvent) {
-        if (profileList != null && !profileList.isEmpty()) {
-            for (PlayerProfile playerAcc : profileList) {
+        if (profileList == null || profileList.isEmpty()) {
+            return false;
+        }
+        for (PlayerProfile playerAcc : profileList) {
 
-
-                BanProfile punishProfile = punishService.getEntity(playerAcc.getPlayerId(), () -> punishService.getRepository().findFirstById(playerAcc.getPlayerId()));
-                if (punishProfile == null) return false;
-                if (punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
-                    Punish.BanReason banReason = Punish.BanReason.BAN_BYPASS;
-                    BanProfile banProfile = new BanProfile();
-                    banProfile.setPlayerId(playerAcc.getPlayerId());
-                    banProfile.setDuration(TimeUnit.HOURS.toMillis(5));
-                    banProfile.setReason(banReason.getEnglishText());
-                    banProfile.setEvidence("Tried bypassing the ban of " + playerAcc.getPlayerName());
-                    banProfile.setAuthorId(Punish.getConsoleUuid());
-                    banProfile.setCreateDate(System.currentTimeMillis());
-
-                    bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, false, true);
-
-                    loginEvent.setCancelled(true);
-                    loginEvent.setCancelReason(BanUtil.generateBanScreen(banProfile));
-                    BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
-                    return true;
-                }
-
+            BanProfile punishProfile = punishService.getEntity(playerAcc.getPlayerId(), () -> punishService.getRepository().findFirstById(playerAcc.getPlayerId()));
+            if (punishProfile == null) {
+                return false;
             }
+            if (punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
+                Punish.BanReason banReason = Punish.BanReason.BAN_BYPASS;
+                BanProfile banProfile = new BanProfile();
+                banProfile.setPlayerId(playerAcc.getPlayerId());
+                banProfile.setDuration(TimeUnit.HOURS.toMillis(5));
+                banProfile.setReason(banReason.getEnglishText());
+                banProfile.setEvidence("Tried bypassing the ban of " + playerAcc.getPlayerName());
+                banProfile.setAuthorId(Punish.getConsoleUuid());
+                banProfile.setCreateDate(System.currentTimeMillis());
+
+                bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, false, true);
+
+                loginEvent.setCancelled(true);
+                loginEvent.setCancelReason(BanUtil.generateBanScreen(banProfile));
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
+                return true;
+            }
+
         }
         return false;
     }

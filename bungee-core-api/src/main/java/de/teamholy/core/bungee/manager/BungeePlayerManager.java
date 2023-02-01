@@ -4,6 +4,9 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -11,13 +14,11 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.util.UUID;
 
 /* copyright by Yassino */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class BungeePlayerManager {
 
-    private final CoreAPI coreAPI;
-
-    public BungeePlayerManager(CoreAPI coreAPI) {
-        this.coreAPI = coreAPI;
-    }
+    CoreAPI coreAPI;
 
     public boolean isOnline(String name) {
         return isOnline(coreAPI.getUuidManager().getUUID(name));

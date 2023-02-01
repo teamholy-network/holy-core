@@ -16,7 +16,6 @@ import java.util.UUID;
 /* copyright by Yassino */
 public class MuteChatListener implements Listener {
 
-
     public MuteChatListener() {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
     }

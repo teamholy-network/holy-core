@@ -2,7 +2,9 @@ package de.teamholy.core.bungee.manager;
 
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.Party;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -12,10 +14,10 @@ import java.util.UUID;
 
 /* copyright by Yassino */
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PartyManager {
 
-    private final HashMap<UUID, Party> parties = new HashMap<>();
-
+    HashMap<UUID, Party> parties = new HashMap<>();
 
     public void removePlayerFromParty(ProxiedPlayer proxiedPlayer) {
         Party party = getPartyByPlayerUUID(proxiedPlayer.getUniqueId());
@@ -40,10 +42,7 @@ public class PartyManager {
 
     public boolean gotInvited(ProxiedPlayer proxiedPlayer, UUID targetPArty) {
         Party party = getPartyByPlayerUUID(targetPArty);
-        if (party.getInvitedPlayers().contains(proxiedPlayer.getUniqueId())) {
-            return true;
-        }
-        return false;
+        return party.getInvitedPlayers().contains(proxiedPlayer.getUniqueId());
     }
 
     public boolean isPartyLeader(UUID uuid) {

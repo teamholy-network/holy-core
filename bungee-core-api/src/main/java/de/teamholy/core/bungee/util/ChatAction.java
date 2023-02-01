@@ -1,14 +1,19 @@
 package de.teamholy.core.bungee.util;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
+
+import javax.print.attribute.standard.PrinterURI;
 
 /* copyright by Yassino */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ChatAction {
 
-    private final TextComponent component;
+    TextComponent component;
 
     public ChatAction() {
         this.component = new TextComponent();
@@ -20,7 +25,7 @@ public class ChatAction {
     }
 
     public ChatAction hover(String hover) {
-        this.component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
+        this.component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
         return this;
     }
 

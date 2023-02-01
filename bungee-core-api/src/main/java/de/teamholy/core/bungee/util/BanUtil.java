@@ -5,41 +5,43 @@ import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.utility.TimeUtil;
 import de.teamholy.core.bungee.BungeeCore;
+import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.concurrent.TimeUnit;
 
 /* copyright by Yassino */
+@UtilityClass
 public class BanUtil {
 
 
-    public static TextComponent generateBanMessage(BanProfile punishProfile) {
+    public TextComponent generateBanMessage(BanProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + authorName + "§7 has banned " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7 for §6" + punishProfile.getReason() + "§7.";
         return generateLookUpComponent(playerName, message);
     }
 
-    public static TextComponent generateUnbanMessage(String unbanner, BanProfile punishProfile) {
+    public TextComponent generateUnbanMessage(String unbanner, BanProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + unbanner + "§7 has unbanned " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
         return generateLookUpComponent(playerName, message);
     }
 
-    public static TextComponent generateMuteMessage(MuteProfile punishProfile) {
+    public TextComponent generateMuteMessage(MuteProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + authorName + "§7 has muted " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7 for §6" + punishProfile.getReason() + "§7.";
         return generateLookUpComponent(playerName, message);
     }
 
-    public static TextComponent generateUnmuteMessage(String unmuter, MuteProfile punishProfile) {
+    public TextComponent generateUnmuteMessage(String unmuter, MuteProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + unmuter + "§7 has unmuted " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
         return generateLookUpComponent(playerName, message);
     }
 
-    public static String generateBanScreen(BanProfile punishProfile) {
+    public String generateBanScreen(BanProfile punishProfile) {
 
         String timeString = TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS);
         String dateString = BungeeUtil.parseDate(punishProfile.getValidUntilDate());
@@ -73,12 +75,12 @@ public class BanUtil {
         return builder.toString();
     }
 
-    public static String generateMuteChatMessage(MuteProfile punishProfile) {
+    public String generateMuteChatMessage(MuteProfile punishProfile) {
         String time = punishProfile.getDuration() != -1 ? TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS) : "Permanent";
         return Message.PUNISH_PREFIX + "§7You're muted for §6" + punishProfile.getReason() + " §8(§7" + time + "§8)";
     }
 
-    private static TextComponent generateLookUpComponent(String name, String message) {
+    private TextComponent generateLookUpComponent(String name, String message) {
         TextComponent component = new ChatAction().text("§8[§eLOOKUP§8]").hover("§7Click to lookup " + name).execute("lookup " + name).component();
         TextComponent mainComp = new TextComponent(message);
         mainComp.addExtra(component);

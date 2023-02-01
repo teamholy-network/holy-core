@@ -22,7 +22,6 @@ public class PostDisconnectListener implements Listener {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
     }
 
-
     @EventHandler
     public void onQuit(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
