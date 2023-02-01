@@ -2,4 +2,5 @@ rootProject.name = 'hoy-core'
 include 'bukkit-core-api'
 include 'bungee-core-api'
 include 'holy-core-api'
+include 'holy-core-cloudmodule'
 

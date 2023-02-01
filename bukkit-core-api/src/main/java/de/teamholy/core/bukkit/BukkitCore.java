@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit;
 
+import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
@@ -28,6 +29,8 @@ public class BukkitCore extends JavaPlugin {
     PerkCache perkCache;
     @Getter
     PerkManager perkManager;
+    @Getter
+    String group;
 
     public BukkitCore() {
         instance = this;
@@ -38,6 +41,7 @@ public class BukkitCore extends JavaPlugin {
         coreAPI = new CoreAPI();
         perkCache = new PerkCache();
         perkManager = new PerkManager();
+        group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
 
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);

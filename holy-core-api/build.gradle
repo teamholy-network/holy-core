@@ -1,7 +1,8 @@
 dependencies {
-    compileOnly("eu.koboo:en2do:$en2doVersion")
-    compileOnly("org.redisson:redisson:$redissonVersion")
-    compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    implementation("eu.koboo:en2do:$en2doVersion")
+    implementation("org.redisson:redisson:$redissonVersion")
+    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:3.4.0-RELEASE")
     implementation("com.github.Koboo:file-config:-SNAPSHOT");

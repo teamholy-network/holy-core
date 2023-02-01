@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.perks;
 
+import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bukkit.BukkitCore;
@@ -23,9 +24,16 @@ public class PerkManager {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
         Perk perk;
         ItemBuilder itemBuilder = null;
+
+
+
         if (perkType == PerkType.STICK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
-            itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
+            
+            if (perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
+                perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
+
+            } else itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
 
             if (perk.isBanner()) {
                 itemBuilder.setBannerMeta(perk.getBaseColor(), perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);
@@ -33,7 +41,12 @@ public class PerkManager {
 
         } else if (perkType == PerkType.BLOCK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
-            itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
+
+            if (perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
+                perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(0);
+
+            } else itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
+
         }
 
         return itemBuilder;
