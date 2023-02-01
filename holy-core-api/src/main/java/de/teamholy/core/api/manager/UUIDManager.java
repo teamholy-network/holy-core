@@ -9,13 +9,11 @@ import org.redisson.api.RMapCache;
 import java.time.Duration;
 import java.util.UUID;
 
-/* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UUIDManager {
 
     CoreAPI coreAPI;
     RMapCache<String, UUID> remotePlayerUuidMap;
-
 
     public UUIDManager(CoreAPI coreAPI) {
         this.coreAPI = coreAPI;
@@ -68,6 +66,4 @@ public class UUIDManager {
     public void register(String name, UUID uuid) {
         remotePlayerUuidMap.fastPut(name, uuid);
     }
-
-
 }

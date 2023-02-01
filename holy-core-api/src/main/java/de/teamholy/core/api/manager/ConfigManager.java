@@ -2,17 +2,20 @@ package de.teamholy.core.api.manager;
 
 import eu.koboo.config.Config;
 import eu.koboo.config.FileConfig;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
-/* copyright by Yassino */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Getter
 public class ConfigManager {
 
-
-    private final String username;
-    private final String password;
-    private final String host;
-    private final int port;
-    private final String database;
-    private final boolean useAuthSource;
+    String username;
+    String password;
+    String host;
+    int port;
+    String database;
+    boolean useAuthSource;
 
     public ConfigManager() {
 
@@ -31,30 +34,4 @@ public class ConfigManager {
         database = config.getString("database");
         useAuthSource = config.getBoolean("useAuthSource");
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public String getDatabase() {
-        return database;
-    }
-
-    public boolean isUseAuthSource() {
-        return useAuthSource;
-    }
-
-
 }

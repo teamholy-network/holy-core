@@ -7,19 +7,22 @@ import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.Punish;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-/* copyright by Yassino */
+
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class CloudManager {
 
-    private final CoreAPI coreAPI;
-
-    public CloudManager(CoreAPI coreAPI) {
-        this.coreAPI = coreAPI;
-    }
+    CoreAPI coreAPI;
 
     public String getColor(UUID uuid) {
         if (uuid == Punish.getConsoleUuid()) return "§4§l";
@@ -58,12 +61,10 @@ public class CloudManager {
 
     public boolean isPunishable(UUID uuid) {
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
-        if (iPermissionUser != null) {
-            if (CloudNetDriver.getInstance().getPermissionManagement().hasPermission(iPermissionUser, "teamholy.team")) {
-                return false;
-            }
+        if (iPermissionUser == null) {
+            return true;
         }
-        return true;
+        return !CloudNetDriver.getInstance().getPermissionManagement().hasPermission(iPermissionUser, "teamholy.team");
     }
 
     /*

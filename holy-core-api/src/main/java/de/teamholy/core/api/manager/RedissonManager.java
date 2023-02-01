@@ -3,7 +3,6 @@ package de.teamholy.core.api.manager;
 import de.teamholy.core.api.CoreAPI;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,6 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
 @Getter
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RedissonManager {
 
@@ -34,15 +32,12 @@ public class RedissonManager {
         config.useSingleServer().setTimeout(10000);
         config.useSingleServer().setConnectionPoolSize(500);
         config.useSingleServer().setRetryInterval(2000);
-        this.redissonClient = Redisson.create();
+
+        redissonClient = Redisson.create();
     }
 
 
     public void onDisable() {
-        if (config == null) {
-            return;
-        }
-
         if (redissonClient == null) {
             return;
         }

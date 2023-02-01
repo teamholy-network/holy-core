@@ -4,6 +4,7 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clan.ClanService;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
@@ -12,16 +13,11 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class ClanManager {
 
     CoreAPI coreAPI;
     ClanService clanService;
-
-
-    public ClanManager(CoreAPI coreAPI, ClanService clanService) {
-        this.coreAPI = coreAPI;
-        this.clanService = clanService;
-    }
 
     public boolean loadAndForce(UUID profileId, UUID clanId) {
         Clan clan = clanService.getEntity(clanId,

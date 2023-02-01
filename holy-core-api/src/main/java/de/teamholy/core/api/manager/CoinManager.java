@@ -2,20 +2,21 @@ package de.teamholy.core.api.manager;
 
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.text.DecimalFormat;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-/* copyright by Yassino */
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class CoinManager {
 
-    private final CoreAPI coreAPI;
-
-    public CoinManager(CoreAPI coreAPI) {
-        this.coreAPI = coreAPI;
-    }
-
+    CoreAPI coreAPI;
 
     public void getCoinsAsync(UUID uuid, Consumer<Long> consumer) {
         coreAPI.getExecutor().execute(() -> consumer.accept(getCoins(uuid)));
@@ -25,11 +26,10 @@ public class CoinManager {
 
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
                 () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
-        if (playerProfile == null)
+        if (playerProfile == null) {
             return 0L;
+        }
         return playerProfile.getCoins();
-
-
     }
 
     public void setCoins(UUID uuid, long coins, boolean forceCache) {
@@ -48,8 +48,9 @@ public class CoinManager {
     public void addCoins(UUID uuid, long coins, boolean forceCache) {
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
                 () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
-        if (playerProfile == null)
+        if (playerProfile == null) {
             return;
+        }
         playerProfile.setCoins(playerProfile.getCoins() + coins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
@@ -61,8 +62,9 @@ public class CoinManager {
     public void removeCoins(UUID uuid, long coins, boolean forceCache) {
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
                 () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
-        if (playerProfile == null)
+        if (playerProfile == null) {
             return;
+        }
         playerProfile.setCoins(playerProfile.getCoins() - coins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
@@ -76,5 +78,4 @@ public class CoinManager {
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
         return decimalFormat.format(integer);
     }
-
 }

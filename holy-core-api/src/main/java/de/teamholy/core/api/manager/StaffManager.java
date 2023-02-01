@@ -1,18 +1,17 @@
 package de.teamholy.core.api.manager;
 
 import de.teamholy.core.api.CoreAPI;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.UUID;
 
-/* copyright by Yassino */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class StaffManager {
 
-    private final CoreAPI coreAPI;
-
-
-    public StaffManager(CoreAPI coreAPI) {
-        this.coreAPI = coreAPI;
-    }
+    CoreAPI coreAPI;
 
     public boolean canNotify(UUID uuid) {
         return coreAPI.getStaffService().getRedisCache().get(uuid).isNotify();
@@ -21,6 +20,4 @@ public class StaffManager {
     public boolean exists(UUID uuid) {
         return coreAPI.getStaffService().getEntity(uuid, () -> coreAPI.getStaffService().getRepository().findFirstById(uuid)).isNotify();
     }
-
-
 }

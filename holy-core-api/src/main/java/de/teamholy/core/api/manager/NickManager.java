@@ -9,7 +9,6 @@ import org.redisson.api.RMapCache;
 import java.util.Map;
 import java.util.UUID;
 
-/* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
 @Getter
 public class NickManager {

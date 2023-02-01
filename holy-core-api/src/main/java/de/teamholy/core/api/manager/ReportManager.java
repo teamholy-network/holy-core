@@ -2,15 +2,18 @@ package de.teamholy.core.api.manager;
 
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.Report;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.redisson.api.RMap;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReportManager {
 
-    private final RMap<UUID, Report> reportRMap;
+    RMap<UUID, Report> reportRMap;
 
     public ReportManager(CoreAPI coreAPI) {
         reportRMap = coreAPI.getRedissonManager().getRedissonClient().getMap("reports");
@@ -36,5 +39,4 @@ public class ReportManager {
         if (reportRMap == null) return new HashMap<>();
         return reportRMap;
     }
-
 }
