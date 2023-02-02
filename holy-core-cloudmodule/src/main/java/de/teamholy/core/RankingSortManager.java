@@ -17,7 +17,7 @@ public class RankingSortManager {
 
     public RankingSortManager() {
         start();
-        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(), 30, 30, TimeUnit.SECONDS);
+        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(), 2, 2, TimeUnit.MINUTES);
     }
 
     public void start() {
