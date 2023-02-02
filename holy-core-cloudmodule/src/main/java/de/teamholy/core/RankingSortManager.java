@@ -16,6 +16,11 @@ public class RankingSortManager {
     private HashMap<String, RScoredSortedSet> sortedSetHashMap;
 
     public RankingSortManager() {
+        start();
+        CloudModule.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(),30,30,TimeUnit.SECONDS);
+    }
+
+    public void start() {
         CloudModule.getCoreAPI().getExecutor().execute(() -> {
 
 
@@ -38,8 +43,6 @@ public class RankingSortManager {
             gameProfiles.forEach(gameProfile -> CloudModule.getCoreAPI().getExecutor().submit(() -> insertStats(gameProfile)));
 
             CloudModule.getInstance().getLogger().info("finished ranking cache process in " + ((System.currentTimeMillis() - start) / 1000) +"s with " + i + " entries");
-
-            CloudModule.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(),30,30,TimeUnit.SECONDS);
         });
     }
 

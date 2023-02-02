@@ -59,6 +59,9 @@ public class StatsResetTask implements Runnable {
             CloudModule.getInstance().getLogger().info("         Statsreset         " + statsType.toString());
 
         });
+
+        CloudModule.getInstance().getSortManager().start();
+
     }
 
     private void resetStats(GameProfile gameProfile, StatsType statsType) {
