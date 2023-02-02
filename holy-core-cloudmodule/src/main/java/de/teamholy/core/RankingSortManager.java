@@ -17,49 +17,43 @@ public class RankingSortManager {
 
     public RankingSortManager() {
         start();
-        CloudModule.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(),30,30,TimeUnit.SECONDS);
+        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(), 30, 30, TimeUnit.SECONDS);
     }
 
     public void start() {
-        CloudModule.getCoreAPI().getExecutor().execute(() -> {
-
-
-            long start = System.currentTimeMillis();
-            CloudModule.getInstance().getLogger().info("starting ranking cache process");
-            sortedSetHashMap = new HashMap<>();
-            for (Gamemodes gamemodes : Gamemodes.values()) {
-                for (StatsType statsType : StatsType.values()) {
-                    RScoredSortedSet scoredSortedSet = CloudModule.getCoreAPI().
-                            getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
-                    scoredSortedSet.clear();
-
-                    sortedSetHashMap.put(scoredSortedSet.getName(), scoredSortedSet);
-                }
-            }
-
-
-            long i = 0;
-            List<GameProfile> gameProfiles = CloudModule.getCoreAPI().getGameService().getRepository().findAll();
-            gameProfiles.forEach(gameProfile -> CloudModule.getCoreAPI().getExecutor().submit(() -> insertStats(gameProfile)));
-
-            CloudModule.getInstance().getLogger().info("finished ranking cache process in " + ((System.currentTimeMillis() - start) / 1000) +"s with " + i + " entries");
-        });
-    }
-
-    public void insertStats(GameProfile gameProfile) {
+        long start = System.currentTimeMillis();
+        CloudModuleCore.getInstance().getLogger().info("starting ranking cache process");
+        sortedSetHashMap = new HashMap<>();
 
         for (Gamemodes gamemodes : Gamemodes.values()) {
+            for (StatsType statsType : StatsType.values()) {
+                RScoredSortedSet scoredSortedSet = CloudModuleCore.getCoreAPI().
+                        getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
+                scoredSortedSet.clear();
 
-            if (gameProfile.exists(gamemodes.toString())) {
-
-                for (StatsType value : StatsType.values()) {
-                    sortedSetHashMap.get(gamemodes.toString() + "_" + value.toString())
-                            .add(gameProfile.getStat(gamemodes.toString(),value,gamemodes.getRankingKey()),gameProfile.getPlayerId());
-
-                }
+                sortedSetHashMap.put(scoredSortedSet.getName(), scoredSortedSet);
             }
         }
 
+
+        List<GameProfile> gameProfiles = CloudModuleCore.getCoreAPI().getGameService().getRepository().findAll();
+        insertStats(gameProfiles);
+
+        CloudModuleCore.getInstance().getLogger().info("finished ranking cache process in " + ((System.currentTimeMillis() - start) / 1000) + "s with " + gameProfiles.size() + " entries");
+    }
+
+    public void insertStats(List<GameProfile> gameProfiles) {
+        for (Gamemodes gamemodes : Gamemodes.values()) {
+            for (StatsType value : StatsType.values()) {
+
+                RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + value.toString());
+
+                gameProfiles.stream()
+                        .filter(gameProfile -> gameProfile.exists(gamemodes.toString()))
+                        .forEach(gameProfile -> sortedSet.addAsync(gameProfile.getStat(gamemodes.toString(), value, gamemodes.getRankingKey()), gameProfile.getPlayerId()));
+
+            }
+        }
     }
 
 }
