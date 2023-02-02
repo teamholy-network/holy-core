@@ -7,6 +7,7 @@ import de.teamholy.core.task.RankingSortTask;
 import org.redisson.api.RScoredSortedSet;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /* copyright by Yassino */
@@ -33,10 +34,8 @@ public class RankingSortManager {
 
 
             long i = 0;
-            for (GameProfile gameProfile : CloudModule.getCoreAPI().getGameService().getRepository().findAll()) {
-                insertStats(gameProfile);
-                i++;
-            }
+            List<GameProfile> gameProfiles = CloudModule.getCoreAPI().getGameService().getRepository().findAll();
+            gameProfiles.forEach(gameProfile -> CloudModule.getCoreAPI().getExecutor().submit(() -> insertStats(gameProfile)));
 
             CloudModule.getInstance().getLogger().info("finished ranking cache process in " + ((System.currentTimeMillis() - start) / 1000) +"s with " + i + " entries");
 

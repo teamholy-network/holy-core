@@ -5,7 +5,7 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:3.4.0-RELEASE")
-    compileOnly("io.github.waterfallmc:waterfall-api:1.18-R0.1-SNAPSHOT")
+    compileOnly("de.dytanic.cloudnet:cloudnet:3.4.0-RELEASE")
 
     implementation(project(':holy-core-api'))
 }
