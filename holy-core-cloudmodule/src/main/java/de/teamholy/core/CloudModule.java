@@ -50,6 +50,7 @@ public class CloudModule extends NodeCloudNetModule {
 
         DAILY = getConfig().getBoolean("daily");
         MONTHLY = getConfig().getBoolean("monthly");
+
         saveConfig();
         service = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 

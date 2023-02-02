@@ -31,7 +31,7 @@ public class StatsResetTask implements Runnable {
 
 
         if (hour.equalsIgnoreCase("00") && !CloudModule.DAILY) resetStatsFromGameProfiles(StatsType.DAILY);
-        if (hour.equalsIgnoreCase("01") && !CloudModule.MONTHLY) resetStatsFromGameProfiles(StatsType.MONTHLY);
+        if (day.equalsIgnoreCase("01") && !CloudModule.MONTHLY) resetStatsFromGameProfiles(StatsType.MONTHLY);
     }
 
 
