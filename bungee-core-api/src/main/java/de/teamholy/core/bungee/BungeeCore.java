@@ -25,6 +25,7 @@ import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
 import de.teamholy.core.bungee.listener.*;
 import de.teamholy.core.bungee.manager.BungeePlayerManager;
 import de.teamholy.core.bungee.manager.PartyManager;
+import eu.koboo.en2do.Credentials;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;

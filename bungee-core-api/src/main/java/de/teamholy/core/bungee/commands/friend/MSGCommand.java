@@ -53,7 +53,7 @@ public class MSGCommand extends Command {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (int a = 0; a < strings.length; a++) {
+        for (int a = 1; a < strings.length; a++) {
             stringBuilder.append(strings[a] + " ");
         }
 

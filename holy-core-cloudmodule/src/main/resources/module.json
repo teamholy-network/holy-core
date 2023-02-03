@@ -1,0 +1,9 @@
+{
+  "group": "de.teamholy.core",
+  "name": "holy-core-module",
+  "version": "2.0",
+  "author": "yassino",
+  "description": "hole core module for managing caching and stats reset",
+  "main": "de.teamholy.core.CloudModuleCore",
+  "dependencies": []
+}

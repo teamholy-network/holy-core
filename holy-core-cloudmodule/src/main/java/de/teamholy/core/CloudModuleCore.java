@@ -6,9 +6,15 @@ import de.dytanic.cloudnet.driver.module.ModuleTask;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.dytanic.cloudnet.module.NodeCloudNetModule;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.game.GameProfile;
+import de.teamholy.core.api.entities.game.StatsType;
+import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.task.StatsResetTask;
+import eu.koboo.en2do.Credentials;
 import lombok.Getter;
 
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,10 +29,9 @@ public class CloudModuleCore extends NodeCloudNetModule {
     private static CoreAPI coreAPI;
     private ScheduledExecutorService service;
 
-    @Getter
-    private IPlayerManager playerManager;
 
     private RankingSortManager sortManager;
+    private MongoManager mongoManager;
 
 
     public static boolean DAILY;
@@ -34,10 +39,12 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
     @ModuleTask(event = ModuleLifeCycle.LOADED)
     public void init() {
+
+        String connectionString = "mongodb://root:leXtRoNdiAlBineLEINEidECtORmlACORceIGeNhIGhteroNfo@89.163.251.177:36410/?authSource=admin";
+
         instance = this;
-        coreAPI = new CoreAPI();
-        playerManager = CloudNetDriver.getInstance().getServicesRegistry()
-                .getFirstService(IPlayerManager.class);
+        coreAPI = new CoreAPI(new Credentials(connectionString,"holy"));
+        mongoManager = new MongoManager(connectionString,"holy");
 
 
         DAILY = getConfig().getBoolean("daily");
@@ -49,6 +56,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
         service.scheduleAtFixedRate(new StatsResetTask(),0,1,TimeUnit.MINUTES);
 
         sortManager = new RankingSortManager();
+
     }
 
     @ModuleTask(event = ModuleLifeCycle.STOPPED)

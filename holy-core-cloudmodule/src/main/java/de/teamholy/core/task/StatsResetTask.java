@@ -1,5 +1,6 @@
 package de.teamholy.core.task;
 
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
@@ -25,12 +26,22 @@ public class StatsResetTask implements Runnable {
         String day = time.split(":")[1];
         String hour = time.split(":")[0];
 
-        if (CloudModuleCore.DAILY && !hour.equalsIgnoreCase("00")) CloudModuleCore.DAILY = false;
-        if (CloudModuleCore.MONTHLY && !day.equalsIgnoreCase("01")) CloudModuleCore.MONTHLY = false;
+        if (CloudModuleCore.DAILY && !hour.equalsIgnoreCase("21")) CloudModuleCore.DAILY = false;
+        if (CloudModuleCore.MONTHLY && !day.equalsIgnoreCase("02")) CloudModuleCore.MONTHLY = false;
 
 
-        if (hour.equalsIgnoreCase("00") && !CloudModuleCore.DAILY) resetStatsFromGameProfiles(StatsType.DAILY);
-        if (day.equalsIgnoreCase("01") && !CloudModuleCore.MONTHLY) resetStatsFromGameProfiles(StatsType.MONTHLY);
+        boolean update = false;
+        if (hour.equalsIgnoreCase("21") && !CloudModuleCore.DAILY)  {
+            resetStatsFromGameProfiles(StatsType.DAILY);
+            update = true;
+        }
+        if (day.equalsIgnoreCase("02") && !CloudModuleCore.MONTHLY) {
+            resetStatsFromGameProfiles(StatsType.MONTHLY);
+            update = true;
+        }
+
+        if (update) CloudModuleCore.getInstance().getSortManager().start();
+
     }
 
 
@@ -40,21 +51,17 @@ public class StatsResetTask implements Runnable {
             RMapCache rMapCache = CloudModuleCore.getCoreAPI().getGameService().getRedisCache();
 
 
-            CloudModuleCore.getCoreAPI().getGameService().getRepository().findAll().forEach(gameProfile -> {
+            CloudModuleCore.getCoreAPI().getGameService().getRedisCache().values().forEach(gameProfile -> {
 
 
-                resetStats(gameProfile,statsType);
+                resetStatsCache
+                        (gameProfile,statsType);
 
-                if (rMapCache.containsKey(gameProfile.getPlayerId())) {
-
-                    boolean forceCache = rMapCache.remainTimeToLive(gameProfile.getPlayerId()) == -1;
+                boolean forceCache = rMapCache.remainTimeToLive(gameProfile.getPlayerId()) == -1;
 
 
-                    CloudModuleCore.getCoreAPI().getGameService().saveEntity(gameProfile, forceCache, true);
+                CloudModuleCore.getCoreAPI().getGameService().saveEntity(gameProfile, forceCache, true);
 
-                } else {
-                    CloudModuleCore.getCoreAPI().getGameService().getRepository().save(gameProfile);
-                }
 
             });
 
@@ -62,20 +69,15 @@ public class StatsResetTask implements Runnable {
             if (statsType == StatsType.DAILY) CloudModuleCore.DAILY = true;
             else if (statsType == StatsType.MONTHLY) CloudModuleCore.MONTHLY = true;
 
-            CloudModuleCore.getInstance().getPlayerManager().onlinePlayers().asPlayers().forEach(iCloudPlayer -> {
-                iCloudPlayer.getPlayerExecutor().sendChatMessage("       §f§lSTATSRESET     ");
-                iCloudPlayer.getPlayerExecutor().sendChatMessage("§7The " + statsType.toBeauty() + " §7stats have been reset");
-            });
+            CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("proxy","statsreset",new JsonDocument("statsType",statsType));
 
             CloudModuleCore.getInstance().getLogger().info("         Statsreset         " + statsType.toString());
 
         });
 
-        CloudModuleCore.getInstance().getSortManager().start();
-
     }
 
-    private void resetStats(GameProfile gameProfile, StatsType statsType) {
+    private void resetStatsCache(GameProfile gameProfile, StatsType statsType) {
         for (Gamemodes gamemode : Gamemodes.values()) {
             gamemode.getStatKeys().forEach(s -> gameProfile.setStat(gamemode.toString(),statsType,s,0));
         }
