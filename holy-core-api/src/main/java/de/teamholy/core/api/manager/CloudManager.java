@@ -33,6 +33,7 @@ public class CloudManager {
             e.printStackTrace();
         }
 
+
         if (iPermissionUser != null) {
             return CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser).getDisplay();
         }

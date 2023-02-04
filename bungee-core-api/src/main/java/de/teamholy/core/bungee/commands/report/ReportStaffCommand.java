@@ -55,7 +55,6 @@ public class ReportStaffCommand extends Command {
 
                 player.sendMessage(prefix + "You finished the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + "§7!");
                 reportHandler.removeReport(report.getTarget());
-                reportHandler.addReport(report);
 
             } else if (args[0].equalsIgnoreCase("auto")) {
 
@@ -71,7 +70,19 @@ public class ReportStaffCommand extends Command {
 
                 player.sendMessage(prefix + "§aThere is currently no report open");
 
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                if (!player.hasPermission("reports.clear")) {
+                    player.sendMessage(prefix + "you dont have any permissions to clear a report");
+                    return;
+                }
 
+
+                reportHandler.getReportRMap().clear();
+
+
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("");
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + " §7cleared the §4§lreports§7!");
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("");
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("accept")) {
@@ -132,6 +143,7 @@ public class ReportStaffCommand extends Command {
 
                 reportHandler.removeReport(uuid);
                 player.sendMessage(prefix + "Deleted report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
+
             }
         }
 
@@ -162,6 +174,7 @@ public class ReportStaffCommand extends Command {
         player.sendMessage(prefix + "/reportstaff accept (name)");
         player.sendMessage(prefix + "/reportstaff remove (name)");
         player.sendMessage(prefix + "/reportstaff finish");
+        player.sendMessage(prefix + "/reportstaff clear");
         player.sendMessage(prefix + "/reportstaff auto");
 
     }

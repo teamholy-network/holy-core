@@ -3,6 +3,7 @@ package de.teamholy.core.api.manager;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.Report;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.redisson.api.RMap;
 
@@ -10,9 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
 public class ReportManager {
 
+    @Getter
     RMap<UUID, Report> reportRMap;
 
     public ReportManager(CoreAPI coreAPI) {

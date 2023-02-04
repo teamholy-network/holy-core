@@ -76,6 +76,8 @@ public class BungeeCore extends Plugin {
         new AdminClanCommand();
         new ClanCommand();
         new CoinsCommand();
+        new StatsCommand(new String[]{"stats","mstats","astats"},null);
+        new KickCommand(new String[]{"kick","kim"}, "teamholy.kick");
 
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new FriendCommand("friend", null, "friends"));
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new FriendListCommand("friendlist", "fl"));
@@ -90,7 +92,6 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TeamChatCommand("teamchat", "teamholy.team", "tc"));
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TeamCommand("team", "teamholy.team", "teamlist"));
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TeamNotifyCommand("teamnotify", "teamholy.team", "notify"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new KickCommand("kick", "teamholy.kick", "kim"));
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new NickListCommand("nicklist", "teamholy.team", "nicks"));
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new RankCommand("rank", "teamholy.rang", "rang"));
         ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new OnlinetimeCommand("onlinetime"));

@@ -92,7 +92,7 @@ public class AdminClanCommand extends SenderCommand {
                         return;
                     }
 
-                    clan.setColor(color);
+                    clan.setColor(color.replaceAll("&", "§"));
                     BungeeCore.getAPI().getClanManager().updateClan(clan);
                     BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7Your clan got the color§8: " + clan.getColor() + clan.getName());
                     for (UUID member : clan.getMembers()) {

@@ -112,7 +112,6 @@ public class BukkitCore extends JavaPlugin {
         getPerkCache().getPerkHashMap().put(205,
                 new Perk(205, "c-Light Red", Material.INK_SACK, (byte) 1, PerkType.CHAT, 1500, PerkRankType.PLAYER, null)
         );
-        getCommand("test").setExecutor(new TestCommand());
 
     }
 

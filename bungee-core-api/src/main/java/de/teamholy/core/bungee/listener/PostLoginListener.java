@@ -150,7 +150,7 @@ public class PostLoginListener implements Listener {
         }
 
         if (i == 0) {
-            proxiedPlayer.sendMessage("§6Friend §8× §7Currently are §cno §7friends online");
+            proxiedPlayer.sendMessage("§6Friend §8× §7There are currently §cno §7friends online");
         } else if (i == 1) {
             proxiedPlayer.sendMessage("§6Friend §8× §7Currently is §e" + i + " §7friend online");
         } else {

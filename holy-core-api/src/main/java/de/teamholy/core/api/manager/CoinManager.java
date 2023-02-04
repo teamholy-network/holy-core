@@ -1,5 +1,6 @@
 package de.teamholy.core.api.manager;
 
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import lombok.AccessLevel;
@@ -37,7 +38,9 @@ public class CoinManager {
                 () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
         if (playerProfile == null)
             return;
-        playerProfile.setCoins(coins);
+        long newCoins = coins;
+        playerProfile.setCoins(newCoins);
+        sendMessage(uuid,newCoins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
@@ -51,7 +54,9 @@ public class CoinManager {
         if (playerProfile == null) {
             return;
         }
-        playerProfile.setCoins(playerProfile.getCoins() + coins);
+        long newCoins = playerProfile.getCoins() + coins;
+        playerProfile.setCoins(newCoins);
+        sendMessage(uuid,newCoins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
@@ -65,7 +70,9 @@ public class CoinManager {
         if (playerProfile == null) {
             return;
         }
-        playerProfile.setCoins(playerProfile.getCoins() - coins);
+        long newCoins = playerProfile.getCoins() - coins;
+        playerProfile.setCoins(newCoins);
+        sendMessage(uuid,newCoins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
@@ -77,5 +84,9 @@ public class CoinManager {
         String pattern = "###,###,###";
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
         return decimalFormat.format(integer);
+    }
+
+    private void sendMessage(UUID uuid, long coins) {
+        coreAPI.getCloudManager().sendCloudMessage("bukkit","coins_update", JsonDocument.newDocument("uuid" , uuid.toString()).append("coins" , coins));
     }
 }

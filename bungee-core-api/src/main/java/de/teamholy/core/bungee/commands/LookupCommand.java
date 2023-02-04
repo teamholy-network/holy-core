@@ -104,7 +104,7 @@ public class LookupCommand extends SenderCommand {
                 player.sendMessage("");
 
                 player.sendMessage("§7First Join §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
-                player.sendMessage("§7Last Join §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
+                player.sendMessage("§7Last Join §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin()));
                 player.sendMessage("§7Registered since §8» §6" + TimeUtil.beautifyTime(playerProfile.getLastJoin() - playerProfile.getFirstJoin(), TimeUnit.MILLISECONDS, true));
 
                 player.sendMessage("");

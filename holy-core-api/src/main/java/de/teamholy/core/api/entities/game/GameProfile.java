@@ -80,7 +80,11 @@ public class GameProfile {
     }
 
     public boolean exists(String gamekey) {
-        return statsMap.containsKey(gamekey);
+        if (!statsMap.containsKey(gamekey)) return false;
+
+        Map<String, Map<String, Long>> gameMap = statsMap.getOrDefault(gamekey, new ConcurrentHashMap<>());
+
+        return gameMap.containsKey(StatsType.ALLTIME.name());
     }
 
 }

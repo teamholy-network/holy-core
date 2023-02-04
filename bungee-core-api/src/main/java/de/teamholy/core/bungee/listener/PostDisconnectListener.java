@@ -59,7 +59,7 @@ public class PostDisconnectListener implements Listener {
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
-                target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §conline");
+                target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §coffline");
             }
         }
 
@@ -86,7 +86,6 @@ public class PostDisconnectListener implements Listener {
         BungeeCore.getAPI().getClanPlayerService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
         BungeeCore.getAPI().getFriendService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
         BungeeCore.getAPI().getSkinService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
-        BungeeCore.getAPI().getBanService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
         BungeeCore.getAPI().getMuteService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
         BungeeCore.getAPI().getGameService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
         BungeeCore.getAPI().getPunishHistoryService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.SECONDS);
