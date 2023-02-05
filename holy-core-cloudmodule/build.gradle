@@ -1,6 +1,5 @@
 dependencies {
     implementation("eu.koboo:en2do:$en2doVersion")
-    implementation 'org.mongodb:mongodb-driver-sync:4.8.2'
     implementation("org.redisson:redisson:$redissonVersion")
     implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 

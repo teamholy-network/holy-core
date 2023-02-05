@@ -1,0 +1,45 @@
+package de.teamholy.core.api.manager;
+
+import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.game.StatsType;
+import de.teamholy.core.api.utility.Gamemodes;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.redisson.api.RScoredSortedSet;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+/* copyright by Yassino */
+public class RankingManager {
+
+    private CoreAPI coreAPI;
+    private HashMap<String, RScoredSortedSet> sortedSetHashMap = new HashMap<>();
+
+    public RankingManager(CoreAPI coreAPI) {
+        this.coreAPI = coreAPI;
+
+        for (Gamemodes gamemodes : Gamemodes.values()) {
+            for (StatsType statsType : StatsType.values()) {
+                RScoredSortedSet scoredSortedSet = coreAPI.
+                        getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
+
+                sortedSetHashMap.put(scoredSortedSet.getName(), scoredSortedSet);
+            }
+        }
+
+    }
+
+    public int getRankFromUUID(Gamemodes gamemodes, StatsType statsType, UUID uuid) {
+        if (sortedSetHashMap.get(gamemodes.toString() + "_" + statsType.toString()).contains(uuid))
+            return sortedSetHashMap.get(gamemodes + "_" + statsType).rank(uuid);
+        return -1;
+    }
+
+    public UUID getUUIDFromRank(Gamemodes gamemodes, StatsType statsType, int rank) {
+        return null;
+    }
+
+}

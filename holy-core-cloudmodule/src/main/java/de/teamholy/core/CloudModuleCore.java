@@ -31,7 +31,6 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
 
     private RankingSortManager sortManager;
-    private MongoManager mongoManager;
 
 
     public static boolean DAILY;
@@ -44,7 +43,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
         instance = this;
         coreAPI = new CoreAPI(new Credentials(connectionString,"holy"));
-        mongoManager = new MongoManager(connectionString,"holy");
+        //mongoManager = new MongoManager(connectionString,"holy");
 
 
         DAILY = getConfig().getBoolean("daily");

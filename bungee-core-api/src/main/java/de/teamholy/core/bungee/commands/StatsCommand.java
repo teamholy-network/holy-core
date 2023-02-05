@@ -86,7 +86,7 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage("");
         player.sendMessage("      " + nameColor + " §8- §" + gamemodes.getColor() + gamemodes);
         player.sendMessage("");
-        player.sendMessage("§7Ranking §8» §eNaN");
+        player.sendMessage(" §7Ranking §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes,statsType,uuid));
         player.sendMessage("");
         gamemodes.getStatKeys().forEach(string -> {
             String stat = toFancy(string);

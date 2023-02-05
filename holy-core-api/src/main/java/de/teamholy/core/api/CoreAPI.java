@@ -35,6 +35,7 @@ public class CoreAPI {
     NickManager nickManager;
     StaffManager staffManager;
     FriendManager friendManager;
+    RankingManager rankingManager;
     ExecutorService executor;
 
     PlayerService playerService;
@@ -77,6 +78,7 @@ public class CoreAPI {
         this.coinManager = new CoinManager(this);
         this.staffManager = new StaffManager(this);
         this.friendManager = new FriendManager(this);
+        this.rankingManager = new RankingManager(this);
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
     }
@@ -111,6 +113,7 @@ public class CoreAPI {
         this.friendManager = new FriendManager(this);
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
+        this.rankingManager = new RankingManager(this);
     }
 
     public void onDisable() {

@@ -10,8 +10,6 @@ import java.util.List;
 public class RankingSortTask implements Runnable{
     @Override
     public void run() {
-        CloudModuleCore.getInstance().getLogger().info("Started RankingSort Task!");
-
 
         List<GameProfile> gameProfiles = new ArrayList<>(CloudModuleCore.getCoreAPI().getGameService().getRedisCache().values());
         CloudModuleCore.getInstance().getSortManager().insertStats(gameProfiles);

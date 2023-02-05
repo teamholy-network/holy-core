@@ -78,9 +78,9 @@ public class StatsResetTask implements Runnable {
     }
 
     private void resetStatsCache(GameProfile gameProfile, StatsType statsType) {
-        for (Gamemodes gamemode : Gamemodes.values()) {
+/*        for (Gamemodes gamemode : Gamemodes.values()) {
             gamemode.getStatKeys().forEach(s -> gameProfile.setStat(gamemode.toString(),statsType,s,0));
-        }
+        }*/
     }
 
 }

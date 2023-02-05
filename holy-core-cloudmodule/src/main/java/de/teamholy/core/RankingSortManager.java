@@ -4,17 +4,11 @@ import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.task.RankingSortTask;
-import org.bson.Document;
-import org.bson.types.Binary;
 import org.redisson.api.RScoredSortedSet;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /* copyright by Yassino */
 public class RankingSortManager {
@@ -23,17 +17,17 @@ public class RankingSortManager {
 
     public RankingSortManager() {
         start();
-        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(), 2, 2, TimeUnit.MINUTES);
+        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(), 30, 30, TimeUnit.SECONDS);
     }
 
     public void start() {
-
+        long start = System.currentTimeMillis();
+        CloudModuleCore.getInstance().getLogger().info("starting ranking cache process");
         sortedSetHashMap = new HashMap<>();
-
 
         for (Gamemodes gamemodes : Gamemodes.values()) {
             for (StatsType statsType : StatsType.values()) {
-                RScoredSortedSet<UUID> scoredSortedSet = CloudModuleCore.getCoreAPI().
+                RScoredSortedSet scoredSortedSet = CloudModuleCore.getCoreAPI().
                         getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
                 scoredSortedSet.clear();
 
@@ -42,57 +36,26 @@ public class RankingSortManager {
         }
 
 
+        List<GameProfile> gameProfiles = CloudModuleCore.getCoreAPI().getGameService().getRepository().findAll();
+        insertStats(gameProfiles);
 
-
-        long start = System.currentTimeMillis();
-        CloudModuleCore.getInstance().getLogger().info("Started caching");
-        CloudModuleCore.getInstance().getMongoManager().getMongoDatabase().getCollection("game_profile_collection").find().forEach(document -> {
-
-
-
-
-            Document statsMap = document.get("statsMap",Document.class);
-
-            for (Gamemodes gamemodes : Gamemodes.values()) {
-
-                if (statsMap.containsKey(gamemodes.toString())) {
-
-                    for (StatsType value : StatsType.values()) {
-
-                        sortedSetHashMap.get(gamemodes.toString() + "_" + statsMap.toString())
-                                .add(statsMap.get(gamemodes.toString(),Document.class).
-                                        get(value.toString(),Document.class)
-                                        .getLong(gamemodes.getRankingKey()),
-                                        UUID.fromString(document.get("_id", Binary.class).toString()));
-
-                    }
-
-                }
-
-            }
-
-        });
-        CloudModuleCore.getInstance().getLogger().info("end " + ( System.currentTimeMillis() - start ) / 1000 + "s");
-
-
-
-
-
-
+        CloudModuleCore.getInstance().getLogger().info("finished ranking cache process in " + ((System.currentTimeMillis() - start) / 1000) + "s with " + gameProfiles.size() + " entries");
     }
 
     public void insertStats(List<GameProfile> gameProfiles) {
         for (Gamemodes gamemodes : Gamemodes.values()) {
-            for (StatsType value : StatsType.values()) {
 
-                RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + value.toString());
-                 gameProfiles.stream()
-                            .filter(gameProfile -> gameProfile.exists(gamemodes.toString()))
-                            .forEach(gameProfile -> sortedSet.add(gameProfile.getStat(gamemodes.toString(), value, gamemodes.getRankingKey()), gameProfile.getPlayerId()));
+
+                gameProfiles.stream()
+                        .filter(gameProfile -> gameProfile.exists(gamemodes.toString()))
+                        .forEach(gameProfile -> {
+                            for (StatsType value : StatsType.values()) {
+                                RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + value.toString());
+                                sortedSet.addAsync(gameProfile.getStat(gamemodes.toString(), value, gamemodes.getRankingKey()), gameProfile.getPlayerId());
+                            }
+                        });
 
             }
-        }
     }
-
 
 }
