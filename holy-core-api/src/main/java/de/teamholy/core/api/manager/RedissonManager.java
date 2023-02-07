@@ -27,13 +27,13 @@ public class RedissonManager {
         this.plugin = plugin;
         this.config = new Config();
 
-        config.useSingleServer().setAddress("");
+        config.useSingleServer().setAddress("redis://127.0.0.1:6379").setPassword("redisfromohioHihSA1212");
         config.useSingleServer().setRetryAttempts(3);
         config.useSingleServer().setTimeout(10000);
         config.useSingleServer().setConnectionPoolSize(500);
         config.useSingleServer().setRetryInterval(2000);
 
-        redissonClient = Redisson.create();
+        redissonClient = Redisson.create(config);
     }
 
 

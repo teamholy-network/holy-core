@@ -583,7 +583,7 @@ public class ClanCommand extends SenderCommand {
         }
 
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
-        clan.getMembers().remove(player.getUniqueId());
+        clan.getMembers().remove(toKick);
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         BungeeCore.getAPI().getClanPlayerService().deleteEntity(kickProfile);
 

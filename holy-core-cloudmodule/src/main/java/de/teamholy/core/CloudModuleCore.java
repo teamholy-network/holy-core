@@ -12,6 +12,8 @@ import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.task.StatsResetTask;
 import eu.koboo.en2do.Credentials;
 import lombok.Getter;
+import org.redisson.api.RTopic;
+import org.redisson.api.listener.MessageListener;
 
 import java.util.Random;
 import java.util.UUID;
@@ -43,7 +45,6 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
         instance = this;
         coreAPI = new CoreAPI(new Credentials(connectionString,"holy"));
-        //mongoManager = new MongoManager(connectionString,"holy");
 
 
         DAILY = getConfig().getBoolean("daily");
@@ -55,6 +56,14 @@ public class CloudModuleCore extends NodeCloudNetModule {
         service.scheduleAtFixedRate(new StatsResetTask(),0,1,TimeUnit.MINUTES);
 
         sortManager = new RankingSortManager();
+
+        RTopic topic = coreAPI.getRedissonManager().getRedissonClient().getTopic("topic");
+
+
+        topic.addListener(String.class, (channel, msg) ->  {
+
+        });
+
 
     }
 

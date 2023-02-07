@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.Punish;
 import lombok.AccessLevel;
 import lombok.Getter;

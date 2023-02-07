@@ -34,7 +34,7 @@ public class RankingManager {
 
     public int getRankFromUUID(Gamemodes gamemodes, StatsType statsType, UUID uuid) {
         if (sortedSetHashMap.get(gamemodes.toString() + "_" + statsType.toString()).contains(uuid))
-            return sortedSetHashMap.get(gamemodes + "_" + statsType).rank(uuid);
+            return sortedSetHashMap.get(gamemodes + "_" + statsType).revRank(uuid);
         return -1;
     }
 

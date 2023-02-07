@@ -50,6 +50,7 @@ public class Inventory implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
+        if(event.getClickedInventory() == null) return;
         if (event.getInventory().equals(inventory) && event.getRawSlot() < event.getInventory().getSize()) {
             event.setCancelled(cancelClick);
             for (Integer integer : items.keySet()) {

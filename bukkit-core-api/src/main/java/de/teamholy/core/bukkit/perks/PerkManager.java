@@ -24,6 +24,7 @@ public class PerkManager {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
         Perk perk;
         ItemBuilder itemBuilder = null;
+        if(perkPlayerProfile == null) return null;
 
 
 

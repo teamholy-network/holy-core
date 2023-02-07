@@ -43,19 +43,16 @@ public class RankingSortManager {
     }
 
     public void insertStats(List<GameProfile> gameProfiles) {
-        for (Gamemodes gamemodes : Gamemodes.values()) {
-
-
-                gameProfiles.stream()
-                        .filter(gameProfile -> gameProfile.exists(gamemodes.toString()))
-                        .forEach(gameProfile -> {
-                            for (StatsType value : StatsType.values()) {
-                                RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + value.toString());
-                                sortedSet.addAsync(gameProfile.getStat(gamemodes.toString(), value, gamemodes.getRankingKey()), gameProfile.getPlayerId());
-                            }
-                        });
-
+        for (GameProfile gameProfile : gameProfiles) {
+            for (Gamemodes gamemodes : Gamemodes.values()) {
+                if (gameProfile.exists(gamemodes.toString())) {
+                    for (StatsType statsType : StatsType.values()) {
+                        RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + statsType.toString());
+                        sortedSet.addAsync(gameProfile.getStat(gamemodes.toString(), statsType, gamemodes.getRankingKey()), gameProfile.getPlayerId());
+                    }
+                }
             }
+        }
     }
 
 }
