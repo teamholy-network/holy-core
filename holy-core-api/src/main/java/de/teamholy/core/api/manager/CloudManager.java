@@ -62,6 +62,9 @@ public class CloudManager {
     }
 
     public boolean isPunishable(UUID uuid) {
+
+
+
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
         if (iPermissionUser == null) {
             return true;
@@ -82,6 +85,7 @@ public class CloudManager {
             } else {
                 playerProfile = coreAPI.getPlayerService().getRepository().findFirstByPlayerName(nameOrUuid);
             }
+
             if (playerProfile == null) {
                 userinfo.complete(null);
                 return;
@@ -89,6 +93,7 @@ public class CloudManager {
 
             String[] strings = new String[]{playerProfile.getPlayerName(), String.valueOf(playerProfile.getPlayerId())};
             userinfo.complete(strings);
+
         });
 
         try {
