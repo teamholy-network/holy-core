@@ -54,14 +54,14 @@ public class BanLoginListener implements Listener {
 
                     punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
-                    bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, true, true);
+                    bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
                     bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("Console", punishProfile));
                     punishService.deleteEntity(punishProfile);
                 }
             } else {
                 List<PlayerProfile> profileList = new ArrayList<>();
                 for (PlayerProfile playerProfile : bungeeCore.getCoreAPI().getPlayerService().getRedisCache().values()) {
-                    if (playerProfile.getIp() != null && playerProfile.getIp().equals(ipAddress)) {
+                    if (playerProfile.getIp().equals(ipAddress)) {
                         profileList.add(playerProfile);
                     }
                 }
