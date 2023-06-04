@@ -27,7 +27,7 @@ public class RedissonManager {
         this.plugin = plugin;
         this.config = new Config();
 
-        config.useSingleServer().setAddress("redis://127.0.0.1:6379").setPassword("redisfromohioHihSA1212");
+        config.useSingleServer().setAddress("redis://127.0.0.1:6379");
         config.useSingleServer().setRetryAttempts(3);
         config.useSingleServer().setTimeout(10000);
         config.useSingleServer().setConnectionPoolSize(500);

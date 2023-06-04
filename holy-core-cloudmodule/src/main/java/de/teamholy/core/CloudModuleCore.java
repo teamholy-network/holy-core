@@ -41,7 +41,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
     @ModuleTask(event = ModuleLifeCycle.LOADED)
     public void init() {
 
-        String connectionString = "mongodb://root:leXtRoNdiAlBineLEINEidECtORmlACORceIGeNhIGhteroNfo@89.163.251.177:36410/?authSource=admin";
+        String connectionString = "mongodb://root:dkdfGp3U81SEu+Zc2L@89.163.144.210:36410/?authSource=admin";
 
         instance = this;
         coreAPI = new CoreAPI(new Credentials(connectionString,"holy"));

@@ -26,16 +26,16 @@ public class StatsResetTask implements Runnable {
         String day = time.split(":")[1];
         String hour = time.split(":")[0];
 
-        if (CloudModuleCore.DAILY && !hour.equalsIgnoreCase("21")) CloudModuleCore.DAILY = false;
-        if (CloudModuleCore.MONTHLY && !day.equalsIgnoreCase("02")) CloudModuleCore.MONTHLY = false;
+        if (CloudModuleCore.DAILY && !hour.equalsIgnoreCase("00")) CloudModuleCore.DAILY = false;
+        if (CloudModuleCore.MONTHLY && !day.equalsIgnoreCase("01")) CloudModuleCore.MONTHLY = false;
 
 
         boolean update = false;
-        if (hour.equalsIgnoreCase("21") && !CloudModuleCore.DAILY)  {
+        if (hour.equalsIgnoreCase("00") && !CloudModuleCore.DAILY)  {
             resetStatsFromGameProfiles(StatsType.DAILY);
             update = true;
         }
-        if (day.equalsIgnoreCase("02") && !CloudModuleCore.MONTHLY) {
+        if (day.equalsIgnoreCase("01") && !CloudModuleCore.MONTHLY) {
             resetStatsFromGameProfiles(StatsType.MONTHLY);
             update = true;
         }
