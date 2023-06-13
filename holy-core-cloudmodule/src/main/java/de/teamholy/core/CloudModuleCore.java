@@ -37,14 +37,16 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
     public static boolean DAILY;
     public static boolean MONTHLY;
-
     @ModuleTask(event = ModuleLifeCycle.LOADED)
     public void init() {
 
-        String connectionString = "mongodb://root:dkdfGp3U81SEu+Zc2L@89.163.144.210:36410/?authSource=admin";
 
         instance = this;
-        coreAPI = new CoreAPI(new Credentials(connectionString,"holy"));
+
+
+        String mongoString = "mongodb://admin:dkdfGp3U81SEu+Zc2L@89.163.144.210:36410/?authSource=admin";
+        getLogger().info("loggin in with (" + mongoString + ")...");
+        coreAPI = new CoreAPI(new Credentials(mongoString,"holy"));
 
 
         DAILY = getConfig().getBoolean("daily");
@@ -56,13 +58,6 @@ public class CloudModuleCore extends NodeCloudNetModule {
         service.scheduleAtFixedRate(new StatsResetTask(),0,1,TimeUnit.MINUTES);
 
         sortManager = new RankingSortManager();
-
-        RTopic topic = coreAPI.getRedissonManager().getRedissonClient().getTopic("topic");
-
-
-        topic.addListener(String.class, (channel, msg) ->  {
-
-        });
 
 
     }

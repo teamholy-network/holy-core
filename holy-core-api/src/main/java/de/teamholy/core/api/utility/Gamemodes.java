@@ -16,7 +16,10 @@ public enum Gamemodes {
     BEDWARS("c", "won_games", List.of("kills", "deaths", "played_games", "won_games", "destroyed_beds"), List.of("BW2x1", "BW4x2", "BW8x1", "BWC2x1")),
     KNOCKBACKFFA("e", "kills", List.of("kills", "deaths"), List.of("KnockbackFFA")),
     SGFFA("a", "kills", List.of("kills", "deaths"), List.of("SGFFA")),
-    CLUTCHES("§b", "", List.of(""), List.of("Clutches"));
+    CLUTCHES("§b", "", List.of(""), List.of("Clutches")),
+
+
+    BRIDGE("§b", "", List.of(""), List.of("Bridge"));
 
     String color, rankingKey;
     List<String> statKeys;
