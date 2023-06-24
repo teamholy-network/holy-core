@@ -24,13 +24,12 @@ public class PerkManager {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
         Perk perk;
         ItemBuilder itemBuilder = null;
-        if(perkPlayerProfile == null) return null;
-
+        if (perkPlayerProfile == null) return null;
 
 
         if (perkType == PerkType.STICK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
-            
+
             if (perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
                 perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
 
@@ -154,6 +153,9 @@ public class PerkManager {
         } else if (sortOptionPerk == SortOptionPerk.COINS) {
             perks.removeIf(perk -> !perk.isBuyAble());
             perks.sort(Comparator.comparing(Perk::getPrice));
+        } else if (sortOptionPerk == SortOptionPerk.SPECIAL) {
+            perks.removeIf(perk -> !perk.isSpecial());
+            perks.sort(Comparator.comparing(Perk::getId));
         } else {
             perks.sort(Comparator.comparing(Perk::getId));
         }
@@ -179,10 +181,18 @@ public class PerkManager {
             List<String> list = new ArrayList<>();
             if (perk.isBuyAble()) {
                 list.add("§7This perk costs §e" + perk.getPrice() + " §6coins");
+            } else if (perk.isSpecial()) {
+                list.add(perk.getSpecialText());
             } else {
                 list.add("§7Available for " + perk.getPerkRankType().getRankName() + "§7 and above");
             }
-            if (perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isBuyAble() || !perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission())) {
+
+            if (
+                    perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isBuyAble()
+                            || !perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission())
+                            || perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isSpecial()
+            ) {
+
                 list.clear();
                 list.add("§ayou own this perk, click to select");
             }
@@ -210,10 +220,9 @@ public class PerkManager {
                         buyPerk(player, perkPlayerProfile, perk, finalName);
                         return;
                     }
-                } else {
-                    if (!player.hasPermission(perk.getPerkRankType().getPermission())) return;
-                }
-
+                } else if (perk.isSpecial()) {
+                    if (!perkPlayerProfile.getOwnedPerks().contains(perk.getId())) return;
+                } else if (!player.hasPermission(perk.getPerkRankType().getPermission())) return;
 
                 if (perkType == PerkType.STICK) {
                     perkPlayerProfile.setStickPerk(perk.getId());
@@ -318,7 +327,7 @@ public class PerkManager {
 
 
     public enum SortOptionPerk {
-        NORMAL, COINS, RANK;
+        NORMAL, COINS, RANK, SPECIAL;
     }
 
     public enum SortOptionPlayer {

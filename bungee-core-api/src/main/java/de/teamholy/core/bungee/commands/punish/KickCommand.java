@@ -44,13 +44,24 @@ public class KickCommand extends SenderCommand {
 
         }
 
-
-        String reason = "§crule violation §8/ §cwarning";
-        if (args.length <= 2) {
-            reason = args[1];
+        if (target.hasPermission("teamholy.team") && !sender.hasPermission("*")) {
+            sender.sendMessage(prefix + "you cant kick a §cteammember§4!");
+            return;
         }
 
-        target.disconnect("§cYou have been kicked from the TeamHoly.DE network! \n§7Reason §8» " + reason);
+
+        String reason = "§crule violation §8/ §cwarning";
+        if (args.length >= 2) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int a = 1; a < args.length; a++) {
+                stringBuilder.append(args[a]).append(" ");
+            }
+
+            reason = stringBuilder.toString();
+        }
+
+        target.disconnect("§cYou have been kicked from the TeamHoly.DE network! \n§7Reason §8» §e" + reason);
 
         String kicked = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
         UUID author = BungeeUtil.parseAuthorUUID(sender);

@@ -131,7 +131,7 @@ public class BanCommand extends SenderCommand {
                 DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                 discordWebhook.setUsername("BAN");
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
-                        .setDescription(authorName + " has banned " + target + " for " + banReason.getEnglishText() + ".")
+                        .setDescription(authorName + " has banned " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
                 );
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);
@@ -149,7 +149,7 @@ public class BanCommand extends SenderCommand {
             String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : "Permanent";
             commandSender.sendMessage(" §6" + reason.getEnglishText() + " §7- §c" + time + " §7- §c" + reason.getId());
         }
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban (name) (id)");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban (name) (id) [Evidence Link]");
     }
 
 }

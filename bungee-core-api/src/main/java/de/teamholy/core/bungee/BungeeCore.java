@@ -14,6 +14,7 @@ import de.teamholy.core.bungee.commands.mute.MuteCommand;
 import de.teamholy.core.bungee.commands.mute.UnmuteCommand;
 import de.teamholy.core.bungee.commands.party.PartyChatCommand;
 import de.teamholy.core.bungee.commands.party.PartyCommand;
+import de.teamholy.core.bungee.commands.punish.CustomPunishCommand;
 import de.teamholy.core.bungee.commands.punish.EvidenceCommand;
 import de.teamholy.core.bungee.commands.punish.KickCommand;
 import de.teamholy.core.bungee.commands.punish.PunishReduceCommand;
@@ -76,6 +77,7 @@ public class BungeeCore extends Plugin {
         new AdminClanCommand();
         new ClanCommand();
         new CoinsCommand();
+        new CustomPunishCommand();
         new StatsCommand(new String[]{"stats","mstats","astats"},null);
         new KickCommand(new String[]{"kick","kim"}, "teamholy.kick");
 

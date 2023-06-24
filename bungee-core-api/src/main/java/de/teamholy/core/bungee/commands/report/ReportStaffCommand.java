@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.commands.report;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
+import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Report;
 import de.teamholy.core.bungee.BungeeCore;
@@ -50,6 +51,12 @@ public class ReportStaffCommand extends Command {
                 if (report == null) {
                     player.sendMessage(prefix + "You dont edit any report!");
                     return;
+                }
+
+                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
+                if (staffProfile != null) {
+                    staffProfile.getReportList().add(report);
+                    BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
                 }
 
 

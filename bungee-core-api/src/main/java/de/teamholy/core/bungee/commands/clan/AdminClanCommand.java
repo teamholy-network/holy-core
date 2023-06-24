@@ -132,10 +132,6 @@ public class AdminClanCommand extends SenderCommand {
                         sender.sendMessage(Message.CLAN_PREFIX + "§cThe clan " + tag + " doesn't exists!");
                         return;
                     }
-                    if (color.length() > 4) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§cYou can only use 2 color codes with '&' symbol!");
-                        return;
-                    }
 
                     clan.setColor(color.replaceAll("&", "§"));
                     BungeeCore.getAPI().getClanManager().updateClan(clan);

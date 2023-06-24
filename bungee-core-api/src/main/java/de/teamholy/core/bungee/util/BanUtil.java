@@ -35,6 +35,22 @@ public class BanUtil {
         return generateLookUpComponent(playerName, message);
     }
 
+    public TextComponent generateCustomMuteMessage(MuteProfile punishProfile) {
+        String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
+        String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
+        String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + authorName + "§7 has §ecustom §7muted " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7 for §6" + punishProfile.getReason() + "§7. " +
+                "\n§7Time§8: §e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(),TimeUnit.MILLISECONDS,true);
+        return generateLookUpComponent(playerName, message);
+    }
+
+    public TextComponent generateCustomBanMessage(BanProfile punishProfile) {
+        String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
+        String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
+        String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + authorName + "§7 has §ecustom §7banned " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7 for §6" + punishProfile.getReason() + "§7. " +
+                "\n§7Time§8: §e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(),TimeUnit.MILLISECONDS,true);
+        return generateLookUpComponent(playerName, message);
+    }
+
     public TextComponent generateUnmuteMessage(String unmuter, MuteProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + unmuter + "§7 has unmuted " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
@@ -61,6 +77,8 @@ public class BanUtil {
                 .append("§7Time remaining§8: §e")
                 .append(timeString)
                 .append("\n");
+
+
 
         if (dateString != null)
             builder.append("§7Date§8: §e")

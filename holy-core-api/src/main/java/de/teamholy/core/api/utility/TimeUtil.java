@@ -66,6 +66,9 @@ public class TimeUtil {
      * @return The time in milliseconds
      */
     public static long getTimeInMilli(String timeString) {
+
+        if (timeString.equalsIgnoreCase("-1")) return -1;
+
         long multiplier = 0;
         long timeLong = Long.parseLong(timeString.substring(0, timeString.length() - 1));
         multiplier = timeString.endsWith("y") ? 1000 * 60 * 60 * 24 * 7 * 4 * 12L : multiplier;

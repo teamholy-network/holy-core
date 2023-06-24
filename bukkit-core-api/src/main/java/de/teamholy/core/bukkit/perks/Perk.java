@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.perks;
 
 import de.teamholy.core.api.utility.Gamemodes;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -20,6 +21,7 @@ public class Perk {
     private PerkType perkType;
     private long price;
     private PerkRankType perkRankType;
+    private String specialText;
     private final List<Gamemodes> notSupportedGamemodes;
 
     //if perk is banner
@@ -50,8 +52,17 @@ public class Perk {
         this.patterns = patterns;
     }
 
+    public Perk setSpecialText(String text) {
+        specialText = text;
+        return this;
+    }
+
     public boolean isBuyAble() {
         return price != -1;
+    }
+
+    public boolean isSpecial() {
+        return specialText != null;
     }
 
     public boolean isBanner() {

@@ -50,7 +50,7 @@ public class Punish {
         BUG_USING(2, "Bug-Using", TimeUnit.DAYS.toMillis(15)),
         TROLLING(3, "Trolling", TimeUnit.DAYS.toMillis(7)),
         BAD_SKIN(4, "Malicious Skin", TimeUnit.DAYS.toMillis(7)),
-        BAD_NAME(5, "Malicious Name", TimeUnit.DAYS.toMillis(15)),
+        BAD_NAME(5, "Malicious Name", TimeUnit.DAYS.toMillis(90)),
         TEAMING(6, "Teaming", TimeUnit.DAYS.toMillis(30)),
         BAN_BYPASS(7, "Ban Bypassing", -1L),
         HOUSE_BAN(8, "Houseban", -1L),

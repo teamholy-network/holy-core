@@ -116,7 +116,7 @@ public class MuteCommand extends SenderCommand {
                 DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                 discordWebhook.setUsername("MUTE");
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
-                        .setDescription(authorName + " has muted " + target + " for " + banReason.getEnglishText() + ".")
+                        .setDescription(authorName + " has muted " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
                 );
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);

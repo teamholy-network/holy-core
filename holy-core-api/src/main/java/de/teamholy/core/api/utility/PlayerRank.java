@@ -16,6 +16,8 @@ public enum PlayerRank {
             153, 0, 0),
     YOUTUBERPLUS("YoutuberPlus", "§4Youtuber+ §8┃ §4", "§4YT+ §8┃ §4", "§4", 7300,
             153, 0, 0),
+    SRDEVELOPER("SrDeveloper", "§bSrDeveloper §8┃ §b", "§bSrDev §8┃ §b", "§b", 7340,
+            0, 204, 255),
     LIVEPLUS("LivePlus", "§4TTV+ §8┃ §4", "§4TTV+ §8┃ §4", "§4", 7350,
             153, 0, 0),
     DEVELOPER("Developer", "§bDeveloper §8┃ §b", "§bDev §8┃ §b", "§b", 7400,
