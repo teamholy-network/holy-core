@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,7 +36,6 @@ public class BanLoginListener implements Listener {
     @EventHandler(priority = 1)
     public void onLogin(LoginEvent loginEvent) {
 
-        try {
 
             UUID uuid = loginEvent.getConnection().getUniqueId();
 
@@ -49,8 +49,7 @@ public class BanLoginListener implements Listener {
                     loginEvent.setCancelReason(BanUtil.generateBanScreen(punishProfile));
                 } else {
                     PunishHistoryProfile punishHistoryProfile = bungeeCore.getCoreAPI().getPunishHistoryService().getEntity(uuid, () -> bungeeCore.getCoreAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
-                    if (punishHistoryProfile == null)
-                        punishHistoryProfile = new PunishHistoryProfile();
+                    if (punishHistoryProfile == null) punishHistoryProfile = new PunishHistoryProfile();
 
                     punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
@@ -59,21 +58,14 @@ public class BanLoginListener implements Listener {
                     punishService.deleteEntity(punishProfile);
                 }
             } else {
-                List<PlayerProfile> profileList = new ArrayList<>();
-                for (PlayerProfile playerProfile : bungeeCore.getCoreAPI().getPlayerService().getRedisCache().values()) {
-                    if (playerProfile.getIp().equals(ipAddress)) {
-                        profileList.add(playerProfile);
-                    }
-                }
+                List<PlayerProfile> profileList = bungeeCore.getCoreAPI().getPlayerService().getRedisCache().values().stream()
+                        .filter(playerProfile -> playerProfile.getIp().equals(ipAddress)).collect(Collectors.toList());
 
                 if (!filterBanBypass(profileList, loginEvent) && !loginEvent.isCancelled()) {
                     profileList = bungeeCore.getCoreAPI().getPlayerService().getRepository().findManyByIp(ipAddress);
                     filterBanBypass(profileList, loginEvent);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private boolean filterBanBypass(List<PlayerProfile> profileList, LoginEvent loginEvent) {
@@ -82,14 +74,12 @@ public class BanLoginListener implements Listener {
         }
         for (PlayerProfile playerAcc : profileList) {
 
+
             BanProfile punishProfile = punishService.getEntity(playerAcc.getPlayerId(), () -> punishService.getRepository().findFirstById(playerAcc.getPlayerId()));
-            if (punishProfile == null) {
-                return false;
-            }
-            if (punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
+            if (punishProfile != null && punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
                 Punish.BanReason banReason = Punish.BanReason.BAN_BYPASS;
                 BanProfile banProfile = new BanProfile();
-                banProfile.setPlayerId(playerAcc.getPlayerId());
+                banProfile.setPlayerId(loginEvent.getConnection().getUniqueId());
                 banProfile.setDuration(TimeUnit.HOURS.toMillis(5));
                 banProfile.setReason(banReason.getEnglishText());
                 banProfile.setEvidence("Tried bypassing the ban of " + playerAcc.getPlayerName());

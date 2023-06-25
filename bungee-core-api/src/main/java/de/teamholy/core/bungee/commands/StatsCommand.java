@@ -135,7 +135,7 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage("");
         for (Gamemodes value : Gamemodes.values()) {
             if (!value.getRankingKey().isEmpty()) {
-                player.sendMessage(new ChatAction().text(" §8» §" + value.getColor() + "§l" + value.toString().toUpperCase(Locale.ROOT)).hover("§7click to show stats of " + nameColor + " §7in " + value.getColor() + value.toString().toUpperCase(Locale.ROOT))
+                player.sendMessage(new ChatAction().text(" §8» §" + value.getColor() + "§l" + value.toString().toUpperCase(Locale.ROOT)).hover("§7click to show stats of " + nameColor + " §7in §" + value.getColor() + value.toString().toUpperCase(Locale.ROOT))
                                 .execute("stats " + name + " " + value.toString() + " " + StatsType.ALLTIME)
                         .component());
             }
