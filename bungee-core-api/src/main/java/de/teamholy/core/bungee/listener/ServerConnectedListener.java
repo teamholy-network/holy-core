@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
+import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ProxyServer;
@@ -7,6 +8,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+
+import java.util.UUID;
 
 /* copyright by Yassino */
 public class ServerConnectedListener implements Listener {
@@ -22,6 +25,10 @@ public class ServerConnectedListener implements Listener {
                 () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (playerProfile == null) return;
         playerProfile.setServerName(event.getServer().getInfo().getName());
+        FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(player.getUniqueId()));
+        for (UUID uuid : friendProfile.getFriendList()) {
+            BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(),uuid,"update");
+        }
         BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
     }
 

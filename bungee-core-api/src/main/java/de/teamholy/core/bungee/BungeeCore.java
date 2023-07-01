@@ -78,6 +78,7 @@ public class BungeeCore extends Plugin {
         new ClanCommand();
         new CoinsCommand();
         new CustomPunishCommand();
+
         new StatsCommand(new String[]{"stats","mstats","astats"},null);
         new KickCommand(new String[]{"kick","kim"}, "teamholy.kick");
 

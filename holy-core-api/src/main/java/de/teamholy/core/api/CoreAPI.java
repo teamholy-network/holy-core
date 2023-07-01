@@ -49,10 +49,11 @@ public class CoreAPI {
     ClanPlayerService clanPlayerService;
     StaffService staffService;
     PerkPlayerService perkPlayerService;
+    ConfigManager config;
 
     public CoreAPI() {
 
-        ConfigManager config = new ConfigManager();
+        this.config = new ConfigManager();
         this.mongoManager = new MongoManager(new Credentials("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin", "holy"));
         this.redissonManager = new RedissonManager(this);
 
@@ -87,6 +88,7 @@ public class CoreAPI {
     public CoreAPI(Credentials credentials) {
 
         this.mongoManager = new MongoManager(credentials);
+        this.config = new ConfigManager();
         this.redissonManager = new RedissonManager(this);
 
 

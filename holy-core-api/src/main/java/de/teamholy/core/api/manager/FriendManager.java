@@ -1,5 +1,6 @@
 package de.teamholy.core.api.manager;
 
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
@@ -73,6 +74,7 @@ public class FriendManager {
         if(friendProfile == null) {
             return;
         }
+        sendFriendUpdateData(player,target,"remove");
         friendProfile.getFriendList().remove(player);
         coreAPI.getFriendService().saveEntity(friendProfile, forceCache, true);
     }
@@ -82,6 +84,7 @@ public class FriendManager {
         if(friendProfile == null) {
             return;
         }
+        sendFriendUpdateData(player,target,"add");
         friendProfile.getFriendList().add(player);
         coreAPI.getFriendService().saveEntity(friendProfile, forceCache, true);
     }
@@ -112,6 +115,11 @@ public class FriendManager {
             return true;
         }
         return friendProfile.getFriendList().size() < getMaxFriendsCount(uuid);
+    }
+
+    public void sendFriendUpdateData(UUID player, UUID target, String message) {
+        JsonDocument jsonDocument = new JsonDocument().append("player",player).append("target",target).append("type",message);
+        coreAPI.getCloudManager().sendCloudMessage("bukkit","friend_update",jsonDocument);
     }
 
 

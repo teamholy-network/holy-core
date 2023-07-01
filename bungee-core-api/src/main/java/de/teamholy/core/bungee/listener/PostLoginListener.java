@@ -144,6 +144,7 @@ public class PostLoginListener implements Listener {
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
+                BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(),uuid,"update");
                 i++;
                 target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §aonline");
             }

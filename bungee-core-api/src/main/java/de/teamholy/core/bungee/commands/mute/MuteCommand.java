@@ -63,6 +63,11 @@ public class MuteCommand extends SenderCommand {
                     return;
                 }
 
+                if (!BungeeUtil.hasPermission(sender, "*") && !BungeeCore.getAPI().getCloudManager().isPunishable(uuid)) {
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§cYou don't have permissions to ban this player!");
+                    return;
+                }
+
                 String evidence = "No evidence";
                 if (args.length == 3) {
                     evidence = args[2];
@@ -97,8 +102,8 @@ public class MuteCommand extends SenderCommand {
                 BungeeCore.getAPI().getMuteService().saveEntity(punishProfile, isOnline, true);
 
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(author, () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(author));
-                staffProfile.getMuteProfileList().add(punishProfile);
                 if (staffProfile != null) {
+                    staffProfile.getMuteProfileList().add(punishProfile);
                     BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
                 }
 
