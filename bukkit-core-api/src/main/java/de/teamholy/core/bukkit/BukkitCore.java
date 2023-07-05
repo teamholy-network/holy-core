@@ -2,9 +2,12 @@ package de.teamholy.core.bukkit;
 
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.utility.AbstractConfiguration;
+import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
 import de.teamholy.core.bukkit.perks.*;
+import eu.koboo.yaml.Yaml;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -13,8 +16,12 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.A;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -96,7 +103,6 @@ public class BukkitCore extends JavaPlugin {
         getPerkCache().getPerkHashMap().put(200,
                 new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null)
         );
-
         getPerkCache().getPerkHashMap().put(201,
                 new Perk(201, "a-Light Green", Material.INK_SACK, (byte) 10, PerkType.CHAT, -1, PerkRankType.PREMIUM, null)
         );
@@ -107,11 +113,26 @@ public class BukkitCore extends JavaPlugin {
                 new Perk(203, "9-Blue", Material.INK_SACK, (byte) 4, PerkType.CHAT, -1, PerkRankType.PREMIUM, null)
         );
         getPerkCache().getPerkHashMap().put(204,
-                new Perk(204, "b-Light Blue", Material.INK_SACK, (byte) 12, PerkType.CHAT, -1, PerkRankType.PREMIUM, null)
+                new Perk(204, "b-Light Blue", Material.INK_SACK, (byte) 12, PerkType.CHAT, -1, PerkRankType.PREMIUM, Arrays.asList(Gamemodes.MLGRUSH,Gamemodes.BRIDGE))
         );
         getPerkCache().getPerkHashMap().put(205,
-                new Perk(205, "c-Light Red", Material.INK_SACK, (byte) 1, PerkType.CHAT, 1500, PerkRankType.PLAYER, null)
+                new Perk(205, "c-Light Red", Material.INK_SACK, (byte) 1, PerkType.CHAT, 1500, PerkRankType.PLAYER, Arrays.asList(Gamemodes.values()))
         );
+
+        AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"),"perks");
+        configuration.load();
+        configuration.append("default.stick",100,true);
+        configuration.append("default.block",0,true);
+        configuration.append("default.chat",200,true);
+        configuration.append("perks.block",getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == PerkType.BLOCK).collect(Collectors.toList()),true);
+        configuration.append("perks.stick",getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == PerkType.STICK).collect(Collectors.toList()),true);
+        configuration.append("perks.chat",getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == PerkType.CHAT).collect(Collectors.toList()),true);
+        configuration.save();
+
+        configuration.getList("perks.block",Perk.class).forEach(o -> {
+            Perk perk = (Perk) o;
+            System.out.println(perk.getName());
+        });
 
     }
 

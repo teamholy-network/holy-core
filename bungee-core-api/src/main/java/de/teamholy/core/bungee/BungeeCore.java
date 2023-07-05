@@ -1,6 +1,8 @@
 package de.teamholy.core.bungee;
 
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.manager.CloudManager;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -31,7 +33,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.util.concurrent.TimeUnit;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -78,26 +83,56 @@ public class BungeeCore extends Plugin {
         new ClanCommand();
         new CoinsCommand();
         new CustomPunishCommand();
+        new CloudMessageListener();
 
         new StatsCommand(new String[]{"stats","mstats","astats"},null);
         new KickCommand(new String[]{"kick","kim"}, "teamholy.kick");
 
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new FriendCommand("friend", null, "friends"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new FriendListCommand("friendlist", "fl"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new MSGCommand("msg"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new ReplyCommand("r"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new PartyChatCommand("partychat", "pc", "pchat"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new PartyCommand("party", null, "parties"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new ReportCommand("report"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new ReportStaffCommand("reportstaff"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TokensCommand("tokens"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new JoinMECommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TeamChatCommand("teamchat", "teamholy.team", "tc"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TeamCommand("team", "teamholy.team", "teamlist"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new TeamNotifyCommand("teamnotify", "teamholy.team", "notify"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new NickListCommand("nicklist", "teamholy.team", "nicks"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new RankCommand("rank", "teamholy.rang", "rang"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(BungeeCore.getInstance(), new OnlinetimeCommand("onlinetime"));
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatFilterListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
+
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendCommand("friend", null, "friends"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendListCommand("friendlist", "fl"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new MSGCommand("msg"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ReplyCommand("r"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new PartyChatCommand("partychat", "pc", "pchat"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new PartyCommand("party", null, "parties"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ReportCommand("report"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ReportStaffCommand("reportstaff"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TokensCommand("tokens"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new JoinMECommand());
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamChatCommand("teamchat", "teamholy.team", "tc"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamCommand("team", "teamholy.team", "teamlist"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamNotifyCommand("teamnotify", "teamholy.team", "notify"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new NickListCommand("nicklist", "teamholy.team", "nicks"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RankCommand("rank", "teamholy.rang", "rang"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new OnlinetimeCommand("onlinetime"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new PingCommand("ping"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new BroadcastCommand("broadcast","teamholy.broadcast","bc"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new JumpCommand("jump"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new GiveawayCommand("giveaway"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new YoutuberCommand("Youtube","","yt","premium+","p+"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new HelpCommand("help","","hile","dc","shop","?","discord","apply","forum"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new NameMCCommand("namemc","","vote","rewards","like","premium","freepremium"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this,new EasyPermissionCommand("easypermission","","eperms","easyperms"));
+
+
+        ProxyServer.getInstance().getScheduler().schedule(this,() -> {
+
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),() -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+                playerProfile.setOnlineTime(playerProfile.getOnlineTime() + 60000L);
+                BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
+            }
+
+            coreAPI.getCloudManager().sendCloudMessage("bukkit","onlineTime_update",null);
+
+            ChatFilterListener.LASTMESSAGES.clear();
+
+            CommandListener.COOLDOWNS.clear();
+        },1,1, TimeUnit.MINUTES);
+
     }
 
     @Override

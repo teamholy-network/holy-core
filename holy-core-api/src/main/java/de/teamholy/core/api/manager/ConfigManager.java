@@ -23,6 +23,7 @@ public class ConfigManager {
         try {
             Yaml yaml = Yaml.parseFilePath("mongodb.cfg");
 
+
             username = yaml.getString("username");
             password = yaml.getString("password");
             host = yaml.getString("host");

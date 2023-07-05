@@ -4,6 +4,7 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.PlayerRank;
@@ -24,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 public class CloudManager {
 
     CoreAPI coreAPI;
+    IPlayerManager playerManager;
 
     public String getColor(UUID uuid) {
         if (uuid == Punish.getConsoleUuid()) return "§4§l";

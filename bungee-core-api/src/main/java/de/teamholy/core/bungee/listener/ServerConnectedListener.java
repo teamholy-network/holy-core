@@ -27,7 +27,7 @@ public class ServerConnectedListener implements Listener {
         playerProfile.setServerName(event.getServer().getInfo().getName());
         FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(player.getUniqueId()));
         for (UUID uuid : friendProfile.getFriendList()) {
-            BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(),uuid,"update");
+            BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(),uuid,"server_update",event.getServer().getInfo().getName());
         }
         BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
     }

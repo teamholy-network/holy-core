@@ -2,6 +2,8 @@ package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.driver.permission.PermissionCheckResult;
+import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.game.GameProfile;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /* copyright by Yassino */
 public class PostLoginListener implements Listener {
@@ -144,7 +147,7 @@ public class PostLoginListener implements Listener {
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
-                BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(),uuid,"update");
+                BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(),uuid,"online",null);
                 i++;
                 target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §aonline");
             }
@@ -191,6 +194,23 @@ public class PostLoginListener implements Listener {
         if (perkPlayerProfile != null) {
             BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, save);
         }
+
+        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
+
+            ICloudPlayer cloudPlayer = BungeeCore.getAPI().getCloudManager().getPlayerManager().getOnlinePlayer(proxiedPlayer.getUniqueId());
+            assert cloudPlayer != null;
+            if (!cloudPlayer.getProperties().contains("autonick")) {
+                cloudPlayer.getProperties().append("autonick",false);
+                BungeeCore.getAPI().getCloudManager().getPlayerManager().updateOnlinePlayer(cloudPlayer);
+            }
+
+            if (!proxiedPlayer.hasPermission("markupapi.nick")) {
+                cloudPlayer.getProperties().append("autonick",false);
+                BungeeCore.getAPI().getCloudManager().getPlayerManager().updateOnlinePlayer(cloudPlayer);
+            }
+
+
+        }, 2, TimeUnit.SECONDS);
     }
 
 }

@@ -1,5 +1,7 @@
 package de.teamholy.core.api;
 
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.entities.ban.BanService;
 import de.teamholy.core.api.entities.clan.ClanService;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerService;
@@ -72,7 +74,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
 
 
-        this.cloudManager = new CloudManager(this);
+        this.cloudManager = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
         this.uuidManager = new UUIDManager(this);
         this.reportManager = new ReportManager(this);
         this.clanManager = new ClanManager(this, clanService);
@@ -106,7 +108,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
 
 
-        this.cloudManager = new CloudManager(this);
+        this.cloudManager = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
         this.uuidManager = new UUIDManager(this);
         this.reportManager = new ReportManager(this);
         this.clanManager = new ClanManager(this, clanService);

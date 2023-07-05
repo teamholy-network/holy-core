@@ -69,4 +69,8 @@ public class Perk {
         return material == Material.BANNER;
     }
 
+    public boolean isRankPerk() {
+        return price == -1 || specialText == null;
+    }
+
 }

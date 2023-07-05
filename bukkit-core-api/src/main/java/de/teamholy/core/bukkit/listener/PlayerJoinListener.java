@@ -43,9 +43,9 @@ public class PlayerJoinListener implements Listener {
             boolean needUpdate = false;
 
             if (!player.hasPermission(PerkRankType.PREMIUM.getPermission())) {
-                if (!stick.isBuyAble() && stick.getId() != 100) needUpdate = true;
-                if (!block.isBuyAble() && block.getId() != 0) needUpdate = true;
-                if (!chat.isBuyAble() && chat.getId() != 200) needUpdate = true;
+                if (!stick.isRankPerk() && stick.getId() != 100) needUpdate = true;
+                if (!block.isRankPerk() && block.getId() != 0) needUpdate = true;
+                if (!chat.isRankPerk() && chat.getId() != 200) needUpdate = true;
             }
 
             if (needUpdate) {

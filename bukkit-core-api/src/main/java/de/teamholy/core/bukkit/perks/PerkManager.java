@@ -30,7 +30,7 @@ public class PerkManager {
         if (perkType == PerkType.STICK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
 
-            if (perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
+            if (perk == null || perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
                 perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
 
             } else itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
@@ -42,7 +42,7 @@ public class PerkManager {
         } else if (perkType == PerkType.BLOCK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
 
-            if (perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
+            if (perk == null || perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
                 perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(0);
 
             } else itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
