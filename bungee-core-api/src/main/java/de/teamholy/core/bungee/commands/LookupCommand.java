@@ -13,6 +13,7 @@ import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.TimeUtil;
+import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import de.teamholy.core.bungee.util.ChatAction;
@@ -68,6 +69,9 @@ public class LookupCommand extends SenderCommand {
                 TextComponent nameComp = new TextComponent("§7Name §8» ");
                 nameComp.addExtra(new ChatAction().text(BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7Click to copy uuid").component());
                 player.sendMessage(nameComp);
+
+                TextComponent cracked = new TextComponent("§7Premium Account §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(),playerProfile.getPlayerName()) ? "§cno" : "§ayes"));
+                player.sendMessage(cracked);
 
                 TextComponent onlineComp = new TextComponent("§7Status §8» ");
                 if (playerProfile.isOnline()) {

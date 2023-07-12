@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.File;
 import java.io.IOException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

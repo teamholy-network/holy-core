@@ -29,6 +29,7 @@ public class CommandListener implements Listener {
             return;
         }
         COOLDOWNS.remove(proxiedPlayer.getUniqueId());
+        if (event.getMessage().startsWith("/login") || event.getMessage().startsWith("/register")) return;
 
         DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
         discordWebhook.setUsername("command");

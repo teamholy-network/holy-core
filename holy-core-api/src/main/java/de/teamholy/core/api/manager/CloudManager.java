@@ -64,9 +64,6 @@ public class CloudManager {
     }
 
     public boolean isPunishable(UUID uuid) {
-
-
-
         IPermissionUser iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
         if (iPermissionUser == null) {
             return true;

@@ -8,7 +8,14 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:3.4.0-RELEASE")
+    compileOnly("eu.koboo:markup-api:2.4")
+
     implementation("eu.koboo:yaml-config:1.2.7")
 
+
     implementation(project(':holy-core-api'))
+}
+
+repositories {
+    mavenLocal();
 }

@@ -3,6 +3,7 @@ package de.teamholy.core.bukkit.perks;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
@@ -30,10 +31,16 @@ public class PerkManager {
         if (perkType == PerkType.STICK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
 
-            if (perk == null || perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
+            if (perk == null) {
                 perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
-
-            } else itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
+            } else if (perk.getNotSupportedGamemodes() != null) {
+                for (Gamemodes notSupportedGamemode : perk.getNotSupportedGamemodes()) {
+                    if (notSupportedGamemode.getCloudGroups().contains(BukkitCore.getInstance().getGroup())) {
+                        perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
+                    }
+                }
+            }
+            itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
 
             if (perk.isBanner()) {
                 itemBuilder.setBannerMeta(perk.getBaseColor(), perk.getPatterns()).setAttribut(ItemFlag.HIDE_POTION_EFFECTS);
@@ -41,12 +48,17 @@ public class PerkManager {
 
         } else if (perkType == PerkType.BLOCK) {
             perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
-
-            if (perk == null || perk.getNotSupportedGamemodes() != null && perk.getNotSupportedGamemodes().contains(BukkitCore.getInstance().getGroup())) {
+            if (perk == null) {
                 perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(0);
+            } else if (perk.getNotSupportedGamemodes() != null) {
+                for (Gamemodes notSupportedGamemode : perk.getNotSupportedGamemodes()) {
+                    if (notSupportedGamemode.getCloudGroups().contains(BukkitCore.getInstance().getGroup())) {
+                        perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(0);
+                    }
+                }
+            }
 
-            } else itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
-
+            itemBuilder = new ItemBuilder(perk.getMaterial(), 1, perk.getSubId());
         }
 
         return itemBuilder;
@@ -201,7 +213,7 @@ public class PerkManager {
             if (perk.getNotSupportedGamemodes() != null) {
                 list.add("");
                 list.add("§c§lNOTE §7this perk isn't supported in§8:");
-                perk.getNotSupportedGamemodes().forEach(gamemodes -> list.add(" " + gamemodes.getColor() + gamemodes.toString().toLowerCase(Locale.ROOT)));
+                perk.getNotSupportedGamemodes().forEach(gamemodes -> list.add(" §" + gamemodes.getColor() + gamemodes.toString().toLowerCase(Locale.ROOT)));
             }
 
             if (perkPlayerProfile.getChatPerk() == perk.getId() || perkPlayerProfile.getBlockPerk() == perk.getId() || perkPlayerProfile.getStickPerk() == perk.getId()) {

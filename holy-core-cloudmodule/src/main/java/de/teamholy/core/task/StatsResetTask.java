@@ -5,6 +5,8 @@ import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.Gamemodes;
+import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
+import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
 import org.redisson.api.RMapCache;
 
 import java.text.SimpleDateFormat;
@@ -65,6 +67,7 @@ public class StatsResetTask implements Runnable {
 
             });
 
+            
 
             if (statsType == StatsType.DAILY) CloudModuleCore.DAILY = true;
             else if (statsType == StatsType.MONTHLY) CloudModuleCore.MONTHLY = true;
@@ -78,9 +81,9 @@ public class StatsResetTask implements Runnable {
     }
 
     private void resetStatsCache(GameProfile gameProfile, StatsType statsType) {
-/*        for (Gamemodes gamemode : Gamemodes.values()) {
+        for (Gamemodes gamemode : Gamemodes.values()) {
             gamemode.getStatKeys().forEach(s -> gameProfile.setStat(gamemode.toString(),statsType,s,0));
-        }*/
+        }
     }
 
 }

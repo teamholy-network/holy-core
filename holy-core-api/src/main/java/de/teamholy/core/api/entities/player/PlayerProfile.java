@@ -26,6 +26,7 @@ public class PlayerProfile {
     long onlineTime;
     long joinMeTokens;
     long statsResetTokens;
+    boolean autoNick;
 
     long firstJoin;
     long lastJoin;

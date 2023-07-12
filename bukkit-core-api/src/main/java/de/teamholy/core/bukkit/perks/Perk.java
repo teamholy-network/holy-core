@@ -52,6 +52,11 @@ public class Perk {
         this.patterns = patterns;
     }
 
+    public void setBannerMeta(List<Pattern> patterns, DyeColor baseColor) {
+        this.patterns = patterns;
+        this.baseColor = baseColor;
+    }
+
     public Perk setSpecialText(String text) {
         specialText = text;
         return this;

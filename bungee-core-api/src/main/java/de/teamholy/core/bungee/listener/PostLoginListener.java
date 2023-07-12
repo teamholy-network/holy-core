@@ -62,6 +62,7 @@ public class PostLoginListener implements Listener {
             playerProfile.setRank(PlayerRank.PLAYER.toString());
             playerProfile.setStatsResetTokens(0L);
             playerProfile.setJoinMeTokens(0L);
+            playerProfile.setAutoNick(false);
             playerProfile.setCollectables(new HashMap<>());
             playerProfile.setFirstJoin(System.currentTimeMillis());
             playerProfile.setLastJoin(System.currentTimeMillis());
@@ -113,14 +114,16 @@ public class PostLoginListener implements Listener {
                     finalPlayerProfile.setIp(ipAddress);
                 }
 
+                if (!proxiedPlayer.hasPermission("markupapi.nick") && finalPlayerProfile.isAutoNick()) finalPlayerProfile.setAutoNick(false);
+
                 IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(finalPlayerProfile.getPlayerId());
                 String group = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser).getName();
                 if (!group.equalsIgnoreCase(finalPlayerProfile.getRank())) {
                     finalPlayerProfile.setRank(group.toUpperCase(Locale.ROOT));
                 }
 
-                BungeeCore.getAPI().getPlayerService().saveEntity(finalPlayerProfile, true, true);
 
+                BungeeCore.getAPI().getPlayerService().saveEntity(finalPlayerProfile, true, true);
             });
         }
 
@@ -156,9 +159,9 @@ public class PostLoginListener implements Listener {
         if (i == 0) {
             proxiedPlayer.sendMessage("§6Friend §8× §7There are currently §cno §7friends online");
         } else if (i == 1) {
-            proxiedPlayer.sendMessage("§6Friend §8× §7Currently is §e" + i + " §7friend online");
+            proxiedPlayer.sendMessage("§6Friend §8× §7There is currently §e" + i + " §7friend online");
         } else {
-            proxiedPlayer.sendMessage("§6Friend §8× §7Currently are §a" + i + " §7friends online");
+            proxiedPlayer.sendMessage("§6Friend §8× §7There are currently §a" + i + " §7friends online");
         }
 
 
@@ -195,22 +198,6 @@ public class PostLoginListener implements Listener {
             BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, save);
         }
 
-        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
-
-            ICloudPlayer cloudPlayer = BungeeCore.getAPI().getCloudManager().getPlayerManager().getOnlinePlayer(proxiedPlayer.getUniqueId());
-            assert cloudPlayer != null;
-            if (!cloudPlayer.getProperties().contains("autonick")) {
-                cloudPlayer.getProperties().append("autonick",false);
-                BungeeCore.getAPI().getCloudManager().getPlayerManager().updateOnlinePlayer(cloudPlayer);
-            }
-
-            if (!proxiedPlayer.hasPermission("markupapi.nick")) {
-                cloudPlayer.getProperties().append("autonick",false);
-                BungeeCore.getAPI().getCloudManager().getPlayerManager().updateOnlinePlayer(cloudPlayer);
-            }
-
-
-        }, 2, TimeUnit.SECONDS);
     }
 
 }

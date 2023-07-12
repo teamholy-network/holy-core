@@ -28,7 +28,8 @@ import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
 import de.teamholy.core.bungee.listener.*;
 import de.teamholy.core.bungee.manager.BungeePlayerManager;
 import de.teamholy.core.bungee.manager.PartyManager;
-import eu.koboo.en2do.Credentials;
+import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
+import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -85,7 +86,7 @@ public class BungeeCore extends Plugin {
         new CustomPunishCommand();
         new CloudMessageListener();
 
-        new StatsCommand(new String[]{"stats","mstats","astats"},null);
+        new StatsCommand(new String[]{"stats","mstats","astats","dstats"},null);
         new KickCommand(new String[]{"kick","kim"}, "teamholy.kick");
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatFilterListener());
