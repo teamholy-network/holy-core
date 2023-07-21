@@ -3,6 +3,7 @@ package de.teamholy.core.bungee.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.listener.ChatLogListener;
 import de.teamholy.core.bungee.model.ChatLog;
@@ -13,6 +14,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+
 public class ChatLogManager {
     @Getter
     private ChatLogRepository chatLogRepository;
@@ -21,13 +24,13 @@ public class ChatLogManager {
         chatLogRepository = BungeeCore.getAPI().getMongoManager().create(ChatLogRepository.class);
     }
 
-    public ChatLog createChatlog(ProxiedPlayer player, ProxiedPlayer chatlogPlayer) {
+    public ChatLog createChatlog(UUID requestUUID, ProxiedPlayer chatlogPlayer) {
 
-        if (ChatLogListener.CHATLOGS.get(player.getUniqueId()).isEmpty()) {
+        if (ChatLogListener.CHATLOGS.get(chatlogPlayer.getUniqueId()).isEmpty()) {
             return null;
         }
 
-        String chatlogString = new ChatLogListener().getChatLog(player.getUniqueId());
+        String chatlogString = new ChatLogListener().getChatLog(chatlogPlayer.getUniqueId());
 
         String randomKey = generateRandomKey();
 
@@ -39,8 +42,8 @@ public class ChatLogManager {
         chatLog.setChatLogCreated(System.currentTimeMillis());
         chatLog.setLoggedPlayerName(chatlogPlayer.getName());
         chatLog.setLoggedPlayerUUID(chatlogPlayer.getUniqueId());
-        chatLog.setRequestPlayerName(player.getName());
-        chatLog.setRequestPlayerUUID(player.getUniqueId());
+        chatLog.setRequestPlayerName(Punish.getConsoleUuid() == requestUUID ? "CONSOLE" : BungeeCore.getAPI().getUuidManager().getName(requestUUID));
+        chatLog.setRequestPlayerUUID(requestUUID);
         chatLog.setMessages(chatLogMessages);
 
         chatLogRepository.save(chatLog);
