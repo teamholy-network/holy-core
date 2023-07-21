@@ -27,7 +27,9 @@ import de.teamholy.core.bungee.commands.team.TeamCommand;
 import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
 import de.teamholy.core.bungee.listener.*;
 import de.teamholy.core.bungee.manager.BungeePlayerManager;
+import de.teamholy.core.bungee.manager.ChatLogManager;
 import de.teamholy.core.bungee.manager.PartyManager;
+import de.teamholy.core.bungee.repositories.ChatLogRepository;
 import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
 import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
 import lombok.AccessLevel;
@@ -52,6 +54,11 @@ public class BungeeCore extends Plugin {
     BungeePlayerManager bungeePlayerManager;
     PartyManager partyManager;
 
+    ChatLogManager chatLogManager;
+
+
+
+
     public BungeeCore() {
         instance = this;
     }
@@ -62,6 +69,10 @@ public class BungeeCore extends Plugin {
 
         bungeePlayerManager = new BungeePlayerManager(this.coreAPI);
         partyManager = new PartyManager();
+        chatLogManager = new ChatLogManager();
+
+
+
 
 
         new LoginListener();
@@ -91,6 +102,7 @@ public class BungeeCore extends Plugin {
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatFilterListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatLogListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
 
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendCommand("friend", null, "friends"));
