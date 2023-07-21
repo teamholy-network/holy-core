@@ -10,6 +10,7 @@ import de.teamholy.core.api.utility.Report;
 import de.teamholy.core.api.utility.TimeUtil;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.commands.SenderCommand;
+import de.teamholy.core.bungee.model.ChatLog;
 import de.teamholy.core.bungee.util.BanUtil;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import net.md_5.bungee.api.CommandSender;
@@ -34,6 +35,9 @@ public class MuteCommand extends SenderCommand {
         }
         if (args.length == 2 || args.length == 3) {
             String target = args[0];
+
+            ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
+            ProxiedPlayer senderPlayer = (ProxiedPlayer) sender;
 
 
             try {
@@ -69,7 +73,9 @@ public class MuteCommand extends SenderCommand {
                     return;
                 }
 
-                String evidence = "No evidence";
+                ChatLog chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(senderPlayer.getUniqueId(), targetPlayer);
+
+                String evidence = "https://teamholy.de/chatlog/" + chatLog.getChatLogId();
                 if (args.length == 3) {
                     evidence = args[2];
                 }
