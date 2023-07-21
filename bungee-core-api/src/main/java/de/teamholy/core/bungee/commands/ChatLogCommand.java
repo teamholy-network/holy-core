@@ -34,6 +34,11 @@ public class ChatLogCommand extends Command {
 
         ProxiedPlayer chatlogPlayer = ProxyServer.getInstance().getPlayer(args[0]);
 
+        if (chatlogPlayer == null) {
+            sender.sendMessage("§cChatlog §8× §7Player not found!");
+            return;
+        }
+
         ChatLog chatLog;
         chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(player.getUniqueId(), chatlogPlayer);
 
