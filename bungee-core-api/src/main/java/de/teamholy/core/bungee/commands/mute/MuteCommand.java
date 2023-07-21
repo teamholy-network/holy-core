@@ -6,6 +6,7 @@ import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
+import de.teamholy.core.api.utility.Report;
 import de.teamholy.core.api.utility.TimeUtil;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.commands.SenderCommand;
@@ -99,7 +100,6 @@ public class MuteCommand extends SenderCommand {
                 punishProfile.setCreateDate(System.currentTimeMillis());
                 punishProfile.setEvidence(evidence);
 
-                BungeeCore.getAPI().getMuteService().saveEntity(punishProfile, isOnline, true);
 
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(author, () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(author));
                 if (staffProfile != null) {
@@ -110,10 +110,15 @@ public class MuteCommand extends SenderCommand {
 
                 ProxiedPlayer authorPlayer = ProxyServer.getInstance().getPlayer(author);
                 if (authorPlayer != null && BungeeCore.getAPI().getReportManager().getAllReports().values().stream().anyMatch(report -> report.getViewer() != null && report.getViewer().equals(author))) {
+                    if (evidence.equalsIgnoreCase("No evidence")) {
+                        Report report = BungeeCore.getAPI().getReportManager().getReport(uuid);
+                        if (report.getChatlogID() != null) punishProfile.setEvidence("teamholy.de/chatlog/" + report.getChatlogID());
+                    }
                     BungeeCore.getInstance().getProxy().getPluginManager().dispatchCommand(player, "reports finish");
                 }
 
 
+                BungeeCore.getAPI().getMuteService().saveEntity(punishProfile, isOnline, true);
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateMuteMessage(punishProfile));
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());

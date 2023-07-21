@@ -15,5 +15,5 @@ public class Report {
     UUID sender, target;
     UUID viewer;
     Long time, viewerSince;
-    String reason;
+    String reason, chatlogID;
 }
