@@ -73,12 +73,16 @@ public class MuteCommand extends SenderCommand {
                     return;
                 }
 
-                ChatLog chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(senderPlayer.getUniqueId(), targetPlayer);
-
-                String evidence = "https://teamholy.de/chatlog/" + chatLog.getChatLogId();
+                String evidence;
                 if (args.length == 3) {
                     evidence = args[2];
+                } else {
+                    ChatLog chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(senderPlayer.getUniqueId(), targetPlayer);
+                    evidence = (chatLog != null) ? "https://teamholy.de/chatlog/" + chatLog.getChatLogId() : "No evidence";
                 }
+
+
+
 
 
                 UUID author = BungeeUtil.parseAuthorUUID(sender);
