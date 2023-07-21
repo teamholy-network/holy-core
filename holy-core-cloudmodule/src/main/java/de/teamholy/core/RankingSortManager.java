@@ -3,9 +3,9 @@ package de.teamholy.core;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.Gamemodes;
-import de.teamholy.core.task.RankingSortTask;
 import org.redisson.api.RScoredSortedSet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -13,11 +13,14 @@ import java.util.concurrent.TimeUnit;
 /* copyright by Yassino */
 public class RankingSortManager {
 
-    private HashMap<String, RScoredSortedSet> sortedSetHashMap;
+    public static HashMap<String, RScoredSortedSet> sortedSetHashMap;
 
     public RankingSortManager() {
         start();
-        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new RankingSortTask(), 30, 30, TimeUnit.SECONDS);
+        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(() -> {
+            List<GameProfile> gameProfiles = new ArrayList<>(CloudModuleCore.getCoreAPI().getGameService().getRedisCache().values());
+            CloudModuleCore.getInstance().getSortManager().insertStats(gameProfiles);
+        }, 30, 30, TimeUnit.SECONDS);
     }
 
     public void start() {

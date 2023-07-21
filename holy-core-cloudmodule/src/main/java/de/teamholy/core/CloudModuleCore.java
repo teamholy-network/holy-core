@@ -44,7 +44,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
         instance = this;
 
 
-        String mongoString = "mongodb://admin:dkdfGp3U81SEu+Zc2L@89.163.144.210:36410/?authSource=admin";
+        String mongoString = "mongodb://admin:dkdfGp3U81SEu+Zc2L@10.0.3.2:46410/?authSource=admin";
         getLogger().info("loggin in with (" + mongoString + ")...");
         coreAPI = new CoreAPI(Credentials.of(mongoString,"holy"));
 
@@ -55,7 +55,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
         saveConfig();
         service = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
-        service.scheduleAtFixedRate(new StatsResetTask(),0,1,TimeUnit.MINUTES);
+        service.scheduleAtFixedRate(new StatsResetTask(),10,60,TimeUnit.SECONDS);
 
         sortManager = new RankingSortManager();
 

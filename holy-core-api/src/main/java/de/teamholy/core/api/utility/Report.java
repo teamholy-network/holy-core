@@ -14,6 +14,6 @@ public class Report {
 
     UUID sender, target;
     UUID viewer;
-    Long time;
+    Long time, viewerSince;
     String reason;
 }

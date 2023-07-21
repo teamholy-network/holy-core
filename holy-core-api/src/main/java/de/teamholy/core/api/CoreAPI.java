@@ -56,6 +56,7 @@ public class CoreAPI {
     ConfigManager config;
 
     public CoreAPI() {
+        CloudManager cloudManager1;
 
         this.config = new ConfigManager();
         this.mongoManager = new MongoManager(Credentials.
@@ -80,7 +81,12 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
 
 
-        this.cloudManager = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+        try {
+            cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+        } catch (NoClassDefFoundError error) {
+            cloudManager1 = new CloudManager(this, null);
+        }
+        this.cloudManager = cloudManager1;
         this.uuidManager = new UUIDManager(this);
         this.reportManager = new ReportManager(this);
         this.clanManager = new ClanManager(this, clanService);
@@ -94,9 +100,12 @@ public class CoreAPI {
 
 
     public CoreAPI(Credentials credentials) {
+        CloudManager cloudManager1;
 
-        this.mongoManager = new MongoManager(credentials);
         this.config = new ConfigManager();
+        this.mongoManager = new MongoManager(credentials);
+
+
         this.redissonManager = new RedissonManager(this);
 
 
@@ -114,16 +123,22 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
 
 
-        this.cloudManager = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+        try {
+            cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+        } catch (NoClassDefFoundError error) {
+            cloudManager1 = new CloudManager(this, null);
+        }
+
+        this.cloudManager = cloudManager1;
         this.uuidManager = new UUIDManager(this);
         this.reportManager = new ReportManager(this);
         this.clanManager = new ClanManager(this, clanService);
         this.coinManager = new CoinManager(this);
         this.staffManager = new StaffManager(this);
         this.friendManager = new FriendManager(this);
+        this.rankingManager = new RankingManager(this);
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
-        this.rankingManager = new RankingManager(this);
     }
 
     public void onDisable() {

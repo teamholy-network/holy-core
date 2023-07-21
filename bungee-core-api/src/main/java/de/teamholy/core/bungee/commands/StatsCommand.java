@@ -141,7 +141,7 @@ public class StatsCommand extends SenderCommand {
             }
         }
         player.sendMessage("");
-        player.sendMessage("§8» §bhttps://teamholy.de/stats/?player=" + name);
+        player.sendMessage("§8» §bhttps://teamholy.de/profile/" + name);
         player.sendMessage("");
 
 

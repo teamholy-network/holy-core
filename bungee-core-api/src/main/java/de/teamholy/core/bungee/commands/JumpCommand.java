@@ -30,6 +30,8 @@ public class JumpCommand extends Command {
                 return;
             }
 
+            player.connect(target.getServer().getInfo());
+
             player.sendMessage(prefix + "You jumped to " + BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName());
             BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit","report",JsonDocument.newDocument("targetUuid",target.getUniqueId())
                     .append("jumperUuid",player.getUniqueId()));

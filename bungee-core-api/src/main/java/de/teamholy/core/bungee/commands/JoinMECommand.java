@@ -51,12 +51,12 @@ public class JoinMECommand extends Command {
                     ProxyServer.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "joinme do it");
                 } else {
                     proxiedPlayer.sendMessage(prefix + "You currently have §e" + tokens + " §7joinme " + (tokens == 1 ? "token" : "tokens"));
+                    TextComponent message = new TextComponent(prefix + "§aClick to create a Joinme!");
+                    message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme do it"));
+
+                    proxiedPlayer.sendMessage(message);
                 }
 
-                TextComponent message = new TextComponent(prefix + "§2§lClick to create a Joinme!");
-                message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme do it"));
-
-                proxiedPlayer.sendMessage(message);
 
             }
 
