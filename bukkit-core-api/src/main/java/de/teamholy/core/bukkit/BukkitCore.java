@@ -6,9 +6,11 @@ import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
 import de.teamholy.core.bukkit.perks.*;
+import de.teamholy.core.bukkit.report.ReportBukkitManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,6 +44,8 @@ public class BukkitCore extends JavaPlugin {
         perkCache = new PerkCache();
         perkManager = new PerkManager();
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
+
+        getCommand("reportsgui").setExecutor(new ReportBukkitManager());
 
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);

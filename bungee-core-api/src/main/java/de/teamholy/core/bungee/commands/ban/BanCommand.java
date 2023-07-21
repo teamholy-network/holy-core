@@ -117,7 +117,7 @@ public class BanCommand extends SenderCommand {
 
                 ProxiedPlayer authorPlayer = ProxyServer.getInstance().getPlayer(author);
                 if (authorPlayer != null && BungeeCore.getAPI().getReportManager().getAllReports().values().stream().anyMatch(report -> report.getViewer() != null && report.getViewer().equals(author))) {
-                    authorPlayer.chat("/reports finish");
+                    BungeeCore.getInstance().getProxy().getPluginManager().dispatchCommand(authorPlayer, "reports finish");
                 }
 
                 ProxiedPlayer player = ProxyServer.getInstance().getPlayer(target);
