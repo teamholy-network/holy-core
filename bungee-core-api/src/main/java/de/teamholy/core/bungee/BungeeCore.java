@@ -129,6 +129,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this,new HelpCommand("help","","hile","dc","shop","?","discord","apply","forum"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this,new NameMCCommand("namemc","","vote","rewards","like","premium","freepremium"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this,new EasyPermissionCommand("easypermission","","eperms","easyperms"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
 
 
         ProxyServer.getInstance().getScheduler().schedule(this,() -> {
