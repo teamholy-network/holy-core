@@ -12,6 +12,7 @@ import lombok.Getter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class ChatLogManager {
 
     public ChatLog createChatlog(UUID requestUUID, ProxiedPlayer chatlogPlayer) {
 
-        if (ChatLogListener.CHATLOGS.get(chatlogPlayer.getUniqueId()).isEmpty()) {
+        if (ChatLogListener.CHATLOGS.getOrDefault(chatlogPlayer.getUniqueId(), new LinkedList<>()).isEmpty()) {
             return null;
         }
 
