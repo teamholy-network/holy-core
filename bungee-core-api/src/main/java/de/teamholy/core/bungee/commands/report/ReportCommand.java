@@ -107,7 +107,7 @@ public class ReportCommand extends Command {
                 if (!BungeeCore.getAPI().getStaffManager().canNotify(proxiedPlayer.getUniqueId())) return;
 
                 proxiedPlayer.sendMessage(prefix + "The player " + reporter + " §7reported " + reported + " §7for §e" + report.getReason() + " §7reportet §8(§e" + finalTarget.getServer().getInfo().getName() + "§8) " + (finalIsNicked ? "§8(§5§lNICKED§8)" : ""));
-                if (finalChatLog != null) proxiedPlayer.sendMessage(prefix + "Chatlog -> teamholy.de/chatlog/" + finalChatLog.getChatLogId());
+                if (finalChatLog != null) proxiedPlayer.sendMessage(prefix + "Chatlog -> https://teamholy.de/chatlog/" + finalChatLog.getChatLogId());
                 TextComponent message = new TextComponent(prefix + "§a§lAccept report");
                 message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/reports accept " + finalTarget.getName()));
                 message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Accept the report of " + reported + " §7an")));

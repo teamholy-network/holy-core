@@ -112,7 +112,7 @@ public class MuteCommand extends SenderCommand {
                 if (authorPlayer != null && BungeeCore.getAPI().getReportManager().getAllReports().values().stream().anyMatch(report -> report.getViewer() != null && report.getViewer().equals(author))) {
                     if (evidence.equalsIgnoreCase("No evidence")) {
                         Report report = BungeeCore.getAPI().getReportManager().getReport(uuid);
-                        if (report.getChatlogID() != null) punishProfile.setEvidence("teamholy.de/chatlog/" + report.getChatlogID());
+                        if (report.getChatlogID() != null) punishProfile.setEvidence("https:/teamholy.de/chatlog/" + report.getChatlogID());
                     }
                     BungeeCore.getInstance().getProxy().getPluginManager().dispatchCommand(player, "reports finish");
                 }
