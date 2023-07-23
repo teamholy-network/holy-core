@@ -130,6 +130,7 @@ public class BanCommand extends SenderCommand {
 
                 DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                 discordWebhook.setUsername("BAN");
+                //
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
                         .setDescription(authorName + " has banned " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
                 );
