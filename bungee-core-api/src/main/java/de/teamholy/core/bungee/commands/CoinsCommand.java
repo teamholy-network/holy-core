@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
+import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -58,7 +59,7 @@ public class CoinsCommand extends SenderCommand {
                 ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(uuid);
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
-                BungeeCore.getAPI().getPlayerService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid), playerProfile -> {
+                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,() -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
                     if (args[0].equalsIgnoreCase("add")) {
                         playerProfile.setCoins(playerProfile.getCoins() + coinsArg);
                         proxiedPlayer.sendMessage(prefix +
@@ -78,7 +79,6 @@ public class CoinsCommand extends SenderCommand {
                     }
 
                     BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, isOnline, true);
-                });
 
 
             }

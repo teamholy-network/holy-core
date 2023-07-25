@@ -27,6 +27,8 @@ public class ChatLogManager {
 
     public ChatLog createChatlog(UUID requestUUID, ProxiedPlayer chatlogPlayer) {
 
+        if (chatlogPlayer == null) return null;
+
         if (ChatLogListener.CHATLOGS.getOrDefault(chatlogPlayer.getUniqueId(), new LinkedList<>()).isEmpty()) {
             return null;
         }
