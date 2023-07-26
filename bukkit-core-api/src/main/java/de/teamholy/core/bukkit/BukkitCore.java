@@ -1,5 +1,7 @@
 package de.teamholy.core.bukkit;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.AbstractConfiguration;
@@ -24,6 +26,8 @@ public class BukkitCore extends JavaPlugin {
     @Getter
     private static BukkitCore instance;
 
+    private ProtocolManager protocolManager;
+
     @Getter
     CoreAPI coreAPI;
     @Getter
@@ -47,6 +51,7 @@ public class BukkitCore extends JavaPlugin {
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
 
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
+        protocolManager = ProtocolLibrary.getProtocolManager();
 
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);

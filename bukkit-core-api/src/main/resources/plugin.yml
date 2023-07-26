@@ -1,8 +1,8 @@
 name: bukkit-core
 version: 1.0
 main: de.teamholy.core.bukkit.BukkitCore
+depend: [ ProtocolLib ]
 load: STARTUP
-
 commands:
   reportsgui:
     aliases: [rgui, reportstaffgui]
