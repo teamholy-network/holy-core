@@ -51,7 +51,7 @@ public class BukkitCore extends JavaPlugin {
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
         new UsePerkListener();
-        new CloudMessageListener();
+        new CloudMessageListener(this);
 
         Perk defaultStick =
                 new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
