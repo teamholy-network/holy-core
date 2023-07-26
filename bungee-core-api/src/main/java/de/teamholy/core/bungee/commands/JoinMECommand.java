@@ -3,13 +3,12 @@ package de.teamholy.core.bungee.commands;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
+import de.teamholy.core.bungee.manager.PublicBroadcastManager;
 import de.teamholy.core.bungee.model.JoinME;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -23,6 +22,8 @@ public class JoinMECommand extends Command {
     private String prefix = "§dJoinME §8× §7";
     private CoreAPI coreAPI = BungeeCore.getAPI();
     public static HashMap<UUID, JoinME> joinMEHashMap = new HashMap<>();
+
+    PublicBroadcastManager publicBroadcastManager = new PublicBroadcastManager();
 
     public JoinMECommand() {
         super("joinme");
@@ -115,15 +116,9 @@ public class JoinMECommand extends Command {
                         playerProfile.setJoinMeTokens(playerProfile.getJoinMeTokens() - 1);
                         coreAPI.getPlayerService().saveEntity(playerProfile, true, true);
                     }
-                    for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
-                        all.sendMessage("§8§m-------------§f§lJOINME§8§m----------------");
-                        all.sendMessage("     " + BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName() + " §7is playing on §d" + proxiedPlayer.getServer().getInfo().getName());
-                        TextComponent message = new TextComponent("                     §aJoin Server           ");
-                        message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme " + proxiedPlayer.getName()));
-                        message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Play with " + BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName())));
-                        all.sendMessage(message);
-                        all.sendMessage("§8§m-----------------------------------");
-                    }
+
+
+                    publicBroadcastManager.sendPublicBroadcast(null, PublicBroadcastManager.BroadcastType.JOINME, proxiedPlayer);
                     joinMEHashMap.put(proxiedPlayer.getUniqueId(), new JoinME(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3), proxiedPlayer.getServer().getInfo().getName()));
                 }
 

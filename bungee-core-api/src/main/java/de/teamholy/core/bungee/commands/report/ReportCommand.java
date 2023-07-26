@@ -14,8 +14,7 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.util.Arrays;
-import java.util.Comparator;
+
 import java.util.UUID;
 
 /* copyright by Yassino */

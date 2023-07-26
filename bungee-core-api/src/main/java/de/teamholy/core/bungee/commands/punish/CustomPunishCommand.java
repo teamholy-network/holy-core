@@ -4,10 +4,8 @@ import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
-import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
-import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.api.utility.TimeUtil;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.commands.SenderCommand;
@@ -18,9 +16,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.awt.*;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
 
 /* copyright by Yassino */
 public class CustomPunishCommand extends SenderCommand {

@@ -14,7 +14,7 @@ import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
