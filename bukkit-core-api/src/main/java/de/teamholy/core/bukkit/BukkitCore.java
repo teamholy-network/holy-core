@@ -3,6 +3,7 @@ package de.teamholy.core.bukkit;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.AbstractConfiguration;
+import de.teamholy.core.bukkit.listener.CloudMessageListener;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
 import de.teamholy.core.bukkit.perks.*;
@@ -50,6 +51,7 @@ public class BukkitCore extends JavaPlugin {
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
         new UsePerkListener();
+        new CloudMessageListener();
 
         Perk defaultStick =
                 new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
