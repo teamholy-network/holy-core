@@ -1,9 +1,6 @@
 package de.teamholy.core.bukkit.listener;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
@@ -12,8 +9,6 @@ import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.PacketManager;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-import java.util.UUID;
 
 /* copyright by Yassino */
 public class CloudMessageListener {
@@ -31,19 +26,30 @@ public class CloudMessageListener {
     @EventListener
     public void onListen(ChannelMessageReceiveEvent event) {
 
+        if (!event.getChannel().equals("bukkit")) return;
+
         JsonDocument message = event.getData();
 
-        if (event.getChannel().equals("bukkit")) {
-            String command = message.getString("command");
-            String type = message.getString("type");
-
-            Player player = bukkitCore.getServer().getPlayer("Gregorr");
-
-            switch (type) {
-                case "log": packetManager.sendGameStatePacket(player, 5, 0); break;
-            }
+        if (message == null) {
+            BukkitCore.getInstance().getLogger().info("Received null message from pluginchannel");
+            return;
         }
+        String type = message.getString("type");
+        String target = message.getString("target");
 
+        switch (type) {
+            case "demo":
+                Player player = bukkitCore.getServer().getPlayer(target);
+                if (player != null) {
+                    packetManager.sendGameStatePacket(player, 5, 0);
+                }
+                break;
+        }
     }
+
+
+
+
+
 
 }

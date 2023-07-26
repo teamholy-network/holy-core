@@ -6,6 +6,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.entity.Player;
 
+/* copyright by Greg */
+
 public class PacketManager {
 
     private BukkitCore bukkitCore;
