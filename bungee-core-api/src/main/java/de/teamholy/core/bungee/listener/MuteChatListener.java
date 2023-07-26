@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import com.google.gson.JsonObject;
+
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.bungee.BungeeCore;
@@ -10,7 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import org.redisson.api.RTopic;
+
 
 import java.util.UUID;
 

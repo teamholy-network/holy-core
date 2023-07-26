@@ -7,7 +7,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
-import javax.print.attribute.standard.PrinterURI;
+
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
