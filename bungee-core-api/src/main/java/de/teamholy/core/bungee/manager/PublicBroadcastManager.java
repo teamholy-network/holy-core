@@ -4,6 +4,7 @@ package de.teamholy.core.bungee.manager;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.Helpers;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -46,7 +47,7 @@ public class PublicBroadcastManager {
         receiver.sendMessage(helpers.centerMessage("§8[ §c!§8 ] §6BROADCAST"));
         receiver.sendMessage(helpers.centerMessage("§7" + message.replace("&", "§")));
         receiver.sendMessage("  ");
- }
+    }
 
 
 

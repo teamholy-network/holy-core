@@ -12,9 +12,12 @@ dependencies {
     implementation("eu.koboo:yaml-config:1.2.7")
 
 
+
+
     implementation(project(':holy-core-api'))
 }
 
 repositories {
     mavenLocal();
+
 }

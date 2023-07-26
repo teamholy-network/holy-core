@@ -148,7 +148,7 @@ public class BungeeCore extends Plugin {
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
-        }, 5, 5, TimeUnit.MINUTES);
+        }, 30, 30, TimeUnit.MINUTES);
 
     }
 
