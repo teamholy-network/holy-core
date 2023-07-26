@@ -26,6 +26,7 @@ public class BukkitCore extends JavaPlugin {
     @Getter
     private static BukkitCore instance;
 
+    @Getter
     private ProtocolManager protocolManager;
 
     @Getter
