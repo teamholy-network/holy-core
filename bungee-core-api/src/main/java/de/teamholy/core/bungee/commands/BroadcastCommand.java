@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
+import de.teamholy.core.bungee.manager.PublicBroadcastManager;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -8,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 /* copyright by Yassino */
 public class BroadcastCommand extends Command {
 
+    PublicBroadcastManager publicBroadcastManager = new PublicBroadcastManager();
     public BroadcastCommand(String name, String permission, String... aliases) {
         super(name, permission, aliases);
     }
@@ -29,10 +31,7 @@ public class BroadcastCommand extends Command {
             stringBuilder.append(strings[a] + " ");
         }
 
-        ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer -> {
-            proxiedPlayer.sendMessage(" ");
-            proxiedPlayer.sendMessage("§6Broadcast §8× §7" + stringBuilder.toString().replace("&","§"));
-            proxiedPlayer.sendMessage(" ");
-        });
+        publicBroadcastManager.sendPublicBroadcast(stringBuilder.toString(), PublicBroadcastManager.BroadcastType.GENERAL, null);
+
     }
 }

@@ -2,7 +2,6 @@ package de.teamholy.core.bungee;
 
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
-import de.teamholy.core.api.manager.CloudManager;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -29,9 +28,7 @@ import de.teamholy.core.bungee.listener.*;
 import de.teamholy.core.bungee.manager.BungeePlayerManager;
 import de.teamholy.core.bungee.manager.ChatLogManager;
 import de.teamholy.core.bungee.manager.PartyManager;
-import de.teamholy.core.bungee.repositories.ChatLogRepository;
-import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
-import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
+import de.teamholy.core.bungee.manager.PublicBroadcastManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -40,6 +37,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.util.concurrent.TimeUnit;
+
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -55,6 +53,7 @@ public class BungeeCore extends Plugin {
     PartyManager partyManager;
 
     ChatLogManager chatLogManager;
+    PublicBroadcastManager publicBroadcastManager;
 
 
 
@@ -70,10 +69,7 @@ public class BungeeCore extends Plugin {
         bungeePlayerManager = new BungeePlayerManager(this.coreAPI);
         partyManager = new PartyManager();
         chatLogManager = new ChatLogManager();
-
-
-
-
+        publicBroadcastManager = new PublicBroadcastManager();
 
         new LoginListener();
         new BanLoginListener(this);
@@ -142,12 +138,23 @@ public class BungeeCore extends Plugin {
 
             coreAPI.getCloudManager().sendCloudMessage("bukkit","onlineTime_update",null);
 
+
+
             ChatFilterListener.LASTMESSAGES.clear();
 
             CommandListener.COOLDOWNS.clear();
         },1,1, TimeUnit.MINUTES);
 
+
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+            publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
+        }, 5, 5, TimeUnit.MINUTES);
+
     }
+
+
+
+
 
     @Override
     public void onDisable() {
