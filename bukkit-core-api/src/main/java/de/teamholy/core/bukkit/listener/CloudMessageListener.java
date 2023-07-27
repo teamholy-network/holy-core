@@ -7,6 +7,7 @@ import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.PacketManager;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 
@@ -34,17 +35,30 @@ public class CloudMessageListener {
             BukkitCore.getInstance().getLogger().info("Received null message from pluginchannel");
             return;
         }
+
+        BukkitCore.getInstance().getLogger().info("Received message from pluginchannel: " + message);
+
         String type = message.getString("type");
         String target = message.getString("target");
+        String method = message.getString("method");
 
-        switch (type) {
-            case "demo":
-                Player player = bukkitCore.getServer().getPlayer(target);
-                if (player != null) {
-                    packetManager.sendGameStatePacket(player, 5, 0);
-                }
-                break;
+
+        if (type.equals("troll")) {
+            Player player = bukkitCore.getServer().getPlayer(target);
+            if (player == null) return;
+            switch (method) {
+                case "1" -> packetManager.GameStatePacket(player, 5, 0, false) /* Demoscreen */;
+                case "2" -> packetManager.GameStatePacket(player, 4, 1, false) /* Endscreen */;
+                case "3" -> packetManager.sendBlockChangePacket(player, Material.TNT) /* Tnt world */;
+                case "4" -> packetManager.GameStatePacket(player, 5, 0, true) /* Demoscreen loop */;
+            }
+
+
+
+
         }
+
+
     }
 
 

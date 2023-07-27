@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
+import de.teamholy.core.bukkit.listener.PacketListener;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
 import de.teamholy.core.bukkit.perks.*;
@@ -28,6 +29,7 @@ public class BukkitCore extends JavaPlugin {
 
     @Getter
     private ProtocolManager protocolManager;
+
 
     @Getter
     CoreAPI coreAPI;
@@ -56,6 +58,7 @@ public class BukkitCore extends JavaPlugin {
 
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
+        //new PacketListener(this); /* Du bist schwul */
         new UsePerkListener();
         new CloudMessageListener(this);
 
