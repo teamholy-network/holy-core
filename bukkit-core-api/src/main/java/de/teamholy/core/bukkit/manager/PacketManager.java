@@ -86,7 +86,7 @@ public class PacketManager {
 
                 Location playerOldLocation = player.getLocation();
                 for (int x = 0; x < 200; x++) {
-                    for (int y = 0; y < 30; y++) {
+                    for (int y = 0; y < 200; y++) {
                         for (int z = 0; z < 200; z++) {
                             if (new Location(playerOldLocation.getWorld(), playerOldLocation.getBlockX() - 100 + x,
                                     playerOldLocation.getBlockY() - 7 + y, playerOldLocation.getBlockZ() - 100 + z)
