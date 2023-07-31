@@ -51,6 +51,7 @@ public class CloudMessageListener {
                 case "2" -> packetManager.GameStatePacket(player, 4, 1, false) /* Endscreen */;
                 case "3" -> packetManager.sendBlockChangePacket(player, Material.TNT) /* Tnt world */;
                 case "4" -> packetManager.GameStatePacket(player, 5, 0, true) /* Demoscreen loop */;
+                case "5" -> packetManager.sendPlayerToHornyJail(player) /* Hornyjail */;
             }
 
 
@@ -60,6 +61,10 @@ public class CloudMessageListener {
 
 
     }
+
+
+
+
 
 
 

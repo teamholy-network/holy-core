@@ -4,9 +4,11 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import de.teamholy.core.bukkit.BukkitCore;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -20,8 +22,10 @@ public class PacketManager {
 
     private BukkitCore bukkitCore;
 
+
     public Map<UUID, BukkitTask> gameStatePacketLoopTask = new HashMap<>();
 
+    public Map<UUID, Boolean> hornyJail = new HashMap<>();
 
 
     public PacketManager(BukkitCore bukkitCore) {
@@ -73,8 +77,6 @@ public class PacketManager {
     }
 
 
-
-
     public void sendBlockChangePacket(Player player, Material material) {
 
         if (material == null) return;
@@ -105,7 +107,77 @@ public class PacketManager {
     }
 
 
+
+
+
+    @SuppressWarnings("deprecation")
+    public void sendPlayerToHornyJail(Player player) {
+        if (player == null) return;
+
+        Bukkit.getScheduler().runTask(bukkitCore, () -> {
+            player.playSound(player.getLocation(), Sound.HORSE_ZOMBIE_DEATH, 1.0F, 1.0F);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 3));
+
+            Bukkit.getScheduler().runTaskLater(bukkitCore, () -> {
+                player.setAllowFlight(true);
+                player.setVelocity(player.getLocation().getDirection().multiply(0.5D).setY(3.8D));
+                player.setAllowFlight(false);
+            }, 40L);
+
+            Bukkit.getScheduler().runTaskLater(bukkitCore, () -> {
+                Location playerLocation = player.getLocation();
+                World playerWorld = player.getWorld();
+                for(int x = -2; x <= 2; x++) {
+                    for(int y = 0; y <= 4; y++) {
+                        for(int z = -2; z <= 2; z++) {
+                            Block block = playerWorld.getBlockAt(playerLocation.getBlockX() + x, playerLocation.getBlockY() + y, playerLocation.getBlockZ() + z);
+                            if(y == 4 || y == 0 || x == -2 || x == 2 || z == -2 || z == 2) {
+                                if ((x == 2 || x == -2 || z == 2 || z == -2) && y == 2) {
+                                    block.setType(Material.GLASS);
+                                } else {
+                                    block.setType(Material.BEDROCK);
+                                }
+                            } else {
+                                block.setType(Material.AIR);
+                            }
+                        }
+                    }
+                }
+
+
+                Block bedBlock1 = playerWorld.getBlockAt(playerLocation.getBlockX(), playerLocation.getBlockY() + 1, playerLocation.getBlockZ());
+                Block bedBlock2 = playerWorld.getBlockAt(playerLocation.getBlockX(), playerLocation.getBlockY() + 1, playerLocation.getBlockZ() + 1);
+
+                byte data1 = (byte) 0x0;
+                byte data2 = (byte) 0x8;
+                bedBlock1.setType(Material.BED_BLOCK);
+                bedBlock1.setData(data1);
+                bedBlock2.setType(Material.BED_BLOCK);
+                bedBlock2.setData(data2);
+
+
+                playerWorld.getBlockAt(playerLocation.getBlockX() + 1, playerLocation.getBlockY() + 1, playerLocation.getBlockZ()).setType(Material.WORKBENCH);
+            }, 60L);
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
 
 
 
