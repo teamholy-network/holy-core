@@ -25,10 +25,7 @@ import de.teamholy.core.bungee.commands.team.TeamChatCommand;
 import de.teamholy.core.bungee.commands.team.TeamCommand;
 import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
 import de.teamholy.core.bungee.listener.*;
-import de.teamholy.core.bungee.manager.BungeePlayerManager;
-import de.teamholy.core.bungee.manager.ChatLogManager;
-import de.teamholy.core.bungee.manager.PartyManager;
-import de.teamholy.core.bungee.manager.PublicBroadcastManager;
+import de.teamholy.core.bungee.manager.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -36,6 +33,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
+import java.lang.reflect.Proxy;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,7 +51,10 @@ public class BungeeCore extends Plugin {
     PartyManager partyManager;
 
     ChatLogManager chatLogManager;
+    ChatFilterManager chatFilterManager;
     PublicBroadcastManager publicBroadcastManager;
+
+
 
 
 
@@ -70,6 +71,8 @@ public class BungeeCore extends Plugin {
         partyManager = new PartyManager();
         chatLogManager = new ChatLogManager();
         publicBroadcastManager = new PublicBroadcastManager();
+        chatFilterManager = new ChatFilterManager();
+
 
         new LoginListener();
         new BanLoginListener(this);
@@ -126,6 +129,12 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this,new NameMCCommand("namemc","","vote","rewards","like","premium","freepremium"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this,new EasyPermissionCommand("easypermission","","eperms","easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatFilterCommand("chatfilter"));
+
+
+        chatFilterManager.loadFilteredWords();
+
+
 
 
         ProxyServer.getInstance().getScheduler().schedule(this,() -> {
@@ -137,6 +146,8 @@ public class BungeeCore extends Plugin {
             }
 
             coreAPI.getCloudManager().sendCloudMessage("bukkit","onlineTime_update",null);
+
+
 
 
 
