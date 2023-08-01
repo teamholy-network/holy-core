@@ -24,9 +24,9 @@ public class ChatFilterListener implements Listener {
     public void onChat(ChatEvent event) {
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getSender();
 
-        String[] filteredwords = event.getMessage().split("\\s+");
+        String[] filteredwords = event.getMessage().toLowerCase().split("\\s+");
         for (String word : filteredwords) {
-            if (ChatFilterManager.FILTEREDWORDS.containsKey(word)) {
+            if (ChatFilterManager.FILTEREDWORDS.containsKey(word.toLowerCase())) {
                 proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + word + "§8. §7will be reviewed by our team)");
                 event.setCancelled(true);
                 return;
