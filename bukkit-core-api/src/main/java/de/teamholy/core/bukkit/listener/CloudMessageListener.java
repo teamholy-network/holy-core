@@ -32,11 +32,9 @@ public class CloudMessageListener {
         JsonDocument message = event.getData();
 
         if (message == null) {
-            BukkitCore.getInstance().getLogger().info("Received null message from pluginchannel");
             return;
         }
 
-        BukkitCore.getInstance().getLogger().info("Received message from pluginchannel: " + message);
 
         String type = message.getString("type");
         String target = message.getString("target");
@@ -53,9 +51,6 @@ public class CloudMessageListener {
                 case "4" -> packetManager.GameStatePacket(player, 5, 0, true) /* Demoscreen loop */;
                 case "5" -> packetManager.sendPlayerToHornyJail(player) /* Hornyjail */;
             }
-
-
-
 
         }
 

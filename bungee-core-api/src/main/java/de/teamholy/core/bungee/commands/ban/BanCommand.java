@@ -106,7 +106,7 @@ public class BanCommand extends SenderCommand {
                 punishProfile.setCreateDate(System.currentTimeMillis());
                 punishProfile.setEvidence(evidence);
 
-                BungeeCore.getAPI().getBanService().saveEntity(punishProfile, false, true);
+                BungeeCore.getAPI().getBanService().saveEntity(punishProfile, true, true);
 
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(author, () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(author));
                 if (staffProfile != null) {

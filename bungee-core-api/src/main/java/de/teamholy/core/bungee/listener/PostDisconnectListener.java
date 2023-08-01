@@ -55,11 +55,11 @@ public class PostDisconnectListener implements Listener {
 
         String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
 
+        BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(),null,"offline",null);
         FriendCommand.LASTREPLYS.remove(event.getPlayer().getUniqueId());
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
-                BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(),uuid,"offline",null);
                 target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §coffline");
             }
         }
