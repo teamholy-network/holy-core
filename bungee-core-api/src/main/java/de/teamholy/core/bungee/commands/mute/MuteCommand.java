@@ -37,7 +37,7 @@ public class MuteCommand extends SenderCommand {
             String target = args[0];
 
             ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
-            ProxiedPlayer senderPlayer = (ProxiedPlayer) sender;
+            ProxiedPlayer senderPlayer = sender instanceof ProxiedPlayer ? (ProxiedPlayer) sender : null;
 
 
             try {
@@ -77,7 +77,7 @@ public class MuteCommand extends SenderCommand {
                 if (args.length == 3) {
                     evidence = args[2];
                 } else if (targetPlayer != null){
-                    ChatLog chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(senderPlayer.getUniqueId(), targetPlayer);
+                    ChatLog chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog((senderPlayer != null ? senderPlayer.getUniqueId() : UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670")), targetPlayer);
                     evidence = (chatLog != null) ? "https://teamholy.de/chatlog/" + chatLog.getChatLogId() : "No evidence";
                 }
 
@@ -85,7 +85,8 @@ public class MuteCommand extends SenderCommand {
 
 
 
-                UUID author = BungeeUtil.parseAuthorUUID(sender);
+                UUID author = sender instanceof ProxiedPlayer ? BungeeUtil.parseAuthorUUID((ProxiedPlayer) sender) : UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670");
+
 
                 UUID finalUuid = uuid;
                 MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));

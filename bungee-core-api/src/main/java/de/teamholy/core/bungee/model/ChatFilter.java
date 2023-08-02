@@ -17,7 +17,8 @@ public class ChatFilter {
 
     private String word;
 
-    private Integer severity;
+    private String filterAction;
+    private Integer filterActionId;
 
     private String addedBy;
 
