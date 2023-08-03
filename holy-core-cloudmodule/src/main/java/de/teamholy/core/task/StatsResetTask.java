@@ -5,8 +5,6 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.RankingSortManager;
 import de.teamholy.core.api.entities.game.GameProfile;
-import de.teamholy.core.api.entities.game.GameRepository;
-import de.teamholy.core.api.entities.game.GameService;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.Gamemodes;
 import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
@@ -43,7 +41,7 @@ public class StatsResetTask implements Runnable {
         if (CloudModuleCore.MONTHLY && !day.equalsIgnoreCase(monthly_statsreset)) CloudModuleCore.MONTHLY = false;
 
 
-        if (hour.equalsIgnoreCase(daily_statsreset) && !CloudModuleCore.DAILY)  {
+        if (hour.equalsIgnoreCase(daily_statsreset) && !CloudModuleCore.DAILY) {
             resetStatsFromGameProfiles(StatsType.DAILY);
             System.out.println("test 2");
         }
@@ -63,7 +61,7 @@ public class StatsResetTask implements Runnable {
             RMapCache<UUID, GameProfile> rMapCache = CloudModuleCore.getCoreAPI().getGameService().getRedisCache();
             rMapCache.values().forEach(gameProfile -> {
                 for (Gamemodes gamemode : Gamemodes.values()) {
-                    gamemode.getStatKeys().forEach(s -> gameProfile.setStat(gamemode.toString(),statsType,s,0));
+                    gamemode.getStatKeys().forEach(s -> gameProfile.setStat(gamemode.toString(), statsType, s, 0));
                 }
                 boolean forceCache = rMapCache.remainTimeToLive(gameProfile.getPlayerId()) == -1;
                 CloudModuleCore.getCoreAPI().getGameService().saveEntity(gameProfile, forceCache, true);
@@ -76,12 +74,11 @@ public class StatsResetTask implements Runnable {
             for (Gamemodes value : Gamemodes.values()) {
                 if (value.getStatKeys().size() != 1 && !value.getStatKeys().get(0).isEmpty()) {
                     for (String statKey : value.getStatKeys()) {
-                        fieldUpdateList.add(FieldUpdate.set("statsMap." + value + "." + statsType + "." +  statKey,0));
+                        fieldUpdateList.add(FieldUpdate.set("statsMap." + value + "." + statsType + "." + statKey, 0));
                     }
                 }
             }
             CloudModuleCore.getCoreAPI().getGameService().getRepository().updateAllFields(UpdateBatch.of(fieldUpdateList));
-
 
 
             for (Gamemodes gamemodes : Gamemodes.values()) {
@@ -89,12 +86,11 @@ public class StatsResetTask implements Runnable {
                 sortedSet.clear();
             }
 
-            
 
             if (statsType == StatsType.DAILY) CloudModuleCore.DAILY = true;
             else if (statsType == StatsType.MONTHLY) CloudModuleCore.MONTHLY = true;
 
-            CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("proxy","statsreset",new JsonDocument("statsType",statsType));
+            CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("proxy", "statsreset", new JsonDocument("statsType", statsType));
 
             System.out.println("STATSRESET - " + statsType);
 

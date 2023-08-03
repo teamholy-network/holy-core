@@ -31,7 +31,7 @@ public class RankingSortManager {
         for (Gamemodes gamemodes : Gamemodes.values()) {
             for (StatsType statsType : StatsType.values()) {
                 RScoredSortedSet scoredSortedSet = CloudModuleCore.getCoreAPI().
-                        getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
+                    getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
                 scoredSortedSet.clear();
 
                 sortedSetHashMap.put(scoredSortedSet.getName(), scoredSortedSet);
