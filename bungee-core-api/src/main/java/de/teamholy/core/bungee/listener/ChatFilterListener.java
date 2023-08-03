@@ -33,6 +33,11 @@ public class ChatFilterListener implements Listener {
 
         String message = event.getMessage().toLowerCase();
         for (String bannedWord : ChatFilterManager.FILTEREDWORDS.keySet()) {
+
+            if (message.startsWith("/") || proxiedPlayer.hasPermission("teamholy.team")) {
+                return;
+            }
+
             String lowerBannedWord = bannedWord.toLowerCase();
             String regex = "\\b" + String.join("[^a-zA-Z]*", lowerBannedWord.split("")) + "\\b";
             Pattern pattern = Pattern.compile(regex);
@@ -50,37 +55,27 @@ public class ChatFilterListener implements Listener {
                             proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
                             proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §c" + Punish.parseMuteReasonById(actionProfile.filterActionId()));
                             ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "mute " + proxiedPlayer.getName() + " " + actionProfile.filterActionId());
+                            sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                         }
                     }
                     case "ban" -> {
                         ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "ban " + proxiedPlayer.getName() + actionProfile.filterActionId());
                         event.setCancelled(true);
+                        sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                     }
                     case "kick" -> {
                         ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "kick " + proxiedPlayer.getName());
                         event.setCancelled(true);
+                        sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                     }
                     case "warn" -> {
                         proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
                         event.setCancelled(true);
+                        sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                     }
                 }
 
-                DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1136093941612163241/OdV3rYMQtN9wtBU6xcu4IVnQrVPZb5hMveIAmXNFgHynd1JzDxg3QdiD5mzEs8JHyf8-");
-                webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
-                webhook.setUsername("ChatFilter");
-                webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setTitle("Chatfilter")
-                    .addField(proxiedPlayer.getName() + " wrote", event.getMessage(), true)
-                    .addField("may contain", matcher.group(), false)
-                    .addField("Server", proxiedPlayer.getServer().getInfo().getName(), false)
-                    .addField("Action", actionProfile.filterAction(), false)
-                    .setColor(Color.ORANGE)
-                    .setThumbnail("https://visage.surgeplay.com/face/512/" + proxiedPlayer.getUniqueId().toString() + ".png")
-                    .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png"));
 
-
-                webhook.execute();
 
                 return;
             }
@@ -112,6 +107,24 @@ public class ChatFilterListener implements Listener {
         int longestMessageSize = Math.max(lastMessage.length(), message.length());
 
         return (differences * 100) / longestMessageSize < 30;
+    }
+
+    public void sendDiscordWebhookChatfilter(ProxiedPlayer proxiedPlayer, ChatEvent event, Matcher matcher, ChatFilterManager.FilterActionProfile actionProfile) {
+        DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1136093941612163241/OdV3rYMQtN9wtBU6xcu4IVnQrVPZb5hMveIAmXNFgHynd1JzDxg3QdiD5mzEs8JHyf8-");
+        webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
+        webhook.setUsername("ChatFilter");
+        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+            .setTitle("Chatfilter")
+            .addField(proxiedPlayer.getName() + " wrote", event.getMessage(), true)
+            .addField("may contain", matcher.group(), false)
+            .addField("Server", proxiedPlayer.getServer().getInfo().getName(), false)
+            .addField("Action", actionProfile.filterAction(), false)
+            .setColor(Color.ORANGE)
+            .setThumbnail("https://visage.surgeplay.com/face/512/" + proxiedPlayer.getUniqueId().toString() + ".png")
+            .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png"));
+
+
+        webhook.execute();
     }
 
 }
