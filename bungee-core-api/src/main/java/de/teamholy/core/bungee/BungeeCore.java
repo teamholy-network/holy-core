@@ -33,7 +33,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
-import java.lang.reflect.Proxy;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,10 +52,6 @@ public class BungeeCore extends Plugin {
     ChatLogManager chatLogManager;
     ChatFilterManager chatFilterManager;
     PublicBroadcastManager publicBroadcastManager;
-
-
-
-
 
 
     public BungeeCore() {
@@ -96,8 +91,8 @@ public class BungeeCore extends Plugin {
         new CustomPunishCommand();
         new CloudMessageListener();
 
-        new StatsCommand(new String[]{"stats","mstats","astats","dstats"},null);
-        new KickCommand(new String[]{"kick","kim"}, "teamholy.kick");
+        new StatsCommand(new String[]{"stats", "mstats", "astats", "dstats"}, null);
+        new KickCommand(new String[]{"kick", "kim"}, "teamholy.kick");
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatFilterListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
@@ -121,14 +116,14 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new NickListCommand("nicklist", "teamholy.team", "nicks"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new RankCommand("rank", "teamholy.rang", "rang"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new OnlinetimeCommand("onlinetime"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new PingCommand("ping"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new BroadcastCommand("broadcast","teamholy.broadcast","bc"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new JumpCommand("jump"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new GiveawayCommand("giveaway"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new YoutuberCommand("Youtube","","yt","premium+","p+"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new HelpCommand("help","","hile","dc","shop","?","discord","apply","forum"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new NameMCCommand("namemc","","vote","rewards","like","premium","freepremium"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this,new EasyPermissionCommand("easypermission","","eperms","easyperms"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new PingCommand("ping"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new BroadcastCommand("broadcast", "teamholy.broadcast", "bc"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new JumpCommand("jump"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new GiveawayCommand("giveaway"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new YoutuberCommand("Youtube", "", "yt", "premium+", "p+"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HelpCommand("help", "", "hile", "dc", "shop", "?", "discord", "apply", "forum"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatFilterCommand("chatfilter"));
 
@@ -136,26 +131,21 @@ public class BungeeCore extends Plugin {
         chatFilterManager.loadFilteredWords();
 
 
-
-
-        ProxyServer.getInstance().getScheduler().schedule(this,() -> {
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
 
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),() -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
                 playerProfile.setOnlineTime(playerProfile.getOnlineTime() + 60000L);
-                BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile,true,true);
+                BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
             }
 
-            coreAPI.getCloudManager().sendCloudMessage("bukkit","onlineTime_update",null);
-
-
-
+            coreAPI.getCloudManager().sendCloudMessage("bukkit", "onlineTime_update", null);
 
 
             ChatFilterListener.LASTMESSAGES.clear();
 
             CommandListener.COOLDOWNS.clear();
-        },1,1, TimeUnit.MINUTES);
+        }, 1, 1, TimeUnit.MINUTES);
 
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
@@ -163,9 +153,6 @@ public class BungeeCore extends Plugin {
         }, 30, 30, TimeUnit.MINUTES);
 
     }
-
-
-
 
 
     @Override

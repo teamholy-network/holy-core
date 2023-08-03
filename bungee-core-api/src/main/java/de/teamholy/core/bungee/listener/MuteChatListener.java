@@ -11,7 +11,6 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-
 import java.util.UUID;
 
 /* copyright by Yassino */
@@ -32,7 +31,7 @@ public class MuteChatListener implements Listener {
                 if (!message.startsWith("/")) {
 
                     MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(player.getUniqueId(),
-                            () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
+                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
 
                     if (punishProfile != null) {
                         if (punishProfile.active()) {

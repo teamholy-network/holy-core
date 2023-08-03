@@ -38,7 +38,7 @@ public class PostLoginListener implements Listener {
         ProxiedPlayer proxiedPlayer = loginEvent.getPlayer();
 
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
-                () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+            () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
         FriendProfile friendProfile;
         PunishHistoryProfile punishHistoryProfile;
@@ -112,7 +112,8 @@ public class PostLoginListener implements Listener {
                     finalPlayerProfile.setIp(ipAddress);
                 }
 
-                if (!proxiedPlayer.hasPermission("markupapi.nick") && finalPlayerProfile.isAutoNick()) finalPlayerProfile.setAutoNick(false);
+                if (!proxiedPlayer.hasPermission("markupapi.nick") && finalPlayerProfile.isAutoNick())
+                    finalPlayerProfile.setAutoNick(false);
 
                 IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(finalPlayerProfile.getPlayerId());
                 String group = CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(permissionUser).getName();
@@ -145,7 +146,7 @@ public class PostLoginListener implements Listener {
 
         int i = 0;
         String name = BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
-        BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(),null,"online",null);
+        BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(), null, "online", null);
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {

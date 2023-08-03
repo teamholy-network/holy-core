@@ -59,26 +59,26 @@ public class CoinsCommand extends SenderCommand {
                 ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(uuid);
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
-                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,() -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
-                    if (args[0].equalsIgnoreCase("add")) {
-                        playerProfile.setCoins(playerProfile.getCoins() + coinsArg);
-                        proxiedPlayer.sendMessage(prefix +
-                                "You added " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1] + " §6" + BungeeCore.getAPI().getCoinManager().formatInteger(coinsArg) + " §ecoins");
+                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid, () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
+                if (args[0].equalsIgnoreCase("add")) {
+                    playerProfile.setCoins(playerProfile.getCoins() + coinsArg);
+                    proxiedPlayer.sendMessage(prefix +
+                        "You added " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1] + " §6" + BungeeCore.getAPI().getCoinManager().formatInteger(coinsArg) + " §ecoins");
 
-                    } else if (args[0].equalsIgnoreCase("set")) {
-                        playerProfile.setCoins(coinsArg);
+                } else if (args[0].equalsIgnoreCase("set")) {
+                    playerProfile.setCoins(coinsArg);
 
-                        proxiedPlayer.sendMessage(prefix +
-                                "You set " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1] + " §6" + BungeeCore.getAPI().getCoinManager().formatInteger(coinsArg) + " §ecoins");
+                    proxiedPlayer.sendMessage(prefix +
+                        "You set " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1] + " §6" + BungeeCore.getAPI().getCoinManager().formatInteger(coinsArg) + " §ecoins");
 
-                    } else if (args[0].equalsIgnoreCase("remove")) {
-                        playerProfile.setCoins(playerProfile.getCoins() - coinsArg);
+                } else if (args[0].equalsIgnoreCase("remove")) {
+                    playerProfile.setCoins(playerProfile.getCoins() - coinsArg);
 
-                        proxiedPlayer.sendMessage(prefix +
-                                "You removed " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1] + " §6" + BungeeCore.getAPI().getCoinManager().formatInteger(coinsArg) + " §ecoins");
-                    }
+                    proxiedPlayer.sendMessage(prefix +
+                        "You removed " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1] + " §6" + BungeeCore.getAPI().getCoinManager().formatInteger(coinsArg) + " §ecoins");
+                }
 
-                    BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, isOnline, true);
+                BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, isOnline, true);
 
 
             }

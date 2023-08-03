@@ -63,7 +63,7 @@ public class UnmuteCommand extends SenderCommand {
                 DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                 discordWebhook.setUsername("UNMUTE");
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.GREEN)
-                        .setDescription(authorName + " has unmuted " + target + ".")
+                    .setDescription(authorName + " has unmuted " + target + ".")
                 );
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);

@@ -6,7 +6,6 @@ import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
-import de.teamholy.core.bukkit.listener.PacketListener;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
 import de.teamholy.core.bukkit.perks.*;
@@ -14,11 +13,11 @@ import de.teamholy.core.bukkit.report.ReportBukkitManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;import java.util.List;
+import java.io.File;
+import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -30,7 +29,6 @@ public class BukkitCore extends JavaPlugin {
     @Getter
     private ProtocolManager protocolManager;
 
-
     @Getter
     CoreAPI coreAPI;
     @Getter
@@ -39,8 +37,6 @@ public class BukkitCore extends JavaPlugin {
     PerkManager perkManager;
     @Getter
     String group;
-
-
 
     public BukkitCore() {
         instance = this;
@@ -63,28 +59,25 @@ public class BukkitCore extends JavaPlugin {
         new CloudMessageListener(this);
 
         Perk defaultStick =
-                new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
-
+            new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
 
         Perk defaultBlock =
-                new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
-
+            new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
 
         Perk chat =
-                new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
+            new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
 
-
-        AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"),"perks");
+        AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"), "perks");
         configuration.load();
-        configuration.append("default.stick",100,true);
-        configuration.append("default.block",0,true);
-        configuration.append("default.chat",200,true);
-        configuration.append("perks.block", List.of(defaultBlock),false);
-        configuration.append("perks.stick", List.of(defaultStick),false);
-        configuration.append("perks.chat", List.of(chat),false);
+        configuration.append("default.stick", 100, true);
+        configuration.append("default.block", 0, true);
+        configuration.append("default.chat", 200, true);
+        configuration.append("perks.block", List.of(defaultBlock), false);
+        configuration.append("perks.stick", List.of(defaultStick), false);
+        configuration.append("perks.chat", List.of(chat), false);
         configuration.save();
 
-        configuration.getList("perks.block",Perk.class).forEach(o -> {
+        configuration.getList("perks.block", Perk.class).forEach(o -> {
             Perk perk = (Perk) o;
             System.out.println(perk.getMaterial() + String.valueOf(perk.getSubId()));
             if (perk.getMaterial() != null) {
@@ -92,7 +85,7 @@ public class BukkitCore extends JavaPlugin {
             }
         });
 
-        configuration.getList("perks.chat",Perk.class).forEach(o -> {
+        configuration.getList("perks.chat", Perk.class).forEach(o -> {
             Perk perk = (Perk) o;
             if (perk.getMaterial() != null) {
                 getPerkCache().getPerkHashMap().put(perk.getId(), perk);
@@ -100,19 +93,15 @@ public class BukkitCore extends JavaPlugin {
         });
 
 
-
-        configuration.getList("perks.stick",Perk.class).forEach(o -> {
+        configuration.getList("perks.stick", Perk.class).forEach(o -> {
             Perk perk = (Perk) o;
             if (perk.getMaterial() != Material.BANNER) {
-                perk.setBannerMeta(null,null);
+                perk.setBannerMeta(null, null);
             }
             if (perk.getMaterial() != null) {
                 getPerkCache().getPerkHashMap().put(perk.getId(), perk);
             }
         });
-
-
-
     }
 
     @Override

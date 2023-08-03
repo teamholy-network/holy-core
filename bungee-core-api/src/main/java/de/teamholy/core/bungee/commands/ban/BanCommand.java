@@ -132,7 +132,7 @@ public class BanCommand extends SenderCommand {
                 discordWebhook.setUsername("BAN");
                 //
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
-                        .setDescription(authorName + " has banned " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
+                    .setDescription(authorName + " has banned " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
                 );
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);

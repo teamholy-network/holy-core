@@ -18,7 +18,6 @@ public class MaxIPListener implements Listener {
     private final TObjectIntMap<InetAddress> addresses = TCollections.synchronizedMap(new TObjectIntHashMap());
 
 
-
     @EventHandler
     public void login(LoginEvent event) {
         if (this.addresses.get(event.getConnection().getAddress().getAddress()) >= 3) {
@@ -28,7 +27,7 @@ public class MaxIPListener implements Listener {
     }
 
 
-    @EventHandler (priority = -126)
+    @EventHandler(priority = -126)
     public void postLogin(PostLoginEvent event) {
         ProxiedPlayer player = event.getPlayer();
         this.addresses.adjustOrPutValue(event.getPlayer().getAddress().getAddress(), 1, 1);

@@ -37,7 +37,8 @@ public class ChatLogManager {
 
         String randomKey = generateRandomKey();
 
-        Type listType = new TypeToken<List<ChatLog.Message>>(){}.getType();
+        Type listType = new TypeToken<List<ChatLog.Message>>() {
+        }.getType();
         List<ChatLog.Message> chatLogMessages = new Gson().fromJson(chatlogString, listType);
 
         ChatLog chatLog = new ChatLog();
@@ -76,11 +77,6 @@ public class ChatLogManager {
 
         return builder.toString();
     }
-
-
-
-
-
 
 
 }

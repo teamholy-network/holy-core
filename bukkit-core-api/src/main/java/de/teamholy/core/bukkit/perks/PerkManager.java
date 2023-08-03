@@ -1,6 +1,5 @@
 package de.teamholy.core.bukkit.perks;
 
-import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.Gamemodes;
@@ -71,13 +70,13 @@ public class PerkManager {
         }
 
         inventory.setItem(new ItemBuilder(Material.STICK, 1).setName("§8» §6Stick").build(), 2, (event) ->
-                openSecondPerkInventory(player, PerkType.STICK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
+            openSecondPerkInventory(player, PerkType.STICK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
         inventory.setItem(new ItemBuilder(Material.PAPER, 1).setName("§8» §6Chat").build(), 4, (event) ->
-                openSecondPerkInventory(player, PerkType.CHAT, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
+            openSecondPerkInventory(player, PerkType.CHAT, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
         inventory.setItem(new ItemBuilder(Material.SANDSTONE, 1).setName("§8» §6Block").build(), 6, (event) ->
-                openSecondPerkInventory(player, PerkType.BLOCK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
+            openSecondPerkInventory(player, PerkType.BLOCK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
         player.openInventory(inventory.getInventory());
     }
@@ -100,12 +99,12 @@ public class PerkManager {
         ItemBuilder sortPlayer = new ItemBuilder(Material.DIAMOND).setName("§8» §6Filter");
 
         sortPerk.setLore(Arrays.stream(SortOptionPerk.values())
-                .map(value -> (sortOptionPerk == value) ? "§a" + value.toString().toLowerCase(Locale.ROOT) : "§7" + value.toString().toLowerCase(Locale.ROOT))
-                .collect(Collectors.toList()));
+            .map(value -> (sortOptionPerk == value) ? "§a" + value.toString().toLowerCase(Locale.ROOT) : "§7" + value.toString().toLowerCase(Locale.ROOT))
+            .collect(Collectors.toList()));
 
         sortPlayer.setLore(Arrays.stream(SortOptionPlayer.values())
-                .map(value -> (sortOptionPlayer == value) ? "§a" + value.toString().toLowerCase(Locale.ROOT) : "§7" + value.toString().toLowerCase(Locale.ROOT))
-                .collect(Collectors.toList()));
+            .map(value -> (sortOptionPlayer == value) ? "§a" + value.toString().toLowerCase(Locale.ROOT) : "§7" + value.toString().toLowerCase(Locale.ROOT))
+            .collect(Collectors.toList()));
 
 
         // sort perk
@@ -151,9 +150,9 @@ public class PerkManager {
 
         List<Perk> perks = BukkitCore.getInstance().getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == perkType).filter(perk -> switch (sortOptionPlayer) {
             case OWNED ->
-                    (perk.isBuyAble() && perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission()));
+                (perk.isBuyAble() && perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission()));
             case UNOWNED ->
-                    (perk.isBuyAble() && !perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && !player.hasPermission(perk.getPerkRankType().getPermission()));
+                (perk.isBuyAble() && !perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && !player.hasPermission(perk.getPerkRankType().getPermission()));
             default -> true;
         }).collect(Collectors.toList());
 
@@ -200,9 +199,9 @@ public class PerkManager {
             }
 
             if (
-                    perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isBuyAble()
-                            || !perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission())
-                            || perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isSpecial()
+                perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isBuyAble()
+                    || !perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission())
+                    || perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isSpecial()
             ) {
 
                 list.clear();

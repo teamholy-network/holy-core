@@ -15,6 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class PublicBroadcastManager {
 
     public enum BroadcastType {JOINME, LINK, GENERAL}
+
     private Helpers helpers;
 
     public PublicBroadcastManager() {
@@ -24,9 +25,14 @@ public class PublicBroadcastManager {
     public void sendPublicBroadcast(String message, BroadcastType type, ProxiedPlayer sender) {
         for (ProxiedPlayer all : ProxyServer.getInstance().getPlayers()) {
             switch (type) {
-                case JOINME: sendJoinMe(all, sender); break;
-                case LINK: break;
-                case GENERAL: sendGeneral(all, message.replace("&", "§")); break;
+                case JOINME:
+                    sendJoinMe(all, sender);
+                    break;
+                case LINK:
+                    break;
+                case GENERAL:
+                    sendGeneral(all, message.replace("&", "§"));
+                    break;
             }
         }
     }
@@ -47,7 +53,6 @@ public class PublicBroadcastManager {
         receiver.sendMessage(helpers.centerMessage("§7" + message.replace("&", "§")));
         receiver.sendMessage("  ");
     }
-
 
 
 }

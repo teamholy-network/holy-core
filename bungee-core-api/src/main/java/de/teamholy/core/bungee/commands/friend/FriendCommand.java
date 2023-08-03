@@ -40,8 +40,8 @@ public class FriendCommand extends Command {
                     friendProfile.getFriendReqeustsList().forEach(uuid -> {
                         String nameColor = getColor(uuid) + getName(uuid);
                         proxiedPlayer.sendMessage(new ComponentBuilder(" §8» " + nameColor + " §8× ").append("§a§lACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + getName(uuid)))
-                                .append(" ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + getName(uuid)))
-                                .create());
+                            .append(" ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + getName(uuid)))
+                            .create());
                     });
                     if (friendProfile.getFriendReqeustsList().size() == 0) {
                         proxiedPlayer.sendMessage("§c-/-");
@@ -107,8 +107,8 @@ public class FriendCommand extends Command {
                     targetPlayer.sendMessage("§8§m-----------§f§lFRIEND§8§m------------");
                     targetPlayer.sendMessage("§7You got an friend request from " + getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()));
                     targetPlayer.sendMessage(new ComponentBuilder("          ").append("§a§lACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + proxiedPlayer.getName()))
-                            .append("       ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + proxiedPlayer.getName()))
-                            .create());
+                        .append("       ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + proxiedPlayer.getName()))
+                        .create());
                     targetPlayer.sendMessage("§8§m-----------------------------");
                 }
 

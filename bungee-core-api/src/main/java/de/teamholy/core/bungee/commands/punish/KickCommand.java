@@ -7,8 +7,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-
-
 import java.util.UUID;
 
 /* copyright by Yassino */
@@ -23,7 +21,6 @@ public class KickCommand extends SenderCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-
 
 
         if (args.length == 0) {
@@ -65,7 +62,7 @@ public class KickCommand extends SenderCommand {
 
         String kicked = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
         UUID author = BungeeUtil.parseAuthorUUID(sender);
-        String name = BungeeCore.getAPI().getCloudManager().getColor(author) +BungeeCore.getAPI().getUuidManager().getName(author);
+        String name = BungeeCore.getAPI().getCloudManager().getColor(author) + BungeeCore.getAPI().getUuidManager().getName(author);
 
         BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + name + " §7kicked " + kicked + " §7for §c" + reason);
     }

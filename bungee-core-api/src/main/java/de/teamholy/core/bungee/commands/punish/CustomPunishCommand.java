@@ -23,7 +23,7 @@ import java.util.UUID;
 public class CustomPunishCommand extends SenderCommand {
 
     public CustomPunishCommand() {
-        super(new String[]{"custompunish", "cpunish","cmute","cban"}, "teamholy.custompunish");
+        super(new String[]{"custompunish", "cpunish", "cmute", "cban"}, "teamholy.custompunish");
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -102,7 +102,6 @@ public class CustomPunishCommand extends SenderCommand {
                     }
 
 
-
                     ProxiedPlayer player = ProxyServer.getInstance().getPlayer(target);
                     if (player != null && player.isConnected())
                         player.disconnect(BanUtil.generateBanScreen(punishProfile));
@@ -114,8 +113,8 @@ public class CustomPunishCommand extends SenderCommand {
                     DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                     discordWebhook.setUsername("BAN");
                     discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
-                            .setDescription(authorName + " has banned " + target + " for " + reason + ". [CUSTOM]")
-                            .setDescription("Evidence -> " + evidence)
+                        .setDescription(authorName + " has banned " + target + " for " + reason + ". [CUSTOM]")
+                        .setDescription("Evidence -> " + evidence)
                     );
 
                     BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);
@@ -126,7 +125,6 @@ public class CustomPunishCommand extends SenderCommand {
                         sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is already muted!");
                         return;
                     }
-
 
 
                     ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
@@ -150,8 +148,6 @@ public class CustomPunishCommand extends SenderCommand {
                     }
 
 
-
-
                     BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateCustomMuteMessage(punishProfile));
 
                     String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
@@ -159,7 +155,7 @@ public class CustomPunishCommand extends SenderCommand {
                     DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                     discordWebhook.setUsername("MUTE");
                     discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
-                            .setDescription(authorName + " has muted " + target + " for " + punishProfile.getReason() + ". [Custom], Evidence -> " + evidence)
+                        .setDescription(authorName + " has muted " + target + " for " + punishProfile.getReason() + ". [Custom], Evidence -> " + evidence)
                     );
 
                     BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);

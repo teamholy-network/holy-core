@@ -23,6 +23,8 @@ public class UUIDUtility {
 
     public enum UUIDType {
         PREMIUM, CRACKED
-    };
+    }
+
+    ;
 
 }

@@ -15,11 +15,11 @@ import java.util.*;
 public class ChatLogListener implements Listener {
 
 
-
     public static Map<UUID, LinkedList<Message>> CHATLOGS = new HashMap<>();
     private static final int max = 50;
     private final Gson gson = new Gson();
-    private final Type typeOfSrc = new TypeToken<List<Message>>(){}.getType();
+    private final Type typeOfSrc = new TypeToken<List<Message>>() {
+    }.getType();
 
     public ChatLogListener() {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
@@ -68,19 +68,12 @@ public class ChatLogListener implements Listener {
         long time;
 
 
-
         Message(String message, String server) {
             this.message = message;
             this.server = server;
             this.time = System.currentTimeMillis();
         }
     }
-
-
-
-
-
-
 
 
 }

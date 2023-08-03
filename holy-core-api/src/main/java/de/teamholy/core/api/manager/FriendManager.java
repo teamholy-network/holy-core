@@ -21,7 +21,7 @@ public class FriendManager {
 
     public boolean isFriend(UUID player, UUID target) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return false;
         }
         return friendProfile.getFriendList().contains(player);
@@ -29,7 +29,7 @@ public class FriendManager {
 
     public boolean canJump(UUID uuid) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(uuid, () -> coreAPI.getFriendService().getRepository().findFirstById(uuid));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return true;
         }
         return friendProfile.isAllowFriendJump();
@@ -37,7 +37,7 @@ public class FriendManager {
 
     public boolean isFriendRequestAllowed(UUID uuid) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(uuid, () -> coreAPI.getFriendService().getRepository().findFirstById(uuid));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return true;
         }
         return friendProfile.isAllowFriendRequests();
@@ -45,7 +45,7 @@ public class FriendManager {
 
     public boolean isFriendRequest(UUID player, UUID target) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return true;
         }
         return friendProfile.getFriendReqeustsList().contains(player);
@@ -53,40 +53,40 @@ public class FriendManager {
 
     public void sendFriendRequest(UUID player, UUID target, boolean forceCache) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return;
         }
-        sendFriendRquestUpdateData(player,target,"send");
+        sendFriendRquestUpdateData(player, target, "send");
         friendProfile.getFriendReqeustsList().add(player);
         coreAPI.getFriendService().saveEntity(friendProfile, forceCache, true);
     }
 
     public void removeFriendRequest(UUID player, UUID target, boolean forceCache) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return;
         }
-        sendFriendRquestUpdateData(player,target,"remove");
+        sendFriendRquestUpdateData(player, target, "remove");
         friendProfile.getFriendReqeustsList().remove(player);
         coreAPI.getFriendService().saveEntity(friendProfile, forceCache, true);
     }
 
     public void removeFriend(UUID player, UUID target, boolean forceCache) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return;
         }
-        sendFriendUpdateData(player,target,"remove",null);
+        sendFriendUpdateData(player, target, "remove", null);
         friendProfile.getFriendList().remove(player);
         coreAPI.getFriendService().saveEntity(friendProfile, forceCache, true);
     }
 
     public void addFriend(UUID player, UUID target, boolean forceCache) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return;
         }
-        sendFriendUpdateData(player,target,"add",null);
+        sendFriendUpdateData(player, target, "add", null);
         friendProfile.getFriendList().add(player);
         coreAPI.getFriendService().saveEntity(friendProfile, forceCache, true);
     }
@@ -96,7 +96,7 @@ public class FriendManager {
 
         IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
 
-        if(permissionUser == null) {
+        if (permissionUser == null) {
             return defaultMaxFriends;
         }
 
@@ -105,7 +105,7 @@ public class FriendManager {
         }
 
         if (CloudNetDriver.getInstance().getPermissionManagement().hasPermission(permissionUser, "teamholy.friend.500")) {
-             defaultMaxFriends = 500;
+            defaultMaxFriends = 500;
         }
 
         return defaultMaxFriends;
@@ -113,20 +113,20 @@ public class FriendManager {
 
     public boolean canAddFriendSize(UUID uuid) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(uuid, () -> coreAPI.getFriendService().getRepository().findFirstById(uuid));
-        if(friendProfile == null) {
+        if (friendProfile == null) {
             return true;
         }
         return friendProfile.getFriendList().size() < getMaxFriendsCount(uuid);
     }
 
     public void sendFriendUpdateData(UUID player, UUID target, String message, String extra) {
-        JsonDocument jsonDocument = new JsonDocument().append("player",player).append("target",target).append("type",message).append("extra",extra);
-        coreAPI.getCloudManager().sendCloudMessage("bukkit","friend_update",jsonDocument);
+        JsonDocument jsonDocument = new JsonDocument().append("player", player).append("target", target).append("type", message).append("extra", extra);
+        coreAPI.getCloudManager().sendCloudMessage("bukkit", "friend_update", jsonDocument);
     }
 
     public void sendFriendRquestUpdateData(UUID player, UUID target, String message) {
-        JsonDocument jsonDocument = new JsonDocument().append("player",player).append("target",target).append("type",message);
-        coreAPI.getCloudManager().sendCloudMessage("bukkit","friendrequest_update",jsonDocument);
+        JsonDocument jsonDocument = new JsonDocument().append("player", player).append("target", target).append("type", message);
+        coreAPI.getCloudManager().sendCloudMessage("bukkit", "friendrequest_update", jsonDocument);
     }
 
 

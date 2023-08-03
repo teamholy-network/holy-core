@@ -26,14 +26,14 @@ public class PostDisconnectListener implements Listener {
     public void onQuit(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(),
-                () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
 
         playerProfile.setOnline(false);
         BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, false, true);
 
         ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(),
-                () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
         if (clanPlayerProfile == null) return;
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanPlayerProfile.getClanId());
@@ -51,11 +51,11 @@ public class PostDisconnectListener implements Listener {
 
 
         FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(player.getUniqueId(),
-                () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(player.getUniqueId()));
+            () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(player.getUniqueId()));
 
         String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
 
-        BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(),null,"offline",null);
+        BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(), null, "offline", null);
         FriendCommand.LASTREPLYS.remove(event.getPlayer().getUniqueId());
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);

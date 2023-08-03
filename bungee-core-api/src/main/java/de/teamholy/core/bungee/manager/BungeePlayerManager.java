@@ -61,7 +61,7 @@ public class BungeePlayerManager {
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
             if (proxiedPlayer.hasPermission("teamholy.team")) {
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),
-                        () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                    () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
                 if (staffProfile.isNotify()) proxiedPlayer.sendMessage(message);
             }
         }
@@ -72,7 +72,7 @@ public class BungeePlayerManager {
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
             if (proxiedPlayer.hasPermission("teamholy.team")) {
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),
-                        () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                    () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
                 if (staffProfile.isNotify()) proxiedPlayer.sendMessage(message);
             }
         }

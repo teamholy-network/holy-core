@@ -63,7 +63,7 @@ public class UnbanCommand extends SenderCommand {
                 DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                 discordWebhook.setUsername("UNBAN");
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.GREEN)
-                        .setDescription(authorName + " has unbanned " + target + ".")
+                    .setDescription(authorName + " has unbanned " + target + ".")
                 );
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);

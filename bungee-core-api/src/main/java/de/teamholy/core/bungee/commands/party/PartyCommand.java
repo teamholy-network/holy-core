@@ -206,8 +206,8 @@ public class PartyCommand extends Command {
                 target.sendMessage("§8§m----------§f§lPARTY----------");
                 target.sendMessage("§7You got an partyinvite from " + getColor(player.getUniqueId()) + player.getName());
                 target.sendMessage(new ComponentBuilder("          ").append("§a§lACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + player.getName()))
-                        .append("       ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party deny " + player.getName()))
-                        .create());
+                    .append("       ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party deny " + player.getName()))
+                    .create());
                 target.sendMessage("§8§m-----------------------------");
 
             } else if (args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("join")) {

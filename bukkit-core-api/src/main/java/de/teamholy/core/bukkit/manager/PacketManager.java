@@ -91,12 +91,12 @@ public class PacketManager {
                     for (int y = 0; y < 200; y++) {
                         for (int z = 0; z < 200; z++) {
                             if (new Location(playerOldLocation.getWorld(), playerOldLocation.getBlockX() - 100 + x,
-                                    playerOldLocation.getBlockY() - 7 + y, playerOldLocation.getBlockZ() - 100 + z)
-                                    .getBlock()
-                                    .getType() != Material.AIR) {
+                                playerOldLocation.getBlockY() - 7 + y, playerOldLocation.getBlockZ() - 100 + z)
+                                .getBlock()
+                                .getType() != Material.AIR) {
                                 Location l = new Location(playerOldLocation.getWorld(),
-                                        playerOldLocation.getBlockX() - 100 + x, playerOldLocation.getBlockY() - 7 + y,
-                                        playerOldLocation.getBlockZ() - 100 + z);
+                                    playerOldLocation.getBlockX() - 100 + x, playerOldLocation.getBlockY() - 7 + y,
+                                    playerOldLocation.getBlockZ() - 100 + z);
                                 player.sendBlockChange(l, material, (byte) 0);
                             }
                         }
@@ -105,9 +105,6 @@ public class PacketManager {
             }
         }.runTaskAsynchronously(bukkitCore);
     }
-
-
-
 
 
     @SuppressWarnings("deprecation")
@@ -127,11 +124,11 @@ public class PacketManager {
             Bukkit.getScheduler().runTaskLater(bukkitCore, () -> {
                 Location playerLocation = player.getLocation();
                 World playerWorld = player.getWorld();
-                for(int x = -2; x <= 2; x++) {
-                    for(int y = 0; y <= 4; y++) {
-                        for(int z = -2; z <= 2; z++) {
+                for (int x = -2; x <= 2; x++) {
+                    for (int y = 0; y <= 4; y++) {
+                        for (int z = -2; z <= 2; z++) {
                             Block block = playerWorld.getBlockAt(playerLocation.getBlockX() + x, playerLocation.getBlockY() + y, playerLocation.getBlockZ() + z);
-                            if(y == 4 || y == 0 || x == -2 || x == 2 || z == -2 || z == 2) {
+                            if (y == 4 || y == 0 || x == -2 || x == 2 || z == -2 || z == 2) {
                                 if ((x == 2 || x == -2 || z == 2 || z == -2) && y == 2) {
                                     block.setType(Material.GLASS);
                                 } else {
@@ -160,17 +157,6 @@ public class PacketManager {
             }, 60L);
         });
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

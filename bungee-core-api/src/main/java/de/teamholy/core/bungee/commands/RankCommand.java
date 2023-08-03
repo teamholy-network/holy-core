@@ -94,14 +94,14 @@ public class RankCommand extends Command {
                     permissionUser.getGroups().clear();
                     permissionUser.addGroup(permissionGroup.getName());
                     discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
-                            .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " LIFETIME gegeben")
+                        .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " LIFETIME gegeben")
                     );
                     player.sendMessage(prefix + " you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§4Lifetime§8)");
                 } else {
                     permissionUser.getGroups().clear();
                     permissionUser.addGroup(permissionGroup.getName(), Long.parseLong(args[3]), TimeUnit.DAYS);
                     discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
-                            .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " für " + args[3] + " Tage gegeben")
+                        .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " für " + args[3] + " Tage gegeben")
                     );
                     player.sendMessage(prefix + " you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§c" + args[3] + " Days§8)");
                 }
