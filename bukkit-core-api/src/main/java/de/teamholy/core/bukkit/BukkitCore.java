@@ -29,7 +29,6 @@ public class BukkitCore extends JavaPlugin {
     @Getter
     private ProtocolManager protocolManager;
 
-
     @Getter
     CoreAPI coreAPI;
     @Getter
@@ -38,7 +37,6 @@ public class BukkitCore extends JavaPlugin {
     PerkManager perkManager;
     @Getter
     String group;
-
 
     public BukkitCore() {
         instance = this;
@@ -63,14 +61,11 @@ public class BukkitCore extends JavaPlugin {
         Perk defaultStick =
             new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
 
-
         Perk defaultBlock =
             new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
 
-
         Perk chat =
             new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
-
 
         AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"), "perks");
         configuration.load();
@@ -107,8 +102,6 @@ public class BukkitCore extends JavaPlugin {
                 getPerkCache().getPerkHashMap().put(perk.getId(), perk);
             }
         });
-
-
     }
 
     @Override
