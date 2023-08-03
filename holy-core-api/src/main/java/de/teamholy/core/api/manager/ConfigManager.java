@@ -1,11 +1,11 @@
 package de.teamholy.core.api.manager;
 
 import eu.koboo.yaml.Yaml;
+import eu.koboo.yaml.YamlParser;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-import java.io.File;
 import java.io.IOException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -22,8 +22,7 @@ public class ConfigManager {
     public ConfigManager() {
 
         try {
-            Yaml yaml = Yaml.parseFilePath("mongodb.cfg");
-
+            Yaml yaml = YamlParser.parseFilePath("mongodb.cfg");
 
             username = yaml.getString("username");
             password = yaml.getString("password");

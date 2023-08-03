@@ -5,5 +5,5 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    implementation("eu.koboo:yaml-config:1.2.7")
+    implementation("eu.koboo:yaml-config:$yamlVersion")
 }
