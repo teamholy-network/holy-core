@@ -21,7 +21,7 @@ public class PingCommand extends Command {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
             if (target != null) {
-                
+
                 if (!player.hasPermission("teamholy.team")) {
                     player.sendMessage(" §8-> §7You don't have the permission for that");
                     return;

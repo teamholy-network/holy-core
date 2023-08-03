@@ -38,7 +38,7 @@ public class JoinMECommand extends Command {
         if (args.length == 0) {
 
             PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
-                    () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
 
             int tokens = (int) playerProfile.getJoinMeTokens();
@@ -105,7 +105,7 @@ public class JoinMECommand extends Command {
 
 
                 PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
-                        () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                    () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
                 int tokens = (int) playerProfile.getJoinMeTokens();
 

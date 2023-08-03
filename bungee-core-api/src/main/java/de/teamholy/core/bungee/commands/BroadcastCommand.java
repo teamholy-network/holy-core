@@ -9,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class BroadcastCommand extends Command {
 
     PublicBroadcastManager publicBroadcastManager = new PublicBroadcastManager();
+
     public BroadcastCommand(String name, String permission, String... aliases) {
         super(name, permission, aliases);
     }

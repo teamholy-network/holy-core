@@ -47,7 +47,7 @@ public class AdminClanCommand extends SenderCommand {
                     }
                     for (UUID member : clan.getMembers()) {
                         ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(member,
-                                () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(member));
+                            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(member));
                         if (clanPlayerProfile != null && clan.getClanId().equals(clanPlayerProfile.getClanId())) {
                             BungeeCore.getAPI().getClanPlayerService().deleteEntity(clanPlayerProfile);
                             ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(member), 2, TimeUnit.SECONDS);
@@ -63,7 +63,7 @@ public class AdminClanCommand extends SenderCommand {
                         return;
                     }
                     ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
-                            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
+                        () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
                     if (clanPlayerProfile == null) {
                         sender.sendMessage(Message.CLAN_PREFIX + "§cThe player " + target + " doesn't has a clan!");
                         return;
@@ -92,7 +92,7 @@ public class AdminClanCommand extends SenderCommand {
 
 
                     ClanPlayerProfile promoteProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
-                            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
+                        () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
 
                     if (promoteProfile == null) {
                         sender.sendMessage(Message.CLAN_PREFIX + "§cThe player dont have a clan!");
@@ -115,12 +115,9 @@ public class AdminClanCommand extends SenderCommand {
                     sender.sendMessage(Message.CLAN_PREFIX + "The player was promoted to" + promote.getFancy());
 
                     BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " +
-                            BungeeCore.getAPI().getCloudManager().getColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) +
-                            "§7 was promoted to " + promote.getFancy() + "§7!");
-                }
-
-
-                else {
+                        BungeeCore.getAPI().getCloudManager().getColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) +
+                        "§7 was promoted to " + promote.getFancy() + "§7!");
+                } else {
                     printUsage(sender);
                 }
             } else if (args.length == 3) {
@@ -153,7 +150,7 @@ public class AdminClanCommand extends SenderCommand {
 
                     UUID finalUuid1 = uuid;
                     ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
-                            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(finalUuid1));
+                        () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(finalUuid1));
                     if (clanProfile != null) {
                         sender.sendMessage(Message.CLAN_PREFIX + "§cThe player already has a clan!");
                         return;

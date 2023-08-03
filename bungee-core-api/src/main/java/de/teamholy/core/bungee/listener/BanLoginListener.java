@@ -14,7 +14,6 @@ import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -37,35 +36,35 @@ public class BanLoginListener implements Listener {
     public void onLogin(LoginEvent loginEvent) {
 
 
-            UUID uuid = loginEvent.getConnection().getUniqueId();
+        UUID uuid = loginEvent.getConnection().getUniqueId();
 
-            BanProfile punishProfile = punishService.getEntity(uuid, () -> punishService.getRepository().findFirstById(uuid));
+        BanProfile punishProfile = punishService.getEntity(uuid, () -> punishService.getRepository().findFirstById(uuid));
 
-            String ipAddress = loginEvent.getConnection().getAddress().getAddress().getHostAddress();
+        String ipAddress = loginEvent.getConnection().getAddress().getAddress().getHostAddress();
 
-            if (punishProfile != null) {
-                if (punishProfile.active()) {
-                    loginEvent.setCancelled(true);
-                    loginEvent.setCancelReason(BanUtil.generateBanScreen(punishProfile));
-                } else {
-                    PunishHistoryProfile punishHistoryProfile = bungeeCore.getCoreAPI().getPunishHistoryService().getEntity(uuid, () -> bungeeCore.getCoreAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
-                    if (punishHistoryProfile == null) punishHistoryProfile = new PunishHistoryProfile();
-
-                    punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
-
-                    bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
-                    bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("Console", punishProfile));
-                    punishService.deleteEntity(punishProfile);
-                }
+        if (punishProfile != null) {
+            if (punishProfile.active()) {
+                loginEvent.setCancelled(true);
+                loginEvent.setCancelReason(BanUtil.generateBanScreen(punishProfile));
             } else {
-                List<PlayerProfile> profileList = bungeeCore.getCoreAPI().getPlayerService().getRedisCache().values().stream()
-                        .filter(playerProfile -> playerProfile.getIp().equals(ipAddress)).collect(Collectors.toList());
+                PunishHistoryProfile punishHistoryProfile = bungeeCore.getCoreAPI().getPunishHistoryService().getEntity(uuid, () -> bungeeCore.getCoreAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+                if (punishHistoryProfile == null) punishHistoryProfile = new PunishHistoryProfile();
 
-                if (!filterBanBypass(profileList, loginEvent) && !loginEvent.isCancelled()) {
-                    profileList = bungeeCore.getCoreAPI().getPlayerService().getRepository().findManyByIp(ipAddress);
-                    filterBanBypass(profileList, loginEvent);
-                }
+                punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
+
+                bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
+                bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("Console", punishProfile));
+                punishService.deleteEntity(punishProfile);
             }
+        } else {
+            List<PlayerProfile> profileList = bungeeCore.getCoreAPI().getPlayerService().getRedisCache().values().stream()
+                .filter(playerProfile -> playerProfile.getIp().equals(ipAddress)).collect(Collectors.toList());
+
+            if (!filterBanBypass(profileList, loginEvent) && !loginEvent.isCancelled()) {
+                profileList = bungeeCore.getCoreAPI().getPlayerService().getRepository().findManyByIp(ipAddress);
+                filterBanBypass(profileList, loginEvent);
+            }
+        }
     }
 
     private boolean filterBanBypass(List<PlayerProfile> profileList, LoginEvent loginEvent) {

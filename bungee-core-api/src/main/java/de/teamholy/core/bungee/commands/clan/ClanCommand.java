@@ -196,7 +196,7 @@ public class ClanCommand extends SenderCommand {
 
     private void onJoin(ProxiedPlayer player, String tag) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(),
-                () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile != null) {
             player.sendMessage(Message.CLAN_PREFIX + "§cYou already have a clan!");
             return;
@@ -768,7 +768,7 @@ public class ClanCommand extends SenderCommand {
         for (ClanPlayerProfile profile : clanMemberList) {
             if (profile.getClanRank() == ClanRank.MEMBER) {
                 members.append(BungeeCore.getAPI().getCloudManager().getColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId()))
-                        .append("§7, ");
+                    .append("§7, ");
             }
         }
         proxiedPlayer.sendMessage(members.toString());

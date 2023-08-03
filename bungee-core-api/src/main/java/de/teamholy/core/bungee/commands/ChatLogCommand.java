@@ -58,7 +58,5 @@ public class ChatLogCommand extends Command {
         sender.sendMessage(message);
 
 
-
-
     }
 }

@@ -41,12 +41,12 @@ public class GiveawayCommand extends Command implements Listener {
                 stringBuilder.append(args[a] + " ");
             }
 
-            startGiveaway(Integer.parseInt(args[0]), player,stringBuilder.toString());
+            startGiveaway(Integer.parseInt(args[0]), player, stringBuilder.toString());
         }
     }
 
 
-    private void startGiveaway(Integer max, ProxiedPlayer player,String price) {
+    private void startGiveaway(Integer max, ProxiedPlayer player, String price) {
         winnerNumber = new Random().nextInt(max);
         server = player.getServer().getInfo().getName();
         chat = false;
@@ -54,18 +54,18 @@ public class GiveawayCommand extends Command implements Listener {
         message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§f§l" + winnerNumber)));
 
         player.sendMessage(message);
-        ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(),this);
+        ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
             proxiedPlayer.sendMessage("§8§m---------§f§lGIVEAWAY§8§m---------");
             proxiedPlayer.sendMessage(prefix + "§lThe number is between §c§l0 - " + max);
-            proxiedPlayer.sendMessage(prefix + "§lPrice: §a§n" + price.replace("&","§"));
+            proxiedPlayer.sendMessage(prefix + "§lPrice: §a§n" + price.replace("&", "§"));
             proxiedPlayer.sendMessage(prefix + "§lGood luck, the chat is enabled in 10 seconds!");
             proxiedPlayer.sendMessage("§8§m--------------------------");
         }
-        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(),() -> {
+        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
             chat = true;
             ProxyServer.getInstance().getPlayers().forEach(players -> players.sendMessage(prefix + "§fThe chat is now enabled!"));
-        },10, TimeUnit.SECONDS);
+        }, 10, TimeUnit.SECONDS);
     }
 
     @EventHandler
@@ -84,10 +84,10 @@ public class GiveawayCommand extends Command implements Listener {
                     players.sendMessage(prefix + "§6§lNumber§l§8: §c§l" + winnerNumber);
                     players.sendMessage(prefix + "§7§lThe chat is enabled in 10 seconds!");
                 });
-                ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(),() -> {
+                ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
                     ProxyServer.getInstance().getPluginManager().unregisterListener(this);
                     ProxyServer.getInstance().getPlayers().forEach(players -> players.sendMessage(prefix + "§6The chat is now enabled!"));
-                },10, TimeUnit.SECONDS);
+                }, 10, TimeUnit.SECONDS);
             }
         }
 

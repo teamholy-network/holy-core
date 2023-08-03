@@ -28,7 +28,7 @@ public class TokensCommand extends Command {
             if (args.length == 0 || !proxiedPlayer.hasPermission("teamholy.tokens")) {
 
                 PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
-                        () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                    () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
 
                 if (proxiedPlayer.hasPermission("teamholy.joinme")) {
@@ -69,7 +69,7 @@ public class TokensCommand extends Command {
                         int number = Integer.parseInt(args[3]);
 
                         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
-                                () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
+                            () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
 
                         if (type.equalsIgnoreCase("joinmeTokens")) {
                             playerProfile.setJoinMeTokens(playerProfile.getJoinMeTokens() + number);

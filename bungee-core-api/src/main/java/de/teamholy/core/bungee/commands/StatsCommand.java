@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.Gamemodes;
@@ -11,7 +10,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.awt.*;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -30,7 +28,7 @@ public class StatsCommand extends SenderCommand {
 
         if (args.length == 0) {
 
-            sendStatsHelp(player,player.getUniqueId());
+            sendStatsHelp(player, player.getUniqueId());
             // /stats Yassino mlgrush alltime
 
         } else if (args.length == 1) {
@@ -41,7 +39,7 @@ public class StatsCommand extends SenderCommand {
                 return;
             }
 
-            sendStatsHelp(player,uuid);
+            sendStatsHelp(player, uuid);
 
 
         } else if (args.length == 3) {
@@ -67,7 +65,7 @@ public class StatsCommand extends SenderCommand {
             }
 
 
-            sendStats(player,uuid,gamemode,statsType);
+            sendStats(player, uuid, gamemode, statsType);
         }
 
     }
@@ -76,7 +74,7 @@ public class StatsCommand extends SenderCommand {
 
         String name = BungeeCore.getAPI().getUuidManager().getName(uuid);
         String nameColor = BungeeCore.getAPI().getCloudManager().getColor(uuid) + name;
-        GameProfile gameProfile = BungeeCore.getAPI().getGameService().getEntity(uuid,() -> BungeeCore.getAPI().getGameService().getRepository().findFirstById(uuid));
+        GameProfile gameProfile = BungeeCore.getAPI().getGameService().getEntity(uuid, () -> BungeeCore.getAPI().getGameService().getRepository().findFirstById(uuid));
         if (!gameProfile.exists(gamemodes.toString())) {
             player.sendMessage(prefix + "This player doesn't have any stats in §" + gamemodes.getColor() + gamemodes.toString().toUpperCase(Locale.ROOT));
             return;
@@ -86,11 +84,11 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage("");
         player.sendMessage("      " + nameColor + " §8- §" + gamemodes.getColor() + gamemodes);
         player.sendMessage("");
-        player.sendMessage(" §7Ranking §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes,statsType,uuid));
+        player.sendMessage(" §7Ranking §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes, statsType, uuid));
         player.sendMessage("");
         gamemodes.getStatKeys().forEach(string -> {
             String stat = toFancy(string);
-            long value = gameProfile.getStat(gamemodes.toString(),statsType,string);
+            long value = gameProfile.getStat(gamemodes.toString(), statsType, string);
 
 
             player.sendMessage(" §7" + stat + " §8» §" + gamemodes.getColor() + value);
@@ -99,15 +97,15 @@ public class StatsCommand extends SenderCommand {
 
         player.sendMessage("");
         TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
-        textComponent.addExtra(new ChatAction().text( ( statsType == StatsType.DAILY  ? "§a§lDAILY" : "§7Daily") ).hover(hover(StatsType.DAILY,nameColor,gamemodes))
-                .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " DAILY").component());
+        textComponent.addExtra(new ChatAction().text((statsType == StatsType.DAILY ? "§a§lDAILY" : "§7Daily")).hover(hover(StatsType.DAILY, nameColor, gamemodes))
+            .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " DAILY").component());
         textComponent.addExtra(" §8┃ ");
-        textComponent.addExtra(new ChatAction().text( ( statsType == StatsType.MONTHLY  ? "§e§lMONTHLY" : "§7Monthly") ).hover(hover(StatsType.MONTHLY,nameColor,gamemodes))
-                .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " MONTHLY").component());
+        textComponent.addExtra(new ChatAction().text((statsType == StatsType.MONTHLY ? "§e§lMONTHLY" : "§7Monthly")).hover(hover(StatsType.MONTHLY, nameColor, gamemodes))
+            .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " MONTHLY").component());
 
         textComponent.addExtra(" §8┃ ");
-        textComponent.addExtra(new ChatAction().text( ( statsType == StatsType.ALLTIME  ? "§c§lALLTIME" : "§7alltime") ).hover(hover(StatsType.ALLTIME,nameColor,gamemodes))
-                .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " ALLTIME").component());
+        textComponent.addExtra(new ChatAction().text((statsType == StatsType.ALLTIME ? "§c§lALLTIME" : "§7alltime")).hover(hover(StatsType.ALLTIME, nameColor, gamemodes))
+            .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " ALLTIME").component());
 
         player.sendMessage(textComponent);
         player.sendMessage("");
@@ -136,8 +134,8 @@ public class StatsCommand extends SenderCommand {
         for (Gamemodes value : Gamemodes.values()) {
             if (!value.getRankingKey().isEmpty()) {
                 player.sendMessage(new ChatAction().text(" §8» §" + value.getColor() + "§l" + value.toString().toUpperCase(Locale.ROOT)).hover("§7click to show stats of " + nameColor + " §7in §" + value.getColor() + value.toString().toUpperCase(Locale.ROOT))
-                                .execute("stats " + name + " " + value.toString() + " " + StatsType.ALLTIME)
-                        .component());
+                    .execute("stats " + name + " " + value.toString() + " " + StatsType.ALLTIME)
+                    .component());
             }
         }
         player.sendMessage("");

@@ -39,7 +39,7 @@ public class BanUtil {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + authorName + "§7 has §ecustom §7muted " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7 for §6" + punishProfile.getReason() + "§7. " +
-                "\n§7Time§8: §e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(),TimeUnit.MILLISECONDS,true);
+            "\n§7Time§8: §e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS, true);
         return generateLookUpComponent(playerName, message);
     }
 
@@ -47,7 +47,7 @@ public class BanUtil {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + authorName + "§7 has §ecustom §7banned " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7 for §6" + punishProfile.getReason() + "§7. " +
-                "\n§7Time§8: §e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(),TimeUnit.MILLISECONDS,true);
+            "\n§7Time§8: §e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS, true);
         return generateLookUpComponent(playerName, message);
     }
 
@@ -69,26 +69,25 @@ public class BanUtil {
         StringBuilder builder = new StringBuilder();
 
         builder.append(Message.LINE)
-                .append("\n\n")
-                .append("§cYou're banned!\n\n")
-                .append("§7Reason§8: §c")
-                .append(punishProfile.getReason())
-                .append("\n\n")
-                .append("§7Time remaining§8: §e")
-                .append(timeString)
-                .append("\n");
-
+            .append("\n\n")
+            .append("§cYou're banned!\n\n")
+            .append("§7Reason§8: §c")
+            .append(punishProfile.getReason())
+            .append("\n\n")
+            .append("§7Time remaining§8: §e")
+            .append(timeString)
+            .append("\n");
 
 
         if (dateString != null)
             builder.append("§7Date§8: §e")
-                    .append(dateString)
-                    .append("\n\n");
+                .append(dateString)
+                .append("\n\n");
 
         builder.append("§7You can make an unban appeal at §ehttps://forum.teamholy.de/\n")
-                .append("\n")
-                .append(Message.LINE)
-                .append("\n");
+            .append("\n")
+            .append(Message.LINE)
+            .append("\n");
 
         return builder.toString();
     }

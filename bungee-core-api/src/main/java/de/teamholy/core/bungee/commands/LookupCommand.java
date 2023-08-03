@@ -53,15 +53,15 @@ public class LookupCommand extends SenderCommand {
                 }
 
                 PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,
-                        () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
+                    () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
                 ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
-                        () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
+                    () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
                 BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,
-                        () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
+                    () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                 MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,
-                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
+                    () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+                    () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
 
 
                 player.sendMessage(Message.LINE);
@@ -70,7 +70,7 @@ public class LookupCommand extends SenderCommand {
                 nameComp.addExtra(new ChatAction().text(BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7Click to copy uuid").component());
                 player.sendMessage(nameComp);
 
-                TextComponent cracked = new TextComponent("§7Premium Account §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(),playerProfile.getPlayerName()) ? "§cno" : "§ayes"));
+                TextComponent cracked = new TextComponent("§7Premium Account §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName()) ? "§cno" : "§ayes"));
                 player.sendMessage(cracked);
 
                 TextComponent onlineComp = new TextComponent("§7Status §8» ");
@@ -126,10 +126,10 @@ public class LookupCommand extends SenderCommand {
                 TextComponent rankComp = new TextComponent("§7Highest Rank §8» ");
                 if (rankTime == 0 || rankTime == -1) {
                     rankComp.addExtra(new ChatAction().text(permissionGroup.getDisplay() + permissionGroup.getName() + " §8┃ §aLifetime").hover("§7Click to show all ranks").execute("lookup 4 " + uuid)
-                            .component());
+                        .component());
                 } else {
                     rankComp.addExtra(new ChatAction().text(permissionGroup.getDisplay() + permissionGroup.getName() + " §8┃ §e" + BungeeUtil.parseDate(rankTime)).hover("§7Click to show all ranks").execute("lookup 4 " + uuid)
-                            .component());
+                        .component());
                 }
                 player.sendMessage(rankComp);
 
@@ -182,13 +182,13 @@ public class LookupCommand extends SenderCommand {
                     String targetName = BungeeCore.getAPI().getUuidManager().getName(uuid);
 
                     PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,
-                            () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
+                        () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
 
                     switch (num) {
                         case 1:
                             if (args[2].equalsIgnoreCase("ban")) {
                                 BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,
-                                        () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
+                                    () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                                 if (banProfile != null) {
                                     String author = BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
                                     String until = BungeeUtil.parseDate(banProfile.getValidUntilDate()) + " §7(" + TimeUtil.beautifyTime(banProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
@@ -198,7 +198,7 @@ public class LookupCommand extends SenderCommand {
                                 }
                             } else if (args[2].equalsIgnoreCase("mute")) {
                                 MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,
-                                        () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
+                                    () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                                 if (muteProfile != null) {
                                     String author = BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
                                     String until = BungeeUtil.parseDate(muteProfile.getValidUntilDate()) + " §7(" + TimeUtil.beautifyTime(muteProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
@@ -213,7 +213,7 @@ public class LookupCommand extends SenderCommand {
                         case 2:
                             if (args[2].equalsIgnoreCase("ban")) {
                                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-                                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+                                    () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
                                 if (punishHistoryProfile.getBanProfileMap().size() > 0) {
                                     player.sendMessage(Message.LINE);
                                     player.sendMessage("");
@@ -236,7 +236,7 @@ public class LookupCommand extends SenderCommand {
                                 }
                             } else if (args[2].equalsIgnoreCase("mute")) {
                                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-                                        () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+                                    () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
                                 if (punishHistoryProfile.getMuteProfileMap().size() > 0) {
                                     player.sendMessage(Message.LINE);
                                     player.sendMessage("");

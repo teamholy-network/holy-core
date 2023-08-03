@@ -25,5 +25,4 @@ public class ChatFilter {
     private Double addedAt;
 
 
-
 }

@@ -1,7 +1,10 @@
 package de.teamholy.core.bungee.util;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
 @SuppressWarnings("unused")
@@ -73,18 +76,18 @@ public class ChatElement {
 
     private static TextComponent createHoverUrl(String text, String hover, String url) {
         return createClickHoverComponent(text, new ClickEvent(ClickEvent.Action.OPEN_URL, url),
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
+            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
     }
 
     private static TextComponent createHoverSuggest(String text, String hover, String suggestion) {
         return createClickHoverComponent(text, new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestion),
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
+            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
     }
 
     private static TextComponent createHoverCommand(String text, String hover, String command) {
         command = command.startsWith("/") ? command : "/" + command;
         return createClickHoverComponent(text, new ClickEvent(ClickEvent.Action.RUN_COMMAND, command),
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
+            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hover)));
     }
 
     private static TextComponent createCommand(String text, String command) {

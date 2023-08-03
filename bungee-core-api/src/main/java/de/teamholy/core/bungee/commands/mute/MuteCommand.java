@@ -76,13 +76,10 @@ public class MuteCommand extends SenderCommand {
                 String evidence = "no evidence";
                 if (args.length == 3) {
                     evidence = args[2];
-                } else if (targetPlayer != null){
+                } else if (targetPlayer != null) {
                     ChatLog chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog((senderPlayer != null ? senderPlayer.getUniqueId() : UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670")), targetPlayer);
                     evidence = (chatLog != null) ? "https://teamholy.de/chatlog/" + chatLog.getChatLogId() : "No evidence";
                 }
-
-
-
 
 
                 UUID author = sender instanceof ProxiedPlayer ? BungeeUtil.parseAuthorUUID((ProxiedPlayer) sender) : UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670");
@@ -123,7 +120,8 @@ public class MuteCommand extends SenderCommand {
                 if (authorPlayer != null && BungeeCore.getAPI().getReportManager().getAllReports().values().stream().anyMatch(report -> report.getViewer() != null && report.getViewer().equals(author))) {
                     if (evidence.equalsIgnoreCase("No evidence")) {
                         Report report = BungeeCore.getAPI().getReportManager().getReport(uuid);
-                        if (report.getChatlogID() != null) punishProfile.setEvidence("https:/teamholy.de/chatlog/" + report.getChatlogID());
+                        if (report.getChatlogID() != null)
+                            punishProfile.setEvidence("https:/teamholy.de/chatlog/" + report.getChatlogID());
                     }
                     BungeeCore.getInstance().getProxy().getPluginManager().dispatchCommand(authorPlayer, "reports finish");
                 }
@@ -137,7 +135,7 @@ public class MuteCommand extends SenderCommand {
                 DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
                 discordWebhook.setUsername("MUTE");
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.RED)
-                        .setDescription(authorName + " has muted " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
+                    .setDescription(authorName + " has muted " + target + " for " + banReason.getEnglishText() + ", Evidence -> " + evidence)
                 );
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);

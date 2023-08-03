@@ -24,16 +24,15 @@ public class LoginListener implements Listener {
         BungeeCore.getAPI().getUuidManager().register(name, uuid);
 
         BungeeCore.getAPI().getClanPlayerService().getEntityAsync(uuid,
-                () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid), clanPlayerProfile -> {
+            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid), clanPlayerProfile -> {
 
-                    if (clanPlayerProfile == null) return;
-                    if (!BungeeCore.getAPI().getClanManager().loadAndForce(uuid, clanPlayerProfile.getClanId())) {
-                        BungeeCore.getAPI().getClanPlayerService().deleteEntity(clanPlayerProfile);
-                    }
-                });
+                if (clanPlayerProfile == null) return;
+                if (!BungeeCore.getAPI().getClanManager().loadAndForce(uuid, clanPlayerProfile.getClanId())) {
+                    BungeeCore.getAPI().getClanPlayerService().deleteEntity(clanPlayerProfile);
+                }
+            });
 
     }
-
 
 
 }

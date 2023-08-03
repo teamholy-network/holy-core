@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.listener;
 
-import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
@@ -24,7 +23,6 @@ import java.util.regex.Pattern;
 public class ChatFilterListener implements Listener {
 
     public static final HashMap<UUID, String> LASTMESSAGES = new HashMap<>();
-
 
 
     DiffMatch diffMatch = new DiffMatch();
@@ -54,23 +52,32 @@ public class ChatFilterListener implements Listener {
                             ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "mute " + proxiedPlayer.getName() + " " + actionProfile.filterActionId());
                         }
                     }
-                    case "ban" ->  { ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "ban " + proxiedPlayer.getName() + actionProfile.filterActionId()); event.setCancelled(true); }
-                    case "kick" -> { ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "kick " + proxiedPlayer.getName()) ; event.setCancelled(true); }
-                    case "warn" -> { proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)") ; event.setCancelled(true); }
+                    case "ban" -> {
+                        ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "ban " + proxiedPlayer.getName() + actionProfile.filterActionId());
+                        event.setCancelled(true);
+                    }
+                    case "kick" -> {
+                        ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "kick " + proxiedPlayer.getName());
+                        event.setCancelled(true);
+                    }
+                    case "warn" -> {
+                        proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
+                        event.setCancelled(true);
+                    }
                 }
 
                 DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1136093941612163241/OdV3rYMQtN9wtBU6xcu4IVnQrVPZb5hMveIAmXNFgHynd1JzDxg3QdiD5mzEs8JHyf8-");
                 webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
                 webhook.setUsername("ChatFilter");
                 webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                        .setTitle("Chatfilter")
-                        .addField(proxiedPlayer.getName() +" wrote", event.getMessage(), true)
-                        .addField("may contain", matcher.group(), false)
-                        .addField("Server", proxiedPlayer.getServer().getInfo().getName(), false)
-                        .addField("Action", actionProfile.filterAction(), false)
-                        .setColor(Color.ORANGE)
-                        .setThumbnail("https://visage.surgeplay.com/face/512/" + proxiedPlayer.getUniqueId().toString() + ".png")
-                        .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png"));
+                    .setTitle("Chatfilter")
+                    .addField(proxiedPlayer.getName() + " wrote", event.getMessage(), true)
+                    .addField("may contain", matcher.group(), false)
+                    .addField("Server", proxiedPlayer.getServer().getInfo().getName(), false)
+                    .addField("Action", actionProfile.filterAction(), false)
+                    .setColor(Color.ORANGE)
+                    .setThumbnail("https://visage.surgeplay.com/face/512/" + proxiedPlayer.getUniqueId().toString() + ".png")
+                    .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png"));
 
 
                 webhook.execute();
@@ -85,19 +92,18 @@ public class ChatFilterListener implements Listener {
         if (proxiedPlayer.hasPermission("teamholy.team") || proxiedPlayer.hasPermission("teamholy.perk.holy")) return;
 
         if (LASTMESSAGES.get(proxiedPlayer.getUniqueId()) == null) {
-            LASTMESSAGES.put(proxiedPlayer.getUniqueId(),event.getMessage());
+            LASTMESSAGES.put(proxiedPlayer.getUniqueId(), event.getMessage());
             return;
         }
 
-        if (areMessagesEquals(event.getMessage(),LASTMESSAGES.get(proxiedPlayer.getUniqueId()))) {
+        if (areMessagesEquals(event.getMessage(), LASTMESSAGES.get(proxiedPlayer.getUniqueId()))) {
             proxiedPlayer.sendMessage("§cChatFilter §8× §7Your last message is 70% similar");
             event.setCancelled(true);
         }
 
-        LASTMESSAGES.put(proxiedPlayer.getUniqueId(),event.getMessage());
+        LASTMESSAGES.put(proxiedPlayer.getUniqueId(), event.getMessage());
 
     }
-
 
 
     public boolean areMessagesEquals(String lastMessage, String message) {

@@ -34,13 +34,13 @@ public class CommandListener implements Listener {
         DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
         discordWebhook.setUsername("command");
         discordWebhook.addEmbed(new DiscordWebhook.EmbedObject()
-                .setColor(Color.RED)
-                .setDescription("[" + proxiedPlayer.getServer().getInfo().getName() + "] " + proxiedPlayer.getName() + ": " + event.getMessage())
-                .setFooter(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss").format(LocalDateTime.now()),null));
+            .setColor(Color.RED)
+            .setDescription("[" + proxiedPlayer.getServer().getInfo().getName() + "] " + proxiedPlayer.getName() + ": " + event.getMessage())
+            .setFooter(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss").format(LocalDateTime.now()), null));
 
         BungeeCore.getAPI().getExecutor().submit(discordWebhook::execute);
 
-        COOLDOWNS.put(proxiedPlayer.getUniqueId(),System.currentTimeMillis() + (TimeUnit.SECONDS.toMillis(1) / 2));
+        COOLDOWNS.put(proxiedPlayer.getUniqueId(), System.currentTimeMillis() + (TimeUnit.SECONDS.toMillis(1) / 2));
     }
 
 }
