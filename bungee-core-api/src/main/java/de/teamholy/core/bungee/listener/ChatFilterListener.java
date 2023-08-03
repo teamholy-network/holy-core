@@ -109,7 +109,7 @@ public class ChatFilterListener implements Listener {
         return (differences * 100) / longestMessageSize < 30;
     }
 
-    public void sendDiscordWebhookChatfilter(ProxiedPlayer proxiedPlayer, ChatEvent event, Matcher matcher, ChatFilterManager.FilterActionProfile actionProfile) {
+    private void sendDiscordWebhookChatfilter(ProxiedPlayer proxiedPlayer, ChatEvent event, Matcher matcher, ChatFilterManager.FilterActionProfile actionProfile) {
         DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1136093941612163241/OdV3rYMQtN9wtBU6xcu4IVnQrVPZb5hMveIAmXNFgHynd1JzDxg3QdiD5mzEs8JHyf8-");
         webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
         webhook.setUsername("ChatFilter");
