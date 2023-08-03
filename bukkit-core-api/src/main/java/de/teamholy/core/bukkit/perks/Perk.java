@@ -2,7 +2,6 @@ package de.teamholy.core.bukkit.perks;
 
 import de.teamholy.core.api.utility.Gamemodes;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;

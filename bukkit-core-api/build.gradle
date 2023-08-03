@@ -11,7 +11,7 @@ dependencies {
 
     implementation("eu.koboo:yaml-config:$yamlVersion")
 
-    compileOnly ("com.comphenix.protocol:ProtocolLib:4.8.0")
+    compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
 
     implementation(project(':holy-core-api'))
 }

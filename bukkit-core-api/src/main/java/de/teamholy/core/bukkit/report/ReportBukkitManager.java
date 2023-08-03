@@ -1,7 +1,6 @@
 package de.teamholy.core.bukkit.report;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bukkit.BukkitCore;
@@ -29,7 +28,7 @@ public class ReportBukkitManager implements CommandExecutor {
 
         if (player.hasPermission("teamholy.team")) return false;
 
-        Inventory inventory = new Inventory("§8» §6Reports",9*4);
+        Inventory inventory = new Inventory("§8» §6Reports", 9 * 4);
 
         for (int i = inventory.getInventory().getSize() - 9; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
@@ -37,30 +36,27 @@ public class ReportBukkitManager implements CommandExecutor {
 
 
         reportManager.getAllReports().forEach((uuid, report) -> BukkitCore.getAPI().getPlayerService().getEntityAsync(player.getUniqueId(),
-                () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()),playerProfile -> {
+            () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()), playerProfile -> {
 
-            //14 o 10 g 1 r
+                //14 o 10 g 1 r
 
-            ItemBuilder itemBuilder;
+                ItemBuilder itemBuilder;
 
-            if (!playerProfile.isOnline()) {
-                itemBuilder = new ItemBuilder(Material.INK_SACK,1).setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName());
-            }
-
-
+                if (!playerProfile.isOnline()) {
+                    itemBuilder = new ItemBuilder(Material.INK_SACK, 1).setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName());
+                }
 
 
-
-        }));
+            }));
 
         inventory.setItem(new ItemBuilder(Material.ENDER_PEARL).setName("§8» §6Auto §creport")
-                .setLore(""," §7Views the report of a random"," §7player like §6/reports auto","").build(),29,event -> {
-            sendBungeeCommand(player,"reports auto");
+            .setLore("", " §7Views the report of a random", " §7player like §6/reports auto", "").build(), 29, event -> {
+            sendBungeeCommand(player, "reports auto");
         });
 
         inventory.setItem(new ItemBuilder(Material.ENDER_PEARL).setName("§8» §6Clear §creports")
-                .setLore(""," §7clears all reports"," §7like §6/reports clear","").build(),32,event -> {
-            sendBungeeCommand(player,"reports clear");
+            .setLore("", " §7clears all reports", " §7like §6/reports clear", "").build(), 32, event -> {
+            sendBungeeCommand(player, "reports clear");
         });
 
         player.openInventory(inventory.getInventory());

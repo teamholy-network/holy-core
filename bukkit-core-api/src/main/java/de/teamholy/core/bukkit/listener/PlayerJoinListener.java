@@ -64,17 +64,17 @@ public class PlayerJoinListener implements Listener {
 
             String value;
             String signature;
-            if (UUIDUtility.isCracked(player.getUniqueId(),player.getName())) {
+            if (UUIDUtility.isCracked(player.getUniqueId(), player.getName())) {
                 value = "ewogICJ0aW1lc3RhbXAiIDogMTY4ODc0NTgyNzAxOSwKICAicHJvZmlsZUlkIiA6ICIwMDdkNWE2ZGQxNmU0Y2IxOTdhZTQ3NDBhMjUzMWJlMCIsCiAgInByb2ZpbGVOYW1lIiA6ICJJbUJvb18iLAogIC" +
-                        "JzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTdjMDZ" +
-                        "iMGZlNWE2MjQ0OTA4NGYzODg4ZTYxNDgzZmExNDM2MDQ5YjZhNWRkNmYwYzdkZTU2MGVjMjQ0ZjBjOCIKICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA" +
-                        "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjM0MGMwZTAzZGQyNGExMWIxNWE4YjMzYzJhN2U5ZTMyYWJiMjA1MWIyNDgxZDBiYTdkZWZkNjM1Y2E3YTkzMyIKICAgIH0KICB9Cn0=";
+                    "JzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTdjMDZ" +
+                    "iMGZlNWE2MjQ0OTA4NGYzODg4ZTYxNDgzZmExNDM2MDQ5YjZhNWRkNmYwYzdkZTU2MGVjMjQ0ZjBjOCIKICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA" +
+                    "6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjM0MGMwZTAzZGQyNGExMWIxNWE4YjMzYzJhN2U5ZTMyYWJiMjA1MWIyNDgxZDBiYTdkZWZkNjM1Y2E3YTkzMyIKICAgIH0KICB9Cn0=";
 
                 signature = "PlH8r5lPXfm0gxnd9Kw7o7GFA41vVG29pqAMGI+clYbqMZjPrYSKWhoVOFnpVEMhCMPjGEVyn9wB7xzMX4bG44AnFPPkjys3IIIMaZBHh64vakkLHkbB" +
-                        "BhPcMYIYrH3l03SblVFaYX0rdgq1xNZXMrW0rMIdj0xtwWZSfb8JNk6jLmM1s5o0kI+j7jXaZplZgXmT/B9e4wpMPxUYmgXR2sQWD4djWMEtXZP95KqkFg0HJRNm916iD6iX6XpUC1HKw7KM7L07xYURR" +
-                        "Qn5F4AyETNeUnAHnwZzQC5CQVXoCuwmRtG7ZmtCA2foo6XJ9OUrExo3IcNzFo+sG+hE0eg2Ioa/QzjzGnmSwyTBDsERp/Mj3YEofVO+GjlfywZOt/vULf8o9zPW2t1e22KO6BnaA5FpD4UNtYqMHI5mOqwgI0cI/j3wO+vUI4Y" +
-                        "cfsY9im1iUPYZ8dFyoyC45c/a9OegQvOvcalSq2z0dMeA5mb2HsvoiyJjD3CUJeBRWQESha47m2SMhwVlqJ48Gff6sNI" +
-                        "gm7+6vPRuySmdmXfCqZmPUkbAwqcWsYoUQ+ZhXn4XU7qiqPoeHrE0dt5rab9D6Mj454rhMZJnaI+7MpylVqvEZ7N88xajgOULFV4anj5jCsyCqQPfb7D1Znqfb028RaNTTi1ZvsvHjyzTKk42v5df0tk=";
+                    "BhPcMYIYrH3l03SblVFaYX0rdgq1xNZXMrW0rMIdj0xtwWZSfb8JNk6jLmM1s5o0kI+j7jXaZplZgXmT/B9e4wpMPxUYmgXR2sQWD4djWMEtXZP95KqkFg0HJRNm916iD6iX6XpUC1HKw7KM7L07xYURR" +
+                    "Qn5F4AyETNeUnAHnwZzQC5CQVXoCuwmRtG7ZmtCA2foo6XJ9OUrExo3IcNzFo+sG+hE0eg2Ioa/QzjzGnmSwyTBDsERp/Mj3YEofVO+GjlfywZOt/vULf8o9zPW2t1e22KO6BnaA5FpD4UNtYqMHI5mOqwgI0cI/j3wO+vUI4Y" +
+                    "cfsY9im1iUPYZ8dFyoyC45c/a9OegQvOvcalSq2z0dMeA5mb2HsvoiyJjD3CUJeBRWQESha47m2SMhwVlqJ48Gff6sNI" +
+                    "gm7+6vPRuySmdmXfCqZmPUkbAwqcWsYoUQ+ZhXn4XU7qiqPoeHrE0dt5rab9D6Mj454rhMZJnaI+7MpylVqvEZ7N88xajgOULFV4anj5jCsyCqQPfb7D1Znqfb028RaNTTi1ZvsvHjyzTKk42v5df0tk=";
 
             } else {
                 EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
@@ -83,7 +83,6 @@ public class PlayerJoinListener implements Listener {
                 value = property.getValue();
                 signature = property.getSignature();
             }
-
 
 
             if (skinProfile == null) skinProfile = new SkinProfile();
@@ -103,7 +102,6 @@ public class PlayerJoinListener implements Listener {
 
         });
     }
-
 
 
 }

@@ -54,7 +54,7 @@ public class SkinChanger {
 
     public static GameProfile getGameProfile(Player player) {
         try {
-            GameProfile profile = (GameProfile)player.getClass().getMethod("getProfile", new Class[0]).invoke(player, new Object[0]);
+            GameProfile profile = (GameProfile) player.getClass().getMethod("getProfile", new Class[0]).invoke(player, new Object[0]);
             return profile;
         } catch (Exception e) {
             e.printStackTrace();
