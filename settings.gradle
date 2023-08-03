@@ -1,4 +1,4 @@
-rootProject.name = 'hoy-core'
+rootProject.name = 'holy-core'
 include 'bukkit-core-api'
 include 'bungee-core-api'
 include 'holy-core-api'
