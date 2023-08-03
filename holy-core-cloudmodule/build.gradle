@@ -3,9 +3,9 @@ dependencies {
     implementation("org.redisson:redisson:$redissonVersion")
     implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 
-    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:3.4.0-RELEASE")
-    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:3.4.0-RELEASE")
-    compileOnly("de.dytanic.cloudnet:cloudnet:3.4.0-RELEASE")
+    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
+    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
+    compileOnly("de.dytanic.cloudnet:cloudnet:$cloudnetVersion")
 
     implementation(project(':holy-core-api'))
 }
