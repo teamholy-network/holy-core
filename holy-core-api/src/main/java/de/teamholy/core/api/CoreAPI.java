@@ -16,8 +16,6 @@ import de.teamholy.core.api.entities.staff.StaffService;
 import de.teamholy.core.api.manager.*;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
-import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
-import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -60,8 +58,8 @@ public class CoreAPI {
 
         this.config = new ConfigManager();
         this.mongoManager = new MongoManager(Credentials.
-                of("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin"
-                        , "holy"));
+            of("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin"
+                , "holy"));
 
 
         this.redissonManager = new RedissonManager(this);

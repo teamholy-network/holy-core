@@ -3,10 +3,6 @@ package de.teamholy.core.api.manager;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.Gamemodes;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.redisson.api.RScoredSortedSet;
 
 import java.util.HashMap;
@@ -24,7 +20,7 @@ public class RankingManager {
         for (Gamemodes gamemodes : Gamemodes.values()) {
             for (StatsType statsType : StatsType.values()) {
                 RScoredSortedSet scoredSortedSet = coreAPI.
-                        getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
+                    getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
 
                 sortedSetHashMap.put(scoredSortedSet.getName(), scoredSortedSet);
             }

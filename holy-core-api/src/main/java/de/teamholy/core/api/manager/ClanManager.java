@@ -21,7 +21,7 @@ public class ClanManager {
 
     public boolean loadAndForce(UUID profileId, UUID clanId) {
         Clan clan = clanService.getEntity(clanId,
-                () -> coreAPI.getClanService().getRepository().findFirstById(clanId));
+            () -> coreAPI.getClanService().getRepository().findFirstById(clanId));
         if (clan != null) {
             if (clan.getMembers().contains(profileId)) {
                 clanService.saveEntity(clan, true, false);

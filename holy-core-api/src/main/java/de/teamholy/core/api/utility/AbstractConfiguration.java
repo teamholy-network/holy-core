@@ -23,9 +23,9 @@ public class AbstractConfiguration {
     public AbstractConfiguration(File path, String fileName) {
         this.path = path;
         path.mkdirs();
-        configFile = new File(path, fileName+".json");
+        configFile = new File(path, fileName + ".json");
 
-        if(!configFile.exists()) {
+        if (!configFile.exists()) {
             save();
         }
         load();
@@ -33,10 +33,10 @@ public class AbstractConfiguration {
 
     public <T> AbstractConfiguration append(String key, T value, boolean fullUpdate) {
 
-        if(fullUpdate) {
+        if (fullUpdate) {
             baseObject.add(key, gson.toJsonTree(value));
         } else {
-            if(!baseObject.has(key)) {
+            if (!baseObject.has(key)) {
                 baseObject.add(key, gson.toJsonTree(value));
             }
         }
@@ -58,13 +58,14 @@ public class AbstractConfiguration {
         return list;
     }
 
-    public void save()  {
+    public void save() {
         try {
             FileWriter fileWriter = new FileWriter(configFile);
             fileWriter.write(gson.toJson(baseObject));
             fileWriter.flush();
             fileWriter.close();
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
     }
 
     public void load() {

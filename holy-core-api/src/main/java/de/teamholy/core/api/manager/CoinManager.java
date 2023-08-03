@@ -26,7 +26,7 @@ public class CoinManager {
     public long getCoins(UUID uuid) {
 
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
-                () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
+            () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
         if (playerProfile == null) {
             return 0L;
         }
@@ -35,12 +35,12 @@ public class CoinManager {
 
     public void setCoins(UUID uuid, long coins, boolean forceCache) {
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
-                () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
+            () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
         if (playerProfile == null)
             return;
         long newCoins = coins;
         playerProfile.setCoins(newCoins);
-        sendMessage(uuid,newCoins);
+        sendMessage(uuid, newCoins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
@@ -50,13 +50,13 @@ public class CoinManager {
 
     public void addCoins(UUID uuid, long coins, boolean forceCache) {
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
-                () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
+            () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
         if (playerProfile == null) {
             return;
         }
         long newCoins = playerProfile.getCoins() + coins;
         playerProfile.setCoins(newCoins);
-        sendMessage(uuid,newCoins);
+        sendMessage(uuid, newCoins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
@@ -66,13 +66,13 @@ public class CoinManager {
 
     public void removeCoins(UUID uuid, long coins, boolean forceCache) {
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
-                () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
+            () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
         if (playerProfile == null) {
             return;
         }
         long newCoins = playerProfile.getCoins() - coins;
         playerProfile.setCoins(newCoins);
-        sendMessage(uuid,newCoins);
+        sendMessage(uuid, newCoins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 
@@ -87,6 +87,6 @@ public class CoinManager {
     }
 
     private void sendMessage(UUID uuid, long coins) {
-        coreAPI.getCloudManager().sendCloudMessage("bukkit","coins_update", JsonDocument.newDocument("uuid" , uuid.toString()).append("coins" , coins));
+        coreAPI.getCloudManager().sendCloudMessage("bukkit", "coins_update", JsonDocument.newDocument("uuid", uuid.toString()).append("coins", coins));
     }
 }

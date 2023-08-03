@@ -7,7 +7,6 @@ import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
-import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.Punish;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,22 +44,22 @@ public class CloudManager {
 
     public void announceClanUpdate(UUID uuid) {
         ChannelMessage.builder()
-                .channel("bukkit")
-                .message("clan_update")
-                .json(JsonDocument.newDocument("uuid", uuid.toString()))
-                .targetAll()
-                .build()
-                .send();
+            .channel("bukkit")
+            .message("clan_update")
+            .json(JsonDocument.newDocument("uuid", uuid.toString()))
+            .targetAll()
+            .build()
+            .send();
     }
 
     public void sendCloudMessage(String channel, String message, JsonDocument data) {
         ChannelMessage.builder()
-                .channel(channel)
-                .message(message)
-                .json(data)
-                .targetAll()
-                .build()
-                .send();
+            .channel(channel)
+            .message(message)
+            .json(data)
+            .targetAll()
+            .build()
+            .send();
     }
 
     public boolean isPunishable(UUID uuid) {
