@@ -103,6 +103,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatLogListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new TabCompleteListener());
 
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendCommand("friend", null, "friends"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendListCommand("friendlist", "fl"));
