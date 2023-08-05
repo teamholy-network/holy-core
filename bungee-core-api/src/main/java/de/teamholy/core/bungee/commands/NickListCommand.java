@@ -17,20 +17,23 @@ public class NickListCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        ProxiedPlayer player = (ProxiedPlayer) sender;
-        if (!player.hasPermission("teamholy.team")) return;
+        if (!sender.hasPermission("teamholy.team")) return;
 
 
         Map<UUID, String> nickMap = BungeeCore.getAPI().getNickManager().getNickList();
 
-        if (nickMap.size() == 0) {
-            player.sendMessage("§cThere are currently no nicked players");
+        if (nickMap.isEmpty()) {
+            sender.sendMessage("§cThere are currently no nicked players");
         } else {
-            player.sendMessage("§7There are currently §e" + nickMap.size() + " nicked §7users");
-            player.sendMessage("");
+            sender.sendMessage("§7There are currently §e" + nickMap.size() + " nicked §7users");
+            sender.sendMessage("");
             nickMap.forEach((uuid, s) -> {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(uuid);
-                player.sendMessage(" " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(uuid) + " §8» §e" + s + " §8(§a" + proxiedPlayer.getServer().getInfo().getName() + "§8)");
+                if (proxiedPlayer != null) {
+                    sender.sendMessage("§8- §e" + proxiedPlayer.getName() + " §8(§7" + s + "§8)");
+                } else {
+                    sender.sendMessage("§8- §e" + uuid + " §8(§7" + s + "§8)");
+                }
             });
         }
 
