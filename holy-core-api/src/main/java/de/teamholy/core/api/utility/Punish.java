@@ -98,7 +98,9 @@ public class Punish {
         RACISM(2, "Racism", -1L),
         INSULT(3, "Insulting", TimeUnit.DAYS.toMillis(7)),
         SPAM(4, "Spamming", TimeUnit.DAYS.toMillis(1)),
-        PROVOCATION(5, "Provocation", TimeUnit.DAYS.toMillis(3));
+        PROVOCATION(5, "Provocation", TimeUnit.DAYS.toMillis(3)),
+        CHOICEOFWORDS(6, "Choice of Words", TimeUnit.DAYS.toMillis(7));
+
 
         int id;
         String englishText;
