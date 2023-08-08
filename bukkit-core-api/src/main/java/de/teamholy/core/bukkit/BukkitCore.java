@@ -4,10 +4,12 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
 import de.teamholy.core.bukkit.listener.PlayerJoinListener;
 import de.teamholy.core.bukkit.listener.PlayerQuitListener;
+import de.teamholy.core.bukkit.manager.CloudMessageManager;
 import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
 import lombok.AccessLevel;
@@ -18,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -28,6 +31,9 @@ public class BukkitCore extends JavaPlugin {
 
     @Getter
     private ProtocolManager protocolManager;
+
+    @Getter
+    CloudMessageManager cloudMessageManager;
 
     @Getter
     CoreAPI coreAPI;
@@ -47,6 +53,7 @@ public class BukkitCore extends JavaPlugin {
         coreAPI = new CoreAPI();
         perkCache = new PerkCache();
         perkManager = new PerkManager();
+        cloudMessageManager = new CloudMessageManager(this);
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
 
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
@@ -102,10 +109,23 @@ public class BukkitCore extends JavaPlugin {
                 getPerkCache().getPerkHashMap().put(perk.getId(), perk);
             }
         });
+
+
+
+        BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
+
+           cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
+
+
+
+        }, 0, 50);
+
+
     }
 
     @Override
     public void onDisable() {
+        coreAPI.getMetricsManager().removeMetric(this.getServer().getServerName());
         coreAPI.onDisable();
     }
 

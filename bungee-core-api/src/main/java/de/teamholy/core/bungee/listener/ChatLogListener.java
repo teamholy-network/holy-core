@@ -15,7 +15,7 @@ import java.util.*;
 public class ChatLogListener implements Listener {
 
 
-    public static Map<UUID, LinkedList<Message>> CHATLOGS = new HashMap<>();
+    public static final Map<UUID, LinkedList<Message>> CHATLOGS = new HashMap<>();
     private static final int max = 50;
     private final Gson gson = new Gson();
     private final Type typeOfSrc = new TypeToken<List<Message>>() {

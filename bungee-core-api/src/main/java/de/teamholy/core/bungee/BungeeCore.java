@@ -1,7 +1,10 @@
 package de.teamholy.core.bungee;
 
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
+import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.manager.MetricsManager;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -26,6 +29,7 @@ import de.teamholy.core.bungee.commands.team.TeamCommand;
 import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
 import de.teamholy.core.bungee.listener.*;
 import de.teamholy.core.bungee.manager.*;
+import de.teamholy.core.bungee.util.Helpers;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -53,6 +57,10 @@ public class BungeeCore extends Plugin {
     ChatFilterManager chatFilterManager;
     PublicBroadcastManager publicBroadcastManager;
 
+    MetricsManager metricsManager;
+
+    Helpers helpers;
+
 
     public BungeeCore() {
         instance = this;
@@ -67,6 +75,8 @@ public class BungeeCore extends Plugin {
         chatLogManager = new ChatLogManager();
         publicBroadcastManager = new PublicBroadcastManager();
         chatFilterManager = new ChatFilterManager();
+        metricsManager = new MetricsManager(this.coreAPI);
+        helpers = new Helpers();
 
 
         new LoginListener();
@@ -89,7 +99,7 @@ public class BungeeCore extends Plugin {
         new ClanCommand();
         new CoinsCommand();
         new CustomPunishCommand();
-        new CloudMessageListener();
+        new CloudMessageListener(this.coreAPI);
 
         new StatsCommand(new String[]{"stats", "mstats", "astats", "dstats"}, null);
         new KickCommand(new String[]{"kick", "kim"}, "teamholy.kick");
@@ -152,11 +162,17 @@ public class BungeeCore extends Plugin {
             publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
         }, 30, 30, TimeUnit.MINUTES);
 
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+            JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
+            coreAPI.getMetricsManager().saveMetric(document);
+        }, 0, 2, TimeUnit.SECONDS);
+
     }
 
 
     @Override
     public void onDisable() {
+        coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
         coreAPI.onDisable();
     }
 

@@ -1,8 +1,11 @@
 package de.teamholy.core.bungee.listener;
 
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
+import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.manager.MetricsManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -11,13 +14,26 @@ import java.util.UUID;
 /* copyright by Yassino */
 public class CloudMessageListener {
 
-    public CloudMessageListener() {
+    CoreAPI coreAPI;
+
+
+
+    public CloudMessageListener(CoreAPI coreAPI) {
+        this.coreAPI = coreAPI;
         CloudNetDriver.getInstance().getEventManager().registerListener(this);
     }
 
     @EventListener
     public void onListen(ChannelMessageReceiveEvent event) {
         if (event.getMessage() == null) return;
+
+        if (event.getMessage().equals("ohio:report")) {
+            JsonDocument message = event.getData();
+            coreAPI.getMetricsManager().saveMetric(message);
+            return;
+
+    }
+
         if (event.getMessage().equalsIgnoreCase("command")) {
             UUID uuid = event.getData().get("uuid", UUID.class);
             if (uuid != null) {
