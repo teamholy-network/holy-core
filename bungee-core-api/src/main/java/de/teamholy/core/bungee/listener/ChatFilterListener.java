@@ -51,11 +51,11 @@ public class ChatFilterListener implements Listener {
                         if (punishProfile != null) {
                             return;
                         } else {
-                            event.setCancelled(true);
                             proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
                             proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §c" + Punish.parseMuteReasonById(actionProfile.filterActionId()));
                             ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "mute " + proxiedPlayer.getName() + " " + actionProfile.filterActionId());
                             sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
+                            event.setCancelled(true);
                         }
                     }
                     case "ban" -> {
