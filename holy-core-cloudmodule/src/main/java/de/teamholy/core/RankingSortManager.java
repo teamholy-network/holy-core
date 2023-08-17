@@ -19,7 +19,7 @@ public class RankingSortManager {
         start();
         CloudModuleCore.getInstance().getService().scheduleAtFixedRate(() -> {
             List<GameProfile> gameProfiles = new ArrayList<>(CloudModuleCore.getCoreAPI().getGameService().getRedisCache().values());
-            CloudModuleCore.getInstance().getSortManager().insertStats(gameProfiles);
+            insertStats(gameProfiles);
         }, 30, 30, TimeUnit.SECONDS);
     }
 

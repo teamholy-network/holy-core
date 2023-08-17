@@ -37,6 +37,7 @@ public class CloudMessageListener {
 
 
         String type = message.getString("type");
+        if (type == null) return;
         String target = message.getString("target");
         String method = message.getString("method");
 
