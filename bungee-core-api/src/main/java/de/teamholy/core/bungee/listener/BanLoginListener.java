@@ -10,6 +10,7 @@ import de.teamholy.core.bungee.util.BanUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -87,8 +88,10 @@ public class BanLoginListener implements Listener {
 
                 bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, false, true);
 
-                loginEvent.setCancelled(true);
-                loginEvent.setCancelReason(BanUtil.generateBanScreen(banProfile));
+                BungeeCore.getInstance().getProxy().getScheduler().schedule(BungeeCore.getInstance(),() -> {
+                    ProxiedPlayer player = BungeeCore.getInstance().getProxy().getPlayer(loginEvent.getConnection().getName());
+                    if (player != null) player.disconnect(BanUtil.generateBanScreen(banProfile));
+                },2,TimeUnit.SECONDS);
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
                 return true;
             }
