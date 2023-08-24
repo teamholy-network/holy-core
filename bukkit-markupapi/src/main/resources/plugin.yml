@@ -1,0 +1,11 @@
+name: MarkupAPI
+version: 1.9
+author: Koboo
+main: eu.koboo.markup.MarkupAPI
+depend: [ ProtocolLib ]
+commands:
+  hardnick:
+  nick:
+  nickpreset:
+  nicklist:
+  reloadpresets:

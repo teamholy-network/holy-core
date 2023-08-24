@@ -1,0 +1,6 @@
+# Disable specific commands
+register-cmd-hardnick: true
+register-cmd-nick: true
+register-cmd-nicklist: true
+register-cmd-nickpreset: true
+register-cmd-reloadpresets: true
