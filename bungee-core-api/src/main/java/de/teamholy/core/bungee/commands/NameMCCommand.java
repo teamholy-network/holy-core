@@ -11,10 +11,9 @@ public class NameMCCommand extends Command {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-        commandSender.sendMessage("§8§m---------§f§lNAMEMC§8§m---------");
-        commandSender.sendMessage("§7Link§8: §fteamholy.de/go/namemc");
-        commandSender.sendMessage("§7Like us to get §6Premium §7& §dJoinme tokens");
-        commandSender.sendMessage("§7Claim your rewards in the lobby at the npc");
+        commandSender.sendMessage("§8§m---------§6§lVOTE§8§m---------");
+        commandSender.sendMessage("§7Link§8: §fteamholy.de/vote");
+        commandSender.sendMessage("§7Claim your rewards on the website");
         commandSender.sendMessage("§8§m-------------------------");
     }
 }

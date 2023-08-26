@@ -46,7 +46,6 @@ public class ChatLogListener implements Listener {
                 playerChatLog.removeFirst();
             }
 
-
             CHATLOGS.put(playerUUID, playerChatLog);
 
         }
