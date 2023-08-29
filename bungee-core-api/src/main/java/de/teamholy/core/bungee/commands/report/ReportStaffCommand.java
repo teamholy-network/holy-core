@@ -17,12 +17,11 @@ import net.md_5.bungee.api.plugin.Command;
 import java.util.Map;
 import java.util.UUID;
 
-/* copyright by Yassino */
+/* copyright by Yassino and charonxyz */
 public class ReportStaffCommand extends Command {
 
-
-    private String prefix = "§cReports §8× §7";
-    private ReportManager reportHandler = BungeeCore.getAPI().getReportManager();
+    private final String prefix = "§cReports §8× §7";
+    private final ReportManager reportHandler = BungeeCore.getAPI().getReportManager();
 
     public ReportStaffCommand(String name) {
         super(name, "teamholy.reports", "reports");
@@ -35,7 +34,7 @@ public class ReportStaffCommand extends Command {
             return;
 
         if (args.length == 0) {
-            sendHelp(player);
+            player.chat("/reportsgui");
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("finish")) {
 
@@ -49,7 +48,7 @@ public class ReportStaffCommand extends Command {
 
 
                 if (report == null) {
-                    player.sendMessage(prefix + "You dont edit any report!");
+                    player.sendMessage(TextComponent.fromLegacyText(prefix + "You dont edit any report!"));
                     return;
                 }
 
@@ -60,14 +59,21 @@ public class ReportStaffCommand extends Command {
                 }
 
 
-                player.sendMessage(prefix + "You finished the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + "§7!");
+                player.sendMessage(TextComponent.fromLegacyText(prefix +
+                    "You finished the report of "
+                    + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget())
+                    + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + "§7!"));
+
                 reportHandler.removeReport(report.getTarget());
 
             } else if (args[0].equalsIgnoreCase("auto")) {
 
                 for (Report report : reportHandler.getAllReports().values()) {
                     if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
-                        player.sendMessage(prefix + "You already took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
+                        player.sendMessage(TextComponent.fromLegacyText(prefix +
+                            "You already took over the report of "
+                            + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget())
+                            + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())));
                         return;
                     } else if (report.getViewer() == null) {
                         player.chat("/reports chat " + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
@@ -75,7 +81,7 @@ public class ReportStaffCommand extends Command {
                 }
 
 
-                player.sendMessage(prefix + "§aThere is currently no report open");
+                player.sendMessage(TextComponent.fromLegacyText(prefix + "§aThere is currently no report open"));
 
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (!player.hasPermission("reports.clear")) {
@@ -90,6 +96,8 @@ public class ReportStaffCommand extends Command {
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("");
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §7cleared the §4§lreports§7!");
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("");
+            } else {
+                sendHelp(player);
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("accept")) {
@@ -152,9 +160,12 @@ public class ReportStaffCommand extends Command {
                 reportHandler.removeReport(uuid);
                 player.sendMessage(prefix + "Deleted report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
 
+            } else {
+                sendHelp(player);
             }
+        } else {
+            sendHelp(player);
         }
-
     }
 
     public void sendHelp(ProxiedPlayer player) {

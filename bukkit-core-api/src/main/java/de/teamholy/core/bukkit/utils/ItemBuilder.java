@@ -61,10 +61,13 @@ public class ItemBuilder {
         this.itemStack = new ItemStack(material, amount);
     }
 
-    public ItemBuilder(Material material, int amount, byte subID) {
+    public ItemBuilder(Material material, int amount, int subID) {
         this.itemStack = new ItemStack(material, amount, (short) subID);
     }
 
+    public ItemBuilder(Material material, int amount, byte subID) {
+        this.itemStack = new ItemStack(material, amount, (short) subID);
+    }
 
     public ItemBuilder setName(String displayName) {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
@@ -195,6 +198,11 @@ public class ItemBuilder {
         ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.spigot().setUnbreakable(true);
         this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
+    public ItemBuilder setId(int id) {
+        this.itemStack.setDurability((short)id);
         return this;
     }
 
