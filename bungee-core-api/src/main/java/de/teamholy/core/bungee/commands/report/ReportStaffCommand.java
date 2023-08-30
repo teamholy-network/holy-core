@@ -46,7 +46,6 @@ public class ReportStaffCommand extends Command {
                         report = reportTemp;
                 }
 
-
                 if (report == null) {
                     player.sendMessage(TextComponent.fromLegacyText(prefix + "You dont edit any report!"));
                     return;
@@ -76,19 +75,18 @@ public class ReportStaffCommand extends Command {
                             + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())));
                         return;
                     } else if (report.getViewer() == null) {
-                        player.chat("/reports accept " + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
+                        acceptReport(player, BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
+                        return;
                     }
                 }
-
 
                 player.sendMessage(TextComponent.fromLegacyText(prefix + "§aThere is currently no report open"));
 
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (!player.hasPermission("reports.clear")) {
-                    player.sendMessage(prefix + "you dont have any permissions to clear a report");
+                    player.sendMessage(prefix + "You dont have any permissions to clear a report");
                     return;
                 }
-
 
                 reportHandler.getReportRMap().clear();
 
@@ -101,44 +99,7 @@ public class ReportStaffCommand extends Command {
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("accept")) {
-                String name = args[1];
-                UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(name);
-                if (uuid == null) {
-                    player.sendMessage(prefix + "This player doesn't exist");
-                    return;
-                }
-
-                if (!reportHandler.isReported(uuid)) {
-                    player.sendMessage(prefix + "This player wasn't reported");
-                    return;
-                }
-
-                if (ProxyServer.getInstance().getPlayer(uuid) == null) {
-                    player.sendMessage(prefix + "This player isn't §aonline §7anymore");
-                    return;
-                }
-
-
-                for (Report report : reportHandler.getAllReports().values()) {
-                    if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
-                        player.sendMessage(prefix + "You already took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
-                        return;
-                    }
-                }
-
-                Report report = reportHandler.getReport(uuid);
-
-                if (report.getViewer() != null) {
-                    player.sendMessage(prefix + "The report was already took over from " + BungeeCore.getAPI().getCloudManager().getColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()));
-                    return;
-                }
-
-                report.setViewer(player.getUniqueId());
-                report.setViewerSince(System.currentTimeMillis());
-                player.sendMessage(prefix + "You took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
-                BungeeCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", "jump " + name));
-                reportHandler.addReport(report);
-
+                acceptReport(player, args[1]);
             } else if (args[0].equalsIgnoreCase("remove")) {
                 String name = args[1];
                 if (!player.hasPermission("reports.remove")) {
@@ -166,6 +127,46 @@ public class ReportStaffCommand extends Command {
         } else {
             sendHelp(player);
         }
+    }
+
+    private void acceptReport(ProxiedPlayer player, String name) {
+        UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(name);
+        if (uuid == null) {
+            player.sendMessage(prefix + "This player doesn't exist");
+            return;
+        }
+
+        if (!reportHandler.isReported(uuid)) {
+            player.sendMessage(prefix + "This player wasn't reported");
+            return;
+        }
+
+        if (ProxyServer.getInstance().getPlayer(uuid) == null) {
+            player.sendMessage(prefix + "This player isn't §aonline §7anymore");
+            return;
+        }
+
+
+        for (Report report : reportHandler.getAllReports().values()) {
+            if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
+                player.sendMessage(prefix + "You already took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
+                return;
+            }
+        }
+
+        Report report = reportHandler.getReport(uuid);
+
+        if (report.getViewer() != null) {
+            player.sendMessage(prefix + "The report was already took over from " + BungeeCore.getAPI().getCloudManager().getColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()));
+            return;
+        }
+
+        report.setViewer(player.getUniqueId());
+        report.setViewerSince(System.currentTimeMillis());
+        player.sendMessage(prefix + "You took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
+        BungeeCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", "jump " + name));
+        reportHandler.addReport(report);
+
     }
 
     private void openBukkitInventory(ProxiedPlayer player) {

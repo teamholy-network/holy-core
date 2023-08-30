@@ -93,16 +93,19 @@ public class ReportBukkitManager implements CommandExecutor {
         PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService()
             .getEntity(report.getTarget(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(report.getTarget()));
         if (playerProfile == null) return;
+
+
         Inventory inventory = new Inventory("§8» §cReport §8× §7" + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), 9 * 3);
+        for (int i = 0; i < inventory.getInventory().getSize(); i++) {
+            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
+        }
+
 
         ItemBuilder teleport = new ItemBuilder(playerProfile.isOnline() ? Material.ENDER_PEARL : Material.BARRIER)
             .setName((playerProfile.isOnline() ? "§8» §6Teleport" : "§cOffline"));
 
         ItemBuilder close = new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§8» §cClose Report");
 
-        for (int i = 0; i < inventory.getInventory().getSize(); i++) {
-            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
-        }
         inventory.setItem(teleport.build(), 11, event -> {
             if (playerProfile.isOnline()) {
                 sendBungeeCommand(player, "reports accept " + playerProfile.getPlayerName());
@@ -125,10 +128,18 @@ public class ReportBukkitManager implements CommandExecutor {
                 "§8┃ §7Reason §8» §c" + report.getReason())
             .build(), 13);
 
-        inventory.setItem(close.build(), 15, event -> sendBungeeCommand(player, "reports finish"));
+        inventory.setItem(close.build(), 15, event -> {
+            if (!playerProfile.isOnline()) {
+                reportManager.removeReport(report.getTarget());
+                player.closeInventory();
+                player.performCommand("reportsgui");
+                return;
+            }
+            sendBungeeCommand(player, "reports finish");
+        });
         inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), 18, event -> {
             player.closeInventory();
-            player.chat("/reportsgui");
+            player.performCommand("reportsgui");
         });
         player.openInventory(inventory.getInventory());
     }
