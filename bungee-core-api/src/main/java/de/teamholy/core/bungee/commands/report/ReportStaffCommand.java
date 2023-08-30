@@ -34,7 +34,7 @@ public class ReportStaffCommand extends Command {
             return;
 
         if (args.length == 0) {
-            player.chat("/reportsgui");
+            openBukkitInventory(player);
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("finish")) {
 
@@ -76,7 +76,7 @@ public class ReportStaffCommand extends Command {
                             + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())));
                         return;
                     } else if (report.getViewer() == null) {
-                        player.chat("/reports chat " + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
+                        player.chat("/reports accept " + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
                     }
                 }
 
@@ -166,6 +166,13 @@ public class ReportStaffCommand extends Command {
         } else {
             sendHelp(player);
         }
+    }
+
+    private void openBukkitInventory(ProxiedPlayer player) {
+        BungeeCore.getAPI().getCloudManager().sendCloudMessage(
+            "bukkit",
+            "reportsgui",
+            JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", "reportsgui"));
     }
 
     public void sendHelp(ProxiedPlayer player) {

@@ -36,9 +36,6 @@ public class CloudMessageManager  {
 
         CloudNetDriver.getInstance().getMessenger().sendChannelMessage(channel, message, command);
 
-
-
-
     }
 
     private double getProcessCpuLoad() {
