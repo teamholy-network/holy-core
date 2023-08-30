@@ -130,12 +130,12 @@ public class ReportBukkitManager implements CommandExecutor {
 
         inventory.setItem(close.build(), 15, event -> {
             if (!playerProfile.isOnline()) {
-                reportManager.removeReport(report.getTarget());
-                player.closeInventory();
-                player.performCommand("reportsgui");
-                return;
+                sendBungeeCommand(player, "reports remove " + playerProfile.getPlayerName());
+            } else {
+                sendBungeeCommand(player, "reports finish");
             }
-            sendBungeeCommand(player, "reports finish");
+            player.closeInventory();
+            Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> player.performCommand("reportsgui"), 2L);
         });
         inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), 18, event -> {
             player.closeInventory();
