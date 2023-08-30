@@ -17,7 +17,6 @@ public class CloudMessageListener {
     CoreAPI coreAPI;
 
 
-
     public CloudMessageListener(CoreAPI coreAPI) {
         this.coreAPI = coreAPI;
         CloudNetDriver.getInstance().getEventManager().registerListener(this);
@@ -32,7 +31,7 @@ public class CloudMessageListener {
             coreAPI.getMetricsManager().saveMetric(message);
             return;
 
-    }
+        }
 
         if (event.getMessage().equalsIgnoreCase("command")) {
             UUID uuid = event.getData().get("uuid", UUID.class);

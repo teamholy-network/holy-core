@@ -35,7 +35,7 @@ public class CloudMessageListener {
 
         JsonDocument message = event.getData();
 
-        if (event.getMessage().equalsIgnoreCase("command")) {
+        if (event.getMessage().equalsIgnoreCase("bukkitcommand")) {
             UUID uuid = message.get("uuid", UUID.class);
             if (uuid == null) return;
             Player targetPlayer = bukkitCore.getServer().getPlayer(uuid);
