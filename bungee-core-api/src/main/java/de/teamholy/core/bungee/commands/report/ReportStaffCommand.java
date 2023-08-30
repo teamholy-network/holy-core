@@ -171,8 +171,9 @@ public class ReportStaffCommand extends Command {
     private void openBukkitInventory(ProxiedPlayer player) {
         BungeeCore.getAPI().getCloudManager().sendCloudMessage(
             "bukkit",
-            "reportsgui",
-            JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", "reportsgui"));
+            "command",
+            JsonDocument.newDocument("uuid", player.getUniqueId())
+                .append("command", "reportsgui"));
     }
 
     public void sendHelp(ProxiedPlayer player) {

@@ -35,12 +35,17 @@ public class CloudMessageListener {
 
         JsonDocument message = event.getData();
 
-        if (event.getMessage().equalsIgnoreCase("reportsgui")) {
+        if (event.getMessage().equalsIgnoreCase("command")) {
             UUID uuid = message.get("uuid", UUID.class);
             if (uuid == null) return;
             Player targetPlayer = bukkitCore.getServer().getPlayer(uuid);
             if (targetPlayer != null) {
-                Bukkit.getScheduler().runTaskLater(bukkitCore, () -> targetPlayer.performCommand("reportsgui"), 1L);
+                String command = message.getString("command");
+                if (command == null) {
+                    System.out.println("Command is null");
+                    return;
+                }
+                Bukkit.getScheduler().runTaskLater(bukkitCore, () -> targetPlayer.performCommand(command), 1L); // 1 tick delay due to asynchronous execution
             }
         } else {
             String type = message.getString("type");
