@@ -28,6 +28,8 @@ public class ReportBukkitManager implements CommandExecutor {
 
     private final ReportManager reportManager = BukkitCore.getAPI().getReportManager();
 
+    private final String prefix = "§cReport §8× §7";
+
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -35,6 +37,10 @@ public class ReportBukkitManager implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (!player.hasPermission("teamholy.team")) return false;
+        if (reportManager.getAllReports().isEmpty()) {
+            player.sendMessage(prefix + "§cThere are no open reports!");
+            return true;
+        }
 
         Inventory inventory = new Inventory("§8» §cReports", 9 * 4);
 
@@ -42,64 +48,43 @@ public class ReportBukkitManager implements CommandExecutor {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
 
-        reportManager.getAllReports().forEach((uuid, report) -> {
-            PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService()
-                .getEntity(report.getTarget(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(report.getTarget()));
-            if (playerProfile == null) return;
-
-            ItemBuilder itemBuilder;
-
-            if (!playerProfile.isOnline()) {
-                itemBuilder = new ItemBuilder(Material.INK_SACK, 1)
-                    .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
-                    .setLore("§cOffline");
-            } else {
-                String nick = BukkitCore.getAPI().getNickManager().getNickFromUUID(report.getTarget());
-
-                itemBuilder = new ItemBuilder(Material.INK_SACK, 1, report.getViewer() == null ? 10 : 14)
-                    .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName() + " " + (nick != null ? "§8(§5§lNICKED §7- §e" + nick + "§8)" : ""))
-                    .setLore(" ", "§8┃ §7State §8» §a" + (report.getViewer() == null ? "§aOpen" : "§6In Progress"),
-                        "§8┃ §7Date §8» §e" + convertTime(report.getTime()),
-                        "§8┃ §7Reason §8» §e" + report.getReason());
-            }
-            if (inventory.getInventory().contains(itemBuilder.build())) return;
-            inventory.setItem(itemBuilder.build(), inventory.getInventory().firstEmpty(), event -> openPlayerReport(player, report));
-
-        });
+        reportManager.getAllReports().forEach((uuid, report) -> addReportToInventory(player, inventory, report, false));
 
         inventory.setItem(new
             ItemBuilder(Material.FISHING_ROD)
             .setName("§8» §6Auto §creport")
             .setLore("", " §7Views the report of a random", " §7player like §6/reports auto", "")
-            .build(), 30, event ->
-        {
-            sendBungeeCommand(player, "reports auto");
-        });
+            .build(), 29, event ->
+            sendBungeeCommand(player, "reports auto"));
 
         inventory.setItem(new
-            ItemBuilder(Material.BARRIER)
+            ItemBuilder(Material.LAVA_BUCKET)
             .setName("§8» §6Clear §creports")
             .setLore("", " §7Clears all reports", " §7like §6/reports clear", "")
-            .build(), 32, event ->
-        {
-            sendBungeeCommand(player, "reports clear");
-        });
+            .build(), 31, event ->
+            sendBungeeCommand(player, "reports clear"));
+
+        inventory.setItem(new
+            ItemBuilder(Material.PAPER)
+            .setName("§8» §6List §creports")
+            .setLore("", " §7Lists your current §creports", "")
+            .build(), 33, event ->
+            openCurrentReports(player));
 
         player.openInventory(inventory.getInventory());
         return false;
     }
 
-    private void openPlayerReport(Player player, Report report) {
+    private void openPlayerReport(Player player, Report report, boolean ownReport) {
         PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService()
             .getEntity(report.getTarget(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(report.getTarget()));
         if (playerProfile == null) return;
 
 
-        Inventory inventory = new Inventory("§8» §cReport §8× §7" + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), 9 * 3);
+        Inventory inventory = new Inventory("§8» " + prefix + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), 9 * 3);
         for (int i = 0; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
-
 
         ItemBuilder teleport = new ItemBuilder(playerProfile.isOnline() ? Material.ENDER_PEARL : Material.BARRIER)
             .setName((playerProfile.isOnline() ? "§8» §6Teleport" : "§cOffline"));
@@ -135,23 +120,78 @@ public class ReportBukkitManager implements CommandExecutor {
                 sendBungeeCommand(player, "reports finish");
             }
             player.closeInventory();
-            Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> player.performCommand("reportsgui"), 2L);
+            Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+                if (ownReport) {
+                    if (!openCurrentReports(player)) {
+                        player.performCommand("reportsgui");
+                    }
+                }
+                else player.performCommand("reportsgui");
+            }, 3L);
         });
         inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), 18, event -> {
             player.closeInventory();
-            player.performCommand("reportsgui");
+            if (ownReport) {
+                if (!openCurrentReports(player)) {
+                    player.performCommand("reportsgui");
+                }
+            }
+            else player.performCommand("reportsgui");
         });
         player.openInventory(inventory.getInventory());
     }
 
-    private void sendBungeeCommand(Player player, String command) {
-        BukkitCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", command));
+    private boolean openCurrentReports(Player player) {
+        if (reportManager.getAllReports().isEmpty()) {
+            player.sendMessage(prefix + "§cThere are no open reports!");
+            return false;
+        }
+        Inventory inventory = new Inventory("§8» " + prefix + "§6Your Reports", 9 * 4);
+        for (int i = inventory.getInventory().getSize() - 9; i < inventory.getInventory().getSize(); i++) {
+            inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
+        }
+        inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), inventory.getInventory().getSize() - 9, event -> {
+            player.closeInventory();
+            player.performCommand("reportsgui");
+        });
+
+        reportManager.getAllReports().forEach((uuid, report) -> {
+            if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
+                addReportToInventory(player, inventory, report, true);
+            }
+        });
+
+        player.openInventory(inventory.getInventory());
+        return true;
     }
 
-    public String getCurrentServer(UUID player) {
-        ICloudPlayer cloudPlayer = BukkitCore.getAPI().getCloudManager().getPlayerManager().getOnlinePlayer(player);
-        if (cloudPlayer == null) return "§cUnknown";
-        return cloudPlayer.getConnectedService().getServerName();
+    private void addReportToInventory(Player player, Inventory inventory, Report report, boolean ownReport) {
+        PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService()
+            .getEntity(report.getTarget(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(report.getTarget()));
+        if (playerProfile == null) return;
+
+        ItemBuilder itemBuilder;
+
+        if (!playerProfile.isOnline()) {
+            itemBuilder = new ItemBuilder(Material.INK_SACK, 1, 1)
+                .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
+                .setLore("§cOffline");
+        } else {
+            String nick = BukkitCore.getAPI().getNickManager().getNickFromUUID(report.getTarget());
+
+            itemBuilder = new ItemBuilder(Material.INK_SACK, 1, report.getViewer() == null ? 10 : 14)
+                .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName() + " " + (nick != null ? "§8(§5§lNICKED §7- §e" + nick + "§8)" : ""))
+                .setLore(" ",
+                    "§8┃ §7State §8» §a" + (report.getViewer() == null ? "§aOpen" : "§6In Progress"),
+                    "§8┃ §7Date §8» §e" + convertTime(report.getTime()),
+                    "§8┃ §7Reason §8» §e" + report.getReason());
+        }
+        if (inventory.getInventory().contains(itemBuilder.build())) return;
+        inventory.setItem(itemBuilder.build(), inventory.getInventory().firstEmpty(), event -> openPlayerReport(player, report, ownReport));
+    }
+
+    private void sendBungeeCommand(Player player, String command) {
+        BukkitCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", command));
     }
 
     public static String convertTime(long timestampInMillis) {
