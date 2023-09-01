@@ -20,6 +20,7 @@ public class PerkPlayerProfile {
     Integer stickPerk;
     Integer blockPerk;
     Integer chatPerk;
+    Boolean cBanner;
     List<Integer> ownedPerks;
 
 }

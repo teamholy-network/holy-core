@@ -6,6 +6,7 @@ import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -13,12 +14,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /* copyright by Yassino */
 public class PerkManager {
 
     private String prefix = "§6Perks§8× §7";
+
+    private List<Pattern> patterns;
 
     public ItemBuilder getPerk(Player player, PerkType perkType) {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
@@ -69,14 +73,55 @@ public class PerkManager {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 15).setName("§8//").build(), i);
         }
 
-        inventory.setItem(new ItemBuilder(Material.STICK, 1).setName("§8» §6Stick").build(), 2, (event) ->
+        inventory.setItem(new ItemBuilder(Material.STICK, 1).setName("§8» §6Stick").build(), 1, (event) ->
             openSecondPerkInventory(player, PerkType.STICK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
-        inventory.setItem(new ItemBuilder(Material.PAPER, 1).setName("§8» §6Chat").build(), 4, (event) ->
+        inventory.setItem(new ItemBuilder(Material.PAPER, 1).setName("§8» §6Chat").build(), 3, (event) ->
             openSecondPerkInventory(player, PerkType.CHAT, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
-        inventory.setItem(new ItemBuilder(Material.SANDSTONE, 1).setName("§8» §6Block").build(), 6, (event) ->
+        inventory.setItem(new ItemBuilder(Material.SANDSTONE, 1).setName("§8» §6Block").build(), 5, (event) ->
             openSecondPerkInventory(player, PerkType.BLOCK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
+
+
+
+        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+
+
+
+        inventory.setItem(new ItemBuilder(Material.BANNER, 1).setName("§8» §6Custom Head Banner")
+                .setLore(" " , " §7A custom banner on your head ", " §7with your own design! " , " §7you can change them ", " §7on the §6§lwebsite! ", " §7(§ehttps://teamholy.de/profile/" + player.getDisplayName() + "§7)", " ",
+                    ( perkPlayerProfile.getOwnedPerks().contains(99999) ? "§aYou own this" : "§7This perk costs §e10000 §6coins")
+                    )
+            .setBannerMeta(DyeColor.WHITE, new ArrayList<>()).build(), 7, (event) -> {
+
+            PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+
+            if (perkPlayerProfile.getOwnedPerks().contains(99999)) {
+                player.sendMessage(prefix + "§7You already own this perk!");
+                player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 2f, 2f);
+                player.closeInventory();
+            } else {
+                if (!(playerProfile.getCoins() >= 10000)) {
+                    player.sendMessage(prefix + "§cYou dont have enough coins!");
+                    player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 2f, 2f);
+                    return;
+                }
+
+                perkPlayerProfile.getOwnedPerks().add(99999);
+                playerProfile.setCoins(playerProfile.getCoins() - 10000);
+                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+                BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
+                BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
+
+                player.sendMessage(prefix + "§7You successfully bought the §eCustom Banner §7perk for §e10000 §6coins!");
+                player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 2f);
+                player.closeInventory();
+            }
+
+
+
+            });
+
 
         player.openInventory(inventory.getInventory());
     }
@@ -143,6 +188,7 @@ public class PerkManager {
 
         player.openInventory(inventory.getInventory());
     }
+
 
     private void showPerks(Player player, PerkType perkType, PerkManager.SortOptionPerk sortOptionPerk, PerkManager.SortOptionPlayer sortOptionPlayer, Inventory inventory) {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
