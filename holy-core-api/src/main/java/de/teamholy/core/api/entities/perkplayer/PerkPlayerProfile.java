@@ -1,5 +1,6 @@
 package de.teamholy.core.api.entities.perkplayer;
 
+import de.teamholy.core.api.utility.CustomBanner;
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,7 @@ public class PerkPlayerProfile {
     Integer stickPerk;
     Integer blockPerk;
     Integer chatPerk;
-    Boolean cBanner;
     List<Integer> ownedPerks;
+    CustomBanner customBanner;
 
 }

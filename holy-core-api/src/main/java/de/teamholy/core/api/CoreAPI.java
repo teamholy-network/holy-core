@@ -103,7 +103,7 @@ public class CoreAPI {
     public CoreAPI(Credentials credentials) {
         CloudManager cloudManager1;
 
-        this.config = new ConfigManager();
+        config = null;
         this.mongoManager = new MongoManager(credentials);
 
 

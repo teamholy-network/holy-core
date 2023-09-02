@@ -9,6 +9,7 @@ import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
+import de.teamholy.core.api.utility.CustomBanner;
 import de.teamholy.core.api.utility.PartyInviteAllowance;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.BungeeCore;
@@ -90,6 +91,7 @@ public class PostLoginListener implements Listener {
             perkPlayerProfile.setStickPerk(100);
             perkPlayerProfile.setChatPerk(200);
             perkPlayerProfile.setOwnedPerks(new ArrayList<>());
+            perkPlayerProfile.setCustomBanner(new CustomBanner());
 
 
         } else {

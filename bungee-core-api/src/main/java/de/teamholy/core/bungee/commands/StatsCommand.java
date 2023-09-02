@@ -2,6 +2,7 @@ package de.teamholy.core.bungee.commands;
 
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
+import de.teamholy.core.api.utility.EloRank;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
@@ -85,6 +86,11 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage("      " + nameColor + " §8- §" + gamemodes.getColor() + gamemodes);
         player.sendMessage("");
         player.sendMessage(" §7Ranking §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes, statsType, uuid));
+        player.sendMessage("");
+
+        int elo = (int) gameProfile.getStat(gamemodes.toString(),statsType,"elo");
+
+        player.sendMessage(" §7Elo §8» §" + gamemodes.getColor() + elo + " §8(" + EloRank.getEloRank(elo).getName() + "§8)");
         player.sendMessage("");
         gamemodes.getStatKeys().forEach(string -> {
             String stat = toFancy(string);

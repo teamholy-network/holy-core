@@ -113,6 +113,8 @@ public class BukkitCore extends JavaPlugin {
             }
         });
 
+        getPerkCache().getPerkHashMap().put(99999,cBanner);
+
 
 
         BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {

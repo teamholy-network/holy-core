@@ -18,12 +18,10 @@ public class ChatLogListener implements Listener {
     public static final Map<UUID, LinkedList<Message>> CHATLOGS = new HashMap<>();
     private static final int max = 50;
     private final Gson gson = new Gson();
+
+    // copyright chatgpt by gregor
     private final Type typeOfSrc = new TypeToken<List<Message>>() {
     }.getType();
-
-    public ChatLogListener() {
-        ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
-    }
 
     @EventHandler
     public void onChat(ChatEvent event) {
