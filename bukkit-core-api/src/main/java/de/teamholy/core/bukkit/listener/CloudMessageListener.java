@@ -6,6 +6,7 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
+import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
@@ -78,22 +79,28 @@ public class CloudMessageListener {
 
             String target = message.getString("target");
             String activated = message.getString("activated");
-
-            System.out.println("target: " + target + " activated: " + activated);
-
+            UUID playerUUID = null;
             Player player = bukkitCore.getServer().getPlayer(target);
 
-            PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+            PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+
+            if (player != null) {
+                playerUUID = player.getUniqueId();
+            } else {
+                playerUUID = playerProfile.getPlayerId();
+            }
+
+            PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(playerUUID);
 
             if (activated.equals("true")) {
-                customBannerManager.setAndPlaceCustomBanner(player, "WHITE");
+                customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
                 perkPlayerProfile.getCustomBanner().setActivated(true);
             } else {
                 customBannerManager.removeCustomBanner(player);
                 perkPlayerProfile.getCustomBanner().setActivated(false);
             }
 
-            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(playerUUID, perkPlayerProfile);
             BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
 
 

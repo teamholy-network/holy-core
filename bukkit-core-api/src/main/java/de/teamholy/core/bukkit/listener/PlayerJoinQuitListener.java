@@ -34,8 +34,6 @@ public class PlayerJoinQuitListener implements Listener {
     private PacketManager packetmanager;
 
 
-
-
     public PlayerJoinQuitListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
         this.customBannerManager = new CustomBannerManager(bukkitCore);
@@ -51,8 +49,13 @@ public class PlayerJoinQuitListener implements Listener {
 
         bukkitCore.getCoreAPI().getExecutor().submit(() -> {
 
+            PerkPlayerProfile perkPlayerProfile;
+
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
-            PerkPlayerProfile perkPlayerProfile = BukkitCore.getAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+            if (perkPlayerProfile == null) {
+                perkPlayerProfile = BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            }
 
             Perk stick = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
             Perk block = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
@@ -67,12 +70,15 @@ public class PlayerJoinQuitListener implements Listener {
                 if (!chat.isRankPerk() && chat.getId() != 200) needUpdate = true;
             }
 
+
+            String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby"};
+
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
 
-
-               if (CloudNetDriver.getInstance().getComponentName().startsWith("Lobby") || CloudNetDriver.getInstance().getComponentName().startsWith("Premium") || CloudNetDriver.getInstance().getComponentName().startsWith("MLG") ||
-               CloudNetDriver.getInstance().getComponentName().startsWith("Test")) {
-                    customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                for (String supportedServer : supportedServers) {
+                    if (BukkitCore.getInstance().getGroup().startsWith(supportedServer)) {
+                        customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                    }
                 }
 
             }
