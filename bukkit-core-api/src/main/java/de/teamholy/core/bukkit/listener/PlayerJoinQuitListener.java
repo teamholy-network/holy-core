@@ -65,7 +65,7 @@ public class PlayerJoinQuitListener implements Listener {
             }
 
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
-                //customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
             }
 
             if (needUpdate) {

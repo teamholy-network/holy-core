@@ -48,10 +48,15 @@ public class CloudMessageListener {
                 Bukkit.getScheduler().runTaskLater(bukkitCore, () -> targetPlayer.performCommand(command), 1L); // 1 tick delay due to asynchronous execution
             }
         } else if (event.getMessage().equalsIgnoreCase("troll")) {
+
+
+
             String type = message.getString("type");
             if (type == null) return;
             String target = message.getString("target");
             String method = message.getString("method");
+
+            System.out.println("type: " + type + " target: " + target + " method: " + method);
 
             if (type.equals("troll")) {
                 Player player = bukkitCore.getServer().getPlayer(target);

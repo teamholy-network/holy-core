@@ -41,7 +41,7 @@ public class CustomBannerManager {
 
 
             }
-        }.runTaskLater(bukkitCore, 20L);
+        }.runTaskLater(bukkitCore, 0L);
 
 
 
