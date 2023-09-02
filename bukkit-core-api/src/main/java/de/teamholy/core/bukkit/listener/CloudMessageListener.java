@@ -5,7 +5,9 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
+import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,9 +22,12 @@ public class CloudMessageListener {
     private final BukkitCore bukkitCore;
     private final PacketManager packetManager;
 
+    private CustomBannerManager customBannerManager;
+
     public CloudMessageListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
         this.packetManager = new PacketManager(bukkitCore);
+        this.customBannerManager = new CustomBannerManager(bukkitCore);
         CloudNetDriver.getInstance().getEventManager().registerListener(this);
     }
 
@@ -69,6 +74,36 @@ public class CloudMessageListener {
                     case "5" -> packetManager.sendPlayerToHornyJail(player) /* Hornyjail */;
                 }
             }
+        } else if (event.getMessage().equalsIgnoreCase("banner")) {
+
+            String target = message.getString("target");
+            String activated = message.getString("activated");
+            String baseColor = message.getString("baseColor");
+
+            System.out.println("target: " + target + " activated: " + activated);
+
+            Player player = bukkitCore.getServer().getPlayer(target);
+
+            PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+
+            if (player == null) return;
+
+            if (activated.equals("true")) {
+                customBannerManager.setAndPlaceCustomBanner(player, baseColor);
+                perkPlayerProfile.getCustomBanner().setActivated(true);
+            } else {
+                customBannerManager.removeCustomBanner(player);
+                perkPlayerProfile.getCustomBanner().setActivated(false);
+            }
+
+            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+            BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
+
+
+
+
+
+
         }
     }
 
