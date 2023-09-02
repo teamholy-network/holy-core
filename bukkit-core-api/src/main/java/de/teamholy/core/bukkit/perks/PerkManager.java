@@ -108,13 +108,13 @@ public class PerkManager {
 
                 if (!perkPlayerProfile.getCustomBanner().isActivated()) {
 
-                    player.sendMessage(prefix + "§7You successfully activated the §eCustom Banner §7perk!");
+                    player.sendMessage(prefix + "§7You successfully activated your §eCustom Banner §7!");
                     player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
                     perkPlayerProfile.getCustomBanner().setActivated(true);
                     customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
                 } else {
 
-                    player.sendMessage(prefix + "§7You successfully deactivated the §eCustom Banner §7perk!");
+                    player.sendMessage(prefix + "§7You successfully deactivated your §eCustom Banner §7!");
                     player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
                     perkPlayerProfile.getCustomBanner().setActivated(false);
                     customBannerManager.removeCustomBanner(player);
