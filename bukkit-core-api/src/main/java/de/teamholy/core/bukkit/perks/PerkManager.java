@@ -4,6 +4,7 @@ import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
 import org.bukkit.DyeColor;
@@ -23,6 +24,12 @@ public class PerkManager {
     private String prefix = "§6Perks§8× §7";
 
     private List<Pattern> patterns;
+
+    private CustomBannerManager customBannerManager;
+
+    public PerkManager(BukkitCore bukkitCore) {
+        this.customBannerManager = new CustomBannerManager(bukkitCore);
+    }
 
     public ItemBuilder getPerk(Player player, PerkType perkType) {
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
@@ -104,13 +111,13 @@ public class PerkManager {
                     player.sendMessage(prefix + "§7You successfully activated the §eCustom Banner §7perk!");
                     player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
                     perkPlayerProfile.getCustomBanner().setActivated(true);
-
+                    customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
                 } else {
 
                     player.sendMessage(prefix + "§7You successfully deactivated the §eCustom Banner §7perk!");
                     player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
                     perkPlayerProfile.getCustomBanner().setActivated(false);
-
+                    customBannerManager.removeCustomBanner(player);
                 }
 
                 BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);

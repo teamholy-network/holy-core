@@ -50,7 +50,7 @@ public class BukkitCore extends JavaPlugin {
     public void onEnable() {
         coreAPI = new CoreAPI();
         perkCache = new PerkCache();
-        perkManager = new PerkManager();
+        perkManager = new PerkManager(this);
         cloudMessageManager = new CloudMessageManager(this);
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
 
