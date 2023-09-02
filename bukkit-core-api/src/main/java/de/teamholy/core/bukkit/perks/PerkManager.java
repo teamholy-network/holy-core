@@ -86,19 +86,35 @@ public class PerkManager {
 
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
 
+        String dieLore = perkPlayerProfile.getCustomBanner().isActivated() ? "§l§aselected" : "§7Click to §l§aselect";
 
 
         inventory.setItem(new ItemBuilder(Material.BANNER, 1).setName("§8» §6Custom Head Banner")
                 .setLore(" " , " §7A custom banner on your head ", " §7with your own design! " , " §7you can change them ", " §7on the §6§lwebsite! ", " §7(§ehttps://teamholy.de/profile/" + player.getDisplayName() + "§7)", " ",
-                    ( perkPlayerProfile.getOwnedPerks().contains(99999) ? "§aYou own this" : "§7This perk costs §e10000 §6coins")
+                    ( perkPlayerProfile.getOwnedPerks().contains(99999) ? dieLore : "§7This perk costs §e10000 §6coins")
                     )
             .setBannerMeta(DyeColor.WHITE, new ArrayList<>()).build(), 7, (event) -> {
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
             if (perkPlayerProfile.getOwnedPerks().contains(99999)) {
-                player.sendMessage(prefix + "§7You already own this perk!");
-                player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 2f, 2f);
+
+                if (!perkPlayerProfile.getCustomBanner().isActivated()) {
+
+                    player.sendMessage(prefix + "§7You successfully activated the §eCustom Banner §7perk!");
+                    player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
+                    perkPlayerProfile.getCustomBanner().setActivated(true);
+
+                } else {
+
+                    player.sendMessage(prefix + "§7You successfully deactivated the §eCustom Banner §7perk!");
+                    player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
+                    perkPlayerProfile.getCustomBanner().setActivated(false);
+
+                }
+
+                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+                BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 player.closeInventory();
             } else {
                 if (!(playerProfile.getCoins() >= 10000)) {

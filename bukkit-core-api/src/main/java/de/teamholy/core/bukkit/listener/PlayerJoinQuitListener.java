@@ -6,6 +6,8 @@ import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.CustomBannerManager;
+import de.teamholy.core.bukkit.manager.PacketManager;
 import de.teamholy.core.bukkit.perks.Perk;
 import de.teamholy.core.bukkit.perks.PerkRankType;
 import lombok.AccessLevel;
@@ -18,14 +20,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PlayerJoinListener implements Listener {
+public class PlayerJoinQuitListener implements Listener {
 
     BukkitCore bukkitCore;
 
-    public PlayerJoinListener(BukkitCore bukkitCore) {
+    private CustomBannerManager customBannerManager;
+    private PacketManager packetmanager;
+
+
+    public PlayerJoinQuitListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
+        this.customBannerManager = new CustomBannerManager(bukkitCore);
+        this.packetmanager = new PacketManager(bukkitCore);
         Bukkit.getPluginManager().registerEvents(this, bukkitCore);
     }
 
@@ -44,12 +55,17 @@ public class PlayerJoinListener implements Listener {
             Perk block = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
             Perk chat = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getChatPerk());
 
+
             boolean needUpdate = false;
 
             if (!player.hasPermission(PerkRankType.PREMIUM.getPermission())) {
                 if (!stick.isRankPerk() && stick.getId() != 100) needUpdate = true;
                 if (!block.isRankPerk() && block.getId() != 0) needUpdate = true;
                 if (!chat.isRankPerk() && chat.getId() != 200) needUpdate = true;
+            }
+
+            if (perkPlayerProfile.getCustomBanner().isActivated()) {
+                customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
             }
 
             if (needUpdate) {
@@ -101,6 +117,19 @@ public class PlayerJoinListener implements Listener {
             Bukkit.getScheduler().runTask(bukkitCore, () -> MarkupAPI.changeSkin(player,finalValue,finalSignature));*/
 
         });
+    }
+
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        UUID playerUUID = event.getPlayer().getUniqueId();
+        bukkitCore.getPerkCache().getPerkPlayerProfileHashMap().remove(playerUUID);
+        customBannerManager.removeCustomBanner(event.getPlayer());
+        if (packetmanager.gameStatePacketLoopTask.containsKey(playerUUID)) {
+            packetmanager.gameStatePacketLoopTask.get(playerUUID).cancel();
+            packetmanager.gameStatePacketLoopTask.remove(playerUUID);
+        }
+
     }
 
 

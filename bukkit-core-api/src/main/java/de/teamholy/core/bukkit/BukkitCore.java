@@ -4,12 +4,11 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
-import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
-import de.teamholy.core.bukkit.listener.PlayerJoinListener;
-import de.teamholy.core.bukkit.listener.PlayerQuitListener;
+import de.teamholy.core.bukkit.listener.PlayerJoinQuitListener;
 import de.teamholy.core.bukkit.manager.CloudMessageManager;
+import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
 import lombok.AccessLevel;
@@ -20,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -59,9 +57,9 @@ public class BukkitCore extends JavaPlugin {
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        new PlayerJoinListener(this);
-        new PlayerQuitListener(this);
-        //new PacketListener(this); /* Du bist schwul */
+        new PlayerJoinQuitListener(this);
+        //new PacketListener(this); /* Du bist schwul*/
+        new CustomBannerManager(this);
         new UsePerkListener();
         new CloudMessageListener(this);
 
