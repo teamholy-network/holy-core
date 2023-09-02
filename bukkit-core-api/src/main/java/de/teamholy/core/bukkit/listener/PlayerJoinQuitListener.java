@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.listener;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.UUIDUtility;
@@ -31,6 +32,8 @@ public class PlayerJoinQuitListener implements Listener {
 
     private CustomBannerManager customBannerManager;
     private PacketManager packetmanager;
+
+
 
 
     public PlayerJoinQuitListener(BukkitCore bukkitCore) {
@@ -65,7 +68,13 @@ public class PlayerJoinQuitListener implements Listener {
             }
 
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
-                customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+
+
+               if (CloudNetDriver.getInstance().getComponentName().startsWith("Lobby") || CloudNetDriver.getInstance().getComponentName().startsWith("Premium") || CloudNetDriver.getInstance().getComponentName().startsWith("MLG") ||
+               CloudNetDriver.getInstance().getComponentName().startsWith("Test")) {
+                    customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                }
+
             }
 
             if (needUpdate) {

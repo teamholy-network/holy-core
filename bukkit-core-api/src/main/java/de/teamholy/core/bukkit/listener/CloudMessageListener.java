@@ -78,7 +78,6 @@ public class CloudMessageListener {
 
             String target = message.getString("target");
             String activated = message.getString("activated");
-            String baseColor = message.getString("baseColor");
 
             System.out.println("target: " + target + " activated: " + activated);
 
@@ -86,10 +85,8 @@ public class CloudMessageListener {
 
             PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
 
-            if (player == null) return;
-
             if (activated.equals("true")) {
-                customBannerManager.setAndPlaceCustomBanner(player, baseColor);
+                customBannerManager.setAndPlaceCustomBanner(player, "WHITE");
                 perkPlayerProfile.getCustomBanner().setActivated(true);
             } else {
                 customBannerManager.removeCustomBanner(player);
