@@ -61,7 +61,7 @@ public class StatsResetTask implements Runnable {
             RMapCache<UUID, GameProfile> rMapCache = CloudModuleCore.getCoreAPI().getGameService().getRedisCache();
             rMapCache.values().forEach(gameProfile -> {
                 for (Gamemodes gamemode : Gamemodes.values()) {
-                    gamemode.getStatKeys().forEach(s -> gameProfile.setStat(gamemode.toString(), statsType, s, 0));
+                    gamemode.getStatKeys().forEach(statKey -> gameProfile.setStat(gamemode.toString(), statsType, statKey.getName(),statKey.getDefaultValue()));
                 }
                 boolean forceCache = rMapCache.remainTimeToLive(gameProfile.getPlayerId()) == -1;
                 CloudModuleCore.getCoreAPI().getGameService().saveEntity(gameProfile, forceCache, true);
@@ -72,9 +72,9 @@ public class StatsResetTask implements Runnable {
              */
             List<FieldUpdate> fieldUpdateList = Lists.newLinkedList();
             for (Gamemodes value : Gamemodes.values()) {
-                if (value.getStatKeys().size() != 1 && !value.getStatKeys().get(0).isEmpty()) {
-                    for (String statKey : value.getStatKeys()) {
-                        fieldUpdateList.add(FieldUpdate.set("statsMap." + value + "." + statsType + "." + statKey, 0));
+                if (value.getStatKeys().size() != 0) {
+                    for (Gamemodes.StatKey statKey : value.getStatKeys()) {
+                        fieldUpdateList.add(FieldUpdate.set("statsMap." + value + "." + statsType + "." + statKey.getName(), statKey.getDefaultValue()));
                     }
                 }
             }

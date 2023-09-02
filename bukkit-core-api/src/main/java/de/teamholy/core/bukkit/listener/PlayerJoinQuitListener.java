@@ -65,7 +65,7 @@ public class PlayerJoinQuitListener implements Listener {
             }
 
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
-                customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                //customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
             }
 
             if (needUpdate) {
@@ -124,7 +124,7 @@ public class PlayerJoinQuitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
         bukkitCore.getPerkCache().getPerkPlayerProfileHashMap().remove(playerUUID);
-        customBannerManager.removeCustomBanner(event.getPlayer());
+        //customBannerManager.removeCustomBanner(event.getPlayer());
         if (packetmanager.gameStatePacketLoopTask.containsKey(playerUUID)) {
             packetmanager.gameStatePacketLoopTask.get(playerUUID).cancel();
             packetmanager.gameStatePacketLoopTask.remove(playerUUID);

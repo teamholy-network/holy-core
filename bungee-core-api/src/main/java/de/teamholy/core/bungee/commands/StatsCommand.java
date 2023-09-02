@@ -2,7 +2,7 @@ package de.teamholy.core.bungee.commands;
 
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
-import de.teamholy.core.api.utility.EloRank;
+import de.teamholy.core.api.utility.TrophieLeague;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
@@ -90,15 +90,16 @@ public class StatsCommand extends SenderCommand {
 
         int elo = (int) gameProfile.getStat(gamemodes.toString(),statsType,"elo");
 
-        player.sendMessage(" §7Elo §8» §" + gamemodes.getColor() + elo + " §8(" + EloRank.getEloRank(elo).getName() + "§8)");
+        player.sendMessage(" §7Trophies §8» §" + gamemodes.getColor() + elo + " §8(" + TrophieLeague.getEloRank(elo).getName() + "§8)");
         player.sendMessage("");
         gamemodes.getStatKeys().forEach(string -> {
-            String stat = toFancy(string);
-            long value = gameProfile.getStat(gamemodes.toString(), statsType, string);
+            if (!string.getName().equalsIgnoreCase("trophies")) {
+                String stat = toFancy(string.getName());
+                long value = gameProfile.getStat(gamemodes.toString(), statsType, string.getName());
 
 
-            player.sendMessage(" §7" + stat + " §8» §" + gamemodes.getColor() + value);
-
+                player.sendMessage(" §7" + stat + " §8» §" + gamemodes.getColor() + value);
+            }
         });
 
         player.sendMessage("");

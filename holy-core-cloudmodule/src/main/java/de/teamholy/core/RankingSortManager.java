@@ -52,9 +52,7 @@ public class RankingSortManager {
                     for (StatsType statsType : StatsType.values()) {
                         RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + statsType.toString());
                         int stat = (int) gameProfile.getStat(gamemodes.toString(), statsType, gamemodes.getRankingKey());
-                        if (stat != 1000) {
-                            sortedSet.addAsync(stat, gameProfile.getPlayerId());
-                        }
+                        if (stat > 1000) sortedSet.addAsync(stat, gameProfile.getPlayerId());
                     }
                 }
             }

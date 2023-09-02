@@ -1,8 +1,10 @@
 package de.teamholy.core.api.utility;
 
+import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
@@ -12,15 +14,52 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum Gamemodes {
 
-    MLGRUSH("6", "elo", List.of("kills", "deaths", "played_games", "won_games", "destroyed_beds"), List.of("MLGRush")),
-    BEDWARS("c", "elo", List.of("kills", "deaths", "played_games", "won_games", "destroyed_beds"), List.of("BW2x1", "BW4x2", "BW8x1")),
-    KNOCKBACKFFA("e", "elo", List.of("kills", "deaths"), List.of("KnockbackFFA")),
-    SGFFA("a", "elo", List.of("kills", "deaths"), List.of("SGFFA")),
-    CLUTCHES("b", "", List.of(""), List.of("Clutches")),
-    BRIDGE("b", "", List.of(""), List.of("Bridge")),
-    RUSHBW("c","elo", List.of("kills", "deaths", "played_games", "won_games", "destroyed_beds"), List.of("RBW2x1", "RBW4x2", "RBW8x1"));
+    MLGRUSH("6", "trophies", List.of(
+        new StatKey("kills",0),
+        new StatKey("deaths",0),
+        new StatKey("played_games",0),
+        new StatKey("won_games",0),
+        new StatKey("destroyed_beds",0),
+        new StatKey("trophies",1000)
+    ), List.of("MLGRush")),
+    BEDWARS("c", "trophies", List.of(
+            new StatKey("kills",0),
+            new StatKey("deaths",0),
+            new StatKey("played_games",0),
+            new StatKey("won_games",0),
+            new StatKey("destroyed_beds",0),
+            new StatKey("trophies",1000))
+        , List.of("BW2x1", "BW4x2", "BW8x1")),
+    KNOCKBACKFFA("e", "trophies", List.of(
+        new StatKey("kills",0),
+        new StatKey("deaths",0),
+        new StatKey("trophies",1000)
+    ), List.of("KnockbackFFA")),
+    SGFFA("a", "trophies", List.of(
+        new StatKey("kills",0),
+        new StatKey("deaths",0),
+        new StatKey("trophies",1000)
+    ), List.of("SGFFA")),
+    CLUTCHES("b", "", Lists.newArrayList(), List.of("Clutches")),
+    BRIDGE("b", "", Lists.newArrayList(), List.of("Bridge")),
+    RUSHBW("c","trophies", List.of(
+        new StatKey("kills",0),
+        new StatKey("deaths",0),
+        new StatKey("played_games",0),
+        new StatKey("won_games",0),
+        new StatKey("destroyed_beds",0),
+        new StatKey("trophies",1000)
+    ), List.of("RBW2x1", "RBW4x2", "RBW8x1"));
 
     String color, rankingKey;
-    List<String> statKeys;
+    List<StatKey> statKeys;
     List<String> cloudGroups;
+
+    @Getter @AllArgsConstructor
+    public static class StatKey {
+
+        private String name;
+        private int defaultValue;
+
+    }
 }
