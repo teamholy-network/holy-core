@@ -88,7 +88,7 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage(" §7Ranking §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes, statsType, uuid));
         player.sendMessage("");
 
-        int elo = (int) gameProfile.getStat(gamemodes.toString(),statsType,"elo");
+        int elo = (int) gameProfile.getStat(gamemodes.toString(),statsType,"trophies");
 
         player.sendMessage(" §7Trophies §8» §" + gamemodes.getColor() + elo + " §8(" + TrophieLeague.getEloRank(elo).getName() + "§8)");
         player.sendMessage("");
