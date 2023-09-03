@@ -74,7 +74,7 @@ public class StatsResetTask implements Runnable {
                 for (Gamemodes value : Gamemodes.values()) {
                     RScoredSortedSet scoredSortedSet = CloudModuleCore.getCoreAPI().getRedissonManager().getRedissonClient().getScoredSortedSet(value.toString() + "_" + StatsType.DAILY);
 
-                    scoredSortedSet.entryRange(0, 0).forEach(o -> {
+                    scoredSortedSet.entryRangeReversed(0, 0).forEach(o -> {
                         ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) o;
                         if (!championRanks.contains(scoredEntry.getValue())) championRanks.add(scoredEntry.getValue());
                         IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(scoredEntry.getValue());

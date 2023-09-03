@@ -56,8 +56,11 @@ public enum PlayerRank {
         255, 255, 0),
     PREMIUM("Premium", "§6Premium §8┃ §6", "§6Premium §8┃ §6", "§6", 8700,
         204, 102, 0),
-    PLAYER("Player", "§7", "§7", "§7", 9000,
-        80, 80, 80);
+    //PLAYER("Player", "§7", "§7", "§7", 9000,
+      //  80, 80, 80);
+
+    PLAYER("Player", "§6Premium §8┃ §6", "§6Premium §8┃ §6", "§6", 8700,
+                204, 102, 0);
 
     String name;
     String chatPrefix;
