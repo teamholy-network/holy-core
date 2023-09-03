@@ -4,24 +4,31 @@ import com.google.common.collect.Lists;
 import de.dytanic.cloudnet.CloudNet;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.RankingSortManager;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
+import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.Gamemodes;
+import de.teamholy.core.api.utility.PlayerRank;
 import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
 import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
 import org.redisson.api.RMapCache;
 import org.redisson.api.RScoredSortedSet;
+import org.redisson.client.protocol.ScoredEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static jodd.util.StringUtil.repeat;
+import static jodd.util.StringUtil.uncapitalize;
 
 /* copyright by Yassino */
 public class StatsResetTask implements Runnable {
@@ -62,6 +69,25 @@ public class StatsResetTask implements Runnable {
     private void resetStatsFromGameProfiles(StatsType statsType) {
         CloudModuleCore.getCoreAPI().getExecutor().execute(() -> {
 
+            List<UUID> championRanks = Lists.newArrayList();
+            if (statsType == StatsType.DAILY) {
+                for (Gamemodes value : Gamemodes.values()) {
+                    RScoredSortedSet scoredSortedSet = CloudModuleCore.getCoreAPI().getRedissonManager().getRedissonClient().getScoredSortedSet(value.toString() + "_" + StatsType.DAILY);
+
+                    scoredSortedSet.entryRange(0, 0).forEach(o -> {
+                        ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) o;
+                        if (!championRanks.contains(scoredEntry.getValue())) championRanks.add(scoredEntry.getValue());
+                        IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(scoredEntry.getValue());
+                        assert permissionUser != null;
+                        permissionUser.addGroup("Champion",1, TimeUnit.DAYS);
+                        CloudNetDriver.getInstance().getPermissionManagement().updateUser(permissionUser);
+                    });
+
+                }
+            }
+
+
+
             /*
             Reset all in cache
              */
@@ -98,14 +124,29 @@ public class StatsResetTask implements Runnable {
             else if (statsType == StatsType.MONTHLY) CloudModuleCore.MONTHLY = true;
 
             try {
-                CloudModuleCore.getCoreAPI().getCloudManager().getPlayerManager().getOnlinePlayersAsync().get().forEach(iCloudPlayer -> {
+                CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class).getOnlinePlayersAsync().get().forEach(iCloudPlayer -> {
                     iCloudPlayer.getPlayerExecutor().sendChatMessage(centerMessage("§f§lSTATSRESET"));
-                    iCloudPlayer.getPlayerExecutor().sendChatMessage("§7The " + statsType.toBeauty() + "§8-§7stats §7were §creset§8!");
+                    iCloudPlayer.getPlayerExecutor().sendChatMessage(centerMessage("§7The " + statsType.toBeauty() + "§8-§7stats §7were §creset§8!"));
+                    if (statsType == StatsType.DAILY) {
+
+
+
+                        if (championRanks.size() != 0) {
+                            iCloudPlayer.getPlayerExecutor().sendChatMessage(" ");
+                            StringBuilder stringBuilder = new StringBuilder();
+                            championRanks.forEach(uuid -> stringBuilder.append("§6" + CloudModuleCore.getCoreAPI().getUuidManager().getName(uuid) + "§8,"));
+                            stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(),"");
+
+                            iCloudPlayer.getPlayerExecutor().sendChatMessage(centerMessage("§3Champion §7ranks§8: " + stringBuilder));
+                            iCloudPlayer.getPlayerExecutor().sendChatMessage(" ");
+                        }
+                    }
                 });
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
             System.out.println("STATSRESET - " + statsType);
+            System.out.println("Champions = " + championRanks.size());
 
         });
 

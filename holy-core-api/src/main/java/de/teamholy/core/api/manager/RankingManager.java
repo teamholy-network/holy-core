@@ -12,7 +12,7 @@ import java.util.UUID;
 public class RankingManager {
 
     private CoreAPI coreAPI;
-    private HashMap<String, RScoredSortedSet> sortedSetHashMap = new HashMap<>();
+    private final HashMap<String, RScoredSortedSet> sortedSetHashMap = new HashMap<>();
 
     public RankingManager(CoreAPI coreAPI) {
         this.coreAPI = coreAPI;
