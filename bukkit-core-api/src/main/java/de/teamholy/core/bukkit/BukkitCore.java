@@ -76,7 +76,7 @@ public class BukkitCore extends JavaPlugin {
             new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
 
         Perk cBanner =
-            new Perk(99999,"Custom Banner",Material.BANNER,(byte) 0,PerkType.CBANNER,10000,PerkRankType.PLAYER,null);
+            new Perk(99999,"Custom Banner",Material.BANNER,(byte) 0,PerkType.CBANNER,15000,PerkRankType.PLAYER,null);
 
         AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"), "perks");
         configuration.load();
