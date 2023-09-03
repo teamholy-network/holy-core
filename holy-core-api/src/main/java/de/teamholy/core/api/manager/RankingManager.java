@@ -35,7 +35,11 @@ public class RankingManager {
     }
 
     public UUID getUUIDFromRank(Gamemodes gamemodes, StatsType statsType, int rank) {
-        return null;
+        try {
+            return (UUID) sortedSetHashMap.get(gamemodes + "_" + statsType).entryRangeReversed((rank+1),(rank+1)).stream().toList().get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
 }

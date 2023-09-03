@@ -46,7 +46,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
         saveConfig();
         service = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
-        service.scheduleAtFixedRate(new StatsResetTask(), 10, 60, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(new StatsResetTask(), 60, 60, TimeUnit.SECONDS);
 
         sortManager = new RankingSortManager();
 

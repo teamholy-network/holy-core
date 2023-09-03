@@ -5,6 +5,7 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.game.GameProfile;
+import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
 import de.teamholy.core.api.utility.CustomBanner;
@@ -183,6 +184,9 @@ public class BungeeCore extends Plugin {
             coreAPI.getMetricsManager().saveMetric(document);
         }, 0, 2, TimeUnit.SECONDS);
 
+        System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,1) + "------------------------------");
+        System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,2) + "------------------------------");
+        System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,0) + "------------------------------");
 
     }
 
