@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.AbstractConfiguration;
+import de.teamholy.core.bukkit.commands.XyzCommand;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
 import de.teamholy.core.bukkit.listener.PlayerJoinQuitListener;
 import de.teamholy.core.bukkit.manager.CloudMessageManager;
@@ -62,6 +63,8 @@ public class BukkitCore extends JavaPlugin {
         new CustomBannerManager(this);
         new UsePerkListener();
         new CloudMessageListener(this);
+
+        getCommand("xyz").setExecutor(new XyzCommand(this));
 
         Perk defaultStick =
             new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);

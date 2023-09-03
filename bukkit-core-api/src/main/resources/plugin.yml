@@ -7,3 +7,4 @@ depend: [ ProtocolLib, CloudNet-Bridge ]
 commands:
     reportsgui:
         aliases: [ rgui, reportstaffgui ]
+    xyz:
