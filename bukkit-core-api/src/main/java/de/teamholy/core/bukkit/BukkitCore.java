@@ -34,6 +34,8 @@ public class BukkitCore extends JavaPlugin {
     @Getter
     CloudMessageManager cloudMessageManager;
 
+    CustomBannerManager customBannerManager;
+
     @Getter
     CoreAPI coreAPI;
     @Getter
@@ -65,6 +67,9 @@ public class BukkitCore extends JavaPlugin {
         new CloudMessageListener(this);
 
         getCommand("xyz").setExecutor(new XyzCommand(this));
+
+        customBannerManager.loadBanners();
+
 
         Perk defaultStick =
             new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);

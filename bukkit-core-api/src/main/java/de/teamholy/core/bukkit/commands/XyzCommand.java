@@ -30,7 +30,10 @@ public class XyzCommand implements CommandExecutor {
         }
 
 
-        customBannerManager.setAndPlaceCustomBanner1(player, "RED", "{BlockEntityTag:{Base:0,Patterns:[{Pattern:cs,Color:11},{Pattern:hhb,Color:14},{Pattern:bs,Color:11},{Pattern:bo,Color:11},{Pattern:ms,Color:14},{Pattern:ts,Color:11}]}}");
+        customBannerManager.loadBanners(); // DEBUG
+
+
+        customBannerManager.setAndPlaceCustomBanner1(player, Integer.parseInt(patternCode));
 
         player.sendMessage("test" + " " + patternCode);
 

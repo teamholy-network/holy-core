@@ -1,6 +1,11 @@
 package de.teamholy.core.bukkit.manager;
 
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.perks.Banner;
+import de.teamholy.core.bukkit.perks.BannerPattern;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
@@ -10,7 +15,11 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.block.banner.Pattern;
 
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -18,6 +27,9 @@ import java.util.regex.Matcher;
 public class CustomBannerManager {
 
     private BukkitCore bukkitCore;
+
+    private HashMap<Integer, Banner> bannerHashMap = new HashMap<>();
+
 
     public CustomBannerManager(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
@@ -37,6 +49,7 @@ public class CustomBannerManager {
 
                     if (bannerMeta != null) {
                         bannerMeta.setBaseColor(DyeColor.valueOf(baseColor));
+
                         banner.setItemMeta(bannerMeta);
                     }
 
@@ -54,39 +67,46 @@ public class CustomBannerManager {
 
     }
 
-    public void setAndPlaceCustomBanner1(Player player, String baseColor, String patternCode) {
-
-        List<Pattern> patterns = parsePattern(patternCode);
+    public void setAndPlaceCustomBanner1(Player player, int bannerId) {
 
 
+        Banner customBanner = bannerHashMap.get(bannerId);
 
+        if (customBanner != null) {
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {
-                    ItemStack banner = new ItemStack(Material.BANNER);
-                    BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
-
-                    if (bannerMeta != null) {
-                        bannerMeta.setBaseColor(DyeColor.valueOf(baseColor));
-                        bannerMeta.setPatterns(patterns);
-                        banner.setItemMeta(bannerMeta);
-                    }
-
-                    player.getInventory().setHelmet(banner);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
+            List<org.bukkit.block.banner.Pattern> bukkitPatterns = new ArrayList<>();
+            for (BannerPattern customPattern : customBanner.getPatterns()) {
+                DyeColor dyeColor = DyeColor.valueOf(customPattern.getColor());
+                PatternType patternType = PatternType.valueOf(customPattern.getPattern());
+                org.bukkit.block.banner.Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
+                bukkitPatterns.add(bukkitPattern);
             }
-        }.runTaskLater(bukkitCore, 0L);
 
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        ItemStack banner = new ItemStack(Material.BANNER);
+                        BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
 
+                        if (bannerMeta != null) {
+                            bannerMeta.setBaseColor(DyeColor.valueOf(customBanner.getBaseColor()));
+                            bannerMeta.setPatterns(bukkitPatterns);
+                            banner.setItemMeta(bannerMeta);
+                        }
 
-
+                        player.getInventory().setHelmet(banner);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.runTaskLater(bukkitCore, 0L);
+        } else {
+            return;
+        }
     }
+
+
 
 
     public List<Pattern> parsePattern(String blockEntityTag) {
@@ -133,17 +153,6 @@ public class CustomBannerManager {
         };
     }
 
-
-
-
-
-
-
-
-
-
-
-
     public void removeCustomBanner(Player player) {
         ItemStack currentHelmet = player.getInventory().getHelmet();
             if (currentHelmet != null && currentHelmet.getType() == Material.BANNER) {
@@ -153,7 +162,27 @@ public class CustomBannerManager {
      }
 
 
+    public void loadBanners() {
+        try {
+            String coreFolderPath = "plugins/core/";
+            File bannersFile = new File(coreFolderPath + "banners.json");
 
+            if (bannersFile.exists()) {
+                FileInputStream fis = new FileInputStream(bannersFile);
+                ObjectMapper mapper = new ObjectMapper();
+                List<Banner> banners = mapper.readValue(fis, new TypeReference<>() {});
+
+                for (Banner banner : banners) {
+                    bannerHashMap.put(banner.getId(), banner);
+                    System.out.println("Banner " + banner.getName() + " loaded");
+                }
+            } else {
+                System.out.println("banners not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
