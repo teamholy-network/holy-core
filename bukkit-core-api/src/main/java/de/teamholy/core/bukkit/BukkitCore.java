@@ -68,6 +68,7 @@ public class BukkitCore extends JavaPlugin {
 
         getCommand("xyz").setExecutor(new XyzCommand(this));
 
+        customBannerManager = new CustomBannerManager(this);
         customBannerManager.loadBanners();
 
 
