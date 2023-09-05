@@ -8,6 +8,7 @@ import net.md_5.bungee.api.plugin.Command;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /* copyright by Yassino */
 public class NickListCommand extends Command {
@@ -19,24 +20,24 @@ public class NickListCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         if (!sender.hasPermission("teamholy.team")) return;
 
-
         Map<UUID, String> nickMap = BungeeCore.getAPI().getNickManager().getNickList();
 
-        if (nickMap.isEmpty()) {
+        Map<UUID, String> onlineNickMap = nickMap.entrySet()
+            .stream()
+            .filter(entry -> ProxyServer.getInstance().getPlayer(entry.getKey()) != null)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        if (onlineNickMap.isEmpty()) {
             sender.sendMessage("§cThere are currently no nicked players");
         } else {
-            sender.sendMessage("§7There are currently §e" + nickMap.size() + " nicked §7users");
+            sender.sendMessage("§7There are currently §e" + onlineNickMap.size() + " nicked §7users");
             sender.sendMessage("");
-            nickMap.forEach((uuid, s) -> {
+            onlineNickMap.forEach((uuid, s) -> {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(uuid);
                 if (proxiedPlayer != null) {
                     sender.sendMessage("§8- §e" + proxiedPlayer.getName() + " §8(§7" + s + "§8)");
-                } else {
-                    sender.sendMessage("§8- §e" + uuid + " §8(§7" + s + "§8)");
                 }
             });
         }
-
-
     }
 }
