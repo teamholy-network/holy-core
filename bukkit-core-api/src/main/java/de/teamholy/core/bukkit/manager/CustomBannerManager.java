@@ -1,11 +1,10 @@
 package de.teamholy.core.bukkit.manager;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import de.teamholy.core.api.entities.banner.Banner;
+import de.teamholy.core.api.entities.banner.BannerRepository;
 import de.teamholy.core.bukkit.BukkitCore;
-import de.teamholy.core.bukkit.perks.Banner;
-import de.teamholy.core.bukkit.perks.BannerPattern;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
@@ -16,8 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.block.banner.Pattern;
 
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +31,7 @@ public class CustomBannerManager {
 
     public CustomBannerManager(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
+        loadBanners();
     }
 
     public void setAndPlaceCustomBanner(Player player, String baseColor) {
@@ -69,16 +68,16 @@ public class CustomBannerManager {
 
     public void setAndPlaceCustomBanner1(Player player, int bannerId) {
 
+        Banner cBanner = bannerHashMap.get(bannerId);
 
-        Banner customBanner = bannerHashMap.get(bannerId);
+        if (cBanner != null) {
+            List<Pattern> bukkitPatterns = new ArrayList<>();
 
-        if (customBanner != null) {
-
-            List<org.bukkit.block.banner.Pattern> bukkitPatterns = new ArrayList<>();
-            for (BannerPattern customPattern : customBanner.getPatterns()) {
+            for (de.teamholy.core.api.entities.banner.Banner.Pattern customPattern : cBanner.getPatterns()) {
                 DyeColor dyeColor = DyeColor.valueOf(customPattern.getColor());
                 PatternType patternType = PatternType.valueOf(customPattern.getPattern());
-                org.bukkit.block.banner.Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
+
+                Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
                 bukkitPatterns.add(bukkitPattern);
             }
 
@@ -90,7 +89,7 @@ public class CustomBannerManager {
                         BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
 
                         if (bannerMeta != null) {
-                            bannerMeta.setBaseColor(DyeColor.valueOf(customBanner.getBaseColor()));
+                            bannerMeta.setBaseColor(DyeColor.valueOf(cBanner.getBaseColor()));
                             bannerMeta.setPatterns(bukkitPatterns);
                             banner.setItemMeta(bannerMeta);
                         }
@@ -105,6 +104,11 @@ public class CustomBannerManager {
             return;
         }
     }
+
+
+
+
+
 
 
 
@@ -164,21 +168,15 @@ public class CustomBannerManager {
 
     public void loadBanners() {
         try {
-            String coreFolderPath = "plugins/core/";
-            File bannersFile = new File(coreFolderPath + "banners.json");
+            BannerRepository bannerRepository = bukkitCore.getCoreAPI().getBannerService().getRepository();
 
-            if (bannersFile.exists()) {
-                FileInputStream fis = new FileInputStream(bannersFile);
-                ObjectMapper mapper = new ObjectMapper();
-                List<Banner> banners = mapper.readValue(fis, new TypeReference<>() {});
+            bannerRepository.findAll().forEach(banner -> {
 
-                for (Banner banner : banners) {
-                    bannerHashMap.put(banner.getId(), banner);
-                    System.out.println("Banner " + banner.getName() + " loaded");
-                }
-            } else {
-                System.out.println("banners not found");
-            }
+                Integer bannerId = Integer.parseInt(banner.getId());
+                bannerHashMap.put(bannerId, banner);
+
+                System.out.println("Banner " + banner.getName() + " loaded");
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.commands;
 
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,19 +24,36 @@ public class XyzCommand implements CommandExecutor {
 
         Player player = (Player) commandSender;
 
-        String patternCode = strings[0];
+        String instruction = strings[0];
+
+
 
         if (!player.hasPermission("*")) {
             player.sendMessage("Unknown command. Type \"/help\" for help.");
         }
 
 
-        customBannerManager.loadBanners(); // DEBUG
+        if (instruction.equalsIgnoreCase("update")) {
+            customBannerManager.loadBanners();
+            player.sendMessage("§aBanners updated");
+            return false;
+        } else if (instruction.equalsIgnoreCase("set")) {
+            String target = strings[1];
+            String bannerId = strings[2];
 
+            if (target == null) {
+                customBannerManager.setAndPlaceCustomBanner1(player, Integer.parseInt(bannerId));
+            }
 
-        customBannerManager.setAndPlaceCustomBanner1(player, Integer.parseInt(patternCode));
+            Player targetPlayer = Bukkit.getPlayer(target);
 
-        player.sendMessage("test" + " " + patternCode);
+            if (targetPlayer == null) {
+                player.sendMessage("§cPlayer not found");
+                return false;
+            }
+            customBannerManager.setAndPlaceCustomBanner1(targetPlayer, Integer.parseInt(bannerId));
+            player.sendMessage("§aBanner set for " + targetPlayer.getName());
+        }
 
         return false;
     }

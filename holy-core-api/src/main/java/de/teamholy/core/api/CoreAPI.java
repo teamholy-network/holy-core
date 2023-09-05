@@ -3,6 +3,7 @@ package de.teamholy.core.api;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.entities.ban.BanService;
+import de.teamholy.core.api.entities.banner.BannerService;
 import de.teamholy.core.api.entities.clan.ClanService;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerService;
 import de.teamholy.core.api.entities.friend.FriendService;
@@ -52,7 +53,10 @@ public class CoreAPI {
     ClanPlayerService clanPlayerService;
     StaffService staffService;
     PerkPlayerService perkPlayerService;
+    BannerService bannerService;
     ConfigManager config;
+
+
 
 
     public CoreAPI() {
@@ -79,6 +83,7 @@ public class CoreAPI {
         this.nickManager = new NickManager(this);
         this.muteService = new MuteService(this);
         this.perkPlayerService = new PerkPlayerService(this);
+        this.bannerService = new BannerService(this);
 
 
         try {
@@ -122,6 +127,7 @@ public class CoreAPI {
         this.nickManager = new NickManager(this);
         this.muteService = new MuteService(this);
         this.perkPlayerService = new PerkPlayerService(this);
+        this.bannerService = new BannerService(this);
 
 
         try {
