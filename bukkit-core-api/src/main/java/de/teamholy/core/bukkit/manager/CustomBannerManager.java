@@ -74,7 +74,7 @@ public class CustomBannerManager {
             List<Pattern> bukkitPatterns = new ArrayList<>();
 
             for (de.teamholy.core.api.entities.banner.Banner.Pattern customPattern : cBanner.getPatterns()) {
-                DyeColor dyeColor = DyeColor.valueOf(customPattern.getColor());
+                DyeColor dyeColor = colorMapper(customPattern.getColor());
                 PatternType patternType = PatternType.valueOf(customPattern.getPattern());
 
                 Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
@@ -105,58 +105,6 @@ public class CustomBannerManager {
         }
     }
 
-
-
-
-
-
-
-
-
-    public List<Pattern> parsePattern(String blockEntityTag) {
-        List<Pattern> patterns = new ArrayList<>();
-
-        String patternString = "\\{Pattern:(.*?),Color:(\\d+)}";
-        java.util.regex.Pattern patternRegex = java.util.regex.Pattern.compile(patternString);
-        Matcher matcher = patternRegex.matcher(blockEntityTag);
-
-        while (matcher.find()) {
-            String patternIdentifier = matcher.group(1);
-            int color = Integer.parseInt(matcher.group(2));
-
-            DyeColor dyeColor = getColorByData(color);
-            PatternType patternType = PatternType.getByIdentifier(patternIdentifier);
-
-            if (dyeColor != null && patternType != null) {
-                patterns.add(new Pattern(dyeColor, patternType));
-            }
-        }
-
-        return patterns;
-    }
-
-    public DyeColor getColorByData(int color) {
-        return switch (color) {
-            case 0 -> DyeColor.WHITE;
-            case 1 -> DyeColor.ORANGE;
-            case 2 -> DyeColor.MAGENTA;
-            case 3 -> DyeColor.LIGHT_BLUE;
-            case 4 -> DyeColor.YELLOW;
-            case 5 -> DyeColor.LIME;
-            case 6 -> DyeColor.PINK;
-            case 7 -> DyeColor.GRAY;
-            case 8 -> DyeColor.SILVER;
-            case 9 -> DyeColor.CYAN;
-            case 10 -> DyeColor.PURPLE;
-            case 11 -> DyeColor.BLUE;
-            case 12 -> DyeColor.BROWN;
-            case 13 -> DyeColor.GREEN;
-            case 14 -> DyeColor.RED;
-            case 15 -> DyeColor.BLACK;
-            default -> null;
-        };
-    }
-
     public void removeCustomBanner(Player player) {
         ItemStack currentHelmet = player.getInventory().getHelmet();
             if (currentHelmet != null && currentHelmet.getType() == Material.BANNER) {
@@ -165,6 +113,14 @@ public class CustomBannerManager {
             }
      }
 
+    private DyeColor colorMapper(String colorName) {
+        switch (colorName) {
+            case "LIGHT_PURPLE": return DyeColor.MAGENTA;
+            default: return DyeColor.valueOf(colorName);
+        }
+    }
+
+
 
     public void loadBanners() {
         try {
@@ -172,7 +128,8 @@ public class CustomBannerManager {
 
             bannerRepository.findAll().forEach(banner -> {
 
-                Integer bannerId = Integer.parseInt(banner.getId());
+
+               Integer bannerId = Integer.parseInt(banner.getId());
                 bannerHashMap.put(bannerId, banner);
 
                 System.out.println("Banner " + banner.getName() + " loaded");
