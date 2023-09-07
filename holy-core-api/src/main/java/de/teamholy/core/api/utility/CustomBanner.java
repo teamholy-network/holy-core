@@ -17,7 +17,7 @@ public class CustomBanner {
 
 
     @Getter @NoArgsConstructor @Setter
-    public class Pattern {
+    public static class Pattern {
         private String color;
         private String patternName;
     }

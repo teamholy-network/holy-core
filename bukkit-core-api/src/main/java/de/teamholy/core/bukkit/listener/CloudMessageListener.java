@@ -113,32 +113,23 @@ public class CloudMessageListener {
             } else if (type.equalsIgnoreCase("set")) {
                 try {
                     JsonObject jsonObject = new Gson().fromJson(instruction, JsonObject.class);
-
-
-                    if (!jsonObject.has("baseColor")) {
+                    if (!jsonObject.has("baseColor") || !jsonObject.has("patterns")) {
                         player.sendMessage("§cError applying your Custom Skin!");
                         return;
                     }
-                    String baseColor = jsonObject.get("baseColor").getAsString();
 
+                    String baseColor = jsonObject.get("baseColor").getAsString();
                     ArrayList<CustomBanner.Pattern> patternsList = new ArrayList<>();
 
-
-                    if (!jsonObject.has("patterns")) {
-                        player.sendMessage("§cError applying your Custom Skin!");
-                        return;
-                    }
                     JsonArray patternsArray = jsonObject.getAsJsonArray("patterns");
                     for (JsonElement patternElement : patternsArray) {
                         JsonObject patternObject = patternElement.getAsJsonObject();
-
-
                         if (!patternObject.has("color") || !patternObject.has("pattern")) {
                             player.sendMessage("§cError applying your Custom Skin!");
                             return;
                         }
 
-                        CustomBanner.Pattern patternInstance = new CustomBanner().new Pattern();
+                        CustomBanner.Pattern patternInstance = new CustomBanner.Pattern();
                         patternInstance.setColor(patternObject.get("color").getAsString());
                         patternInstance.setPatternName(patternObject.get("pattern").getAsString());
                         patternsList.add(patternInstance);
@@ -152,7 +143,6 @@ public class CloudMessageListener {
                     BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
                     BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                     customBannerManager.setAndPlaceCustomBanner1(player, customBanner);
-
 
                 } catch (JsonSyntaxException e) {
                     player.sendMessage("§cError applying your Custom Skin!");
