@@ -78,8 +78,7 @@ public class PlayerJoinQuitListener implements Listener {
 
                 for (String supportedServer : supportedServers) {
                     if (BukkitCore.getInstance().getGroup().startsWith(supportedServer)) {
-
-                        customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                        customBannerManager.setAndPlaceCustomBanner1(player, perkPlayerProfile.getCustomBanner());
                     }
                 }
 

@@ -13,4 +13,6 @@ public class PerkCache {
     private final HashMap<UUID, PerkPlayerProfile> perkPlayerProfileHashMap = new HashMap<>();
     private final HashMap<Integer, Perk> perkHashMap = new HashMap<>();
 
+
+
 }

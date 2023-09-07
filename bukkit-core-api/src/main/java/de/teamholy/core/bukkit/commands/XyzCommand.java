@@ -34,7 +34,6 @@ public class XyzCommand implements CommandExecutor {
 
 
         if (instruction.equalsIgnoreCase("update")) {
-            customBannerManager.loadBanners();
             player.sendMessage("§aBanners updated");
             return false;
         } else if (instruction.equalsIgnoreCase("set")) {
@@ -42,7 +41,7 @@ public class XyzCommand implements CommandExecutor {
             String bannerId = strings[2];
 
             if (target == null) {
-                customBannerManager.setAndPlaceCustomBanner1(player, Integer.parseInt(bannerId));
+
             }
 
             Player targetPlayer = Bukkit.getPlayer(target);
@@ -51,7 +50,7 @@ public class XyzCommand implements CommandExecutor {
                 player.sendMessage("§cPlayer not found");
                 return false;
             }
-            customBannerManager.setAndPlaceCustomBanner1(targetPlayer, Integer.parseInt(bannerId));
+
             player.sendMessage("§aBanner set for " + targetPlayer.getName());
         }
 

@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.perks;
 
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.utility.CustomBanner;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
@@ -111,7 +112,7 @@ public class PerkManager {
                     player.sendMessage(prefix + "§7You successfully activated your §eCustom Banner §7!");
                     player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
                     perkPlayerProfile.getCustomBanner().setActivated(true);
-                    customBannerManager.setAndPlaceCustomBanner(player, perkPlayerProfile.getCustomBanner().getBaseColor());
+                    customBannerManager.setAndPlaceCustomBanner1(player, perkPlayerProfile.getCustomBanner());
                 } else {
 
                     player.sendMessage(prefix + "§7You successfully deactivated your §eCustom Banner §7!");
@@ -130,12 +131,36 @@ public class PerkManager {
                     return;
                 }
 
+                CustomBanner customBanner = perkPlayerProfile.getCustomBanner();
+
                 perkPlayerProfile.getOwnedPerks().add(99999);
+                customBanner.setActivated(true);
+                customBanner.setBaseColor("BLACK");
+
+                List<CustomBanner.Pattern> patterns = new ArrayList<>();
+
+                String[][] defaultBanner = {
+                    {"ORANGE", "STRIPE_LEFT"},
+                    {"ORANGE", "STRIPE_RIGHT"},
+                    {"ORANGE", "STRIPE_MIDDLE"},
+                    {"BLACK", "BORDER"},
+                    {"BLACK", "GRADIENT"}
+                };
+
+                for (String[] data : defaultBanner) {
+                    CustomBanner.Pattern pattern = customBanner.new Pattern();
+                    pattern.setColor(data[0]);
+                    pattern.setPatternName(data[1]);
+                    patterns.add(pattern);
+                }
+                customBanner.setPatterns(patterns);
+                perkPlayerProfile.setCustomBanner(customBanner);
                 playerProfile.setCoins(playerProfile.getCoins() - 15000);
                 BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
 
+                customBannerManager.setAndPlaceCustomBanner1(player, customBanner);
                 player.sendMessage(prefix + "§7You successfully bought the §eCustom Banner §7perk for §e10000 §6coins!");
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 2f);
                 player.closeInventory();
