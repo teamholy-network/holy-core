@@ -100,9 +100,9 @@ public class CloudMessageListener {
             if (type.equalsIgnoreCase("toggle")) {
 
                 if (instruction.equals("true")) {
-                    customBannerManager.setAndPlaceCustomBanner1(player, perkPlayerProfile.getCustomBanner());
-                    perkPlayerProfile.getCustomBanner().setActivated(true);
 
+                    perkPlayerProfile.getCustomBanner().setActivated(true);
+                    customBannerManager.setAndPlaceCustomBanner1(player, perkPlayerProfile.getCustomBanner());
                 } else {
                     customBannerManager.removeCustomBanner(player);
                     perkPlayerProfile.getCustomBanner().setActivated(false);
