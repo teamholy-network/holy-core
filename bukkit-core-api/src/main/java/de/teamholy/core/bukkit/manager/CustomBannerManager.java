@@ -78,10 +78,11 @@ public class CustomBannerManager {
     }
 
     private DyeColor colorMapper(String colorName) {
-        switch (colorName) {
-            case "LIGHT_PURPLE": return DyeColor.MAGENTA;
-            default: return DyeColor.valueOf(colorName);
-        }
+        return switch (colorName) {
+            case "LIGHT_PURPLE" -> DyeColor.MAGENTA;
+            case "LIGHT_GRAY" -> DyeColor.SILVER;
+            default -> DyeColor.valueOf(colorName);
+        };
     }
 
 

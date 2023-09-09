@@ -166,6 +166,7 @@ public class BungeeCore extends Plugin {
                 BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
             }
 
+
             coreAPI.getCloudManager().sendCloudMessage("bukkit", "onlineTime_update", null);
 
 
