@@ -99,7 +99,7 @@ public class PerkManager {
 
         inventory.setItem(new ItemBuilder(Material.BANNER, 1).setName("§8» §6Custom Head Banner")
                 .setLore(" " , " §7A custom banner on your head ", " §7with your own design! " , " §7you can change them ", " §7on the §6§lwebsite! ", " §7(§ehttps://teamholy.de/profile/" + player.getDisplayName() + "§7)", " ",
-                    ( perkPlayerProfile.getOwnedPerks().contains(99999) ? dieLore : "§7This perk costs §e15000 §6coins")
+                    ( perkPlayerProfile.getOwnedPerks().contains(99999) ? dieLore : "§7This perk costs §e5000 §6coins")
                     )
             .setBannerMeta(DyeColor.WHITE, new ArrayList<>()).build(), 7, (event) -> {
 
@@ -125,7 +125,7 @@ public class PerkManager {
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 player.closeInventory();
             } else {
-                if (!(playerProfile.getCoins() >= 15000)) {
+                if (!(playerProfile.getCoins() >= 5000)) {
                     player.sendMessage(prefix + "§cYou dont have enough coins!");
                     player.playSound(player.getLocation(), Sound.ANVIL_BREAK, 2f, 2f);
                     return;
@@ -135,7 +135,7 @@ public class PerkManager {
 
                 perkPlayerProfile.getOwnedPerks().add(99999);
 
-                playerProfile.setCoins(playerProfile.getCoins() - 15000);
+                playerProfile.setCoins(playerProfile.getCoins() - 5000);
                 BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
