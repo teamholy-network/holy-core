@@ -81,6 +81,8 @@ public class CustomBannerManager {
         return switch (colorName) {
             case "LIGHT_PURPLE" -> DyeColor.MAGENTA;
             case "LIGHT_GRAY" -> DyeColor.SILVER;
+            case "DARK_GRAY" -> DyeColor.GRAY;
+            case "LIGHT_GREEN" -> DyeColor.LIME;
             default -> DyeColor.valueOf(colorName);
         };
     }
