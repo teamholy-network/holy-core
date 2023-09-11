@@ -33,7 +33,7 @@ public class BanLoginListener implements Listener {
         ProxyServer.getInstance().getPluginManager().registerListener(bungeeCore, this);
     }
 
-    @EventHandler(priority = 1)
+    @EventHandler(priority = 2)
     public void onLogin(LoginEvent loginEvent) {
 
 

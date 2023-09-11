@@ -141,7 +141,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamCommand("team", "teamholy.team", "teamlist"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamNotifyCommand("teamnotify", "teamholy.team", "notify"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new NickListCommand("nicklist", "teamholy.team", "nicks"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RankCommand("rank", "teamholy.rang", "rang"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RankCommand("rank", "", "rang"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new OnlinetimeCommand("onlinetime"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new PingCommand("ping"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new BroadcastCommand("broadcast", "teamholy.broadcast", "bc"));

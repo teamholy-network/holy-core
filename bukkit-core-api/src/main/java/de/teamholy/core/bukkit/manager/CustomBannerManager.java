@@ -53,7 +53,7 @@ public class CustomBannerManager {
                         BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
 
                         if (bannerMeta != null) {
-                            bannerMeta.setBaseColor(DyeColor.valueOf(customBanner.getBaseColor().toUpperCase()));  // Use the customBanner object
+                            bannerMeta.setBaseColor(DyeColor.valueOf(customBanner.getBaseColor().toUpperCase()));
                             bannerMeta.setPatterns(bukkitPatterns);
                             banner.setItemMeta(bannerMeta);
                         }
