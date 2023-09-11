@@ -45,94 +45,96 @@ public class RankCommand extends Command {
 
 
         if (args.length == 4) {
-            if (args[0].equalsIgnoreCase("set")) {
-                UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
-                if (uuid == null) {
-                    player.sendMessage(prefix + "This player does not exist");
-                    return;
-                }
-
-                IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(args[2]);
-                if (permissionGroup == null) {
-                    player.sendMessage(prefix + "This group does not exist");
-                    return;
-                }
-
-                if (!player.hasPermission("teamholy.rang." + args[2].toLowerCase())) {
-                    player.sendMessage(prefix + "You cant give away this rank!");
-                    return;
-                }
-
-                IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
-                if (permissionGroup.getGroups().contains(permissionGroup.getName())) {
-                    player.sendMessage(prefix + "This player is already in the group");
-                    return;
-                }
-
-                if (permissionUser.hasPermission("teamholy.team") == PermissionCheckResult.ALLOWED && !player.hasPermission("*")) {
-                    player.sendMessage(prefix + "You are not allowed to give this player a rank!");
-                    return;
-                }
-
-
-                ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
-                if (target != null) {
-                    target.sendMessage(prefix + " You now have the " + permissionGroup.getDisplay() + permissionGroup.getName() + " §7rank!");
-                    if (permissionGroup.isDefaultGroup() || args[3].equalsIgnoreCase("-1")) {
-                        target.sendMessage(prefix + "§8(§4Lifetime§8)");
-                    } else {
-                        target.sendMessage(prefix + "§8(§c" + args[3] + " days§8)");
-                    }
-                }
-                BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "rank_update", JsonDocument.newDocument("uuid", uuid));
-
-                PlayerRank playerRank = Arrays.stream(PlayerRank.values()).filter(playerRank1 -> playerRank1.getName().equalsIgnoreCase(permissionGroup.getName())).collect(Collectors.toList()).get(0);
-
-                DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
-                discordWebhook.setUsername("Rang update");
-                if (permissionGroup.isDefaultGroup() || args[3].equalsIgnoreCase("-1")) {
-                    permissionUser.getGroups().clear();
-                    permissionUser.addGroup(permissionGroup.getName());
-                    discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
-                        .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " LIFETIME gegeben")
-                    );
-                    player.sendMessage(prefix + " you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§4Lifetime§8)");
-                } else {
-                    permissionUser.getGroups().clear();
-                    permissionUser.addGroup(permissionGroup.getName(), Long.parseLong(args[3]), TimeUnit.DAYS);
-                    discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
-                        .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " für " + args[3] + " Tage gegeben")
-                    );
-                    player.sendMessage(prefix + " you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§c" + args[3] + " Days§8)");
-                }
-
-                CloudNetDriver.getInstance().getPermissionManagement().updateUser(permissionUser);
-
-                BungeeCore.getAPI().getExecutor().submit(() -> {
-
-                    if (target != null) {
-                        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(target.getUniqueId()));
-                        playerProfile.setRank(playerRank.toString());
-                        BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
-
-                        StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(target.getUniqueId()));
-                        if (staffProfile == null) {
-                            staffProfile = new StaffProfile();
-                            staffProfile.setPlayerId(target.getUniqueId());
-                            staffProfile.setNotify(true);
-                            staffProfile.setBanProfileList(new ArrayList<>());
-                            staffProfile.setMuteProfileList(new ArrayList<>());
-                            staffProfile.setReportList(new ArrayList<>());
-                            BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
-                        }
-
-                    }
-
-                    discordWebhook.execute();
-
-                });
-
+            UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
+            if (uuid == null) {
+                player.sendMessage(prefix + "This player does not exist");
+                return;
             }
+
+            IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(args[2]);
+            if (permissionGroup == null) {
+                player.sendMessage(prefix + "This group does not exist");
+                return;
+            }
+
+            if (!player.hasPermission("teamholy.rang." + args[2].toLowerCase())) {
+                player.sendMessage(prefix + "You cant give away this rank!");
+                return;
+            }
+
+            IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
+            if (permissionGroup.getGroups().contains(permissionGroup.getName())) {
+                player.sendMessage(prefix + "This player is already in the group");
+                return;
+            }
+
+            if (permissionUser.hasPermission("teamholy.team") == PermissionCheckResult.ALLOWED && !player.hasPermission("*")) {
+                player.sendMessage(prefix + "You are not allowed to give this player a rank!");
+                return;
+            }
+
+
+            ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
+            if (target != null) {
+                target.sendMessage(prefix + " You now have the " + permissionGroup.getDisplay() + permissionGroup.getName() + " §7rank!");
+                if (permissionGroup.isDefaultGroup() || args[3].equalsIgnoreCase("-1")) {
+                    target.sendMessage(prefix + "§8(§4Lifetime§8)");
+                } else {
+                    target.sendMessage(prefix + "§8(§c" + args[3] + " days§8)");
+                }
+            }
+            BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "rank_update", JsonDocument.newDocument("uuid", uuid));
+
+            PlayerRank playerRank = Arrays.stream(PlayerRank.values()).filter(playerRank1 -> playerRank1.getName().equalsIgnoreCase(permissionGroup.getName())).collect(Collectors.toList()).get(0);
+
+            DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
+            discordWebhook.setUsername("Rang update");
+            if (permissionGroup.isDefaultGroup() || args[3].equalsIgnoreCase("-1")) {
+                if (args[0].equalsIgnoreCase("set")) permissionUser.getGroups().clear();
+                else if (!args[0].equalsIgnoreCase("add")) {
+                    sendHelp(player);
+                    return;
+                }
+                permissionUser.addGroup(permissionGroup.getName());
+                discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
+                    .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " LIFETIME gegeben")
+                );
+                player.sendMessage(prefix + "you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§4Lifetime§8)");
+            } else {
+                permissionUser.getGroups().clear();
+                permissionUser.addGroup(permissionGroup.getName(), Long.parseLong(args[3]), TimeUnit.DAYS);
+                discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
+                    .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " für " + args[3] + " Tage gegeben")
+                );
+                player.sendMessage(prefix + "you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§c" + args[3] + " Days§8)");
+            }
+
+            CloudNetDriver.getInstance().getPermissionManagement().updateUser(permissionUser);
+
+            BungeeCore.getAPI().getExecutor().submit(() -> {
+
+                if (target != null) {
+                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(target.getUniqueId()));
+                    playerProfile.setRank(playerRank.toString());
+                    BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
+
+                    StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(target.getUniqueId()));
+                    if (staffProfile == null) {
+                        staffProfile = new StaffProfile();
+                        staffProfile.setPlayerId(target.getUniqueId());
+                        staffProfile.setNotify(true);
+                        staffProfile.setBanProfileList(new ArrayList<>());
+                        staffProfile.setMuteProfileList(new ArrayList<>());
+                        staffProfile.setReportList(new ArrayList<>());
+                        BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
+                    }
+
+                }
+
+                discordWebhook.execute();
+
+            });
+
         } else {
             sendHelp(player);
         }
@@ -150,7 +152,7 @@ public class RankCommand extends Command {
             }
         });
         proxiedPlayer.sendMessage(stringBuilder.toString());
-        proxiedPlayer.sendMessage(prefix + "/rank set (player) (rank) (time in days, Lifetime = -1)");
+        proxiedPlayer.sendMessage(prefix + "/rank set§8/§7add (player) (rank) (time in days, Lifetime = -1)");
         sendRank(proxiedPlayer);
     }
 

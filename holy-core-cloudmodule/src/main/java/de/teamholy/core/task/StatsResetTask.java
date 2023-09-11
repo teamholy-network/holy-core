@@ -77,10 +77,7 @@ public class StatsResetTask implements Runnable {
                     scoredSortedSet.entryRangeReversed(0, 0).forEach(o -> {
                         ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) o;
                         if (!championRanks.contains(scoredEntry.getValue())) championRanks.add(scoredEntry.getValue());
-                        IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(scoredEntry.getValue());
-                        assert permissionUser != null;
-                        permissionUser.addGroup("Champion",1, TimeUnit.DAYS);
-                        CloudNetDriver.getInstance().getPermissionManagement().updateUser(permissionUser);
+                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee","command",JsonDocument.newDocument().append("command","rank add " + CloudModuleCore.getCoreAPI().getUuidManager().getName(scoredEntry.getValue()) + " Champion 1"));
                     });
 
                 }
@@ -128,9 +125,6 @@ public class StatsResetTask implements Runnable {
                     iCloudPlayer.getPlayerExecutor().sendChatMessage(centerMessage("§f§lSTATSRESET"));
                     iCloudPlayer.getPlayerExecutor().sendChatMessage(centerMessage("§7The " + statsType.toBeauty() + "§8-§7stats §7were §creset§8!"));
                     if (statsType == StatsType.DAILY) {
-
-
-
                         if (championRanks.size() != 0) {
                             iCloudPlayer.getPlayerExecutor().sendChatMessage(" ");
                             StringBuilder stringBuilder = new StringBuilder();
