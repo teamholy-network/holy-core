@@ -39,7 +39,7 @@ public class CustomBannerManager {
 
             for (CustomBanner.Pattern customPattern : customBanner.getPatterns()) {
                 DyeColor dyeColor = colorMapper(customPattern.getColor().toUpperCase());
-                PatternType patternType = PatternType.valueOf(customPattern.getPatternName().toUpperCase());  // Use getPatternName()
+                PatternType patternType = PatternType.valueOf(customPattern.getPatternName().toUpperCase());
 
                 Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
                 bukkitPatterns.add(bukkitPattern);
@@ -53,7 +53,7 @@ public class CustomBannerManager {
                         BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
 
                         if (bannerMeta != null) {
-                            bannerMeta.setBaseColor(DyeColor.valueOf(customBanner.getBaseColor().toUpperCase()));  // Use the customBanner object
+                            bannerMeta.setBaseColor(colorMapper(customBanner.getBaseColor().toUpperCase()));
                             bannerMeta.setPatterns(bukkitPatterns);
                             banner.setItemMeta(bannerMeta);
                         }

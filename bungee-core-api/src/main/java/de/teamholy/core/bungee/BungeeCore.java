@@ -103,7 +103,6 @@ public class BungeeCore extends Plugin {
         new PostLoginListener();
         new PostDisconnectListener();
         new PartyListener();
-        new ChatLogListener();
 
 
         new BanCommand();
@@ -123,6 +122,7 @@ public class BungeeCore extends Plugin {
         new KickCommand(new String[]{"kick", "kim"}, "teamholy.kick");
 
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatFilterListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatLogListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new TabCompleteListener());

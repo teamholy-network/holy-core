@@ -19,7 +19,7 @@ public class ChatLogListener implements Listener {
     private static final int max = 50;
     private final Gson gson = new Gson();
 
-    // copyright chatgpt by gregor
+
     private final Type typeOfSrc = new TypeToken<List<Message>>() {
     }.getType();
 

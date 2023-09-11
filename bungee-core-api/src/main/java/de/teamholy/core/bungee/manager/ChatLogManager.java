@@ -29,13 +29,17 @@ public class ChatLogManager {
 
         if (chatlogPlayer == null) return null;
 
+
         if (ChatLogListener.CHATLOGS.getOrDefault(chatlogPlayer.getUniqueId(), new LinkedList<>()).isEmpty()) {
             return null;
         }
 
+
         String chatlogString = new ChatLogListener().getChatLog(chatlogPlayer.getUniqueId());
 
+
         String randomKey = generateRandomKey();
+
 
         Type listType = new TypeToken<List<ChatLog.Message>>() {
         }.getType();
