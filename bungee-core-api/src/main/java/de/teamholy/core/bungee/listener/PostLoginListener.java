@@ -147,6 +147,7 @@ public class PostLoginListener implements Listener {
 
 
         int i = 0;
+        StringBuilder onlineFriends = new StringBuilder();
         String name = BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
         BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(), null, "online", null);
         for (UUID uuid : friendProfile.getFriendList()) {
@@ -154,6 +155,7 @@ public class PostLoginListener implements Listener {
             if (target != null) {
                 i++;
                 target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §aonline");
+                onlineFriends.append(BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()).append(", ");
             }
         }
 
@@ -163,6 +165,11 @@ public class PostLoginListener implements Listener {
             proxiedPlayer.sendMessage("§6Friend §8× §7There is currently §e" + i + " §7friend online");
         } else {
             proxiedPlayer.sendMessage("§6Friend §8× §7There are currently §a" + i + " §7friends online");
+        }
+
+        if (i > 0) {
+            onlineFriends.setLength(onlineFriends.length() - 2);
+            proxiedPlayer.sendMessage("§6Friend §8× " + onlineFriends);
         }
 
 
