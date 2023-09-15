@@ -6,11 +6,14 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import net.md_5.bungee.api.ProxyServer;
 
 import java.lang.management.ManagementFactory;
+import java.security.SecureRandom;
 
 /* copyright by Greg */
 public class Helpers {
 
     private static final long BYTES_TO_MB = 1024 * 1024;
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
 
     public String centerMessage(String message) {
         String stripped = message.replaceAll("§.", "");
@@ -42,6 +45,18 @@ public class Helpers {
         OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(
             OperatingSystemMXBean.class);
         return osBean.getProcessCpuLoad() * 100;
+    }
+
+    public String generateSecureKey(int length) {
+        StringBuilder stringBuilder = new StringBuilder();
+        SecureRandom secureRandom = new SecureRandom();
+
+        for (int i = 0; i < length; i++) {
+            int index = secureRandom.nextInt(CHARS.length());
+            stringBuilder.append(CHARS.charAt(index));
+        }
+
+        return stringBuilder.toString();
     }
 }
 

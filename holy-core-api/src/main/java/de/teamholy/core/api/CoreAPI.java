@@ -14,6 +14,7 @@ import de.teamholy.core.api.entities.player.PlayerService;
 import de.teamholy.core.api.entities.punishhistory.PunishHistoryService;
 import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
+import de.teamholy.core.api.entities.stats.StatsProfileService;
 import de.teamholy.core.api.manager.*;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
@@ -54,6 +55,7 @@ public class CoreAPI {
     StaffService staffService;
     PerkPlayerService perkPlayerService;
     BannerService bannerService;
+    StatsProfileService statsProfileService;
     ConfigManager config;
 
 
@@ -84,6 +86,7 @@ public class CoreAPI {
         this.muteService = new MuteService(this);
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
+        this.statsProfileService = new StatsProfileService(this);
 
 
         try {
@@ -128,6 +131,7 @@ public class CoreAPI {
         this.muteService = new MuteService(this);
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
+        this.statsProfileService = new StatsProfileService(this);
 
 
         try {
