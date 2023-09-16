@@ -19,12 +19,15 @@ public class LinkCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
+        player.sendMessage("§6Web §8× §7This command is currently disabled. We dont know when it will be back. Hopefully soon!");
 
-        if (player == null) {
+
+
+       /* if (player == null) {
             return;
         }
 
-        if (args[0].equalsIgnoreCase("relink")) {
+        if (args.length > 0 && args[0].equalsIgnoreCase("relink")) {
             linkManager.relinkPlayer(player);
             return;
         }
@@ -54,6 +57,8 @@ public class LinkCommand extends Command {
 
         linkManager.sendLinkMessageToPlayer(player, linkCode);
 
+
+        */
 
     }
 }

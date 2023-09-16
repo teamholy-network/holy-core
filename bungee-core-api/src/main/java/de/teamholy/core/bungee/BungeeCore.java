@@ -19,6 +19,7 @@ import de.teamholy.core.bungee.commands.friend.FriendCommand;
 import de.teamholy.core.bungee.commands.friend.FriendListCommand;
 import de.teamholy.core.bungee.commands.friend.MSGCommand;
 import de.teamholy.core.bungee.commands.friend.ReplyCommand;
+import de.teamholy.core.bungee.commands.link.LinkCommand;
 import de.teamholy.core.bungee.commands.mute.MuteCommand;
 import de.teamholy.core.bungee.commands.mute.UnmuteCommand;
 import de.teamholy.core.bungee.commands.party.PartyChatCommand;
@@ -153,6 +154,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatFilterCommand("chatfilter"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
 
 
         chatFilterManager.loadFilteredWords();
@@ -176,25 +178,25 @@ public class BungeeCore extends Plugin {
         }, 1, 1, TimeUnit.MINUTES);
 
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
-        }, 30, 30, TimeUnit.MINUTES);
+       // ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+         //   publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
+        //}, 30, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
             coreAPI.getMetricsManager().saveMetric(document);
         }, 0, 2, TimeUnit.SECONDS);
 
-        System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,1) + "------------------------------");
-        System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,2) + "------------------------------");
-        System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,0) + "------------------------------");
+        //System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,1) + "------------------------------");
+        //System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,2) + "------------------------------");
+        //System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,0) + "------------------------------");
 
     }
 
 
     @Override
     public void onDisable() {
-        coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
+        //coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
         coreAPI.onDisable();
     }
 
