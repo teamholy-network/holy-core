@@ -41,7 +41,7 @@ public class LinkManager {
         statsProfile.setPlayerProfileCookie(null);
         statsProfile.setPlayerProfileDiscordLinkCode(helpers.generateSecureKey(40));
         statsProfile.setPlayerProfileDiscordLinked(false);
-        statsProfile.setPlayerProfileLastTimeLoggedIn(0);
+        statsProfile.setPlayerProfileLastTimeLoggedIn(System.currentTimeMillis());
 
         StatsProfile.ProfileViews profileViews = new StatsProfile.ProfileViews();
         profileViews.setTotal(0);

@@ -155,7 +155,7 @@ public class PostLoginListener implements Listener {
             if (target != null) {
                 i++;
                 target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §aonline");
-                onlineFriends.append(BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()).append(", ");
+                onlineFriends.append(BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()).append("§7, ");
             }
         }
 
