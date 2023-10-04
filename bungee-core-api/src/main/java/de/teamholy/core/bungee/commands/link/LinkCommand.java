@@ -19,37 +19,23 @@ public class LinkCommand extends Command {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
-        if (!player.hasPermission("*")) {
-            player.sendMessage("§6Web §8× §7This command is currently disabled. We dont know when it will be back. Hopefully soon!");
-            return;
-        }
-
-
-
-        if (player == null) {
-            return;
-        }
-
         if (args.length > 0 && args[0].equalsIgnoreCase("relink")) {
-            player.sendMessage("Debug: Relink your account");
             linkManager.relinkPlayer(player);
             return;
         }
 
         if (!linkManager.playerExists(player)) {
-            player.sendMessage("Debug: Insert player");
             linkManager.insertPlayer(player);
             return;
         }
 
-        if (System.currentTimeMillis() - linkManager.getPlayerLastTimeLoggedIn(player) > 24 * 60 * 60 * 1000) {
-            player.sendMessage("Debug: Send confirm message");
+        if (linkManager.getPlayerLastTimeLoggedIn(player) != 0 && System.currentTimeMillis() - linkManager.getPlayerLastTimeLoggedIn(player) > 24 * 60 * 60 * 1000) {
             linkManager.sendConfirmRelinkOrLinkMessageToPlayer(player);
             return;
         }
 
+
         if (linkManager.playerLinked(player)) {
-            player.sendMessage("Debug: Player is already linked");
             player.sendMessage("§6Web §8× §7You are already linked!");
             return;
         }

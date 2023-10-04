@@ -104,6 +104,7 @@ public class BungeeCore extends Plugin {
         new PostLoginListener();
         new PostDisconnectListener();
         new PartyListener();
+        new RedisQueueListener("127.0.0.1", 6379, "ashGbdkLcxasHvcjsh#aihvb!jsbbbvksddfc");
 
 
         new BanCommand();
@@ -153,7 +154,6 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatFilterCommand("chatfilter"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
 
 
@@ -178,9 +178,9 @@ public class BungeeCore extends Plugin {
         }, 1, 1, TimeUnit.MINUTES);
 
 
-       // ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-         //   publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
-        //}, 30, 30, TimeUnit.MINUTES);
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+           publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
+        }, 30, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());

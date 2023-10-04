@@ -47,6 +47,10 @@ public class Helpers {
         return osBean.getProcessCpuLoad() * 100;
     }
 
+    public long getRemainingTime(long time, long timeToCheck) {
+        return (timeToCheck - System.currentTimeMillis() + time) / (60 * 1000);
+    }
+
     public String generateSecureKey(int length) {
         StringBuilder stringBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();

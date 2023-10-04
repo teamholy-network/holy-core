@@ -62,23 +62,25 @@ public class LinkManager {
 
     public void relinkPlayer(ProxiedPlayer player) {
 
-        if (System.currentTimeMillis() - getPlayerLastTimeLoggedIn(player) > 24 * 60 * 60 * 1000) {
-            return;
-        }
-
         StatsProfile statsProfile = statsProfileRepository.findFirstById(player.getUniqueId());
 
         if (statsProfile == null) {
+            player.sendMessage("§6Web §8× §7You are not linked!");
+            return;
+        }
+
+        if (System.currentTimeMillis() - statsProfile.getPlayerProfileLastTimeLinked() < 60 * 60 * 1000) {
+            player.sendMessage("§6Web §8× §7Please wait around §e" + helpers.getRemainingTime(statsProfile.getPlayerProfileLastTimeLinked(), 60 * 60 * 1000) + " §7minutes before you can relink your account!");
             return;
         }
 
         String linkCode = helpers.generateSecureKey(50);
 
         statsProfile.setPlayerProfileLinked(false);
+        statsProfile.setPlayerProfileCookie(null);
         statsProfile.setPlayerProfileLinkCode(linkCode);
 
         statsProfileRepository.save(statsProfile);
-
         sendLinkMessageToPlayer(player, linkCode);
 
     }
@@ -107,9 +109,12 @@ public class LinkManager {
     }
 
     public void sendConfirmRelinkOrLinkMessageToPlayer(ProxiedPlayer player) {
-        TextComponent message = new TextComponent("§6Web §8× §7You are already linked!");
-        message.addExtra("\n");
-        message.addExtra("§6Web §8× §7We have noticed that you didn't login for a day. §7(Click me!) if you wish to relink your account.");
+        TextComponent message = new TextComponent();
+        if (playerLinked(player)) {
+            message.addExtra("§6Web §8× §7You are already linked!");
+            message.addExtra("\n");
+        }
+        message.addExtra("§6Web §8× §7We have noticed that you didn't login for a day! (§6Click me!§7) if you wish to relink.");
         message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/link relink"));
         message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Relink").create()));
         player.sendMessage(message);
