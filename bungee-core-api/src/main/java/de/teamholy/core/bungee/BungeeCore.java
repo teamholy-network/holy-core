@@ -20,6 +20,7 @@ import de.teamholy.core.bungee.commands.friend.FriendListCommand;
 import de.teamholy.core.bungee.commands.friend.MSGCommand;
 import de.teamholy.core.bungee.commands.friend.ReplyCommand;
 import de.teamholy.core.bungee.commands.link.LinkCommand;
+import de.teamholy.core.bungee.commands.link.RelinkCommand;
 import de.teamholy.core.bungee.commands.mute.MuteCommand;
 import de.teamholy.core.bungee.commands.mute.UnmuteCommand;
 import de.teamholy.core.bungee.commands.party.PartyChatCommand;
@@ -73,6 +74,8 @@ public class BungeeCore extends Plugin {
 
     Helpers helpers;
 
+    LinkManager linkManager;
+
 
     public BungeeCore() {
         instance = this;
@@ -95,6 +98,7 @@ public class BungeeCore extends Plugin {
         chatFilterManager = new ChatFilterManager();
         metricsManager = new MetricsManager(this.coreAPI);
         helpers = new Helpers();
+        linkManager = new LinkManager();
 
 
         new LoginListener();
@@ -155,6 +159,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
 
 
         chatFilterManager.loadFilteredWords();
