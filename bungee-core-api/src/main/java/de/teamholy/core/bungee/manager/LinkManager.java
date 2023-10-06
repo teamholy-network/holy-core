@@ -50,9 +50,18 @@ public class LinkManager {
         StatsProfile.PlayerProfileSocial playerProfileSocial = new StatsProfile.PlayerProfileSocial();
         playerProfileSocial.setProfileMessage(null);
         playerProfileSocial.setProfileComments(new ArrayList<>());
+        playerProfileSocial.setProfileLikes(new ArrayList<>());
+
+        StatsProfile.Streak profileStreak = new StatsProfile.Streak();
+        profileStreak.setCurrent(0);
+        profileStreak.setBest(0);
+        profileStreak.setNext(0);
+        profileStreak.setLimit(0);
+
 
         statsProfile.setProfileViews(profileViews);
         statsProfile.setPlayerProfileSocial(playerProfileSocial);
+        statsProfile.setProfileStreak(profileStreak);
 
         statsProfileRepository.save(statsProfile);
         sendLinkMessageToPlayer(player, linkCode);
