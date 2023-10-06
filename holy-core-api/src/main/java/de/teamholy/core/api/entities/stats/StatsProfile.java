@@ -11,8 +11,6 @@ import java.util.UUID;
 @Setter
 public class StatsProfile {
 
-    // TODO: 'playerProfile' before every field is redundant, remove it later. Refactor the database too. Im too lazy to do it now.
-
     @Id
     private UUID id;
     private String playerName;
@@ -25,20 +23,18 @@ public class StatsProfile {
     private String playerProfileCookie;
     private String playerProfileDiscordLinkCode;
     private boolean playerProfileDiscordLinked;
-
     private long playerProfileLastTimeLoggedIn;
 
     private PlayerProfileSocial playerProfileSocial;
     private ProfileViews profileViews;
-
-
-
+    private Streak profileStreak;
 
     @Getter
     @Setter
     public static class PlayerProfileSocial {
         private String profileMessage;
         private List<String> profileComments;
+        private List<ProfileLikes> profileLikes;
     }
 
     @Getter
@@ -48,7 +44,19 @@ public class StatsProfile {
         private List<String> ips;
     }
 
+    @Getter
+    @Setter
+    public static class ProfileLikes {
+        private String name;
+        private UUID uuid;
+    }
 
+    @Getter
+    @Setter
+    public static class Streak {
+        private int current;
+        private int best;
+        private long next;
+        private long limit;
+    }
 }
-
-
