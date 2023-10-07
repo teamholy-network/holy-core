@@ -76,6 +76,7 @@ public class BungeeCore extends Plugin {
 
     LinkManager linkManager;
 
+    RedisQueueListener redisQueueListener;
 
     public BungeeCore() {
         instance = this;
@@ -108,8 +109,11 @@ public class BungeeCore extends Plugin {
         new PostLoginListener();
         new PostDisconnectListener();
         new PartyListener();
-        new RedisQueueListener("127.0.0.1", 6379, "ashGbdkLcxasHvcjsh#aihvb!jsbbbvksddfc");
 
+        if (!ProxyServer.getInstance().getName().startsWith("TestProxy")) {
+            redisQueueListener = new RedisQueueListener("127.0.0.1", 6379, "ashGbdkLcxasHvcjsh#aihvb!jsbbbvksddfc");
+            redisQueueListener.init(); // Glaub so ist besser habs davor im constructor gemacht
+        }
 
         new BanCommand();
         new UnbanCommand();

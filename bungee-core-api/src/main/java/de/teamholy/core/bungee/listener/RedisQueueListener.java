@@ -25,8 +25,6 @@ import java.util.List;
 
 public class RedisQueueListener {
 
-    private static final String WEBHOOK_URL = "https://discord.com/api/webhooks/1136069824842309663/TK307wKJKBf4qgtx_0tkZL0SOUeeMKlNgpOXdxDsCsUKtbFuheIzWV_kryrSTUsCH1Ak";
-
     Jedis jedis; /* TODO: 10.08.2021 Anstatt Jedis, RedissonManager benutzen.
      * Kann ich grad nicht machen, weil ich irgendein hurensohn error bekomme
      * Also halts maul bitte */
@@ -34,21 +32,15 @@ public class RedisQueueListener {
     ChatFilterManager chatFilterManager;
     CoinManager coinManager;
     CloudManager cloudManager;
-    DiscordWebhook discordWebhook;
-
-    ProxyServer proxyServer;
 
     public RedisQueueListener(String host, int port, String auth) {
         jedis = new Jedis(host, port);
         if (!auth.isEmpty()) {
             jedis.auth(auth);
         }
-        init();
         chatFilterManager = BungeeCore.getInstance().getChatFilterManager();
         coinManager = BungeeCore.getAPI().getCoinManager();
         cloudManager = BungeeCore.getAPI().getCloudManager();
-        discordWebhook = new DiscordWebhook(WEBHOOK_URL);
-        proxyServer = ProxyServer.getInstance();
     }
 
 
@@ -107,7 +99,7 @@ public class RedisQueueListener {
                             sendDiscordWebhook("Update Custom Banner for " + target);
                         }
                         default ->
-                            proxyServer.getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
+                            ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
                     }
 
                 }
@@ -118,10 +110,12 @@ public class RedisQueueListener {
     }
 
     private void sendDiscordWebhook(String msg) {
-        discordWebhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
-        discordWebhook.setUsername("Redis");
-        discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("Redis").addField("New command queued", msg, true).setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
+        DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1136069824842309663/TK307wKJKBf4qgtx_0tkZL0SOUeeMKlNgpOXdxDsCsUKtbFuheIzWV_kryrSTUsCH1Ak");
+        webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
+        webhook.setUsername("Redis");
+        webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("Redis").addField("New command queued", msg, true).setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
 
-        discordWebhook.execute();
+
+        webhook.execute();
     }
 }
