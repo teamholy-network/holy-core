@@ -1,10 +1,12 @@
 package de.teamholy.core.bukkit.report;
 
+import com.google.common.collect.Maps;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.ext.bridge.player.CloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.ReportManager;
+import de.teamholy.core.api.utility.Pagifier;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.Report;
 import de.teamholy.core.bukkit.BukkitCore;
@@ -20,16 +22,18 @@ import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-/* copyright by Yassino */
 public class ReportBukkitManager implements CommandExecutor {
 
     private final ReportManager reportManager = BukkitCore.getAPI().getReportManager();
 
     private final String prefix = "§cReport §8× §7";
 
+    private Map<UUID, Integer> playerPage = Maps.newHashMap();
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -42,13 +46,37 @@ public class ReportBukkitManager implements CommandExecutor {
             return true;
         }
 
+
+        if (!playerPage.containsKey(player.getUniqueId())) {
+            playerPage.put(player.getUniqueId(), 1);
+        }
+
+        openReportsInventory(player, playerPage.get(player.getUniqueId()));
+        return false;
+    }
+
+    final Pagifier<Report> allReports = new Pagifier<>(27);
+
+    private void openReportsInventory(Player player, int currentPage) {
         Inventory inventory = new Inventory("§8» §cReports", 9 * 4);
 
         for (int i = inventory.getInventory().getSize() - 9; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
 
-        reportManager.getAllReports().forEach((uuid, report) -> addReportToInventory(player, inventory, report, false));
+        reportManager.getAllReports().forEach((uuid, report) -> {
+            if (!allReports.containsItem(report)) {
+                allReports.addItem(report);
+            }
+        });
+
+        if (allReports.getPage(currentPage) == null) {
+            player.sendMessage(prefix + "§cThere are no more reports!");
+            return;
+        }
+        for (var item : allReports.getPage(currentPage)) {
+            addReportToInventory(player, inventory, item, false);
+        }
 
         inventory.setItem(new
             ItemBuilder(Material.FISHING_ROD)
@@ -71,8 +99,34 @@ public class ReportBukkitManager implements CommandExecutor {
             .build(), 33, event ->
             openCurrentReports(player));
 
+        if (currentPage > 1) {
+            inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), inventory.getInventory().getSize() - 9, event -> {
+                playerPage.put(player.getUniqueId(), playerPage.remove(player.getUniqueId()) - 1);
+                player.closeInventory();
+                Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+                    player.performCommand("reportsgui");
+                }, 3L);
+            });
+        }
+
+        if (allReports.getPage(currentPage + 1) != null) {
+            inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §bForward").build(),
+                inventory.getInventory().getSize() - 1, event -> {
+
+                    int playerCurrent = playerPage.remove(player.getUniqueId());
+                    if (allReports.getPage(playerCurrent + 1) != null) {
+                        playerPage.put(player.getUniqueId(), playerCurrent + 1);
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+                            player.performCommand("reportsgui");
+                        }, 3L);
+                    } else {
+                        player.sendMessage(prefix + "§cThere are no more reports!");
+                    }
+                });
+        }
+
         player.openInventory(inventory.getInventory());
-        return false;
     }
 
     private void openPlayerReport(Player player, Report report, boolean ownReport) {
@@ -125,8 +179,7 @@ public class ReportBukkitManager implements CommandExecutor {
                     if (!openCurrentReports(player)) {
                         player.performCommand("reportsgui");
                     }
-                }
-                else player.performCommand("reportsgui");
+                } else player.performCommand("reportsgui");
             }, 3L);
         });
         inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), 18, event -> {
@@ -135,17 +188,25 @@ public class ReportBukkitManager implements CommandExecutor {
                 if (!openCurrentReports(player)) {
                     player.performCommand("reportsgui");
                 }
-            }
-            else player.performCommand("reportsgui");
+            } else player.performCommand("reportsgui");
         });
         player.openInventory(inventory.getInventory());
     }
+
 
     private boolean openCurrentReports(Player player) {
         if (reportManager.getAllReports().isEmpty()) {
             player.sendMessage(prefix + "§cThere are no open reports!");
             return false;
         }
+
+        final Pagifier<Report> ownReports = new Pagifier<>(27);
+
+        reportManager.getAllReports().forEach((uuid, report) -> {
+            if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId()))
+                if (!ownReports.containsItem(report)) ownReports.addItem(report);
+        });
+
         Inventory inventory = new Inventory("§8» " + prefix + "§6Your Reports", 9 * 4);
         for (int i = inventory.getInventory().getSize() - 9; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
@@ -155,11 +216,9 @@ public class ReportBukkitManager implements CommandExecutor {
             player.performCommand("reportsgui");
         });
 
-        reportManager.getAllReports().forEach((uuid, report) -> {
-            if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
-                addReportToInventory(player, inventory, report, true);
-            }
-        });
+        for (var item : ownReports.getPage(0)) {
+            addReportToInventory(player, inventory, item, true);
+        }
 
         player.openInventory(inventory.getInventory());
         return true;

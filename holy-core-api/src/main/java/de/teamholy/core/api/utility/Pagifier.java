@@ -62,6 +62,14 @@ public class Pagifier<T> {
         return total;
     }
 
+    public boolean containsItem(T item) {
+        for (List<T> page : pages) {
+            if (page.contains(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
     public int getTotalPages() {
         return pages.size();
     }
