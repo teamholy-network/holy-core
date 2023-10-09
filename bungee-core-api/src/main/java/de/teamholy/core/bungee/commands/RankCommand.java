@@ -36,10 +36,9 @@ public class RankCommand extends Command {
 
     @SneakyThrows
     @Override
-    public void execute(CommandSender commandSender, String[] args) {
-        ProxiedPlayer player = (ProxiedPlayer) commandSender;
+    public void execute(CommandSender player, String[] args) {
         if (!player.hasPermission("teamholy.rang")) {
-            sendRank(player);
+            sendRank(null);
             return;
         }
 
@@ -141,7 +140,7 @@ public class RankCommand extends Command {
     }
 
 
-    private void sendHelp(ProxiedPlayer proxiedPlayer) {
+    private void sendHelp(CommandSender proxiedPlayer) {
         proxiedPlayer.sendMessage(prefix + "You can only give these ranks:");
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<IPermissionGroup> permissionGroups = new ArrayList<>(CloudNetDriver.getInstance().getPermissionManagement().getGroups());
@@ -153,12 +152,19 @@ public class RankCommand extends Command {
         });
         proxiedPlayer.sendMessage(stringBuilder.toString());
         proxiedPlayer.sendMessage(prefix + "/rank set§8/§7add (player) (rank) (time in days, Lifetime = -1)");
-        sendRank(proxiedPlayer);
+
+        if (proxiedPlayer instanceof ProxiedPlayer) {
+            sendRank((ProxiedPlayer) proxiedPlayer);
+        }
     }
 
 
     private void sendRank(ProxiedPlayer proxiedPlayer) {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        if (proxiedPlayer == null) {
+            return;
+        }
         CloudNetDriver.getInstance().getPermissionManagement().getUser(proxiedPlayer.getUniqueId()).getGroups().forEach(groupEntityData -> {
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(groupEntityData.getGroup());
             if (groupEntityData.getTimeOutMillis() == 0 || groupEntityData.getTimeOutMillis() == -1) {
