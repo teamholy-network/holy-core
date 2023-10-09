@@ -64,9 +64,16 @@ public class ReportBukkitManager implements CommandExecutor {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
 
+
         reportManager.getAllReports().forEach((uuid, report) -> {
             if (!allReports.containsItem(report)) {
                 allReports.addItem(report);
+            }
+        });
+
+        allReports.getPage(currentPage).forEach(value -> {
+            if (!reportManager.getAllReports().containsValue(value)) {
+                allReports.getPage(currentPage).remove(value);
             }
         });
 
@@ -75,6 +82,7 @@ public class ReportBukkitManager implements CommandExecutor {
             return;
         }
         for (var item : allReports.getPage(currentPage)) {
+
             addReportToInventory(player, inventory, item, false);
         }
 
