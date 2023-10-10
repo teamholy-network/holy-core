@@ -15,6 +15,7 @@ public class StatsProfile {
     private UUID id;
     private String playerName;
     private UUID playerUUID;
+    private String playerHash;
     private boolean playerProfileLinked;
     private boolean playerProfileVoted;
     private boolean playerProfileFirstTimeLinked;

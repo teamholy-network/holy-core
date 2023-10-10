@@ -33,6 +33,7 @@ public class LinkManager {
         statsProfile.setId(player.getUniqueId());
         statsProfile.setPlayerName(player.getName());
         statsProfile.setPlayerUUID(player.getUniqueId());
+        statsProfile.setPlayerHash(null);
         statsProfile.setPlayerProfileLinked(false);
         statsProfile.setPlayerProfileVoted(false);
         statsProfile.setPlayerProfileFirstTimeLinked(false);
