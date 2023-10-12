@@ -77,6 +77,8 @@ public class ReportCommand extends Command {
             report.setSender(player.getUniqueId());
             report.setTarget(target.getUniqueId());
             report.setTime(System.currentTimeMillis());
+            report.setTargetOnline(true);
+
             player.sendMessage(prefix + "You reported the player for §e" + report.getReason());
             String[] chatlogReasons = new String[]{"Spam", "Provocation", "Insult", "Advertising"};
 

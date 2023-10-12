@@ -2,8 +2,6 @@ package de.teamholy.core.bukkit.report;
 
 import com.google.common.collect.Maps;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.dytanic.cloudnet.ext.bridge.player.CloudPlayer;
-import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Pagifier;
@@ -12,7 +10,6 @@ import de.teamholy.core.api.utility.Report;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -20,10 +17,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.net.ProxySelector;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class ReportBukkitManager implements CommandExecutor {
 
@@ -35,6 +30,7 @@ public class ReportBukkitManager implements CommandExecutor {
     private final HashMap<UUID, Integer> filterId = Maps.newHashMap();
     private final Map<UUID, Pagifier<Report>> playerPagifier = Maps.newHashMap();
 
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
@@ -45,7 +41,6 @@ public class ReportBukkitManager implements CommandExecutor {
             player.sendMessage(prefix + "§cThere are no open reports!");
             return true;
         }
-
 
         if (!playerPage.containsKey(player.getUniqueId())) {
             playerPage.put(player.getUniqueId(), 1);
@@ -68,7 +63,8 @@ public class ReportBukkitManager implements CommandExecutor {
         if (!playerPagifier.containsKey(player.getUniqueId()))
             playerPagifier.put(player.getUniqueId(), new Pagifier<>(27));
 
-        Pagifier<Report> playerReports = playerPagifier.get(player.getUniqueId());
+        Pagifier<Report> playerReports = playerPagifier.remove(player.getUniqueId());
+
         reportManager.getAllReports().forEach((uuid, report) -> {
             if (!playerReports.containsItem(report)) {
                 playerReports.addItem(report);
@@ -80,17 +76,21 @@ public class ReportBukkitManager implements CommandExecutor {
             return;
         }
 
-        playerReports.getPage(currentPage).forEach(value -> {
+        List<Report> copiedList = new ArrayList<>(playerReports.getPage(currentPage));
+        copiedList.forEach(value -> {
             if (!reportManager.getAllReports().containsValue(value)) {
                 playerReports.getPage(currentPage).remove(value);
             }
         });
 
-        List<Report> reports = playerReports.getPage(currentPage);
         int filterId = this.filterId.getOrDefault(player.getUniqueId(), 0);
-        reports.sort(getFilterById(filterId));
+        copiedList.sort(getFilterById(filterId));
 
-        for (var item : playerReports.getPage(currentPage)) {
+       // copiedList.forEach(report -> Bukkit.broadcastMessage(String.valueOf(report.isTargetOnline())));
+
+        playerPagifier.put(player.getUniqueId(), playerReports);
+
+        for (var item : copiedList) {
             addReportToInventory(player, inventory, item, false);
         }
 
@@ -173,7 +173,8 @@ public class ReportBukkitManager implements CommandExecutor {
     private Comparator<Report> getFilterById(int id) {
         return (id == 0 ? Comparator.comparing(Report::isTargetOnline)
             : id == 1 ? Comparator.comparing(Report::isTargetOnline, Comparator.reverseOrder())
-            : id == 2 ? Comparator.comparingLong(Report::getTime) : null);
+            : id == 2 ? Comparator.comparingLong(Report::getTime)
+            : Comparator.comparing(Report::getTime, Comparator.naturalOrder()));
     }
 
     private void openPlayerReport(Player player, Report report, boolean ownReport) {
@@ -250,7 +251,7 @@ public class ReportBukkitManager implements CommandExecutor {
 
         reportManager.getAllReports().forEach((uuid, report) -> {
             if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId()))
-                if (!ownReports.containsItem(report)) ownReports.addItem(report);
+                if (ownReports.containsItem(report)) ownReports.addItem(report);
         });
 
         Inventory inventory = new Inventory("§8» " + prefix + "§6Your Reports", 9 * 4);
@@ -261,6 +262,8 @@ public class ReportBukkitManager implements CommandExecutor {
             player.closeInventory();
             player.performCommand("reportsgui");
         });
+
+        if (ownReports.getPage(0) == null) return false;
 
         for (var item : ownReports.getPage(0)) {
             addReportToInventory(player, inventory, item, true);
@@ -291,7 +294,9 @@ public class ReportBukkitManager implements CommandExecutor {
                     "§8┃ §7Date §8» §e" + convertTime(report.getTime()),
                     "§8┃ §7Reason §8» §e" + report.getReason());
         }
-        if (inventory.getInventory().contains(itemBuilder.build())) return;
+        if (inventory.getInventory().contains(itemBuilder.build())) {
+            inventory.getInventory().remove(itemBuilder.build());
+        }
         inventory.setItem(itemBuilder.build(), inventory.getInventory().firstEmpty(), event -> openPlayerReport(player, report, ownReport));
     }
 

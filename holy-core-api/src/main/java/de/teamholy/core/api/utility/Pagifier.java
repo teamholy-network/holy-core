@@ -64,11 +64,11 @@ public class Pagifier<T> {
 
     public boolean containsItem(T item) {
         for (List<T> page : pages) {
-            if (page.contains(item)) {
-                return true;
+            if (!page.contains(item)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
     public int getTotalPages() {
         return pages.size();
