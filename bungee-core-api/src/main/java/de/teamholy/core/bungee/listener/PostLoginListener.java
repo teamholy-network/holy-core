@@ -206,6 +206,13 @@ public class PostLoginListener implements Listener {
             BungeeCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, save);
         }
 
+        BungeeCore.getAPI().getReportManager().getAllReports().values().forEach(report -> {
+            if (report.getTarget().equals(proxiedPlayer.getUniqueId())) {
+                    report.setTargetOnline(true);
+                    BungeeCore.getAPI().getReportManager().addReport(report);
+            }
+        });
+
     }
 
 }

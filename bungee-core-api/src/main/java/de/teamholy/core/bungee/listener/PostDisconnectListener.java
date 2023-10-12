@@ -70,10 +70,12 @@ public class PostDisconnectListener implements Listener {
                 if (proxiedPlayer != null) {
                     proxiedPlayer.sendMessage("§cThe player " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + " §cis now offline");
                     report.setViewer(null);
+                    report.setTargetOnline(false);
                     BungeeCore.getAPI().getReportManager().addReport(report);
                 }
             } else if (report.getViewer() != null && report.getViewer().equals(event.getPlayer().getUniqueId())) {
                 report.setViewer(null);
+                report.setTargetOnline(false);
                 BungeeCore.getAPI().getReportManager().addReport(report);
             }
         });
@@ -81,6 +83,7 @@ public class PostDisconnectListener implements Listener {
         if (player.hasPermission("teamholy.team")) {
             BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7is now §coffline");
         }
+
 
 
         BungeeCore.getAPI().getStaffService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 15, TimeUnit.MINUTES);

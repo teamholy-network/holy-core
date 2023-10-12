@@ -20,11 +20,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.net.ProxySelector;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class ReportBukkitManager implements CommandExecutor {
@@ -33,7 +31,9 @@ public class ReportBukkitManager implements CommandExecutor {
 
     private final String prefix = "§cReport §8× §7";
 
-    private Map<UUID, Integer> playerPage = Maps.newHashMap();
+    private final Map<UUID, Integer> playerPage = Maps.newHashMap();
+    private final HashMap<UUID, Integer> filterId = Maps.newHashMap();
+    private final Map<UUID, Pagifier<Report>> playerPagifier = Maps.newHashMap();
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -51,11 +51,12 @@ public class ReportBukkitManager implements CommandExecutor {
             playerPage.put(player.getUniqueId(), 1);
         }
 
+        if (!filterId.containsKey(player.getUniqueId()))
+            filterId.put(player.getUniqueId(), 0);
+
         openReportsInventory(player, playerPage.get(player.getUniqueId()));
         return false;
     }
-
-    final Pagifier<Report> allReports = new Pagifier<>(27);
 
     private void openReportsInventory(Player player, int currentPage) {
         Inventory inventory = new Inventory("§8» §cReports", 9 * 4);
@@ -64,25 +65,32 @@ public class ReportBukkitManager implements CommandExecutor {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
 
+        if (!playerPagifier.containsKey(player.getUniqueId()))
+            playerPagifier.put(player.getUniqueId(), new Pagifier<>(27));
 
+        Pagifier<Report> playerReports = playerPagifier.get(player.getUniqueId());
         reportManager.getAllReports().forEach((uuid, report) -> {
-            if (!allReports.containsItem(report)) {
-                allReports.addItem(report);
+            if (!playerReports.containsItem(report)) {
+                playerReports.addItem(report);
             }
         });
 
-        allReports.getPage(currentPage).forEach(value -> {
-            if (!reportManager.getAllReports().containsValue(value)) {
-                allReports.getPage(currentPage).remove(value);
-            }
-        });
-
-        if (allReports.getPage(currentPage) == null) {
+        if (playerReports.getPage(currentPage) == null) {
             player.sendMessage(prefix + "§cThere are no more reports!");
             return;
         }
-        for (var item : allReports.getPage(currentPage)) {
 
+        playerReports.getPage(currentPage).forEach(value -> {
+            if (!reportManager.getAllReports().containsValue(value)) {
+                playerReports.getPage(currentPage).remove(value);
+            }
+        });
+
+        List<Report> reports = playerReports.getPage(currentPage);
+        int filterId = this.filterId.getOrDefault(player.getUniqueId(), 0);
+        reports.sort(getFilterById(filterId));
+
+        for (var item : playerReports.getPage(currentPage)) {
             addReportToInventory(player, inventory, item, false);
         }
 
@@ -97,8 +105,28 @@ public class ReportBukkitManager implements CommandExecutor {
             ItemBuilder(Material.LAVA_BUCKET)
             .setName("§8» §6Clear §creports")
             .setLore("", " §7Clears all reports", " §7like §6/reports clear", "")
-            .build(), 31, event ->
+            .build(), 30, event ->
             sendBungeeCommand(player, "reports clear"));
+
+        inventory.setItem(new
+            ItemBuilder(Material.HOPPER)
+            .setName("§8» §6Filter §creports")
+            .setLore("",
+                " §7Filter the §creports",
+                "",
+                " §7Current§8: §a" + getFilterByIdName(filterId))
+            .build(), 32, event -> {
+            int currentFilter = this.filterId.remove(player.getUniqueId());
+            if (currentFilter == 4) {
+                this.filterId.put(player.getUniqueId(), 0);
+            } else {
+                this.filterId.put(player.getUniqueId(), currentFilter + 1);
+            }
+            player.closeInventory();
+            Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+                player.performCommand("reportsgui");
+            }, 3L);
+        });
 
         inventory.setItem(new
             ItemBuilder(Material.PAPER)
@@ -106,6 +134,7 @@ public class ReportBukkitManager implements CommandExecutor {
             .setLore("", " §7Lists your current §creports", "")
             .build(), 33, event ->
             openCurrentReports(player));
+
 
         if (currentPage > 1) {
             inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §cBack").build(), inventory.getInventory().getSize() - 9, event -> {
@@ -117,12 +146,12 @@ public class ReportBukkitManager implements CommandExecutor {
             });
         }
 
-        if (allReports.getPage(currentPage + 1) != null) {
+        if (playerReports.getPage(currentPage + 1) != null) {
             inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §bForward").build(),
                 inventory.getInventory().getSize() - 1, event -> {
 
                     int playerCurrent = playerPage.remove(player.getUniqueId());
-                    if (allReports.getPage(playerCurrent + 1) != null) {
+                    if (playerReports.getPage(playerCurrent + 1) != null) {
                         playerPage.put(player.getUniqueId(), playerCurrent + 1);
                         player.closeInventory();
                         Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
@@ -137,11 +166,20 @@ public class ReportBukkitManager implements CommandExecutor {
         player.openInventory(inventory.getInventory());
     }
 
+    private String getFilterByIdName(int id) {
+        return (id == 0 ? "§aOnline" : id == 1 ? "§cOffline" : id == 2 ? "§eTime" : "§6All");
+    }
+
+    private Comparator<Report> getFilterById(int id) {
+        return (id == 0 ? Comparator.comparing(Report::isTargetOnline)
+            : id == 1 ? Comparator.comparing(Report::isTargetOnline, Comparator.reverseOrder())
+            : id == 2 ? Comparator.comparingLong(Report::getTime) : null);
+    }
+
     private void openPlayerReport(Player player, Report report, boolean ownReport) {
         PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService()
             .getEntity(report.getTarget(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(report.getTarget()));
         if (playerProfile == null) return;
-
 
         Inventory inventory = new Inventory("§8» " + prefix + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), 9 * 3);
         for (int i = 0; i < inventory.getInventory().getSize(); i++) {

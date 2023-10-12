@@ -16,4 +16,5 @@ public class Report {
     UUID viewer;
     Long time, viewerSince;
     String reason, chatlogID;
+    boolean targetOnline;
 }
