@@ -82,7 +82,6 @@ public class ReportCommand extends Command {
             player.sendMessage(prefix + "You reported the player for §e" + report.getReason());
             String[] chatlogReasons = new String[]{"Spam", "Provocation", "Insult", "Advertising"};
 
-
             ChatLog chatLog = null;
             for (String chatlogReason : chatlogReasons) {
                 if (chatlogReason.equalsIgnoreCase(reason)) {

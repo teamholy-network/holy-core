@@ -18,6 +18,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ReportBukkitManager implements CommandExecutor {
@@ -305,8 +309,10 @@ public class ReportBukkitManager implements CommandExecutor {
     }
 
     public static String convertTime(long timestampInMillis) {
-        SimpleDateFormat sdf = new SimpleDateFormat("d. MMM yyyy HH:mm:ss");
-        Date date = new Date(timestampInMillis);
-        return sdf.format(date);
+        //Date date = new Date(timestampInMillis);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        ZonedDateTime zonedDateTime = ZonedDateTime
+            .ofInstant(Instant.ofEpochMilli(timestampInMillis), ZoneId.systemDefault());
+        return zonedDateTime.format(dateTimeFormatter);
     }
 }
