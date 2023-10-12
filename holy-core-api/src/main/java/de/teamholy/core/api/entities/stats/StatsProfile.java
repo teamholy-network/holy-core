@@ -34,6 +34,7 @@ public class StatsProfile {
     @Setter
     public static class PlayerProfileSocial {
         private String profileMessage;
+        private String profileBanner;
         private List<String> profileComments;
         private List<ProfileLikes> profileLikes;
     }

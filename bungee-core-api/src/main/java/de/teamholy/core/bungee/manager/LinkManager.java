@@ -50,6 +50,7 @@ public class LinkManager {
 
         StatsProfile.PlayerProfileSocial playerProfileSocial = new StatsProfile.PlayerProfileSocial();
         playerProfileSocial.setProfileMessage(null);
+        playerProfileSocial.setProfileBanner(null);
         playerProfileSocial.setProfileComments(new ArrayList<>());
         playerProfileSocial.setProfileLikes(new ArrayList<>());
 
