@@ -37,7 +37,6 @@ public class ReportBukkitManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-
         Player player = (Player) commandSender;
 
         if (!player.hasPermission("teamholy.team")) return false;
@@ -67,7 +66,7 @@ public class ReportBukkitManager implements CommandExecutor {
         if (!playerPagifier.containsKey(player.getUniqueId()))
             playerPagifier.put(player.getUniqueId(), new Pagifier<>(27));
 
-        Pagifier<Report> playerReports = playerPagifier.remove(player.getUniqueId());
+        Pagifier<Report> playerReports = playerPagifier.get(player.getUniqueId());
 
         reportManager.getAllReports().forEach((uuid, report) -> {
             if (!playerReports.containsItem(report)) {
@@ -77,6 +76,7 @@ public class ReportBukkitManager implements CommandExecutor {
 
         if (playerReports.getPage(currentPage) == null) {
             player.sendMessage(prefix + "§cThere are no more reports!");
+            playerPage.remove(player.getUniqueId());
             return;
         }
 
@@ -86,6 +86,7 @@ public class ReportBukkitManager implements CommandExecutor {
                 playerReports.getPage(currentPage).remove(value);
             }
         });
+        copiedList = new ArrayList<>(playerReports.getPage(currentPage));
 
         int filterId = this.filterId.getOrDefault(player.getUniqueId(), 0);
         copiedList.sort(getFilterById(filterId));
@@ -150,20 +151,17 @@ public class ReportBukkitManager implements CommandExecutor {
             });
         }
 
-        if (playerReports.getPage(currentPage + 1) != null) {
+        boolean forwardPage = playerReports.getPage(currentPage + 1) != null;
+        if (forwardPage) {
             inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §bForward").build(),
                 inventory.getInventory().getSize() - 1, event -> {
 
                     int playerCurrent = playerPage.remove(player.getUniqueId());
-                    if (playerReports.getPage(playerCurrent + 1) != null) {
-                        playerPage.put(player.getUniqueId(), playerCurrent + 1);
-                        player.closeInventory();
-                        Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
-                            player.performCommand("reportsgui");
-                        }, 3L);
-                    } else {
-                        player.sendMessage(prefix + "§cThere are no more reports!");
-                    }
+                    playerPage.put(player.getUniqueId(), playerCurrent + 1);
+                    player.closeInventory();
+                    Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+                        player.performCommand("reportsgui");
+                    }, 3L);
                 });
         }
 

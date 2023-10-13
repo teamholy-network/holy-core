@@ -162,7 +162,6 @@ public class ReportStaffCommand extends Command {
         }
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
 
-
         report.setViewer(player.getUniqueId());
         report.setViewerSince(System.currentTimeMillis());
         player.sendMessage(prefix + "You took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
