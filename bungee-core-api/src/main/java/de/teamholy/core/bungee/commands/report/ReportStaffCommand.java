@@ -160,6 +160,8 @@ public class ReportStaffCommand extends Command {
             player.sendMessage(prefix + "The report was already took over from " + BungeeCore.getAPI().getCloudManager().getColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()));
             return;
         }
+        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
+
 
         report.setViewer(player.getUniqueId());
         report.setViewerSince(System.currentTimeMillis());
@@ -167,6 +169,10 @@ public class ReportStaffCommand extends Command {
         BungeeCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", "jump " + name));
         reportHandler.addReport(report);
 
+        ProxiedPlayer reporter = ProxyServer.getInstance().getPlayer(report.getSender());
+        if (reporter != null) {
+            reporter.sendMessage(TextComponent.fromLegacyText(prefix + "Your report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + target.getName() + " §7is now being processed"));
+        }
     }
 
     private void openBukkitInventory(ProxiedPlayer player) {
