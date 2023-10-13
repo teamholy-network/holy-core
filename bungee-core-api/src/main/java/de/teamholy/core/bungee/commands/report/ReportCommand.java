@@ -79,7 +79,6 @@ public class ReportCommand extends Command {
             report.setTime(System.currentTimeMillis());
             report.setTargetOnline(true);
 
-            player.sendMessage(prefix + "You reported the player for §e" + report.getReason());
             String[] chatlogReasons = new String[]{"Spam", "Provocation", "Insult", "Advertising"};
 
             ChatLog chatLog = null;
@@ -91,11 +90,12 @@ public class ReportCommand extends Command {
             report.setChatlogID(chatLog == null ? null : chatLog.getChatLogId());
             reportHandler.addReport(report);
 
-
             boolean finalIsNicked = isNicked;
 
             String reported = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
             String reporter = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
+
+            player.sendMessage(prefix + "You've reported " + reported + " for §e" + report.getReason());
 
             ProxiedPlayer finalTarget = target;
             ChatLog finalChatLog = chatLog;
@@ -104,7 +104,7 @@ public class ReportCommand extends Command {
                 if (!proxiedPlayer.hasPermission("teamholy.team")) return;
                 if (!BungeeCore.getAPI().getStaffManager().canNotify(proxiedPlayer.getUniqueId())) return;
 
-                proxiedPlayer.sendMessage(prefix + "The player " + reporter + " §7reported " + reported + " §7for §e" + report.getReason() + " §7reported §8(§e" + finalTarget.getServer().getInfo().getName() + "§8) " + (finalIsNicked ? "§8(§5§lNICKED§8)" : ""));
+                proxiedPlayer.sendMessage(prefix + "The player " + reporter + " §7has reported " + reported + " §7for §e" + report.getReason() + " §8(§e" + finalTarget.getServer().getInfo().getName() + "§8) " + (finalIsNicked ? "§8(§5§lNICKED§8)" : ""));
                 if (finalChatLog != null)
                     proxiedPlayer.sendMessage(prefix + "Chatlog -> https://teamholy.de/chatlog/" + finalChatLog.getChatLogId());
                 TextComponent message = new TextComponent(prefix + "§a§lAccept report");
