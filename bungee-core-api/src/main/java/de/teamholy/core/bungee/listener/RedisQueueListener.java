@@ -48,60 +48,66 @@ public class RedisQueueListener {
         BungeeCore.getAPI().getExecutor().execute(() -> {
             while (true) {
 
-                List<String> jobData = jedis.brpop(10, "commandsQueue");
-                if (jobData != null) {
-                    String msg = jobData.get(1);
-                    String[] args = msg.split(" ");
+                try {
+
+                    List<String> jobData = jedis.brpop(10, "commandsQueue");
+                    if (jobData != null) {
+                        String msg = jobData.get(1);
+                        String[] args = msg.split(" ");
 
 
-                    switch (args[0]) {
-                        case "coinsadd" -> {
-                            String target = args[1];
-                            String amount = args[2];
-                            ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
-                            if (targetPlayer != null) {
-                                coinManager.addCoins(targetPlayer.getUniqueId(), Integer.parseInt(amount), true);
-                                targetPlayer.sendMessage(" ");
-                                targetPlayer.sendMessage("§6Web §8× §7You received §6" + amount + " Coins§7!");
-                                targetPlayer.sendMessage(" ");
+                        switch (args[0]) {
+                            case "coinsadd" -> {
+                                String target = args[1];
+                                String amount = args[2];
+                                ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
+                                if (targetPlayer != null) {
+                                    coinManager.addCoins(targetPlayer.getUniqueId(), Integer.parseInt(amount), true);
+                                    targetPlayer.sendMessage(" ");
+                                    targetPlayer.sendMessage("§6Web §8× §7You received §6" + amount + " Coins§7!");
+                                    targetPlayer.sendMessage(" ");
+                                    sendDiscordWebhook(msg);
+                                }
+                            }
+                            case "refreshChatFilter" -> {
+                                chatFilterManager.loadFilteredWords();
                                 sendDiscordWebhook(msg);
                             }
-                        }
-                        case "refreshChatFilter" -> {
-                            chatFilterManager.loadFilteredWords();
-                            sendDiscordWebhook(msg);
-                        }
-                        case "weblinked" -> {
-                            String target = args[1];
+                            case "weblinked" -> {
+                                String target = args[1];
 
-                            ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
-                            coinManager.addCoins(targetPlayer.getUniqueId(), 500, true);
+                                ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
+                                coinManager.addCoins(targetPlayer.getUniqueId(), 500, true);
 
-                            ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer -> {
-                                proxiedPlayer.sendMessage(" ");
-                                TextComponent message = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8[&c&l!&8] " + BungeeCore.getAPI().getCloudManager().getColor(targetPlayer.getUniqueId()) + targetPlayer.getName() + " &alinked &7his account with our website &7and received &e500 &7Coins! &7Get your &ecoins&7 by &alinking &7your profile with "));
-                                TextComponent linkMessage = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6/link&7!"));
-                                linkMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/link"));
-                                linkMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GOLD + "/link").create()));
-                                message.addExtra(linkMessage);
-                                proxiedPlayer.sendMessage(message);
-                                proxiedPlayer.sendMessage(" ");
-                            });
+                                ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer -> {
+                                    proxiedPlayer.sendMessage(" ");
+                                    TextComponent message = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8[&c&l!&8] " + BungeeCore.getAPI().getCloudManager().getColor(targetPlayer.getUniqueId()) + targetPlayer.getName() + " &alinked &7his account with our website &7and received &e500 &7Coins! &7Get your &ecoins&7 by &alinking &7your profile with "));
+                                    TextComponent linkMessage = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6/link&7!"));
+                                    linkMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/link"));
+                                    linkMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GOLD + "/link").create()));
+                                    message.addExtra(linkMessage);
+                                    proxiedPlayer.sendMessage(message);
+                                    proxiedPlayer.sendMessage(" ");
+                                });
 
+                            }
+                            case "updateCustomBanner" -> {
+                                String type = args[1];
+                                String target = args[2];
+                                String instruction = args[3];
+                                JsonDocument command = new JsonDocument().append("type", type).append("target", target).append("instruction", instruction);
+
+                                cloudManager.sendCloudMessage("bukkit", "banner", command);
+                                sendDiscordWebhook("Update Custom Banner for " + target);
+                            }
+                            default ->
+                                ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
                         }
-                        case "updateCustomBanner" -> {
-                            String type = args[1];
-                            String target = args[2];
-                            String instruction = args[3];
-                            JsonDocument command = new JsonDocument().append("type", type).append("target", target).append("instruction", instruction);
 
-                            cloudManager.sendCloudMessage("bukkit", "banner", command);
-                            sendDiscordWebhook("Update Custom Banner for " + target);
-                        }
-                        default ->
-                            ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
                     }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
 
