@@ -23,6 +23,7 @@ public class StatsProfile {
     private String playerProfileLinkCode;
     private String playerProfileCookie;
     private String playerProfileDiscordLinkCode;
+    private String playerProfileDiscordId;
     private boolean playerProfileDiscordLinked;
     private long playerProfileLastTimeLoggedIn;
 
