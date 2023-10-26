@@ -95,7 +95,7 @@ public class ReportCommand extends Command {
             String reported = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
             String reporter = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
 
-            player.sendMessage(prefix + "You've reported " + reported + " for §e" + report.getReason());
+            player.sendMessage(prefix + "You've reported " + reported + " §7for §e" + report.getReason());
 
             ProxiedPlayer finalTarget = target;
             ChatLog finalChatLog = chatLog;
