@@ -91,7 +91,6 @@ public class BungeeCore extends Plugin {
 
 
 
-
         bungeePlayerManager = new BungeePlayerManager(this.coreAPI);
         partyManager = new PartyManager();
         chatLogManager = new ChatLogManager();
@@ -205,7 +204,7 @@ public class BungeeCore extends Plugin {
 
     @Override
     public void onDisable() {
-        //coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
+        coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
         coreAPI.onDisable();
     }
 

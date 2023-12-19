@@ -26,12 +26,11 @@ public class CloudMessageListener {
     public void onListen(ChannelMessageReceiveEvent event) {
         if (event.getMessage() == null) return;
 
-        //if (event.getMessage().equals("ohio:report")) {
-        //    JsonDocument message = event.getData();
-        ///    coreAPI.getMetricsManager().saveMetric(message);
-         //   return;
-
-        //}
+        if (event.getMessage().equals("ohio:report")) {
+            JsonDocument message = event.getData();
+            coreAPI.getMetricsManager().saveMetric(message);
+            return;
+        }
 
         if (event.getMessage().equalsIgnoreCase("command")) {
             UUID uuid = event.getData().get("uuid", UUID.class);

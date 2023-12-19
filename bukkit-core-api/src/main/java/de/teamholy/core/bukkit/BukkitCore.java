@@ -4,9 +4,11 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.manager.MetricsManager;
 import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.bukkit.commands.XyzCommand;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
+import de.teamholy.core.bukkit.listener.PlayerChatListener;
 import de.teamholy.core.bukkit.listener.PlayerJoinQuitListener;
 import de.teamholy.core.bukkit.manager.CloudMessageManager;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
@@ -36,6 +38,8 @@ public class BukkitCore extends JavaPlugin {
 
     CustomBannerManager customBannerManager;
 
+    MetricsManager metricsManager;
+
     @Getter
     CoreAPI coreAPI;
     @Getter
@@ -52,6 +56,7 @@ public class BukkitCore extends JavaPlugin {
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
+        metricsManager = new MetricsManager(this.coreAPI);
         perkCache = new PerkCache();
         perkManager = new PerkManager(this);
         cloudMessageManager = new CloudMessageManager(this);
@@ -65,23 +70,20 @@ public class BukkitCore extends JavaPlugin {
         new CustomBannerManager(this);
         new UsePerkListener();
         new CloudMessageListener(this);
+        new PlayerChatListener(this);
 
         getCommand("xyz").setExecutor(new XyzCommand(this));
 
         customBannerManager = new CustomBannerManager(this);
 
 
-        Perk defaultStick =
-            new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
+        Perk defaultStick = new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
 
-        Perk defaultBlock =
-            new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
+        Perk defaultBlock = new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
 
-        Perk chat =
-            new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
+        Perk chat = new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
 
-        Perk cBanner =
-            new Perk(99999,"Custom Banner",Material.BANNER,(byte) 0,PerkType.CBANNER,15000,PerkRankType.PLAYER,null);
+        Perk cBanner = new Perk(99999, "Custom Banner", Material.BANNER, (byte) 0, PerkType.CBANNER, 15000, PerkRankType.PLAYER, null);
 
         AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"), "perks");
         configuration.load();
@@ -119,15 +121,12 @@ public class BukkitCore extends JavaPlugin {
             }
         });
 
-        getPerkCache().getPerkHashMap().put(99999,cBanner);
-
+        getPerkCache().getPerkHashMap().put(99999, cBanner);
 
 
         BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
 
-           cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
-
-
+            cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
 
         }, 0, 50);
 
