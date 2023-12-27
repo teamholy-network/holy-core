@@ -84,7 +84,7 @@ public class RankCommand extends Command {
             }
             BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "rank_update", JsonDocument.newDocument("uuid", uuid));
 
-            PlayerRank playerRank = Arrays.stream(PlayerRank.values()).filter(playerRank1 -> playerRank1.getName().equalsIgnoreCase(permissionGroup.getName())).collect(Collectors.toList()).get(0);
+            PlayerRank playerRank = Arrays.stream(PlayerRank.values()).filter(playerRank1 -> playerRank1.getName().equalsIgnoreCase(permissionGroup.getName())).toList().get(0);
 
             DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
             discordWebhook.setUsername("Rang update");

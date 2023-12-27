@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.redisson.api.RMapCache;
 import org.redisson.api.map.event.EntryExpiredListener;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -82,4 +83,5 @@ public class AbstractService<E, K, R extends Repository<E, K>> {
         redisCache.removeAsync(key);
         repository.deleteById(key);
     }
+
 }

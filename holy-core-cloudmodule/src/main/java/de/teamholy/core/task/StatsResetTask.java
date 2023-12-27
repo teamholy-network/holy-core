@@ -67,6 +67,11 @@ public class StatsResetTask implements Runnable {
 
 
     private void resetStatsFromGameProfiles(StatsType statsType) {
+
+        if (statsType == StatsType.DAILY) CloudModuleCore.DAILY = true;
+        else if (statsType == StatsType.MONTHLY) CloudModuleCore.MONTHLY = true;
+
+
         CloudModuleCore.getCoreAPI().getExecutor().execute(() -> {
 
             List<UUID> championRanks = Lists.newArrayList();
@@ -77,7 +82,7 @@ public class StatsResetTask implements Runnable {
                     scoredSortedSet.entryRangeReversed(0, 0).forEach(o -> {
                         ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) o;
                         if (!championRanks.contains(scoredEntry.getValue())) championRanks.add(scoredEntry.getValue());
-                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee","command",JsonDocument.newDocument().append("command","rank add " + CloudModuleCore.getCoreAPI().getUuidManager().getName(scoredEntry.getValue()) + " Champion 1"));
+                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee","command",JsonDocument.newDocument().append("command","cloud perms user " + CloudModuleCore.getCoreAPI().getUuidManager().getName(scoredEntry.getValue()) + " add group Champion 1"));
                     });
 
                 }
@@ -116,9 +121,6 @@ public class StatsResetTask implements Runnable {
                 sortedSet.clear();
             }
 
-
-            if (statsType == StatsType.DAILY) CloudModuleCore.DAILY = true;
-            else if (statsType == StatsType.MONTHLY) CloudModuleCore.MONTHLY = true;
 
             try {
                 CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class).getOnlinePlayersAsync().get().forEach(iCloudPlayer -> {
