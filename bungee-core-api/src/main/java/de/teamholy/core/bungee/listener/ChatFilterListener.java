@@ -28,8 +28,7 @@ public class ChatFilterListener implements Listener {
     public static final HashMap<UUID, String> LASTMESSAGES = new HashMap<>();
 
     private Set<String> domains = new HashSet<>();
-    private final Pattern domainPattern = Pattern.compile("([a-zA-Z0-9-]+)[.,x;-]([a-zA-Z0-9-]+)");
-
+    private final Pattern domainPattern = Pattern.compile("([a-zA-Z0-9-]+)[.,x;⦁!@#$%^&*()_+=|<>?{}\\[\\]\\-]([a-zA-Z0-9-]+)");
 
     DiffMatch diffMatch = new DiffMatch();
 
