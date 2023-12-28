@@ -95,6 +95,12 @@ public class ChatFilterListener implements Listener {
             if (domainMatcher.find()) {
                 String tld = domainMatcher.group(2);
                 if (domains.contains(tld)) {
+
+                    MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                    if (punishProfile != null) {
+                        return; //quick fix for now, only will trigger if player triggers the pattern
+                    }
+
                     ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "cpunish " + proxiedPlayer.getName() + " mute Advertising 24h");
                     proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + domainMatcher.group(0) + "§8. §7will be reviewed by our team)");
                     proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §cADVERTISING");
