@@ -30,6 +30,8 @@ public class ChatFilterListener implements Listener {
     private Set<String> domains = new HashSet<>();
     private final Pattern domainPattern = Pattern.compile("([a-zA-Z0-9-]+)[.,x;⦁!@#$%^&*()_+=|<>?{}\\[\\]\\-]([a-zA-Z0-9-]+)");
 
+    private final String[] bypassedDomains = {"teamholy.de", "teamholy.net"};
+
     DiffMatch diffMatch = new DiffMatch();
 
     public ChatFilterListener(BungeeCore bungeeCore) {
@@ -92,6 +94,12 @@ public class ChatFilterListener implements Listener {
 
             Matcher domainMatcher = domainPattern.matcher(message);
             if (domainMatcher.find()) {
+
+                if (Arrays.stream(bypassedDomains).anyMatch(domain -> domainMatcher.group(0).toLowerCase().endsWith(domain.toLowerCase()))) {
+                    return;
+                }
+
+
                 String tld = domainMatcher.group(2);
                 if (domains.contains(tld)) {
 
