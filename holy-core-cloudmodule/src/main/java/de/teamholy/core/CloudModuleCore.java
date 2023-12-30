@@ -36,7 +36,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
         instance = this;
 
 
-        String mongoString = "mongodb://admin:dkdfGp3U81SEu+Zc2L@10.0.3.2:46410/?authSource=admin";
+        String mongoString = "mongodb://admin:dkdfGp3U81SEu+Zc2L@127.0.0.1:46410/?authSource=admin";
         coreAPI = new CoreAPI(Credentials.of(mongoString, "holy"));
 
 
