@@ -39,6 +39,7 @@ public class RankingSortManager {
                 RScoredSortedSet scoredSortedSet = CloudModuleCore.getCoreAPI()
                     .getRedissonManager().getRedissonClient().getScoredSortedSet(gamemodes.toString() + "_" + statsType.toString());
                 scoredSortedSet.clear();
+
                 sortedSetHashMap.put(scoredSortedSet.getName(), scoredSortedSet);
             }
         }
@@ -81,7 +82,7 @@ public class RankingSortManager {
                     for (StatsType statsType : StatsType.values()) {
                         RScoredSortedSet sortedSet = sortedSetHashMap.get(gamemodes.toString() + "_" + statsType.toString());
                         int stat = (int) gameProfile.getStat(gamemodes.toString(), statsType, gamemodes.getRankingKey());
-                        if (stat > 1000) sortedSet.add(stat, gameProfile.getPlayerId());
+                        if (stat > 1000) sortedSet.addAsync(stat, gameProfile.getPlayerId());
                     }
                 }
             }
