@@ -19,11 +19,6 @@ public class RankingSortManager {
 
     public RankingSortManager() {
         CloudModuleCore.getInstance().getService().execute(this::start);
-
-        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(() -> {
-            List<GameProfile> gameProfiles = new ArrayList<>(CloudModuleCore.getCoreAPI().getGameService().getRedisCache().values());
-            insertStats(gameProfiles);
-        }, 30, 30, TimeUnit.SECONDS);
     }
 
     public void start() {
@@ -70,7 +65,15 @@ public class RankingSortManager {
 
         CloudModuleCore.getInstance().getLogger().info("[✔] Finished ranking cache process in " + ((System.currentTimeMillis() - start) / 1000) + "s with " + gameProfiles.size() + " entries");
         CloudModuleCore.getInstance().getLogger().info("[✔] Starting statsreset task with 60s interval");
+        CloudModuleCore.getInstance().getLogger().info("[✔] Starting ranking cache task with 30s interval");
+
         CloudModuleCore.getInstance().getService().scheduleAtFixedRate(new StatsResetTask(), 60, 60, TimeUnit.SECONDS);
+
+        CloudModuleCore.getInstance().getService().scheduleAtFixedRate(() -> {
+            List<GameProfile> gameProfilesCache = new ArrayList<>(CloudModuleCore.getCoreAPI().getGameService().getRedisCache().values());
+            insertStats(gameProfilesCache);
+            CloudModuleCore.getInstance().getLogger().info("[✔] Updated ranking cache with " + gameProfilesCache.size() + " entries");
+        }, 30, 30, TimeUnit.SECONDS);
 
     }
 
