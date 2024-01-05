@@ -28,7 +28,7 @@ public class ChatFilterListener implements Listener {
     public static final HashMap<UUID, String> LASTMESSAGES = new HashMap<>();
 
     private Set<String> domains = new HashSet<>();
-    private final Pattern domainPattern = Pattern.compile("([a-zA-Z0-9-]+)[.,x;⦁!@#$%^&*()_+=|<>?{}\\[\\]\\-]([a-zA-Z0-9-]+)");
+    private final Pattern domainPattern = Pattern.compile("([a-zA-Z0-9-]+)[.,;⦁!@#$%^&*()_+=|<>?{}\\[\\]\\-]([a-zA-Z0-9-]+)");
 
     private final String[] bypassedDomains = {"teamholy.de", "teamholy.net"};
 
@@ -108,9 +108,9 @@ public class ChatFilterListener implements Listener {
                         return; //quick fix for now, only will trigger if player triggers the pattern
                     }
 
-                    ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "cpunish " + proxiedPlayer.getName() + " mute Advertising 24h");
+                    //ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "cpunish " + proxiedPlayer.getName() + " mute Advertising 24h");
                     proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + domainMatcher.group(0) + "§8. §7will be reviewed by our team)");
-                    proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §cADVERTISING");
+                    //proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §cADVERTISING");
                     event.setCancelled(true);
                     sendDiscordWebhookDomainfilter(proxiedPlayer, event, domainMatcher);
                     return;
@@ -162,7 +162,7 @@ public class ChatFilterListener implements Listener {
         DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1136093941612163241/OdV3rYMQtN9wtBU6xcu4IVnQrVPZb5hMveIAmXNFgHynd1JzDxg3QdiD5mzEs8JHyf8-");
         webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
         webhook.setUsername("ChatFilter");
-        webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("Chatfilter").addField(proxiedPlayer.getName() + " wrote", event.getMessage(), true).addField("may contain", matcher.group(), false).addField("Server", proxiedPlayer.getServer().getInfo().getName(), false).addField("Action", "Mute (24h)", false).setColor(Color.ORANGE).setThumbnail("https://visage.surgeplay.com/face/512/" + proxiedPlayer.getUniqueId().toString() + ".png").setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png"));
+        webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("Chatfilter").addField(proxiedPlayer.getName() + " wrote", event.getMessage(), true).addField("may contain", matcher.group(), false).addField("Server", proxiedPlayer.getServer().getInfo().getName(), false).addField("Action", "Warn", false).setColor(Color.ORANGE).setThumbnail("https://visage.surgeplay.com/face/512/" + proxiedPlayer.getUniqueId().toString() + ".png").setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png"));
 
         webhook.execute();
     }
