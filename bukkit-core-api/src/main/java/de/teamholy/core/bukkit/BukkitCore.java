@@ -66,7 +66,6 @@ public class BukkitCore extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         new PlayerJoinQuitListener(this);
-        //new PacketListener(this); /* Du bist schwul*/
         new CustomBannerManager(this);
         new UsePerkListener();
         new CloudMessageListener(this);
