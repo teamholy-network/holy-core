@@ -20,8 +20,12 @@ import de.teamholy.core.bungee.util.ChatAction;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -64,6 +68,25 @@ public class LookupCommand extends SenderCommand {
                     () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
 
 
+                Scanner scanner = null;
+
+                try {
+                    scanner = new Scanner(new URL("https://teamholy.de/api/holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                String response = scanner.useDelimiter("\\A").next();
+                JSONObject jsonResponse = new JSONObject(response);
+                String country;
+
+
+                if (jsonResponse.isEmpty() || jsonResponse.isNull("country")) {
+                    country = "§cNo country found";
+                } else country = jsonResponse.getString("countryname");
+
+
+
                 player.sendMessage(Message.LINE);
                 player.sendMessage("");
                 TextComponent nameComp = new TextComponent("§7Name §8» ");
@@ -98,6 +121,9 @@ public class LookupCommand extends SenderCommand {
                     ipComp.addExtra(new ChatAction().text("§6" + playerProfile.getIp()).suggest(playerProfile.getIp()).hover("§7Click to copy IP").component());
                     player.sendMessage(ipComp);
                 }
+
+                TextComponent countryComp = new TextComponent("§7Country §8» §6" + country);
+                player.sendMessage(countryComp);
 
 
                 TextComponent accComp = new TextComponent("§7Accounts §8» ");
