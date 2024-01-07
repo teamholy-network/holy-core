@@ -161,6 +161,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
 
 
         chatFilterManager.loadFilteredWords();
