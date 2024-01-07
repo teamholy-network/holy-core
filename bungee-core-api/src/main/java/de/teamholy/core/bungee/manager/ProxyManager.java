@@ -91,42 +91,12 @@ public class ProxyManager {
         });
     }
 
-    public void checkASN(String proxy, ASNCallback callback) {
-        coreAPI.getExecutor().execute(() -> {
-            try {
-                URL url = new URL("http://ipcheck.skydb.de/getinfo?ip=" + proxy);
-                Scanner scanner = new Scanner(url.openStream());
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while (scanner.hasNext()) {
-                    stringBuilder.append(scanner.next());
-                }
-
-                JSONObject json = new JSONObject(stringBuilder.toString());
-                int asnInt = json.optInt("ASN", -1);
-                String asn = asnInt == -1 ? "" : String.valueOf(asnInt);
-
-                callback.onResult(asn);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-
-
-
     public interface ContainsProxyCallback {
         void onResult(boolean isProxy, String countryName, String org);
     }
 
     public interface LucaZplaysCallback {
         void onResult(boolean isProxy);
-    }
-
-    public interface ASNCallback {
-        void onResult(String asn);
     }
 
     public String createKickMessage() {
@@ -147,35 +117,6 @@ public class ProxyManager {
                             .addField("Name", proxiedPlayer.getName(), true)
                             .addField("UUID", proxiedPlayer.getUniqueId().toString(), true)
                             .addField("Proxy", proxy + ", " + countryName + " (" + org + ")", false)
-                            .setThumbnail("https://minotar.net/helm/" + proxiedPlayer.getUniqueId().toString() + "/100.png")
-                            .setColor(Color.orange)
-                            .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png")
-
-                    );
-
-                    webhook.execute();
-                }
-
-            );
-
-        });
-    }
-
-    public void sendAsnWarning(ProxiedPlayer proxiedPlayer, String proxy, String asn) {
-
-        coreAPI.getExecutor().execute(() -> {
-            checkProxy(proxy, (isProxy, countryName, org) -> {
-                    DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1071587864330125372/hvtEqts6aBI7wTWq5DUp13QiWD9byAU-XGEN8hJTsAv1PyEl4tITwSO9kxgADkcMsCC6");
-                    webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
-                    webhook.setUsername("ProxyFilter");
-                    webhook.addEmbed(
-                        new DiscordWebhook.EmbedObject()
-                            .setTitle("Proxyfilter (AS Blacklist)")
-                            .setDescription("User " + proxiedPlayer.getName() + " (" + proxiedPlayer.getUniqueId().toString() + ") hit our AS blacklist")
-                            .addField("Name", proxiedPlayer.getName(), true)
-                            .addField("UUID", proxiedPlayer.getUniqueId().toString(), true)
-                            .addField("Proxy", proxy + ", " + countryName + " (" + org + ")", false)
-                            .addField("AS", asn, false)
                             .setThumbnail("https://minotar.net/helm/" + proxiedPlayer.getUniqueId().toString() + "/100.png")
                             .setColor(Color.orange)
                             .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png")
