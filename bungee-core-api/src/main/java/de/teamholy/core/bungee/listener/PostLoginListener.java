@@ -33,6 +33,9 @@ public class PostLoginListener implements Listener {
 
     ProxyManager proxyManager;
 
+    private final String[] blockedIsns = new String[]{"31163"};
+
+
     public PostLoginListener(ProxyManager proxyManager) {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
         this.proxyManager = proxyManager;
@@ -42,8 +45,7 @@ public class PostLoginListener implements Listener {
     public void onLogin(PostLoginEvent loginEvent) {
         ProxiedPlayer proxiedPlayer = loginEvent.getPlayer();
 
-        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
-            () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
         FriendProfile friendProfile;
         PunishHistoryProfile punishHistoryProfile;
@@ -71,6 +73,19 @@ public class PostLoginListener implements Listener {
                         });
                     }
                 });
+
+                proxyManager.checkASN(ipAddress, asn -> {
+                    if (asn != null) {
+                        for (String blockedIsaEntry : blockedIsns) {
+                            if (asn.contains(blockedIsaEntry)) {
+                                proxiedPlayer.disconnect(proxyManager.kickMessage);
+                                proxyManager.sendAsnWarning(proxiedPlayer, ipAddress, asn);
+                                break;
+                            }
+                        }
+                    }
+                });
+
 
             });
         }
@@ -235,8 +250,8 @@ public class PostLoginListener implements Listener {
 
         BungeeCore.getAPI().getReportManager().getAllReports().values().forEach(report -> {
             if (report.getTarget().equals(proxiedPlayer.getUniqueId())) {
-                    report.setTargetOnline(true);
-                    BungeeCore.getAPI().getReportManager().addReport(report);
+                report.setTargetOnline(true);
+                BungeeCore.getAPI().getReportManager().addReport(report);
             }
         });
 
