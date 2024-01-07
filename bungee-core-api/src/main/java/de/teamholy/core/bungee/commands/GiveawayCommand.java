@@ -21,7 +21,6 @@ public class GiveawayCommand extends Command implements Listener {
     private String prefix = "§dGiveaway §8× §f";
     private boolean chat;
     private int winnerNumber;
-    private String server;
 
     public GiveawayCommand(String name) {
         super(name);
@@ -48,7 +47,6 @@ public class GiveawayCommand extends Command implements Listener {
 
     private void startGiveaway(Integer max, ProxiedPlayer player, String price) {
         winnerNumber = new Random().nextInt(max);
-        server = player.getServer().getInfo().getName();
         chat = false;
         TextComponent message = new TextComponent("§c§kwsd §fHover me to see the number §c§kwsd");
         message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§f§l" + winnerNumber)));
@@ -59,6 +57,7 @@ public class GiveawayCommand extends Command implements Listener {
             proxiedPlayer.sendMessage("§8§m---------§f§lGIVEAWAY§8§m---------");
             proxiedPlayer.sendMessage(prefix + "§lThe number is between §c§l0 - " + max);
             proxiedPlayer.sendMessage(prefix + "§lPrice: §a§n" + price.replace("&", "§"));
+            proxiedPlayer.sendMessage(prefix + "§lTry to guess the number in the chat!");
             proxiedPlayer.sendMessage(prefix + "§lGood luck, the chat is enabled in 10 seconds!");
             proxiedPlayer.sendMessage("§8§m--------------------------");
         }
@@ -73,11 +72,11 @@ public class GiveawayCommand extends Command implements Listener {
         ProxiedPlayer player = (ProxiedPlayer) event.getSender();
         if (event.getMessage().startsWith("/")) return;
 
-        if (!chat) {
+        if (!chat && !player.hasPermission("*")) {
             player.sendMessage(prefix + "The chat is disabled!");
             event.setCancelled(true);
         } else {
-            if (event.getMessage().equalsIgnoreCase(String.valueOf(winnerNumber)) && player.getServer().getInfo().getName().equalsIgnoreCase(server)) {
+            if (event.getMessage().equalsIgnoreCase(String.valueOf(winnerNumber))) {
                 chat = false;
                 ProxyServer.getInstance().getPlayers().forEach(players -> {
                     players.sendMessage(prefix + "§6§lThe Player " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §6§lhas won!");
