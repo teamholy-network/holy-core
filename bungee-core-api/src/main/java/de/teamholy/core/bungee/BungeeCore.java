@@ -71,6 +71,8 @@ public class BungeeCore extends Plugin {
 
     RedisQueueListener redisQueueListener;
 
+    ProxyManager proxyManager;
+
     public BungeeCore() {
         instance = this;
     }
@@ -92,13 +94,14 @@ public class BungeeCore extends Plugin {
         metricsManager = new MetricsManager(this.coreAPI);
         helpers = new Helpers();
         linkManager = new LinkManager();
+        proxyManager = new ProxyManager(this.coreAPI);
 
 
         new LoginListener();
         new BanLoginListener(this);
         new MuteChatListener();
         new ServerConnectedListener();
-        new PostLoginListener();
+        new PostLoginListener(this.proxyManager);
         new PostDisconnectListener();
         new PartyListener();
 

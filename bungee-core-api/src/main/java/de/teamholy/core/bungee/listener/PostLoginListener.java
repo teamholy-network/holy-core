@@ -13,6 +13,7 @@ import de.teamholy.core.api.utility.CustomBanner;
 import de.teamholy.core.api.utility.PartyInviteAllowance;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.BungeeCore;
+import de.teamholy.core.bungee.manager.ProxyManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -27,11 +28,14 @@ import java.util.Locale;
 import java.util.UUID;
 
 
-/* copyright by Yassino */
+/* copyright by Yassino & Gregorr */
 public class PostLoginListener implements Listener {
 
-    public PostLoginListener() {
+    ProxyManager proxyManager;
+
+    public PostLoginListener(ProxyManager proxyManager) {
         ProxyServer.getInstance().getPluginManager().registerListener(BungeeCore.getInstance(), this);
+        this.proxyManager = proxyManager;
     }
 
     @EventHandler
@@ -48,6 +52,29 @@ public class PostLoginListener implements Listener {
 
 
         String ipAddress = proxiedPlayer.getAddress().getAddress().getHostAddress();
+
+        if (!proxiedPlayer.hasPermission("teamholy.joinfilter.bypass")) {
+            BungeeCore.getAPI().getExecutor().execute(() -> {
+                proxyManager.containsProxy(ipAddress).thenAccept(contains -> {
+                    if (contains) {
+                        proxiedPlayer.disconnect(proxyManager.kickMessage);
+                        proxyManager.sendProxyWarning(proxiedPlayer, ipAddress);
+                    } else {
+                        proxyManager.checkZplays(ipAddress, isProxy -> {
+                            if (isProxy) {
+                                proxiedPlayer.sendMessage(proxyManager.kickMessage);
+                                proxyManager.sendProxyWarning(proxiedPlayer, ipAddress);
+                                proxyManager.addProxy(ipAddress);
+                            } else {
+                                proxyManager.removeProxy(ipAddress);
+                            }
+                        });
+                    }
+                });
+
+            });
+        }
+
 
         boolean save = false;
         if (playerProfile == null) {
@@ -212,6 +239,7 @@ public class PostLoginListener implements Listener {
                     BungeeCore.getAPI().getReportManager().addReport(report);
             }
         });
+
 
     }
 
