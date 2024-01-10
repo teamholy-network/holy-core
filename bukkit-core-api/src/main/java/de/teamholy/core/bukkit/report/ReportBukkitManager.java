@@ -66,7 +66,7 @@ public class ReportBukkitManager implements CommandExecutor {
         if (!playerPagifier.containsKey(player.getUniqueId()))
             playerPagifier.put(player.getUniqueId(), new Pagifier<>(27));
 
-        Pagifier<Report> playerReports = playerPagifier.get(player.getUniqueId());
+        Pagifier<Report> playerReports = playerPagifier.remove(player.getUniqueId());
 
         reportManager.getAllReports().forEach((uuid, report) -> {
             if (!playerReports.containsItem(report)) {

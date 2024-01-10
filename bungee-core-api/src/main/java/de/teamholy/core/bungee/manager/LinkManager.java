@@ -37,7 +37,7 @@ public class LinkManager {
         statsProfile.setPlayerProfileLinked(false);
         statsProfile.setPlayerProfileVoted(false);
         statsProfile.setPlayerProfileFirstTimeLinked(false);
-        statsProfile.setPlayerProfileLastTimeLinked(System.currentTimeMillis()); // Hurensohn
+        statsProfile.setPlayerProfileLastTimeLinked(System.currentTimeMillis());
         statsProfile.setPlayerProfileLinkCode(linkCode);
         statsProfile.setPlayerProfileCookie(null);
         statsProfile.setPlayerProfileDiscordLinkCode(helpers.generateSecureKey(40));
