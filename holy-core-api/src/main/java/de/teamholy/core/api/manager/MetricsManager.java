@@ -24,10 +24,23 @@ public class MetricsManager {
     }
 
     public void saveMetric(JsonDocument jsonDocument) {
-
-        if (jsonDocument.isEmpty() ||metricsCollection == null || coreAPI == null || coreAPI.getRedissonManager().getRedissonClient().isShutdown()) {
+        if (coreAPI == null) {
+            System.out.println("coreAPI is null");
             return;
         }
+        if (coreAPI.getRedissonManager().getRedissonClient().isShutdown()) {
+            System.out.println("redissonClient is shutdown");
+            return;
+        }
+        if (metricsCollection == null) {
+            System.out.println("metricsCollection is null");
+            return;
+        }
+
+        if (jsonDocument.isEmpty()) {
+            return;
+        }
+
         Map<String, String> serverMetrics = new HashMap<>();
 
         String serverName = jsonDocument.getString("serverName");
