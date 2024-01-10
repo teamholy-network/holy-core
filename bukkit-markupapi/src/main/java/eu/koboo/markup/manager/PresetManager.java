@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
 import eu.koboo.markup.util.PlayerPreset;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -27,6 +28,9 @@ public class PresetManager {
     private final ExecutorService service;
     private final SecureRandom secureRandom = new SecureRandom();
     private final List<PlayerPreset> presetList = new ArrayList<>();
+
+    @Getter
+    private boolean load = true;
 
     public PresetManager(MarkupAPI markupAPI) {
         this.markupAPI = markupAPI;
@@ -87,7 +91,9 @@ public class PresetManager {
 
     public void reloadPresets() {
         try {
-
+            if (!load) {
+                return;
+            }
             int counter = 0;
 
             BufferedReader reader = new BufferedReader(new FileReader(this.file));
@@ -104,14 +110,19 @@ public class PresetManager {
             reader.close();
             Bukkit.getConsoleSender().sendMessage("Finished loading " + counter + " skins from '" + this.file.getAbsolutePath() + "'..!");
         } catch (Exception e) {
-            if (!(e instanceof SocketTimeoutException))
+            if (!(e instanceof SocketTimeoutException)) {
                 e.printStackTrace();
+                load = false;
+            }
         }
     }
 
     public void loadPreset(UUID uuid, Consumer<PlayerPreset> consumer) {
         service.execute(() -> {
             PlayerPreset preset = null;
+            if (!load) {
+                return;
+            }
             try {
                 URLConnection con = (new URL("https://api.minetools.eu/profile/" + uuid)).openConnection();
                 con.setReadTimeout(3000);
@@ -126,8 +137,7 @@ public class PresetManager {
                 con.getInputStream().close();
                 preset = new PlayerPreset(name, uuid, value, sign);
             } catch (IOException e) {
-                if (!(e instanceof SocketTimeoutException))
-                    e.printStackTrace();
+                load = false;
             }
             consumer.accept(preset);
         });

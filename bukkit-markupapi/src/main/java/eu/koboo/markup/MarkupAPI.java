@@ -94,7 +94,6 @@ public class MarkupAPI extends JavaPlugin {
         presetManager = new PresetManager(this);
         teamManager = new TeamManager(this);
 
-
         handleCommandRegistration("hardnick", new CommandHardNick(this));
         handleCommandRegistration("nick", new CommandNick(this));
         handleCommandRegistration("nicklist", new CommandNickList(this));

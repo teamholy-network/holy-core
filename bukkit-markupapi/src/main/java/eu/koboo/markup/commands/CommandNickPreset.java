@@ -31,6 +31,10 @@ public class CommandNickPreset implements CommandExecutor {
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§cYou don't have permission to do that!");
             return false;
         }
+        if (!markupAPI.getPresetManager().isLoad()) {
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cThe nicksystem is currently disabled!");
+            return false;
+        }
         if (strings.length != 1) {
             StringBuilder builder = new StringBuilder();
             for (SkinPreset preset : SkinPreset.values()) {

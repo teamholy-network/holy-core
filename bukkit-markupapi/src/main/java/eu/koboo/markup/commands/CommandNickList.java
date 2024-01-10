@@ -26,6 +26,10 @@ public class CommandNickList implements CommandExecutor {
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§cYou don't have permission to do that!");
             return false;
         }
+        if (!markupAPI.getPresetManager().isLoad()) {
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cThe nicksystem is currently disabled!");
+            return false;
+        }
         if (strings.length != 0) {
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§cUsage: §7/nicklist");
             return false;

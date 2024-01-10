@@ -33,6 +33,11 @@ public class CommandNick implements CommandExecutor {
             return false;
         }
 
+        if (!markupAPI.getPresetManager().isLoad()) {
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cThe nicksystem is currently disabled!");
+            return false;
+        }
+
         if (strings.length != 0) {
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§cUsage: §7/nick");
             return false;
