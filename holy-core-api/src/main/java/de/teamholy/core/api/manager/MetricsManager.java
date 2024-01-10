@@ -25,7 +25,7 @@ public class MetricsManager {
 
     public void saveMetric(JsonDocument jsonDocument) {
 
-        if (jsonDocument.isEmpty()) {
+        if (jsonDocument.isEmpty() ||metricsCollection == null || coreAPI == null || coreAPI.getRedissonManager().getRedissonClient().isShutdown()) {
             return;
         }
         Map<String, String> serverMetrics = new HashMap<>();

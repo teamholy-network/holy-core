@@ -14,7 +14,7 @@ import java.util.UUID;
 /* copyright by Yassino */
 public class CloudMessageListener {
 
-    CoreAPI coreAPI;
+    private final CoreAPI coreAPI;
 
 
     public CloudMessageListener(CoreAPI coreAPI) {
