@@ -60,15 +60,16 @@ public class LinkManager {
         profileStreak.setNext(0);
         profileStreak.setLimit(0);
 
-
         statsProfile.setProfileViews(profileViews);
         statsProfile.setPlayerProfileSocial(playerProfileSocial);
         statsProfile.setProfileStreak(profileStreak);
 
+        if (statsProfileRepository.exists(statsProfile) || playerExists(player)) {
+            System.out.println("Player already exists in database! UUID: " + player.getUniqueId() + "\nName: " + player.getName());
+            return;
+        }
         statsProfileRepository.save(statsProfile);
         sendLinkMessageToPlayer(player, linkCode);
-
-
     }
 
     public void relinkPlayer(ProxiedPlayer player) {
