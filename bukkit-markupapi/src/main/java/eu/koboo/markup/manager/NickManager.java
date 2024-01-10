@@ -40,7 +40,7 @@ public class NickManager implements Listener {
     }
 
     public boolean hasNickName(Player player) {
-       return this.playerMetaMap.containsKey(player.getUniqueId());
+        return this.playerMetaMap.containsKey(player.getUniqueId());
     }
 
     public PlayerMeta getPlayerMeta(UUID uuid) {
@@ -50,7 +50,6 @@ public class NickManager implements Listener {
     public Map<UUID, PlayerMeta> getPlayerMetaMap() {
         return playerMetaMap;
     }
-
 
     public void apply(Player player, String nickName, UUID optionalUUID, Property nickTextures) {
 
@@ -236,8 +235,8 @@ public class NickManager implements Listener {
         profile.getProperties().put("textures", signedProperty);
 
         PlayerInfoData playerInfoData = new PlayerInfoData(
-                profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
-                EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
+            profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
+            EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
 
         List<PlayerInfoData> playerInfoDataList = new ArrayList<>();
         playerInfoDataList.add(playerInfoData);
@@ -259,8 +258,8 @@ public class NickManager implements Listener {
         profile.getProperties().put("textures", signedProperty);
 
         PlayerInfoData playerInfoData = new PlayerInfoData(
-                profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
-                EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
+            profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
+            EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
 
         List<PlayerInfoData> playerInfoDataList = new ArrayList<>();
         playerInfoDataList.add(playerInfoData);
@@ -283,8 +282,8 @@ public class NickManager implements Listener {
         profile.getProperties().put("textures", signedProperty);
 
         PlayerInfoData playerInfoData = new PlayerInfoData(
-                profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
-                EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
+            profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
+            EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
 
         List<PlayerInfoData> playerInfoDataList = new ArrayList<>();
         playerInfoDataList.add(playerInfoData);
@@ -306,8 +305,8 @@ public class NickManager implements Listener {
         profile.getProperties().put("textures", signedProperty);
 
         PlayerInfoData playerInfoData = new PlayerInfoData(
-                profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
-                EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
+            profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping,
+            EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()), null);
 
         List<PlayerInfoData> playerInfoDataList = new ArrayList<>();
         playerInfoDataList.add(playerInfoData);

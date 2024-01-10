@@ -47,7 +47,7 @@ public class TeamManager implements Listener {
             return;
         }
         WrapperPlayServerScoreboardTeam createPacket = getCreateTeam(player, name, nameTagEvent.getSortId(), nameTagEvent.getPrefix(), nameTagEvent.getSuffix(), nameTagEvent.getDisplaySuffix());
-        WrapperPlayServerScoreboardTeam deletePacket = getDeleteTeam(player, name, nameTagEvent.getSortId());
+        WrapperPlayServerScoreboardTeam deletePacket = getDeleteTeam(name, nameTagEvent.getSortId());
         deletePacket.sendPacket(other);
         createPacket.sendPacket(other);
     }
@@ -80,7 +80,7 @@ public class TeamManager implements Listener {
         return packet;
     }
 
-    private WrapperPlayServerScoreboardTeam getDeleteTeam(Player player, String playerName, int sortId) {
+    private WrapperPlayServerScoreboardTeam getDeleteTeam(String playerName, int sortId) {
         WrapperPlayServerScoreboardTeam packet = new WrapperPlayServerScoreboardTeam();
         String teamName = sortId + playerName;
         if (teamName.length() > 16) {
