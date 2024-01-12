@@ -21,7 +21,7 @@ public class MaxIPListener implements Listener {
     @EventHandler
     public void login(LoginEvent event) {
         if (this.addresses.get(event.getConnection().getAddress().getAddress()) >= 3) {
-            event.setCancelReason("§c§lTo many players with the same §6§lIP");
+            event.setCancelReason("§c§lToo many players with the same §6§lIP §c§lare online!");
             event.setCancelled(true);
         }
     }
