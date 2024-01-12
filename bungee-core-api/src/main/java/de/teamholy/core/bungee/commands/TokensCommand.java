@@ -31,13 +31,10 @@ public class TokensCommand extends Command {
                 PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(proxiedPlayer.getUniqueId(),
                     () -> coreAPI.getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
-
-                if (proxiedPlayer.hasPermission("teamholy.joinme")) {
-                    proxiedPlayer.sendMessage("§8§m-------------§f§lTOKENS§8§m---------------");
-                    proxiedPlayer.sendMessage("§dJoinme Tokens §8» §a§lUNLIMITED §8(§e" + playerProfile.getJoinMeTokens() + "§8)");
-                } else {
-                    proxiedPlayer.sendMessage("§dJoinme Tokens §8» §e" + playerProfile.getJoinMeTokens());
-                }
+                proxiedPlayer.sendMessage("§8§m-------------§f§lTOKENS§8§m---------------");
+                proxiedPlayer.sendMessage("§dJoinme Tokens §8» §e" +
+                    (proxiedPlayer.hasPermission("teamholy.joinme") ? "§a§lUNLIMITED §8(§e" + playerProfile.getJoinMeTokens() + "§8)"
+                        : playerProfile.getJoinMeTokens()));
                 proxiedPlayer.sendMessage("§cStatsreset Tokens §8» §e" + playerProfile.getStatsResetTokens());
                 proxiedPlayer.sendMessage("§8§m----------------------------------");
                 return;
