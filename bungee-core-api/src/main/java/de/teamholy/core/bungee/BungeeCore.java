@@ -81,11 +81,6 @@ public class BungeeCore extends Plugin {
     public void onEnable() {
         coreAPI = new CoreAPI();
 
-
-
-
-
-
         bungeePlayerManager = new BungeePlayerManager(this.coreAPI);
         partyManager = new PartyManager();
         chatLogManager = new ChatLogManager();

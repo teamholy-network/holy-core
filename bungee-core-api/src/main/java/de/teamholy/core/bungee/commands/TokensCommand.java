@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.commands;
 
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
@@ -43,8 +44,8 @@ public class TokensCommand extends Command {
             }
 
             if (args.length != 4) {
-                commandSender.sendMessage("/tokens joinme (player) add (amount)");
-                commandSender.sendMessage("/tokens statsreset (player) add (amount)");
+                commandSender.sendMessage(Message.PREFIX + "/tokens joinme (player) add (amount)");
+                commandSender.sendMessage(Message.PREFIX + "/tokens statsreset (player) add (amount)");
             } else {
 
                 String type;
@@ -54,13 +55,13 @@ public class TokensCommand extends Command {
                 } else if (args[0].toLowerCase(Locale.ROOT).equals("statsreset")) {
                     type = "statsresetTokens";
                 } else {
-                    commandSender.sendMessage("not a valid arg (joinme/statsreset)!");
+                    commandSender.sendMessage(Message.PREFIX + "This is not a valid argument (joinme/statsreset)!");
                     return;
                 }
 
                 UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
                 if (uuid == null) {
-                    commandSender.sendMessage("not a valid player!");
+                    commandSender.sendMessage(Message.PREFIX + "This is not a valid player!");
                     return;
                 }
 
@@ -77,7 +78,7 @@ public class TokensCommand extends Command {
                             playerProfile.setStatsResetTokens(playerProfile.getStatsResetTokens() + number);
                         }
                         BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, ProxyServer.getInstance().getPlayer(uuid) != null, true);
-                        commandSender.sendMessage("Added player " + args[1] + " " + number + " " + type + " tokens!");
+                        commandSender.sendMessage(Message.PREFIX + "Added player " + args[1] + " " + number + " " + type.replace("Tokens", "") + " tokens!");
 
                         ProxiedPlayer proxiedPlayer1 = ProxyServer.getInstance().getPlayer(uuid);
                         if (proxiedPlayer1 != null) {
@@ -89,11 +90,9 @@ public class TokensCommand extends Command {
                         }
 
                     } catch (NumberFormatException e) {
-                        commandSender.sendMessage("not a valid number!");
+                        commandSender.sendMessage(Message.PREFIX + "This is not a valid number!");
                     }
                 }
-
-
             }
         }
 
