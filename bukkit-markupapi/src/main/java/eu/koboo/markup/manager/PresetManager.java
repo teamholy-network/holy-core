@@ -91,9 +91,7 @@ public class PresetManager {
 
     public void reloadPresets() {
         try {
-            if (!load) {
-                return;
-            }
+            load = true;
             int counter = 0;
 
             BufferedReader reader = new BufferedReader(new FileReader(this.file));
