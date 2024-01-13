@@ -1,6 +1,6 @@
 package de.teamholy.bungee.login;
 
-import de.teamholy.bungee.login.command.*;
+import de.teamholy.bungee.login.commands.*;
 import de.teamholy.bungee.login.listener.EventListener;
 import de.teamholy.bungee.login.manager.BotManager;
 import de.teamholy.bungee.login.manager.CaptchaManager;

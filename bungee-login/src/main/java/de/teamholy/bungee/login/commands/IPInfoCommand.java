@@ -1,4 +1,4 @@
-package de.teamholy.bungee.login.command;
+package de.teamholy.bungee.login.commands;
 
 import java.util.regex.Pattern;
 
