@@ -37,11 +37,12 @@ public class RankCommand extends Command {
     @SneakyThrows
     @Override
     public void execute(CommandSender player, String[] args) {
-        if (!player.hasPermission("teamholy.rang")) {
-            sendRank(null);
-            return;
+        if (player instanceof ProxiedPlayer proxiedPlayer) {
+            if (!player.hasPermission("teamholy.rang")) {
+                sendRank(proxiedPlayer);
+                return;
+            }
         }
-
 
         if (args.length == 4) {
             UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
