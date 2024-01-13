@@ -42,7 +42,12 @@ public class EventListener implements Listener {
 
     Set<ProxiedPlayer> loggedin = BungeeLogin.loggedin;
 
-    public EventListener() {
+    CaptchaManager captchaManager;
+
+    public EventListener(CaptchaManager captchaManager) {
+
+        this.captchaManager = captchaManager;
+
         ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () -> {
             crackedipnames.forEach((key, value) -> {
                 if (value.getTime() < System.currentTimeMillis() - 20000) {
@@ -233,12 +238,12 @@ public class EventListener implements Listener {
                     PlayerObject object = repo.findFirstById(name);
                     if (object.getPasswordhash() == null) {
                         if (BotManager.isBotProtectionEnableRegister()) {
-                            CaptchaManager.createCaptcha(player);
+                            captchaManager.createCaptcha(player);
                         }
                         player.sendMessage(BungeeLogin.PREFIX + "/register (password) (password)");
                     } else {
                         if (BotManager.isBotProtectionEnableLogin()) {
-                            CaptchaManager.createCaptcha(player);
+                            captchaManager.createCaptcha(player);
                         }
                         player.sendMessage(BungeeLogin.PREFIX + "/login (password)");
                     }
@@ -277,7 +282,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onChat(ChatEvent event) {
         if (event.getSender() instanceof ProxiedPlayer player) {
-            if (CaptchaManager.getCapcha(player).isPresent()) {
+            if (captchaManager.getCapcha(player).isPresent()) {
                 event.setCancelled(true);
                 return;
             }

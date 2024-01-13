@@ -39,8 +39,12 @@ public class BungeeLogin extends Plugin {
 
     public static ConcurrentHashMap<String, String> iphostname = new ConcurrentHashMap<String, String>();
 
+    public static String APIKEY = "adasaisuoa2j2j2j2jnvalkooiwuhlkabvd"; // hardcoded, yes i know...
+
 
     public static String PREFIX = "§6Teamholy §8× §7";
+
+    CaptchaManager captchaManager;
 
 
     @Override
@@ -55,7 +59,8 @@ public class BungeeLogin extends Plugin {
 
         BotManager.init();
 
-        CaptchaManager.init();
+        captchaManager = new CaptchaManager();
+        captchaManager.init();
 
 //		System.out.println("started with merg prozess");
 //		List<PlayerObject> playerObjects = new ArrayList<>();
@@ -71,11 +76,11 @@ public class BungeeLogin extends Plugin {
 
         ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText("§7Loaded §a" + this.getDescription().getName()));
 
-        ProxyServer.getInstance().getPluginManager().registerListener(this, new EventListener());
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new EventListener(captchaManager));
 
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LoginCommand("login"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LoginCommand("login", captchaManager));
 
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RegisterCommand("register"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RegisterCommand("register", captchaManager));
 
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ResetCommand("reset"));
 

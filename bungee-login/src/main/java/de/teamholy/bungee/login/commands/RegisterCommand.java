@@ -18,8 +18,11 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class RegisterCommand extends Command {
 
-    public RegisterCommand(String name) {
+    CaptchaManager captchaManager;
+
+    public RegisterCommand(String name, CaptchaManager captchaManager) {
         super(name);
+        this.captchaManager = captchaManager;
     }
 
     @Override
@@ -36,9 +39,9 @@ public class RegisterCommand extends Command {
             	return;
             }
             
-            if (CaptchaManager.getCapcha(player).isPresent()) {
+            if (captchaManager.getCapcha(player).isPresent()) {
                 player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cYou have to Solve the Captcha first to Register your Account"));
-                CaptchaManager.getCapcha(player).ifPresent(captcha -> {
+                captchaManager.getCapcha(player).ifPresent(captcha -> {
                     player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + captcha.link));
                 });
             	return;
