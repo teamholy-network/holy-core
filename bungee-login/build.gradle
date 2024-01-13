@@ -1,0 +1,12 @@
+dependencies {
+    implementation("eu.koboo:en2do:$en2doVersion")
+    implementation("org.redisson:redisson:$redissonVersion")
+    implementation 'redis.clients:jedis:5.0.1'
+    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+
+    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
+    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
+    compileOnly("io.github.waterfallmc:waterfall-api:1.18-R0.1-SNAPSHOT")
+
+    implementation(project(':holy-core-api'))
+}

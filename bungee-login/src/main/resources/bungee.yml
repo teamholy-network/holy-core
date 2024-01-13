@@ -1,0 +1,3 @@
+name: bungee-login
+main: de.teamholy.bungee.login.BungeeLogin
+version: 1.0
