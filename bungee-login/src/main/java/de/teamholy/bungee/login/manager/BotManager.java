@@ -18,13 +18,13 @@ public class BotManager {
 	}
 
 	public static boolean isBotProtectionEnableRegister() {
-		return true;
-        //registers >= 5;
+		//return true;
+        return registers >= 5;
 	}
 
 	public static boolean isBotProtectionEnableLogin() {
-		return true;
-        //loggins >= 10;
+		//return true;
+        return loggins >= 10;
 	}
 	
 	public static void register() {
