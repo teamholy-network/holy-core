@@ -10,6 +10,7 @@ import de.teamholy.core.bungee.commands.SenderCommand;
 import de.teamholy.core.bungee.util.BanUtil;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.awt.*;
 import java.util.UUID;
@@ -56,7 +57,8 @@ public class UnbanCommand extends SenderCommand {
                 BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
 
 
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
+                if (sender instanceof ProxiedPlayer player) BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
+                else BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
 

@@ -8,6 +8,7 @@ import de.teamholy.core.bungee.BungeeCore;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /* copyright by Yassino */
@@ -24,7 +25,19 @@ public class BanUtil {
 
     public TextComponent generateUnbanMessage(String unbanner, BanProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
-        String message = Message.PUNISH_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId()) + unbanner + "§7 has unbanned " + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
+        String message = Message.PUNISH_PREFIX
+            + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getAuthorId())
+            + unbanner + "§7 has unbanned "
+            + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
+        return generateLookUpComponent(playerName, message);
+    }
+
+    public TextComponent generateUnbanMessage(String unbanner, UUID unbannerId, BanProfile punishProfile) {
+        String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
+        String message = Message.PUNISH_PREFIX
+            + BungeeCore.getAPI().getCloudManager().getColor(unbannerId)
+            + unbanner + "§7 has unbanned "
+            + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
         return generateLookUpComponent(playerName, message);
     }
 
