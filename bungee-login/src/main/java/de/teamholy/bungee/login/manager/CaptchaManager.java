@@ -30,11 +30,8 @@ public class CaptchaManager {
 
     Title statusTitle;
 
-    Title emptyStatusTitle;
-
     public CaptchaManager() {
         createStatusTitle();
-        createEmptyStatusTitle();
     }
 
     public void init() {
@@ -45,12 +42,10 @@ public class CaptchaManager {
                     sendAsyncHttpRequest(captcha.getCheckurl()).thenAccept(result -> {
                         if (result.contains("true")) {
                             captcha.player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§aCaptcha Solved"));
-                            captcha.player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§aYou can now Login or Register normally ✔"));
-                            sendCaptchaStatus(captcha, "", true);
                             list.remove(captcha);
                         } else {
                             sendCaptchaMessage(captcha);
-                            sendCaptchaStatus(captcha, "§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd", false);
+                            sendCaptchaStatus(captcha);
                         }
                     });
                 } else {
@@ -90,11 +85,10 @@ public class CaptchaManager {
             captcha.setCheckurl(checkurl);
 
             for (int i = 0; i < 10; i++) {
-                BungeeLogin.getInstance().getLogger().info("Captcha Link: " + linkurl);
+            	BungeeLogin.getInstance().getLogger().info("Captcha Link: " + linkurl);
             }
 
             sendCaptchaMessage(captcha);
-            sendCaptchaStatus(captcha, "§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd", false);
 
             return Optional.of(captcha);
 
@@ -109,15 +103,9 @@ public class CaptchaManager {
         c.getPlayer().sendMessage(text);
     }
 
-    public void sendCaptchaStatus(Captcha c, String message, boolean verified) {
-        c.getPlayer().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
-
-        if (verified) {
-            c.getPlayer().sendTitle(emptyStatusTitle);
-        } else {
-            c.getPlayer().sendTitle(statusTitle);
-        }
-
+    public void sendCaptchaStatus(Captcha c) {
+    	c.getPlayer().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd"));
+        c.getPlayer().sendTitle(statusTitle);
     }
 
     public Optional<Captcha> getCapcha(ProxiedPlayer player) {
@@ -150,7 +138,7 @@ public class CaptchaManager {
     public static class Captcha {
         public String checkurl;
         public String link;
-        public ProxiedPlayer player;
+		public ProxiedPlayer player;
     }
 
     private void createStatusTitle() {
@@ -160,15 +148,6 @@ public class CaptchaManager {
         statusTitle.fadeIn(0);
         statusTitle.stay(20 * 60 * 60);
         statusTitle.fadeOut(0);
-    }
-
-    private void createEmptyStatusTitle() {
-        emptyStatusTitle = BungeeLogin.getInstance().getProxy().createTitle();
-        emptyStatusTitle.title(TextComponent.fromLegacyText(""));
-        emptyStatusTitle.subTitle(TextComponent.fromLegacyText(""));
-        emptyStatusTitle.fadeIn(0);
-        emptyStatusTitle.stay(20 * 60 * 60);
-        emptyStatusTitle.fadeOut(0);
     }
 
 }
