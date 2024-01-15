@@ -61,7 +61,7 @@ public class CaptchaManager {
     }
 
     public CompletableFuture<Optional<Captcha>> createCaptcha(ProxiedPlayer player) {
-        String urlString = "https://teamholy.de/api/holy/captcha/generate/" + "/" + BungeeLogin.APIKEY + "/" + player.getName().toLowerCase(Locale.ROOT);
+        String urlString = "https://teamholy.de/api/holy/captcha/generate/" + BungeeLogin.APIKEY + "/" + player.getName().toLowerCase(Locale.ROOT);
         Captcha captcha = new Captcha("", "", player);
 
         for (int i = 0; i < 10; i++) {
