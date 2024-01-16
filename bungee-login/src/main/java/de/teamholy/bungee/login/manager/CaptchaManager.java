@@ -24,14 +24,23 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CaptchaManager {
 
-    public static Set<Captcha> list = ConcurrentHashMap.newKeySet();
+    public Set<Captcha> list = ConcurrentHashMap.newKeySet();
 
 //	public static Set<Captcha> capchaready = ConcurrentHashMap.newKeySet();
 
-    Title statusTitle;
+    private Title statusTitle;
+
+    private static CaptchaManager instance;
 
     public CaptchaManager() {
         createStatusTitle();
+    }
+
+    public static synchronized CaptchaManager getInstance() {
+        if (instance == null) {
+            instance = new CaptchaManager();
+        }
+        return instance;
     }
 
     public void init() {
