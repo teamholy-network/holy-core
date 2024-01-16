@@ -42,7 +42,12 @@ public class EventListener implements Listener {
 
     Set<ProxiedPlayer> loggedin = BungeeLogin.loggedin;
 
-    public EventListener() {
+    CaptchaManager captchaManager;
+
+    public EventListener(CaptchaManager captchaManager) {
+
+        this.captchaManager = captchaManager;
+
         ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () -> {
             crackedipnames.forEach((key, value) -> {
                 if (value.getTime() < System.currentTimeMillis() - 20000) {
@@ -92,10 +97,10 @@ public class EventListener implements Listener {
                         event.setCancelled(true);
 
                         String alreadyRegistered = "§cThis name is registered as a §6§lPremium §7user" +
-                                "\n §cChange your name to play on §6Team§fHoly" +
-                                "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                                "\n" +
-                                "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
+                            "\n §cChange your name to play on §6Team§fHoly" +
+                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
+                            "\n" +
+                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
 
                         if (repo.existsById(name)) {
                             PlayerObject object = repo.findFirstById(name);
@@ -175,10 +180,10 @@ public class EventListener implements Listener {
 
                     if (playerProfile != null) {
                         String alreadyRegistered = "§cThis name is registered as a §6§lPremium §7user" +
-                                "\n §cChange your name to play on §6Team§fHoly" +
-                                "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                                "\n" +
-                                "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
+                            "\n §cChange your name to play on §6Team§fHoly" +
+                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
+                            "\n" +
+                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
 
                         if (repo.existsById(name)) {
                             PlayerObject object = repo.findFirstById(name);
@@ -205,11 +210,11 @@ public class EventListener implements Listener {
                             event.setCancelled(true);
 
                             player.disconnect(TextComponent.fromLegacyText(
-                                    "§cThis name is registered as a §6§lPremium §7user" +
-                                            "\n §cChange your name to play on §6Team§fHoly" +
-                                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                                            "\n" +
-                                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support"));
+                                "§cThis name is registered as a §6§lPremium §7user" +
+                                    "\n §cChange your name to play on §6Team§fHoly" +
+                                    "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
+                                    "\n" +
+                                    "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support"));
                             return;
                         }
                         for (Entry<String, Long> entry : object.getIps().entrySet()) {
@@ -233,12 +238,12 @@ public class EventListener implements Listener {
                     PlayerObject object = repo.findFirstById(name);
                     if (object.getPasswordhash() == null) {
                         if (BotManager.isBotProtectionEnableRegister()) {
-                            CaptchaManager.createCaptcha(player);
+                            captchaManager.createCaptcha(player);
                         }
                         player.sendMessage(BungeeLogin.PREFIX + "/register (password) (password)");
                     } else {
                         if (BotManager.isBotProtectionEnableLogin()) {
-                            CaptchaManager.createCaptcha(player);
+                            captchaManager.createCaptcha(player);
                         }
                         player.sendMessage(BungeeLogin.PREFIX + "/login (password)");
                     }
@@ -277,7 +282,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onChat(ChatEvent event) {
         if (event.getSender() instanceof ProxiedPlayer player) {
-            if (CaptchaManager.getCapcha(player).isPresent()) {
+            if (captchaManager.getCapcha(player).isPresent()) {
                 event.setCancelled(true);
                 return;
             }

@@ -44,7 +44,7 @@ public class AccountInfoCommand extends Command implements TabExecutor {
 					PlayerObject playerobj = BungeeLogin.repo.findFirstById(name);
 					player.sendMessage(TextComponent.fromLegacyText("§8§m-------§f§l Team§6§lHoly§8 §m-------"));
 					player.sendMessage(TextComponent.fromLegacyText("§7Name §8» §e" + name));
-					player.sendMessage(TextComponent.fromLegacyText("§7Account Type §8» " + CMD_PlayerList.getVersion(playerobj.getUuid(), playerobj.getName()).format));
+					player.sendMessage(TextComponent.fromLegacyText("§7Account Type §8» " + PlayerListCommand.getVersion(playerobj.getUuid(), playerobj.getName()).format));
 					if (playerobj.getHostname() != null) {
 						player.sendMessage(TextComponent.fromLegacyText("§7Hostname §8» §e" + playerobj.getHostname()));
 					}
