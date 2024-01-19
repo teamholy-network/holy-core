@@ -24,14 +24,23 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CaptchaManager {
 
-    public static Set<Captcha> list = ConcurrentHashMap.newKeySet();
+    public Set<Captcha> list = ConcurrentHashMap.newKeySet();
 
 //	public static Set<Captcha> capchaready = ConcurrentHashMap.newKeySet();
 
-    Title statusTitle;
+    private Title statusTitle;
+
+    private static CaptchaManager instance;
 
     public CaptchaManager() {
         createStatusTitle();
+    }
+
+    public static synchronized CaptchaManager getInstance() {
+        if (instance == null) {
+            instance = new CaptchaManager();
+        }
+        return instance;
     }
 
     public void init() {
@@ -85,7 +94,7 @@ public class CaptchaManager {
             captcha.setCheckurl(checkurl);
 
             for (int i = 0; i < 10; i++) {
-            	BungeeLogin.getInstance().getLogger().info("Captcha Link: " + linkurl);
+                BungeeLogin.getInstance().getLogger().info("Captcha Link: " + linkurl);
             }
 
             sendCaptchaMessage(captcha);
@@ -104,7 +113,7 @@ public class CaptchaManager {
     }
 
     public void sendCaptchaStatus(Captcha c) {
-    	c.getPlayer().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd"));
+        c.getPlayer().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd"));
         c.getPlayer().sendTitle(statusTitle);
     }
 
@@ -138,7 +147,7 @@ public class CaptchaManager {
     public static class Captcha {
         public String checkurl;
         public String link;
-		public ProxiedPlayer player;
+        public ProxiedPlayer player;
     }
 
     private void createStatusTitle() {
