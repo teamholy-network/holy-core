@@ -24,17 +24,23 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CaptchaManager {
 
-    public static Set<Captcha> list = ConcurrentHashMap.newKeySet();
+    public Set<Captcha> list = ConcurrentHashMap.newKeySet();
 
 //	public static Set<Captcha> capchaready = ConcurrentHashMap.newKeySet();
 
-    Title statusTitle;
+    private Title statusTitle;
 
-    Title emptyStatusTitle;
+    private static CaptchaManager instance;
 
     public CaptchaManager() {
         createStatusTitle();
-        createEmptyStatusTitle();
+    }
+
+    public static synchronized CaptchaManager getInstance() {
+        if (instance == null) {
+            instance = new CaptchaManager();
+        }
+        return instance;
     }
 
     public void init() {
@@ -45,12 +51,10 @@ public class CaptchaManager {
                     sendAsyncHttpRequest(captcha.getCheckurl()).thenAccept(result -> {
                         if (result.contains("true")) {
                             captcha.player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§aCaptcha Solved"));
-                            captcha.player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§aYou can now Login or Register normally ✔"));
-                            sendCaptchaStatus(captcha, "", true);
                             list.remove(captcha);
                         } else {
                             sendCaptchaMessage(captcha);
-                            sendCaptchaStatus(captcha, "§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd", false);
+                            sendCaptchaStatus(captcha);
                         }
                     });
                 } else {
@@ -61,7 +65,7 @@ public class CaptchaManager {
     }
 
     public CompletableFuture<Optional<Captcha>> createCaptcha(ProxiedPlayer player) {
-        String urlString = "https://teamholy.de/api/holy/captcha/generate/" + BungeeLogin.APIKEY + "/" + player.getName().toLowerCase(Locale.ROOT);
+        String urlString = "https://teamholy.de/api/holy/captcha/generate/" + "/" + BungeeLogin.APIKEY + "/" + player.getName().toLowerCase(Locale.ROOT);
         Captcha captcha = new Captcha("", "", player);
 
         for (int i = 0; i < 10; i++) {
@@ -94,7 +98,6 @@ public class CaptchaManager {
             }
 
             sendCaptchaMessage(captcha);
-            sendCaptchaStatus(captcha, "§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd", false);
 
             return Optional.of(captcha);
 
@@ -109,15 +112,9 @@ public class CaptchaManager {
         c.getPlayer().sendMessage(text);
     }
 
-    public void sendCaptchaStatus(Captcha c, String message, boolean verified) {
-        c.getPlayer().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
-
-        if (verified) {
-            c.getPlayer().sendTitle(emptyStatusTitle);
-        } else {
-            c.getPlayer().sendTitle(statusTitle);
-        }
-
+    public void sendCaptchaStatus(Captcha c) {
+        c.getPlayer().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§c§kN§c §aPlease §6verify §ayour connection to continue §c§kd"));
+        c.getPlayer().sendTitle(statusTitle);
     }
 
     public Optional<Captcha> getCapcha(ProxiedPlayer player) {
@@ -160,15 +157,6 @@ public class CaptchaManager {
         statusTitle.fadeIn(0);
         statusTitle.stay(20 * 60 * 60);
         statusTitle.fadeOut(0);
-    }
-
-    private void createEmptyStatusTitle() {
-        emptyStatusTitle = BungeeLogin.getInstance().getProxy().createTitle();
-        emptyStatusTitle.title(TextComponent.fromLegacyText(""));
-        emptyStatusTitle.subTitle(TextComponent.fromLegacyText(""));
-        emptyStatusTitle.fadeIn(0);
-        emptyStatusTitle.stay(20 * 60 * 60);
-        emptyStatusTitle.fadeOut(0);
     }
 
 }
