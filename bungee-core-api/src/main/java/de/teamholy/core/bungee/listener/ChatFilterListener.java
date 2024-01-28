@@ -5,8 +5,6 @@ import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ChatFilterManager;
-import de.teamholy.core.bungee.manager.LensManager;
-import de.teamholy.core.bungee.model.Lens;
 import de.teamholy.core.bungee.util.DiffMatch;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -36,13 +34,10 @@ public class ChatFilterListener implements Listener {
 
     DiffMatch diffMatch = new DiffMatch();
 
-    LensManager lensManager;
-
     public ChatFilterListener(BungeeCore bungeeCore) {
         this.bungeeCore = bungeeCore;
         ProxyServer.getInstance().getPluginManager().registerListener(bungeeCore, this);
         loadDomains();
-        lensManager = bungeeCore.getLensManager();
     }
 
     @EventHandler
@@ -154,13 +149,6 @@ public class ChatFilterListener implements Listener {
             proxiedPlayer.sendMessage("§cChatFilter §8× §7Your last message is 70% similar");
             event.setCancelled(true);
         }
-
-        Lens lens = new Lens();
-        lens.setMessage(event.getMessage());
-        lens.setName(proxiedPlayer.getName());
-        lens.setUuid(proxiedPlayer.getUniqueId().toString());
-
-        lensManager.addMessage(lens);
 
         LASTMESSAGES.put(proxiedPlayer.getUniqueId(), event.getMessage());
 
