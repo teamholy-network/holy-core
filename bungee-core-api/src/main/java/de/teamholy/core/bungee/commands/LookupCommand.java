@@ -69,21 +69,24 @@ public class LookupCommand extends SenderCommand {
 
 
                 Scanner scanner = null;
+                String country = "§cNo country found";
 
                 try {
                     scanner = new Scanner(new URL("https://teamholy.de/api/holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    String response = scanner.useDelimiter("\\A").next();
+                    JSONObject jsonResponse = new JSONObject(response);
+
+
+                    if (!jsonResponse.isEmpty() || !jsonResponse.isNull("country")) {
+                        jsonResponse.getString("countryname");
+                    }
+
+                } catch (IOException ignored) {
+                } finally {
+                    if (scanner != null) {
+                        scanner.close();
+                    }
                 }
-
-                String response = scanner.useDelimiter("\\A").next();
-                JSONObject jsonResponse = new JSONObject(response);
-                String country;
-
-
-                if (jsonResponse.isEmpty() || jsonResponse.isNull("country")) {
-                    country = "§cNo country found";
-                } else country = jsonResponse.getString("countryname");
 
 
 
