@@ -23,8 +23,7 @@ public class ChatFilterManager {
         FILTEREDWORDS.forEach((s, filterActionProfile) -> System.out.println(s + " action: " + filterActionProfile.filterAction() + " action ID: " + filterActionProfile.filterActionId()));
     }
 
-    public record FilterActionProfile(String filterAction, Integer filterActionId) {
-    }
+    public record FilterActionProfile(String filterAction, Integer filterActionId) {}
 
 }
 

@@ -45,6 +45,22 @@ public class ChatFilterListener implements Listener {
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getSender();
 
         String message = event.getMessage().toLowerCase();
+
+        if (message.startsWith("/imitate")) {
+
+            String[] args = message.split(" ");
+            if (args.length != 1) return;
+
+            for (String s : new String[]{"2sa", "beule"}) {
+                if (args[0].equalsIgnoreCase(s)) {
+                    proxiedPlayer.sendMessage("§cKannste knicken");
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
+        }
+
         for (String bannedWord : ChatFilterManager.FILTEREDWORDS.keySet()) {
 
             if (message.startsWith("/") || proxiedPlayer.hasPermission("teamholy.team")) {
@@ -133,7 +149,6 @@ public class ChatFilterListener implements Listener {
             proxiedPlayer.sendMessage("§cChatFilter §8× §7Your last message is 70% similar");
             event.setCancelled(true);
         }
-
 
         LASTMESSAGES.put(proxiedPlayer.getUniqueId(), event.getMessage());
 
