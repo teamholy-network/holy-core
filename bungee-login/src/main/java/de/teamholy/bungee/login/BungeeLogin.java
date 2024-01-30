@@ -1,6 +1,6 @@
 package de.teamholy.bungee.login;
 
-import de.teamholy.bungee.login.command.*;
+import de.teamholy.bungee.login.commands.*;
 import de.teamholy.bungee.login.listener.EventListener;
 import de.teamholy.bungee.login.manager.BotManager;
 import de.teamholy.bungee.login.manager.CaptchaManager;
@@ -40,7 +40,6 @@ public class BungeeLogin extends Plugin {
     public static ConcurrentHashMap<String, String> iphostname = new ConcurrentHashMap<String, String>();
 
     public static String APIKEY = "adasaisuoa2j2j2j2jnvalkooiwuhlkabvd";
-
     public static String PREFIX = "§6Teamholy §8× §7";
 
     CaptchaManager captchaManager;

@@ -29,6 +29,8 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
+
 /* copyright by Yassino */
 public class LookupCommand extends SenderCommand {
 
@@ -72,7 +74,7 @@ public class LookupCommand extends SenderCommand {
                 String country = "§cNo country found";
 
                 try {
-                    scanner = new Scanner(new URL("https://teamholy.de/api/holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
+                    scanner = new Scanner(new URL( RESTBASE + "holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
                     String response = scanner.useDelimiter("\\A").next();
                     JSONObject jsonResponse = new JSONObject(response);
 

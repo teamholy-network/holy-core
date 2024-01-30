@@ -11,6 +11,8 @@ import java.awt.*;
 import java.net.URL;
 import java.util.Scanner;
 
+import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
+
 public class ProxyManager {
 
     CoreAPI coreAPI;
@@ -41,7 +43,7 @@ public class ProxyManager {
     public void checkProxy(String proxy, ContainsProxyCallback callback) {
         coreAPI.getExecutor().execute(() -> {
             try {
-                URL url = new URL("https://teamholy.de/api/holy/vpn/check/" + proxy + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd");
+                URL url = new URL(RESTBASE + "holy/vpn/check/" + proxy + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd");
                 Scanner scanner = new Scanner(url.openStream());
                 StringBuilder stringBuilder = new StringBuilder();
 
