@@ -78,10 +78,11 @@ public class LookupCommand extends SenderCommand {
 
 
                     if (!jsonResponse.isEmpty() || !jsonResponse.isNull("country")) {
-                        jsonResponse.getString("countryname");
+                        country = jsonResponse.getString("countryname");
                     }
 
                 } catch (IOException ignored) {
+
                 } finally {
                     if (scanner != null) {
                         scanner.close();
