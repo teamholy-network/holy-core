@@ -1,10 +1,13 @@
 package de.teamholy.core.bungee.listener;
 
+import com.google.common.collect.Lists;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ChatFilterManager;
+import de.teamholy.core.bungee.manager.ChatLogManager;
+import de.teamholy.core.bungee.model.ChatLog;
 import de.teamholy.core.bungee.util.DiffMatch;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -76,16 +79,21 @@ public class ChatFilterListener implements Listener {
 
                 switch (actionProfile.filterAction()) {
                     case "mute" -> {
-                        MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
-                        if (punishProfile != null) {
-                            return;
-                        } else {
-                            proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
-                            proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §c" + Punish.parseMuteReasonById(actionProfile.filterActionId()));
-                            ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "mute " + proxiedPlayer.getName() + " " + actionProfile.filterActionId());
-                            sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
-                            event.setCancelled(true);
+
+                        LinkedList<ChatLogManager.Message> chatlog = ChatLogManager
+                            .CHATLOGS
+                            .getOrDefault(proxiedPlayer.getUniqueId(), Lists.newLinkedList());
+
+                        if (chatlog.stream().noneMatch(message1 -> message1.message().contains(bannedWord))) {
+                            chatlog.add(new ChatLogManager.Message(event.getMessage(), proxiedPlayer.getServer().getInfo().getName(), System.currentTimeMillis()));
+                            ChatLogManager.CHATLOGS.put(proxiedPlayer.getUniqueId(), chatlog);
                         }
+
+                        proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
+                        proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §c" + Punish.parseMuteReasonById(actionProfile.filterActionId()));
+                        ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "mute " + proxiedPlayer.getName() + " " + actionProfile.filterActionId());
+                        sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
+                        event.setCancelled(true);
                     }
                     case "ban" -> {
                         ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "ban " + proxiedPlayer.getName() + actionProfile.filterActionId());

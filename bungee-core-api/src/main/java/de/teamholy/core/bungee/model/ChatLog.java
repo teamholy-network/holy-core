@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.model;
 
+import de.teamholy.core.bungee.manager.ChatLogManager;
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +26,6 @@ public class ChatLog {
     private String requestPlayerName;
     private UUID requestPlayerUUID;
 
-    private List<Message> messages;
+    private List<ChatLogManager.Message> messages;
 
-    @Getter
-    @Setter
-    public static class Message {
-        private String message;
-        private String server;
-        private long time;
-    }
 }

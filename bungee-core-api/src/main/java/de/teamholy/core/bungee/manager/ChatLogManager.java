@@ -12,14 +12,19 @@ import lombok.Getter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class ChatLogManager {
     @Getter
     private ChatLogRepository chatLogRepository;
+
+    public static final Map<UUID, LinkedList<Message>> CHATLOGS = new HashMap<>();
+    private static final int max = 50;
+    private final Gson gson = new Gson();
+
+
+    private final Type typeOfSrc = new TypeToken<List<Message>>() {
+    }.getType();
 
     public ChatLogManager() {
         chatLogRepository = BungeeCore.getAPI().getMongoManager().create(ChatLogRepository.class);
@@ -30,20 +35,16 @@ public class ChatLogManager {
         if (chatlogPlayer == null) return null;
 
 
-        if (ChatLogListener.CHATLOGS.getOrDefault(chatlogPlayer.getUniqueId(), new LinkedList<>()).isEmpty()) {
+        if (CHATLOGS.getOrDefault(chatlogPlayer.getUniqueId(), new LinkedList<>()).isEmpty()) {
             return null;
         }
 
 
-        String chatlogString = new ChatLogListener().getChatLog(chatlogPlayer.getUniqueId());
+        String chatlogString = getChatLogToString(chatlogPlayer.getUniqueId());
 
 
         String randomKey = generateRandomKey();
-
-
-        Type listType = new TypeToken<List<ChatLog.Message>>() {
-        }.getType();
-        List<ChatLog.Message> chatLogMessages = new Gson().fromJson(chatlogString, listType);
+        List<Message> chatLogMessages = new Gson().fromJson(chatlogString, typeOfSrc);
 
         ChatLog chatLog = new ChatLog();
         chatLog.setChatLogId(randomKey);
@@ -57,6 +58,28 @@ public class ChatLogManager {
         chatLogRepository.save(chatLog);
 
         return chatLog;
+    }
+
+
+    public String getChatLogToString(UUID uuid) {
+        LinkedList<Message> chatLog = CHATLOGS.get(uuid);
+        if (chatLog != null) {
+            return gson.toJson(chatLog, typeOfSrc);
+        } else {
+            return null;
+        }
+    }
+
+    public void addMessageToChatlog(UUID uuid, Message Message) {
+        LinkedList<Message> chatLog = CHATLOGS.get(uuid);
+        if (chatLog == null) {
+            chatLog = new LinkedList<>();
+        }
+        chatLog.add(Message);
+        if (chatLog.size() > max) {
+            chatLog.removeFirst();
+        }
+        CHATLOGS.put(uuid, chatLog);
     }
 
     private String generateRandomKey() {
@@ -80,6 +103,10 @@ public class ChatLogManager {
         builder.append("chatlog");
 
         return builder.toString();
+    }
+
+
+    public record Message(String message, String server, long time) {
     }
 
 
