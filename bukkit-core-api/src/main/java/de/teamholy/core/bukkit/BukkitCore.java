@@ -49,6 +49,8 @@ public class BukkitCore extends JavaPlugin {
     @Getter
     String group;
 
+    public static boolean RESTART = false;
+
     public BukkitCore() {
         instance = this;
     }
@@ -63,6 +65,7 @@ public class BukkitCore extends JavaPlugin {
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
 
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
+        getCommand("stop").setExecutor(new de.teamholy.core.bukkit.commands.StopCommand());
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         new PlayerJoinQuitListener(this);

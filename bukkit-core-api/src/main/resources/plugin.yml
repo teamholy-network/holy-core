@@ -8,3 +8,5 @@ commands:
     reportsgui:
         aliases: [ rgui, reportstaffgui ]
     xyz:
+    stop:
+        aliases: [restart, stopserver]

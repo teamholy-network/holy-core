@@ -186,6 +186,21 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder withGlow(boolean b) {
+        if (b) {
+            this.itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+            ItemMeta meta  = this.itemStack.getItemMeta();
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            this.itemStack.setItemMeta(meta);
+        } else {
+            this.itemStack.removeEnchantment(Enchantment.DURABILITY);
+            ItemMeta meta  = this.itemStack.getItemMeta();
+            meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
+
     private GameProfile getProfile(String url) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         String base64 = Base64.getEncoder().encodeToString((new String("{textures:{SKIN:{url:\"" + url + "\"}}}")).getBytes());

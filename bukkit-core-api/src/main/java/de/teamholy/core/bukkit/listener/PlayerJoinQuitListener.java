@@ -7,6 +7,7 @@ import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.commands.StopCommand;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
 import de.teamholy.core.bukkit.perks.Perk;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
@@ -39,6 +41,13 @@ public class PlayerJoinQuitListener implements Listener {
         this.customBannerManager = new CustomBannerManager(bukkitCore);
         this.packetmanager = new PacketManager(bukkitCore);
         Bukkit.getPluginManager().registerEvents(this, bukkitCore);
+    }
+
+    @EventHandler
+    public void onLogin(PlayerLoginEvent event) {
+        if (BukkitCore.RESTART) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "§cServer restart");
+        }
     }
 
 
