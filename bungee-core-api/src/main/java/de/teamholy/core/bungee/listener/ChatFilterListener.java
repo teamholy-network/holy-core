@@ -126,9 +126,13 @@ public class ChatFilterListener implements Listener {
                     return;
                 }
 
+                if (ProxyServer.getInstance().getPlayer(domainMatcher.group(0)) != null) {
+                    return; // quick fix for now, check if matcher is a player -> ignore
+                }
 
                 String tld = domainMatcher.group(2);
                 if (domains.contains(tld)) {
+
 
                     MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
                     if (punishProfile != null) {
