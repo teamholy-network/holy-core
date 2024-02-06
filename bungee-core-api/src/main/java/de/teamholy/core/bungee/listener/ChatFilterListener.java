@@ -75,6 +75,9 @@ public class ChatFilterListener implements Listener {
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(message);
             if (matcher.find()) {
+                if (ProxyServer.getInstance().getPlayer(matcher.group()) != null) {
+                    return; // quick fix for now, check if matcher is a player -> ignore
+                }
                 ChatFilterManager.FilterActionProfile actionProfile = ChatFilterManager.FILTEREDWORDS.get(bannedWord);
 
                 switch (actionProfile.filterAction()) {
