@@ -103,6 +103,9 @@ public class PlayerJoinQuitListener implements Listener {
             BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
 
 
+
+
+
             String value;
             String signature;
             if (UUIDUtility.isCracked(player.getUniqueId(), player.getName())) {

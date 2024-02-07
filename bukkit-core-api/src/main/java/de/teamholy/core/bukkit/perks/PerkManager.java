@@ -8,12 +8,13 @@ import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.material.Wool;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -30,6 +31,44 @@ public class PerkManager {
 
     public PerkManager(BukkitCore bukkitCore) {
         this.customBannerManager = new CustomBannerManager(bukkitCore);
+        startChangingRainbowPerks();
+    }
+
+    public void startChangingRainbowPerks() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getOpenInventory() != null && player.getOpenInventory().getTitle() != null && player.getOpenInventory().getTitle().equalsIgnoreCase("§8» §6Perks")) {
+                    changeRainbowColorInInventory(player);
+                }
+            }
+        }, 0L, 10L);
+    }
+
+    private void changeRainbowColorInInventory(Player player) {
+        int i = 0;
+        for (ItemStack item : player.getOpenInventory().getTopInventory()) {
+            if (item != null && (item.getType() == Material.WOOL || item.getType() == Material.STAINED_GLASS)) {
+
+                if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).toLowerCase().contains("rainbow")) {
+                    PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+                    Perk perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
+                    ItemBuilder itemBuilder = new ItemBuilder(item.getType(), item.getAmount(), new Random().nextInt(16))
+                        .setName(item.getItemMeta().getDisplayName())
+                        .setLore(item.getItemMeta().getLore());
+
+                    if (item.getType() == Material.WOOL && ChatColor.stripColor(perk.getName()).toLowerCase().contains("wool")) {
+                        itemBuilder.withGlow(true);
+                    } else if (item.getType() == Material.STAINED_GLASS && ChatColor.stripColor(perk.getName()).toLowerCase().contains("glass")) {
+                        itemBuilder.withGlow(true);
+                    }
+
+
+                    player.getOpenInventory().setItem(i, itemBuilder.build());
+
+                }
+            }
+            i++;
+        }
     }
 
     public ItemBuilder getPerk(Player player, PerkType perkType) {
@@ -91,16 +130,15 @@ public class PerkManager {
             openSecondPerkInventory(player, PerkType.BLOCK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
 
-
         PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
 
         String dieLore = perkPlayerProfile.getCustomBanner().isActivated() ? "§l§aselected" : "§7Click to §l§aselect";
 
 
         inventory.setItem(new ItemBuilder(Material.BANNER, 1).setName("§8» §6Custom Head Banner")
-                .setLore(" " , " §7A custom banner on your head ", " §7with your own design! " , " §7you can change them ", " §7on the §6§lwebsite! ", " §7(§ehttps://teamholy.de/profile/" + player.getDisplayName() + "§7)", " ",
-                    ( perkPlayerProfile.getOwnedPerks().contains(99999) ? dieLore : "§7This perk costs §e5000 §6coins")
-                    )
+            .setLore(" ", " §7A custom banner on your head ", " §7with your own design! ", " §7you can change them ", " §7on the §6§lwebsite! ", " §7(§ehttps://teamholy.de/profile/" + player.getDisplayName() + "§7)", " ",
+                (perkPlayerProfile.getOwnedPerks().contains(99999) ? dieLore : "§7This perk costs §e5000 §6coins")
+            )
             .setBannerMeta(DyeColor.WHITE, new ArrayList<>()).build(), 7, (event) -> {
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
@@ -132,7 +170,6 @@ public class PerkManager {
                 }
 
 
-
                 perkPlayerProfile.getOwnedPerks().add(99999);
 
                 playerProfile.setCoins(playerProfile.getCoins() - 5000);
@@ -145,8 +182,7 @@ public class PerkManager {
             }
 
 
-
-            });
+        });
 
 
         player.openInventory(inventory.getInventory());
