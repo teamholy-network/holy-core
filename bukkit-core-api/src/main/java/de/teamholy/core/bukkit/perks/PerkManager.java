@@ -176,7 +176,7 @@ public class PerkManager {
                 BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
-                player.sendMessage(prefix + "§7You successfully bought the §eCustom Banner §7perk for §e10000 §6coins!");
+                player.sendMessage(prefix + "§7You successfully bought the §eCustom Banner §7perk for §e5000 §6coins!");
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 2f);
                 player.closeInventory();
             }
