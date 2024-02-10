@@ -80,7 +80,7 @@ public class PlayerJoinQuitListener implements Listener {
             }
 
 
-            String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby"};
+            String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby", "Bridge"};
 
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
 
