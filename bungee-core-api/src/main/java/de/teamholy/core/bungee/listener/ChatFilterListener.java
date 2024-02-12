@@ -119,15 +119,22 @@ public class ChatFilterListener implements Listener {
                 return;
             }
 
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                if (message.toLowerCase().contains(player.getName().toLowerCase())) {
+                    message = message.replace(player.getName(), "");
+
+                    if (message.isEmpty()) {
+                        return;
+                    }
+                }
+            }
+
             Matcher domainMatcher = domainPattern.matcher(message);
+
             if (domainMatcher.find()) {
 
                 if (Arrays.stream(bypassedDomains).anyMatch(domain -> domainMatcher.group(0).toLowerCase().endsWith(domain.toLowerCase()))) {
                     return;
-                }
-
-                if (ProxyServer.getInstance().getPlayer(domainMatcher.group(0)) != null) {
-                    return; // quick fix for now, check if matcher is a player -> ignore
                 }
 
                 String tld = domainMatcher.group(2);
