@@ -3,6 +3,7 @@ package eu.koboo.markup;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.mojang.authlib.properties.Property;
+import de.teamholy.core.bukkit.BukkitCore;
 import eu.koboo.markup.adapter.PacketPlayServerNamedEntitySpawnAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerPlayerInfoAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerScoreboardTeamAdapter;
@@ -11,9 +12,9 @@ import eu.koboo.markup.events.PlayerPostUnnickEvent;
 import eu.koboo.markup.manager.NickManager;
 import eu.koboo.markup.manager.PresetManager;
 import eu.koboo.markup.manager.TeamManager;
+import eu.koboo.markup.repository.NickProfilesRepository;
 import eu.koboo.markup.util.PlayerMeta;
 import eu.koboo.markup.util.PlayerPreset;
-import eu.koboo.markup.util.SkinPreset;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ public class MarkupAPI extends JavaPlugin {
     private NickManager nickManager;
     private PresetManager presetManager;
     private TeamManager teamManager;
+    private NickProfilesRepository nickProfilesRepository;
 
     public static void updateNameTag(Player player) {
         api.getTeamManager().announceUpdate(player);
@@ -76,9 +78,6 @@ public class MarkupAPI extends JavaPlugin {
         api.getPresetManager().reloadPresets();
     }
 
-    public static SkinPreset getRandomSkinPreset() {
-        return SkinPreset.VALUES[SkinPreset.RANDOM.nextInt(SkinPreset.VALUES.length)];
-    }
 
     public static PlayerPreset getRandomPlayerPreset() {
         return api.getPresetManager().getPlayerPreset();
@@ -94,10 +93,11 @@ public class MarkupAPI extends JavaPlugin {
         presetManager = new PresetManager(this);
         teamManager = new TeamManager(this);
 
+        nickProfilesRepository = BukkitCore.getAPI().getMongoManager().create(NickProfilesRepository.class);
+
         handleCommandRegistration("hardnick", new CommandHardNick(this));
         handleCommandRegistration("nick", new CommandNick(this));
         handleCommandRegistration("nicklist", new CommandNickList(this));
-        handleCommandRegistration("nickpreset", new CommandNickPreset(this));
         handleCommandRegistration("reloadpresets", new CommandReloadPresets(this));
 
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
@@ -123,6 +123,9 @@ public class MarkupAPI extends JavaPlugin {
         return teamManager;
     }
 
+    public NickProfilesRepository getNickProfilesRepository() {
+        return nickProfilesRepository;
+    }
 
     private void handleCommandRegistration(String command, CommandExecutor executor) {
         String key = "register-cmd-" + command;
