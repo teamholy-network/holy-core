@@ -83,6 +83,11 @@ public class ChatFilterListener implements Listener {
                 switch (actionProfile.filterAction()) {
                     case "mute" -> {
 
+                        MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                        if (punishProfile != null) {
+                            return;
+                        }
+
                         LinkedList<ChatLogManager.Message> chatlog = ChatLogManager
                             .CHATLOGS
                             .getOrDefault(proxiedPlayer.getUniqueId(), Lists.newLinkedList());
