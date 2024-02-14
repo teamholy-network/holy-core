@@ -6,6 +6,5 @@ depend: [ ProtocolLib ]
 commands:
   hardnick:
   nick:
-  nickpreset:
   nicklist:
   reloadpresets:

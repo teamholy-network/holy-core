@@ -1,12 +1,14 @@
 package eu.koboo.markup.util;
 
 import com.mojang.authlib.properties.Property;
+import eu.koboo.en2do.repository.entity.Id;
 
 import java.util.UUID;
 
 public class PlayerPreset {
 
     private final String name;
+    @Id
     private final UUID uuid;
     private final Property property;
 

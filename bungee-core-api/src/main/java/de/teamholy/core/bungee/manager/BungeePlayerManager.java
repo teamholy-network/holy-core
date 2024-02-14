@@ -2,8 +2,10 @@ package de.teamholy.core.bungee.manager;
 
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.clan.Clan;
+import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
+import de.teamholy.core.bungee.commands.team.AdminChatCommand;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -60,6 +62,19 @@ public class BungeePlayerManager {
         ProxyServer.getInstance().getConsole().sendMessage(message);
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
             if (proxiedPlayer.hasPermission("teamholy.team")) {
+                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),
+                    () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                if (staffProfile.isNotify()) proxiedPlayer.sendMessage(message);
+            }
+        }
+    }
+
+    public void notifyAdmin(String message) {
+        ProxyServer.getInstance().getConsole().sendMessage(message);
+        for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
+
+            PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+            if (AdminChatCommand.adminRanks.contains(playerProfile.getRank())) {
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),
                     () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
                 if (staffProfile.isNotify()) proxiedPlayer.sendMessage(message);

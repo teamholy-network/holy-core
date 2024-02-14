@@ -2,6 +2,7 @@ package eu.koboo.markup.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import de.teamholy.core.bukkit.BukkitCore;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
 import eu.koboo.markup.util.PlayerPreset;
@@ -24,7 +25,6 @@ import java.util.function.Consumer;
 public class PresetManager {
 
     private final MarkupAPI markupAPI;
-    private final File file;
     private final ExecutorService service;
     private final SecureRandom secureRandom = new SecureRandom();
     private final List<PlayerPreset> presetList = new ArrayList<>();
@@ -38,9 +38,7 @@ public class PresetManager {
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
         }
-        this.file = new File(dataFolder, "skin_uuids.txt");
         this.service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        exportDefaults();
         reloadPresets();
     }
 
@@ -64,82 +62,6 @@ public class PresetManager {
         return preset;
     }
 
-    private void exportDefaults() {
-        try {
-            if (!this.file.exists()) {
-
-                Bukkit.getConsoleSender().sendMessage("Exporting default skins to '" + this.file.getAbsolutePath() + "'..");
-
-                this.file.createNewFile();
-
-                InputStream inputStream = PresetManager.class.getClassLoader().getResourceAsStream("uuids.txt");
-                FileOutputStream outputStream = new FileOutputStream(this.file);
-
-                if (inputStream != null) {
-                    int n;
-                    while ((n = inputStream.read()) != -1) {
-                        outputStream.write(n);
-                    }
-                    inputStream.close();
-                }
-                outputStream.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void reloadPresets() {
-        try {
-            load = true;
-            int counter = 0;
-
-            BufferedReader reader = new BufferedReader(new FileReader(this.file));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.contains("-")) {
-                    counter += 1;
-                    if (counter % 25 == 0) {
-                        Bukkit.getConsoleSender().sendMessage("Loading " + counter + " skins..");
-                    }
-                    loadPreset(UUID.fromString(line), presetList::add);
-                }
-            }
-            reader.close();
-            Bukkit.getConsoleSender().sendMessage("Finished loading " + counter + " skins from '" + this.file.getAbsolutePath() + "'..!");
-        } catch (Exception e) {
-            if (!(e instanceof SocketTimeoutException)) {
-                e.printStackTrace();
-                load = false;
-            }
-        }
-    }
-
-    public void loadPreset(UUID uuid, Consumer<PlayerPreset> consumer) {
-        service.execute(() -> {
-            PlayerPreset preset = null;
-            if (!load) {
-                return;
-            }
-            try {
-                URLConnection con = (new URL("https://api.minetools.eu/profile/" + uuid)).openConnection();
-                con.setReadTimeout(3000);
-                con.setDoInput(true);
-                JsonElement rootElement = (new JsonParser()).parse(new BufferedReader(new InputStreamReader(con.getInputStream())));
-                JsonElement jsonElement2 = rootElement.getAsJsonObject().get("raw");
-                JsonElement jsonElement3 = jsonElement2.getAsJsonObject().get("properties");
-                JsonElement jsonElement4 = jsonElement3.getAsJsonArray().get(0);
-                String name = rootElement.getAsJsonObject().get("decoded").getAsJsonObject().get("profileName").getAsString();
-                String value = jsonElement4.getAsJsonObject().get("value").toString().replace("\"", "");
-                String sign = jsonElement4.getAsJsonObject().get("signature").toString().replace("\"", "");
-                con.getInputStream().close();
-                preset = new PlayerPreset(name, uuid, value, sign);
-            } catch (IOException e) {
-                load = false;
-            }
-            consumer.accept(preset);
-        });
-    }
 
     public void loadPreset(String playerName, Consumer<PlayerPreset> consumer) {
         service.execute(() -> {
@@ -163,5 +85,15 @@ public class PresetManager {
             consumer.accept(preset);
         });
     }
+
+    public void reloadPresets() {
+        service.execute(() -> {
+            presetList.addAll(markupAPI.getNickProfilesRepository().findAll());
+            if (presetList.isEmpty()) {
+                load = false;
+            }
+        });
+    }
+
 
 }

@@ -30,6 +30,7 @@ import de.teamholy.core.bungee.commands.punish.KickCommand;
 import de.teamholy.core.bungee.commands.punish.PunishReduceCommand;
 import de.teamholy.core.bungee.commands.report.ReportCommand;
 import de.teamholy.core.bungee.commands.report.ReportStaffCommand;
+import de.teamholy.core.bungee.commands.team.AdminChatCommand;
 import de.teamholy.core.bungee.commands.team.TeamChatCommand;
 import de.teamholy.core.bungee.commands.team.TeamCommand;
 import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
@@ -159,6 +160,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
 
 
         chatFilterManager.loadFilteredWords();
