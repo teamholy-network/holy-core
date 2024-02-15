@@ -201,13 +201,7 @@ public class PostLoginListener implements Listener {
             }
         }
 
-        if (i == 0) {
-            proxiedPlayer.sendMessage("§6Friend §8× §7There are currently §cno §7friends online");
-        } else if (i == 1) {
-            proxiedPlayer.sendMessage("§6Friend §8× §7There is currently §e" + i + " §7friend online");
-        } else {
-            proxiedPlayer.sendMessage("§6Friend §8× §7There are currently §a" + i + " §7friends online");
-        }
+        proxiedPlayer.sendMessage("§6Friend §8× §7There " + (i <= 1 ? "is" : "are") + " currently " + (i == 0 ? "§cno §7friend" : "§a" + i + " §7friend" + (i >= 2 ? "s" : "")) + " online");
 
         if (i > 0) {
             onlineFriends.setLength(onlineFriends.length() - 2);
