@@ -140,6 +140,17 @@ public class PlayerJoinQuitListener implements Listener {
                 signature = skinProfile.getSignature();
             }
 
+           /* if (UUIDUtility.isCracked(player.getUniqueId(), player.getName())) {
+                GameProfile gameProfile = ((CraftPlayer) player).getHandle().getProfile();
+                gameProfile.getProperties().clear();
+                gameProfile.getProperties().put("textures", new Property("textures", value, signature));
+
+                for (Player online : Bukkit.getOnlinePlayers()) {
+                    online.hidePlayer(player);
+                    online.showPlayer(player);
+                }
+            }*/
+
 /*                String finalSignature = signature;
                 String finalValue = value;
             Bukkit.getScheduler().runTask(bukkitCore, () -> MarkupAPI.changeSkin(player,finalValue,finalSignature));*/

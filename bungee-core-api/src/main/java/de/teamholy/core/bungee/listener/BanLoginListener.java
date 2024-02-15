@@ -54,7 +54,7 @@ public class BanLoginListener implements Listener {
                 punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
                 bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
-                bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("Console", punishProfile));
+                bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("console", punishProfile));
                 punishService.deleteEntity(punishProfile);
             }
         } else {
@@ -86,7 +86,7 @@ public class BanLoginListener implements Listener {
                 banProfile.setAuthorId(Punish.getConsoleUuid());
                 banProfile.setCreateDate(System.currentTimeMillis());
 
-                bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, false, true);
+                bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, true, true);
 
                 BungeeCore.getInstance().getProxy().getScheduler().schedule(BungeeCore.getInstance(),() -> {
                     ProxiedPlayer player = BungeeCore.getInstance().getProxy().getPlayer(loginEvent.getConnection().getName());

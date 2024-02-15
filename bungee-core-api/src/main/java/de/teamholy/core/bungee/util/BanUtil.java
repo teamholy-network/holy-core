@@ -35,7 +35,7 @@ public class BanUtil {
     public TextComponent generateUnbanMessage(String unbanner, UUID unbannerId, BanProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX
-            + BungeeCore.getAPI().getCloudManager().getColor(unbannerId)
+            + (unbanner.equalsIgnoreCase("console") ? "§4§l" : BungeeCore.getAPI().getCloudManager().getColor(unbannerId))
             + unbanner + "§7 has unbanned "
             + BungeeCore.getAPI().getCloudManager().getColor(punishProfile.getPlayerId()) + playerName + "§7.";
         return generateLookUpComponent(playerName, message);
