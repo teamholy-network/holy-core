@@ -28,11 +28,17 @@ public class PartyListener implements Listener {
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
         ProxiedPlayer player = event.getPlayer();
+
+        if (event.getFrom().getName().toLowerCase().contains("bw") && player.getServer().getInfo().getName().toLowerCase().contains("lobby")) {
+            BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit","cameFromBw", JsonDocument.newDocument("uuid",player.getUniqueId().toString()));
+        }
+
         Party party = BungeeCore.getInstance().getPartyManager().getPartyByPlayerUUID(player.getUniqueId());
 
         if (party == null) return;
 
         if (!BungeeCore.getInstance().getPartyManager().isPartyLeader(player.getUniqueId())) return;
+
 
         if (player.getServer().getInfo().getName().contains("Lobby")) return;
 
