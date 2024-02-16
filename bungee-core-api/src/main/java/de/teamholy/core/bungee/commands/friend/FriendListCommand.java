@@ -20,12 +20,15 @@ public class FriendListCommand extends Command {
         if (args.length == 0) {
             FriendCommand.printFriendList(proxiedPlayer, 1);
         } else if (args.length == 1) {
+            int page = 1;
             try {
-                int page = Integer.parseInt(args[0]);
-                FriendCommand.printFriendList(proxiedPlayer, page);
+                page = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
                 proxiedPlayer.sendMessage("§cPlease enter a valid number!");
             }
+
+            if (page < 1) page = 1;
+            FriendCommand.printFriendList(proxiedPlayer, page);
         } else {
             proxiedPlayer.sendMessage(prefix + "/friend list (page)");
         }
