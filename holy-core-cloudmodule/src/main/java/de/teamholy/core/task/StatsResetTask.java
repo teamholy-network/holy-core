@@ -62,7 +62,6 @@ public class StatsResetTask implements Runnable {
             resetStatsFromGameProfiles(StatsType.MONTHLY);
         }
 
-
     }
 
 

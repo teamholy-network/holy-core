@@ -1,9 +1,8 @@
 package de.teamholy.core.bukkit.task;
 
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.wrapper.Wrapper;
-import de.teamholy.core.api.CoreAPI;
-import de.teamholy.core.api.ping.PingResponse;
-import de.teamholy.core.api.ping.PingService;
+import de.teamholy.core.bukkit.BukkitCore;
 
 /**
  * Copyright (c) charon, All Rights Reserved
@@ -13,25 +12,9 @@ import de.teamholy.core.api.ping.PingService;
  **/
 public class ServiceAliveTask implements Runnable {
 
-    private final PingService pingService;
-
-    public ServiceAliveTask(CoreAPI coreAPI) {
-        this.pingService = coreAPI.getPingService();
-    }
-
     @Override
     public void run() {
-
-        long currentTime = System.currentTimeMillis();
-        long lastPing = pingService.getLastPing(Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName());
-
-        if (lastPing - currentTime < -10000) {
-            System.out.println("\nService is offline. Sending ping...\n");
-            pingService.sendPing(Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName(), PingResponse.OFFLINE);
-            return;
-        }
-        System.out.println("\nService is online. Sending ping...\n");
-        pingService.sendPing(Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName(), PingResponse.ONLINE);
+        BukkitCore.getAPI().getCloudManager().sendCloudMessage("alive", "ping:response", new JsonDocument().append("server", Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName()).append("response", "online"));
     }
 
 

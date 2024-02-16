@@ -1,4 +1,4 @@
-package de.teamholy.core.api.ping;
+package de.teamholy.core.ping;
 
 import lombok.Getter;
 

@@ -106,21 +106,7 @@ public class CloudManager {
         return null;
     }
 
-    public void stopService(String name) {
-        Collection<ServiceInfoSnapshot> serviceInfoSnapshots = CloudNetDriver.getInstance().getCloudServiceProvider()
-            .getCloudServices();
 
-        if (serviceInfoSnapshots.isEmpty()) {
-            return;
-        }
-        for (var serverInfo : serviceInfoSnapshots) {
-            if (serverInfo.getServiceId().getName().startsWith(name)) {
-                if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
-                    serverInfo.provider().stop();
-                }
-            }
-        }
-    }
 
 
 }

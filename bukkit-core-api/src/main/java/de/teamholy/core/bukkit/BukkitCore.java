@@ -5,9 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.manager.MetricsManager;
-import de.teamholy.core.api.ping.PingResponse;
 import de.teamholy.core.api.utility.AbstractConfiguration;
-import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.commands.XyzCommand;
 import de.teamholy.core.bukkit.listener.CloudMessageListener;
 import de.teamholy.core.bukkit.listener.PlayerChatListener;
@@ -75,7 +73,7 @@ public class BukkitCore extends JavaPlugin {
         cloudMessageManager = new CloudMessageManager(this);
 
         System.out.println("Starting ServiceAliveTask\n");
-        executorService.scheduleAtFixedRate(new ServiceAliveTask(coreAPI), 0, 5, TimeUnit.SECONDS);
+        Bukkit.getScheduler().runTaskTimer(this, new ServiceAliveTask(), 0, 20*5);
         System.out.println("\nStarted ServiceAliveTask");
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
@@ -154,7 +152,6 @@ public class BukkitCore extends JavaPlugin {
     @Override
     public void onDisable() {
         coreAPI.getMetricsManager().removeMetric(this.getServer().getServerName());
-        coreAPI.getPingService().sendPing(Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName(), PingResponse.OFFLINE);
 
         coreAPI.onDisable();
 
