@@ -5,7 +5,10 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
 import de.teamholy.core.api.CoreAPI;
-import de.teamholy.core.api.manager.MetricsManager;
+import de.teamholy.core.api.manager.CloudManager;
+import de.teamholy.core.api.ping.PingResponse;
+import de.teamholy.core.api.ping.PingService;
+import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -15,6 +18,7 @@ import java.util.UUID;
 public class CloudMessageListener {
 
     private final CoreAPI coreAPI;
+    private final PingService pingService = BungeeCore.getAPI().getPingService();
 
 
     public CloudMessageListener(CoreAPI coreAPI) {
@@ -39,6 +43,19 @@ public class CloudMessageListener {
                 ProxyServer.getInstance().getPluginManager().dispatchCommand(target, event.getData().getString("command"));
             } else {
                 ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), event.getData().getString("command"));
+            }
+        }
+
+        if (event.getMessage().equalsIgnoreCase("ping:response")) {
+            PingResponse response = PingResponse.fromString(event.getData().getString("response"));
+            String service = event.getData().getString("server");
+
+            if (response == null) {
+                return;
+            }
+
+            if (response.isOffline()) {
+                BungeeCore.getAPI().getCloudManager().stopService(service);
             }
         }
     }

@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.manager.MetricsManager;
+import de.teamholy.core.api.ping.PingResponse;
 import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.commands.XyzCommand;
@@ -15,15 +16,21 @@ import de.teamholy.core.bukkit.manager.CloudMessageManager;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
+import de.teamholy.core.bukkit.task.ServiceAliveTask;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -57,6 +64,8 @@ public class BukkitCore extends JavaPlugin {
         instance = this;
     }
 
+    final ScheduledThreadPoolExecutor executorService = new ScheduledThreadPoolExecutor(1);
+
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
@@ -64,6 +73,11 @@ public class BukkitCore extends JavaPlugin {
         perkCache = new PerkCache();
         perkManager = new PerkManager(this);
         cloudMessageManager = new CloudMessageManager(this);
+
+        System.out.println("Starting ServiceAliveTask\n");
+        executorService.scheduleAtFixedRate(new ServiceAliveTask(coreAPI), 0, 5, TimeUnit.SECONDS);
+        System.out.println("\nStarted ServiceAliveTask");
+
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
 
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
@@ -140,7 +154,12 @@ public class BukkitCore extends JavaPlugin {
     @Override
     public void onDisable() {
         coreAPI.getMetricsManager().removeMetric(this.getServer().getServerName());
+        coreAPI.getPingService().sendPing(Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName(), PingResponse.OFFLINE);
+
         coreAPI.onDisable();
+
+
+        executorService.shutdown();
     }
 
     public static CoreAPI getAPI() {

@@ -4,6 +4,9 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.dytanic.cloudnet.driver.service.ServiceEnvironmentType;
+import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
+import de.dytanic.cloudnet.driver.service.ServiceLifeCycle;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
@@ -13,6 +16,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -100,6 +104,22 @@ public class CloudManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void stopService(String name) {
+        Collection<ServiceInfoSnapshot> serviceInfoSnapshots = CloudNetDriver.getInstance().getCloudServiceProvider()
+            .getCloudServices();
+
+        if (serviceInfoSnapshots.isEmpty()) {
+            return;
+        }
+        for (var serverInfo : serviceInfoSnapshots) {
+            if (serverInfo.getServiceId().getName().startsWith(name)) {
+                if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
+                    serverInfo.provider().stop();
+                }
+            }
+        }
     }
 
 

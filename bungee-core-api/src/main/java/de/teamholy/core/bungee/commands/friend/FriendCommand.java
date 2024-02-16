@@ -256,11 +256,15 @@ public class FriendCommand extends Command {
 
 
     public static void printFriendList(ProxiedPlayer proxiedPlayer, int page) {
-        BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
-            if (friendProfile == null) return;
+        var friendCache = BungeeCore.getAPI().getFriendManager().getFriendCache(proxiedPlayer.getUniqueId());
 
-            proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "Friend list §a" + friendProfile.getFriendList().size() +
-                "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8(§7Page §e" + page + "§8)"));
+        if (friendCache.isEmpty()) {
+            proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cYour friend list is empty!"));
+            return;
+        }
+
+        proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "Friend list §a" + friendCache.size() +
+            "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8(§7Page §e" + page + "§8)"));
 
             /*
             friendProfile.getFriendList().forEach(friendUUID -> {
@@ -268,29 +272,28 @@ public class FriendCommand extends Command {
                 FriendManager.FriendEntry friendEntry = FriendManager.FriendEntry.friendCache.get(friendUUID);
             });*/
 
-            ArrayList<FriendManager.Friend> friendArrayList = BungeeCore.getAPI().getFriendManager().getFriendCache(proxiedPlayer.getUniqueId())
-                .values()
-                .stream()
-                .sorted((o1, o2) -> {
-                    boolean o1Online = o1.isOnline();
-                    boolean o2Online = o2.isOnline();
-                    if (o1Online && !o2Online) {
-                        return -1;
-                    } else if (o1Online == o2Online) {
-                        return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
-                    } else {
-                        return 1;
-                    }
-                }).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<FriendManager.Friend> friendArrayList = BungeeCore.getAPI().getFriendManager().getFriendCache(proxiedPlayer.getUniqueId())
+            .values()
+            .stream()
+            .sorted((o1, o2) -> {
+                boolean o1Online = o1.isOnline();
+                boolean o2Online = o2.isOnline();
+                if (o1Online && !o2Online) {
+                    return -1;
+                } else if (o1Online == o2Online) {
+                    return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
+                } else {
+                    return 1;
+                }
+            }).collect(Collectors.toCollection(ArrayList::new));
 
 
-            List<TextComponent> sorted = sortOnlineOffline(friendArrayList, page);
-            if (sorted.isEmpty()) {
-                proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cThis page is empty!"));
-                return;
-            }
-            sorted.forEach(proxiedPlayer::sendMessage);
-        });
+        List<TextComponent> sorted = sortOnlineOffline(friendArrayList, page);
+        if (sorted.isEmpty()) {
+            proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cThis page is empty!"));
+            return;
+        }
+        sorted.forEach(proxiedPlayer::sendMessage);
     }
 
     private static String convertTime(long milliseconds) {
