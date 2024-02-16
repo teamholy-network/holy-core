@@ -2,6 +2,7 @@ package eu.koboo.markup.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mojang.authlib.properties.Property;
 import de.teamholy.core.bukkit.BukkitCore;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
@@ -78,7 +79,11 @@ public class PresetManager {
                 String value = rawElement.getAsJsonObject().get("value").toString().replace("\"", "");
                 String sign = rawElement.getAsJsonObject().get("signature").toString().replace("\"", "");
                 con.getInputStream().close();
-                preset = new PlayerPreset(name, uuid, value, sign);
+                preset = new PlayerPreset();
+                preset.setUuid(uuid);
+                preset.setName(name);
+                preset.setValue(value);
+                preset.setSignature(sign);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -88,7 +93,9 @@ public class PresetManager {
 
     public void reloadPresets() {
         service.execute(() -> {
+            System.out.println("Loading presets...");
             presetList.addAll(markupAPI.getNickProfilesRepository().findAll());
+            System.out.println("Loaded " + presetList.size() + " presets.");
             if (presetList.isEmpty()) {
                 load = false;
             }

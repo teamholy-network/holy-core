@@ -62,7 +62,7 @@ public class CommandHardNick implements CommandExecutor {
                         return;
                     }
                     Bukkit.getScheduler().runTask(markupAPI, () -> {
-                        markupAPI.getNickManager().apply(player, preset.getName(), preset.getUuid(), preset.getProperty());
+                        markupAPI.getNickManager().apply(player, preset.getName(), preset.getUuid(), MarkupAPI.getProperty(preset.getValue(), preset.getSignature()));
                         player.sendMessage(MarkupAPI.NICK_PREFIX + "§7You're now known as§8: §a" + nickName);
                     });
                 });

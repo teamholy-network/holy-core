@@ -2,6 +2,8 @@ package eu.koboo.markup;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.properties.Property;
 import de.teamholy.core.bukkit.BukkitCore;
 import eu.koboo.markup.adapter.PacketPlayServerNamedEntitySpawnAdapter;
@@ -20,7 +22,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.*;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class MarkupAPI extends JavaPlugin {
 
@@ -87,13 +94,14 @@ public class MarkupAPI extends JavaPlugin {
     public void onEnable() {
         api = this;
 
+        nickProfilesRepository = BukkitCore.getAPI().getMongoManager().create(NickProfilesRepository.class);
+
         saveDefaultConfig();
 
         nickManager = new NickManager(this);
         presetManager = new PresetManager(this);
         teamManager = new TeamManager(this);
 
-        nickProfilesRepository = BukkitCore.getAPI().getMongoManager().create(NickProfilesRepository.class);
 
         handleCommandRegistration("hardnick", new CommandHardNick(this));
         handleCommandRegistration("nick", new CommandNick(this));
@@ -104,6 +112,12 @@ public class MarkupAPI extends JavaPlugin {
         protocolManager.addPacketListener(new PacketPlayServerNamedEntitySpawnAdapter(this));
         protocolManager.addPacketListener(new PacketPlayServerPlayerInfoAdapter(this));
         protocolManager.addPacketListener(new PacketPlayServerScoreboardTeamAdapter(this));
+        System.out.println("Started MarkupAPI");
+    }
+
+
+    public static Property getProperty(String value, String signature) {
+        return new Property("textures", value, signature);
     }
 
     @Override

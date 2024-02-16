@@ -2,31 +2,22 @@ package eu.koboo.markup.util;
 
 import com.mojang.authlib.properties.Property;
 import eu.koboo.en2do.repository.entity.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@NoArgsConstructor(force = true)
+@Getter
+@Setter
 public class PlayerPreset {
 
-    private final String name;
+
+    private String name;
     @Id
-    private final UUID uuid;
-    private final Property property;
+    private UUID uuid;
+    private String value;
+    private String signature;
 
-    public PlayerPreset(String name, UUID uuid, String value, String sign) {
-        this.name = name;
-        this.uuid = uuid;
-        this.property = new Property("textures", value, sign);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public Property getProperty() {
-        return this.property;
-    }
 }

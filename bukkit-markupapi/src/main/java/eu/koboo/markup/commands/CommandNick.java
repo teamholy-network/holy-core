@@ -50,7 +50,7 @@ public class CommandNick implements CommandExecutor {
 
         if (!markupAPI.getNickManager().hasNickName(player)) {
             PlayerPreset playerPreset = markupAPI.getPresetManager().getPlayerPreset();
-            markupAPI.getNickManager().apply(player, playerPreset.getName(), playerPreset.getUuid(), playerPreset.getProperty());
+            markupAPI.getNickManager().apply(player, playerPreset.getName(), playerPreset.getUuid(), MarkupAPI.getProperty(playerPreset.getValue(), playerPreset.getSignature()));
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§7You're now known as§8: §a" + playerPreset.getName());
         } else {
             markupAPI.getNickManager().resetPlayer(player);
