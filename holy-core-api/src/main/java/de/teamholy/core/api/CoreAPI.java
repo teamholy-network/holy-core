@@ -16,7 +16,6 @@ import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
 import de.teamholy.core.api.entities.stats.StatsProfileService;
 import de.teamholy.core.api.manager.*;
-import de.teamholy.core.api.ping.PingService;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
 import lombok.AccessLevel;
@@ -25,7 +24,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
@@ -60,11 +58,6 @@ public class CoreAPI {
     StatsProfileService statsProfileService;
     ConfigManager config;
 
-    PingService pingService;
-
-
-
-
     public CoreAPI() {
         CloudManager cloudManager1;
 
@@ -75,8 +68,6 @@ public class CoreAPI {
 
 
         this.redissonManager = new RedissonManager(this);
-
-        this.pingService = new PingService(this);
 
 
         this.playerService = new PlayerService(this);
@@ -122,8 +113,6 @@ public class CoreAPI {
 
 
         this.redissonManager = new RedissonManager(this);
-        this.pingService = new PingService(this);
-
 
         this.playerService = new PlayerService(this);
         this.banService = new BanService(this);

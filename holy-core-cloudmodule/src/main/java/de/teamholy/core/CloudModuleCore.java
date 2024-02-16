@@ -1,9 +1,13 @@
 package de.teamholy.core;
 
+import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.module.ModuleLifeCycle;
 import de.dytanic.cloudnet.driver.module.ModuleTask;
 import de.dytanic.cloudnet.module.NodeCloudNetModule;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.event.CloudMessageEvent;
+import de.teamholy.core.ping.PingService;
+import de.teamholy.core.task.ServiceAliveTask;
 import de.teamholy.core.task.StatsResetTask;
 import eu.koboo.en2do.Credentials;
 import lombok.Getter;
@@ -30,6 +34,10 @@ public class CloudModuleCore extends NodeCloudNetModule {
     public static boolean DAILY;
     public static boolean MONTHLY;
 
+    private PingService pingService;
+
+    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
     @ModuleTask(event = ModuleLifeCycle.LOADED)
     public void init() {
 
@@ -51,6 +59,12 @@ public class CloudModuleCore extends NodeCloudNetModule {
         sortManager = new RankingSortManager();
 
 
+        pingService = new PingService();
+
+        service.scheduleAtFixedRate(new ServiceAliveTask(pingService), 0, 5, TimeUnit.SECONDS);
+
+        CloudNetDriver.getInstance().getEventManager()
+            .registerListener(new CloudMessageEvent(pingService)); //Register a listener object on the event manager
     }
 
     @ModuleTask(event = ModuleLifeCycle.STOPPED)
@@ -58,6 +72,9 @@ public class CloudModuleCore extends NodeCloudNetModule {
         getConfig().append("daily", DAILY);
         getConfig().append("monthly", MONTHLY);
         saveConfig();
+
+        service.shutdown();
+        pingService.pingMap.clear();
     }
 
 }

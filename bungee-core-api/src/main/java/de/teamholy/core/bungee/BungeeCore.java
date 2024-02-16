@@ -94,7 +94,6 @@ public class BungeeCore extends Plugin {
         linkManager = new LinkManager();
         proxyManager = new ProxyManager(this.coreAPI);
 
-
         new LoginListener();
         new BanLoginListener(this);
         new MuteChatListener();
