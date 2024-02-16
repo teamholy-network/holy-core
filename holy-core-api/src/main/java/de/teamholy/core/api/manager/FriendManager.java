@@ -125,11 +125,13 @@ public class FriendManager {
     public void sendFriendUpdateData(UUID player, UUID target, String message, String extra) {
         JsonDocument jsonDocument = new JsonDocument().append("player", player).append("target", target).append("type", message).append("extra", extra);
         coreAPI.getCloudManager().sendCloudMessage("bukkit", "friend_update", jsonDocument);
+        getFriendEntry(player).updateFriendEntry(target, message, extra);
     }
 
     public void sendFriendRquestUpdateData(UUID player, UUID target, String message) {
         JsonDocument jsonDocument = new JsonDocument().append("player", player).append("target", target).append("type", message);
         coreAPI.getCloudManager().sendCloudMessage("bukkit", "friendrequest_update", jsonDocument);
+        getFriendEntry(player).updateFriendRequestEntry(target, message);
     }
 
     @Getter
@@ -195,11 +197,11 @@ public class FriendManager {
         return friendEntry.getListForPage(page, list, 10);
     }
 
-    public ConcurrentHashMap<UUID, Friend> getFriendCache(UUID uuid) {
+    public HashMap<UUID, Friend> getFriendCache(UUID uuid) {
         return getFriendEntry(uuid).getFriendCache();
     }
 
-    public ConcurrentHashMap<UUID, Friend> getFriendRequestsCache(UUID uuid) {
+    public HashMap<UUID, Friend> getFriendRequestsCache(UUID uuid) {
         return getFriendEntry(uuid).getFriendRequestCache();
     }
 
@@ -211,8 +213,8 @@ public class FriendManager {
 
         private CoreAPI coreAPI;
 
-        private final ConcurrentHashMap<UUID, Friend> friendCache = new ConcurrentHashMap<>();
-        private final ConcurrentHashMap<UUID, Friend> friendRequestCache = new ConcurrentHashMap<>();
+        private final HashMap<UUID, Friend> friendCache = new HashMap<>();
+        private final HashMap<UUID, Friend> friendRequestCache = new HashMap<>();
 
 
         private int page = 1;
@@ -311,6 +313,7 @@ public class FriendManager {
                 friendCache.remove(uuid);
 
             } else if (data.equalsIgnoreCase("server_update")) {
+                if (friendCache.isEmpty()) return;
 
                 Friend friend = friendCache.get(uuid);
                 if (friend == null) return;
@@ -318,6 +321,7 @@ public class FriendManager {
                 friendCache.put(uuid, friend);
 
             } else if (data.equalsIgnoreCase("online")) {
+                if (friendCache.isEmpty()) return;
 
                 Friend friend = friendCache.get(uuid);
                 if (friend == null) return;
@@ -325,6 +329,8 @@ public class FriendManager {
                 friendCache.put(uuid, friend);
 
             } else if (data.equalsIgnoreCase("offline")) {
+                if (friendCache.isEmpty()) return;
+
 
                 Friend friend = friendCache.get(uuid);
                 if (friend == null) return;

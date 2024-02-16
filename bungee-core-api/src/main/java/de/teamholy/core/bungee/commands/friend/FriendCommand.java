@@ -268,24 +268,28 @@ public class FriendCommand extends Command {
                 FriendManager.FriendEntry friendEntry = FriendManager.FriendEntry.friendCache.get(friendUUID);
             });*/
 
-
             ArrayList<FriendManager.Friend> friendArrayList = BungeeCore.getAPI().getFriendManager().getFriendCache(proxiedPlayer.getUniqueId())
-                    .values()
-                    .stream()
-                    .sorted((o1, o2) -> {
-                        boolean o1Online = o1.isOnline();
-                        boolean o2Online = o2.isOnline();
-                        if (o1Online && !o2Online) {
-                            return -1;
-                        } else if (o1Online == o2Online) {
-                            return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
-                        } else {
-                            return 1;
-                        }
-                    }).collect(Collectors.toCollection(ArrayList::new));
+                .values()
+                .stream()
+                .sorted((o1, o2) -> {
+                    boolean o1Online = o1.isOnline();
+                    boolean o2Online = o2.isOnline();
+                    if (o1Online && !o2Online) {
+                        return -1;
+                    } else if (o1Online == o2Online) {
+                        return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
+                    } else {
+                        return 1;
+                    }
+                }).collect(Collectors.toCollection(ArrayList::new));
 
 
-            sortOnlineOffline(friendArrayList, page).forEach(proxiedPlayer::sendMessage);
+            List<TextComponent> sorted = sortOnlineOffline(friendArrayList, page);
+            if (sorted.isEmpty()) {
+                proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cThis page is empty!"));
+                return;
+            }
+            sorted.forEach(proxiedPlayer::sendMessage);
         });
     }
 
@@ -337,9 +341,9 @@ public class FriendCommand extends Command {
             UUID uuid = friend.getUuid();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
             TextComponent textComponent = new TextComponent("§8- " + getColor(uuid) + getName(uuid));
-            if (friend.isOnline()) {
-                textComponent.addExtra("§8: §aOnline §7on §e" + friend.getCurrentServer());
-                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend jump " + getName(uuid)));
+            if (player != null) {
+                textComponent.addExtra("§8: §aOnline §7on §e" + player.getServer().getInfo().getName());
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend jump " + player.getName()));
                 textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aJump to " + getColor(uuid) + getName(uuid)).create()));
                 onlineOfflineList.add(textComponent);
             } else {
