@@ -342,7 +342,7 @@ public class FriendCommand extends Command {
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
             TextComponent textComponent = new TextComponent("§8- " + getColor(uuid) + getName(uuid));
             if (player != null) {
-                textComponent.addExtra("§8: §aOnline §7on §e" + player.getServer().getInfo().getName());
+                textComponent.addExtra("§8: §aOnline §7on §6" + player.getServer().getInfo().getName());
                 textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend jump " + player.getName()));
                 textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aJump to " + getColor(uuid) + getName(uuid)).create()));
                 onlineOfflineList.add(textComponent);
