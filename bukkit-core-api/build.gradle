@@ -12,7 +12,7 @@ dependencies {
 
     implementation("eu.koboo:yaml-config:$yamlVersion")
 
-    compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
 
 
