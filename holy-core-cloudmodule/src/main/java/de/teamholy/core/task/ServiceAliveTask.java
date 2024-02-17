@@ -29,8 +29,9 @@ public class ServiceAliveTask implements Runnable {
 
                 if (pingService.stopService(server)) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Service " + server + " is dead. Stopping service.");
-                } else {
-                    pingService.pingMap.remove(server);
+
+                    pingService.removePing(server);
+                    pingService.sendDiscordWebhook(server);
                 }
             }
         }

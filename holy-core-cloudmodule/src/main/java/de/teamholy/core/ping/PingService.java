@@ -29,17 +29,12 @@ public class PingService {
     public HashMap<String, Long> pingMap = new HashMap<>();
 
     public void addPing(String server) {
+        pingMap.remove(server);
         pingMap.put(server, System.currentTimeMillis());
     }
 
     public void removePing(String server) {
         pingMap.remove(server);
-    }
-
-    public boolean isPinging(String server) {
-        if (pingMap.isEmpty()) return false;
-
-        return pingMap.containsKey(server);
     }
 
     public long getLastPing(String server) {
@@ -57,8 +52,6 @@ public class PingService {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
                     serverInfo.provider().stop();
-                    removePing(name);
-                    sendDiscordWebhook(serverInfo.getServiceId().getName());
                     return true;
                 }
             }
