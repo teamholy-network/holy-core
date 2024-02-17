@@ -1,6 +1,5 @@
 package de.teamholy.core.api.utility;
 
-import club.minnced.discord.webhook.send.MessageAttachment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
