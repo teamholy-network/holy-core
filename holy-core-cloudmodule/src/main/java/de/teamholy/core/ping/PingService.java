@@ -59,10 +59,11 @@ public class PingService {
                     serverInfo.provider().stop();
                     removePing(name);
                     sendDiscordWebhook(serverInfo.getServiceId().getName());
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
 
