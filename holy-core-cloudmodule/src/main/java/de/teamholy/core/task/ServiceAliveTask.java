@@ -1,5 +1,7 @@
 package de.teamholy.core.task;
 
+import de.dytanic.cloudnet.wrapper.Wrapper;
+import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.ping.PingService;
 
 /**
@@ -19,10 +21,16 @@ public class ServiceAliveTask implements Runnable {
     @Override
     public void run() {
         for (String server : pingService.pingMap.keySet()) {
-            System.out.println("Checking " + server + " for aliveness with last ping at " + pingService.getLastPing(server));
+           // CloudModuleCore.getInstance().getLogger().info("[!] Checking " + server + " for aliveness with last ping " + (System.currentTimeMillis() - pingService.getLastPing(server)) + " seconds ago");
             if (System.currentTimeMillis() - pingService.getLastPing(server) > 10000) {
-                System.out.println("Service " + server + " is dead. Stopping service.");
-                pingService.stopService(server);
+
+                if (Wrapper.getInstance().getCloudServiceProvider(server).isValid()) {
+                    CloudModuleCore.getInstance().getLogger().info("[!] Service " + server + " is dead. Stopping service.");
+                    pingService.stopService(server);
+                    return;
+                } else {
+                    pingService.pingMap.remove(server);
+                }
             }
         }
     }

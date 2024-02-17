@@ -2,6 +2,8 @@ package de.teamholy.core.event;
 
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
+import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStopEvent;
+import de.dytanic.cloudnet.ext.bridge.bukkit.event.BukkitCloudServiceStopEvent;
 import de.teamholy.core.ping.PingResponse;
 import de.teamholy.core.ping.PingService;
 
@@ -36,6 +38,10 @@ public class CloudMessageEvent {
         }
     }
 
+    @EventListener
+    public void onHandleServiceStop(CloudServiceStopEvent event) {
+        pingService.removePing(event.getServiceInfo().getServiceId().getName());
+    }
 
 
 }

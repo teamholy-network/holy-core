@@ -12,6 +12,7 @@ import de.teamholy.core.task.StatsResetTask;
 import eu.koboo.en2do.Credentials;
 import lombok.Getter;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +37,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
     private PingService pingService;
 
-    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     @ModuleTask(event = ModuleLifeCycle.LOADED)
     public void init() {
@@ -61,7 +62,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
         pingService = new PingService();
 
-        service.scheduleAtFixedRate(new ServiceAliveTask(pingService), 0, 5, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(new ServiceAliveTask(pingService), 5, 5, TimeUnit.SECONDS);
 
         CloudNetDriver.getInstance().getEventManager()
             .registerListener(new CloudMessageEvent(pingService)); //Register a listener object on the event manager

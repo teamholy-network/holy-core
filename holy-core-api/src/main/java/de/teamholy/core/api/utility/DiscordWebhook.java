@@ -1,5 +1,6 @@
 package de.teamholy.core.api.utility;
 
+import club.minnced.discord.webhook.send.MessageAttachment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
@@ -84,6 +86,7 @@ public class DiscordWebhook {
                 EmbedObject.Image image = embed.getImage();
                 EmbedObject.Thumbnail thumbnail = embed.getThumbnail();
                 EmbedObject.Author author = embed.getAuthor();
+
                 List<EmbedObject.Field> fields = embed.getFields();
 
                 if (footer != null) {
@@ -107,6 +110,7 @@ public class DiscordWebhook {
                     jsonThumbnail.put("url", thumbnail.getUrl());
                     jsonEmbed.put("thumbnail", jsonThumbnail);
                 }
+
 
                 if (author != null) {
                     JSONObject jsonAuthor = new JSONObject();
@@ -156,6 +160,9 @@ public class DiscordWebhook {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addFile(File file) {
     }
 
     @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -252,6 +259,7 @@ public class DiscordWebhook {
             this.fields.add(new Field(name, value, inline));
             return this;
         }
+
 
         @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
         @RequiredArgsConstructor
