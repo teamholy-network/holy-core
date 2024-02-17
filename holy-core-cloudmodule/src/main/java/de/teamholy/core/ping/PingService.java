@@ -46,12 +46,12 @@ public class PingService {
         return pingMap.get(server);
     }
 
-    public void stopService(String name) {
+    public boolean stopService(String name) {
         Collection<ServiceInfoSnapshot> serviceInfoSnapshots = CloudNetDriver.getInstance().getCloudServiceProvider()
             .getCloudServices();
 
         if (serviceInfoSnapshots.isEmpty()) {
-            return;
+            return false;
         }
         for (var serverInfo : serviceInfoSnapshots) {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
@@ -62,6 +62,7 @@ public class PingService {
                 }
             }
         }
+        return true;
     }
 
 
@@ -101,7 +102,7 @@ public class PingService {
             .addField("Log", pasteURL, false)
             .setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
 
-        webhook.execute();
+        CloudModuleCore.getCoreAPI().getExecutor().execute(webhook::execute);
     }
 
 }
