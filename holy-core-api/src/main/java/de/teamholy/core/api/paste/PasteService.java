@@ -19,7 +19,8 @@ public class PasteService {
 
     private static final String PASTE_URL = "https://pastebin.com/api/api_post.php";
 
-    private static final String API_KEY = "vWpOZeOhQqtctVA2Hzt2IFlTESG9P2W7";
+    private static final String API_KEY = "hIoFTw2oSQ3cVPyQ7bZO_oeGS8dXzZ0q";
+    private static final String USER_KEY = "2670664b6b0faf05d2e3b2f892bc89ad";
 
     public static String paste(String service, String content) {
         String response = null;
@@ -29,10 +30,11 @@ public class PasteService {
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
 
-            String postData = "api_option=paste&api_user_key=" + "" +
-                "&api_paste_private=" + 1 +
-                "&api_paste_name=" + "TeamHoly-Log-" + service + "-" + System.currentTimeMillis() +
+            String postData = "api_option=paste&api_user_key=" + USER_KEY +
+                "&api_paste_private=" + 2 +
+                "&api_paste_name=" + "Log-" + service + "-" + System.currentTimeMillis() +
                 "&api_paste_format=" + "java" +
+                "&api_paste_expire_date=" + "1W" +
                 "&api_dev_key=" + API_KEY +
                 "&api_paste_code=" + URLEncoder.encode(content, "UTF-8");
 
@@ -65,21 +67,11 @@ public class PasteService {
         return response;
     }
 
-    public static void main(String[] args) {
 
-        StringBuilder sb = new StringBuilder();
+    /*
+    public static void main(String[] args) throws Exception {
 
-        List<String> msg = List.of("test", "test");
+        System.out.println(paste("test", "test"));
 
-        try {
-            for (String message : msg) {
-                sb.append(message).append("\n");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String paste = paste("test", sb.toString());
-        System.out.println(paste);
-    }
+    }*/
 }
