@@ -69,7 +69,7 @@ public class BukkitCore extends JavaPlugin {
         cloudMessageManager = new CloudMessageManager(this);
 
         System.out.println("Starting ServiceAliveTask\n");
-        Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20*3);
+        Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20*5);
         System.out.println("\nStarted ServiceAliveTask");
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];

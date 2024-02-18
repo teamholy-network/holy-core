@@ -21,18 +21,14 @@ public class HealthTask implements Runnable {
 
     @Override
     public void run() {
-        HashMap<String, Long> pingMap = healthService.pingMap;
+        HashMap<String, Long> pingMap = new HashMap<>(healthService.pingMap);
         for (String server : pingMap.keySet()) {
-           // CloudModuleCore.getInstance().getLogger().info("[!] Checking " + server + " for aliveness with last ping " + (System.currentTimeMillis() - pingService.getLastPing(server)) + " seconds ago");
-            if (System.currentTimeMillis() >= healthService.getLastPing(server)) {
+            if (System.currentTimeMillis() - healthService.getLastPing(server) <= 10000L) continue;
 
-                if (healthService.stopService(server)) {
-                    CloudModuleCore.getInstance().getLogger().info("[!] Service " + server + " is dead. Stopping service.");
+            healthService.stopService(server);
 
-                    healthService.removePing(server);
-                    healthService.sendDiscordWebhook(server);
-                }
-            }
+            healthService.removePing(server);
+            healthService.sendDiscordWebhook(server);
         }
     }
 }

@@ -24,8 +24,7 @@ public class HealthService {
     public HashMap<String, Long> pingMap = new HashMap<>();
 
     public void addPing(String server) {
-        pingMap.remove(server);
-        pingMap.put(server, System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5));
+        pingMap.put(server, System.currentTimeMillis());
     }
 
     public void removePing(String server) {
@@ -36,22 +35,21 @@ public class HealthService {
         return pingMap.get(server);
     }
 
-    public boolean stopService(String name) {
+    public void stopService(String name) {
         Collection<ServiceInfoSnapshot> serviceInfoSnapshots = CloudNetDriver.getInstance().getCloudServiceProvider()
             .getCloudServices();
 
         if (serviceInfoSnapshots.isEmpty()) {
-            return false;
+            return;
         }
         for (var serverInfo : serviceInfoSnapshots) {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
+                    CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Trying to kill...");
                     serverInfo.provider().kill();
-                    return true;
                 }
             }
         }
-        return false;
     }
 
 
@@ -91,7 +89,7 @@ public class HealthService {
             .addField("Log", pasteURL, false)
             .setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
 
-        CloudModuleCore.getCoreAPI().getExecutor().execute(webhook::execute);
+        webhook.execute();
     }
 
 }

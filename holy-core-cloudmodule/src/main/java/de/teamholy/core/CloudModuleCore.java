@@ -61,7 +61,8 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
         healthService = new HealthService();
 
-        service.scheduleAtFixedRate(new HealthTask(healthService), 0, 1, TimeUnit.SECONDS);
+        HealthTask healthTask = new HealthTask(healthService);
+        service.scheduleAtFixedRate(healthTask, 5, 1, TimeUnit.SECONDS);
 
         CloudNetDriver.getInstance().getEventManager()
             .registerListener(new CloudMessageEvent(healthService)); //Register a listener object on the event manager
@@ -76,11 +77,8 @@ public class CloudModuleCore extends NodeCloudNetModule {
 
         service.shutdown();
         healthService.pingMap.clear();
+        executorService.shutdown();
 
-
-        sortManager = null;
-        healthService = null;
-        coreAPI = null;
     }
 
     @ModuleTask(event = ModuleLifeCycle.STOPPED)
@@ -90,6 +88,11 @@ public class CloudModuleCore extends NodeCloudNetModule {
         saveConfig();
 
         service.shutdown();
+        executorService.shutdown();
+
         healthService.pingMap.clear();
+        sortManager = null;
+        healthService = null;
+        coreAPI = null;
     }
 }
