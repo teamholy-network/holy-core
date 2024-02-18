@@ -1,5 +1,7 @@
 package de.teamholy.core.bungee.commands.friend;
 
+import de.teamholy.core.api.entities.friend.entry.Friend;
+import de.teamholy.core.api.entities.friend.entry.FriendEntry;
 import de.teamholy.core.api.manager.FriendManager;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
@@ -256,7 +258,8 @@ public class FriendCommand extends Command {
 
 
     public static void printFriendList(ProxiedPlayer proxiedPlayer, int page) {
-        var friendCache = BungeeCore.getAPI().getFriendManager().getFriendCache(proxiedPlayer.getUniqueId());
+        FriendEntry friendEntry = BungeeCore.getAPI().getFriendManager().getFriendEntry(proxiedPlayer.getUniqueId());
+        var friendCache = friendEntry.getFriendCache();
 
         if (friendCache.isEmpty()) {
             proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cYour friend list is empty!"));
@@ -272,21 +275,10 @@ public class FriendCommand extends Command {
                 FriendManager.FriendEntry friendEntry = FriendManager.FriendEntry.friendCache.get(friendUUID);
             });*/
 
-        ArrayList<FriendManager.Friend> friendArrayList = BungeeCore.getAPI().getFriendManager().getFriendCache(proxiedPlayer.getUniqueId())
+        ArrayList<Friend> friendArrayList = friendCache
             .values()
             .stream()
-            .sorted((o1, o2) -> {
-                boolean o1Online = o1.isOnline();
-                boolean o2Online = o2.isOnline();
-                if (o1Online && !o2Online) {
-                    return -1;
-                } else if (o1Online == o2Online) {
-                    return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
-                } else {
-                    return 1;
-                }
-            }).collect(Collectors.toCollection(ArrayList::new));
-
+            .sorted(friendEntry.getSortOption().getComparator()).collect(Collectors.toCollection(ArrayList::new));
 
         List<TextComponent> sorted = sortOnlineOffline(friendArrayList, page);
         if (sorted.isEmpty()) {
@@ -319,7 +311,7 @@ public class FriendCommand extends Command {
     }
 
 
-    private static List<TextComponent> sortOnlineOffline(List<FriendManager.Friend> list, int pageNumber) {
+    private static List<TextComponent> sortOnlineOffline(List<Friend> list, int pageNumber) {
         // in the list of the uuids should the online players be first
 
         list.sort((o1, o2) -> {
@@ -340,7 +332,7 @@ public class FriendCommand extends Command {
         int endIndex = Math.min(startIndex + 10, list.size());
 
         for (int i = startIndex; i < endIndex; i++) {
-            FriendManager.Friend friend = list.get(i);
+            Friend friend = list.get(i);
             UUID uuid = friend.getUuid();
             ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
             TextComponent textComponent = new TextComponent("§8- " + getColor(uuid) + getName(uuid));

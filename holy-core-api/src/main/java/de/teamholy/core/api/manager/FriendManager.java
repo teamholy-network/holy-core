@@ -1,26 +1,44 @@
 package de.teamholy.core.api.manager;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.teamholy.core.api.CachedFriendEntry;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.friend.FriendProfile;
+import de.teamholy.core.api.entities.friend.entry.Friend;
+import de.teamholy.core.api.entities.friend.entry.FriendEntry;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.PlayerRank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 public class FriendManager {
 
     CoreAPI coreAPI;
+
+    HashMap<UUID, CachedFriendEntry> friendEntryMap = new HashMap<>();
+
+    public FriendManager(CoreAPI coreAPI) {
+        this.coreAPI = coreAPI;
+    }
 
     public boolean isFriend(UUID player, UUID target) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));
@@ -134,26 +152,9 @@ public class FriendManager {
         getFriendEntry(player).updateFriendRequestEntry(target, message);
     }
 
-    @Getter
-    @Setter
-    public static class Friend {
-        private String value, signature;
-        private UUID uuid;
-        private boolean isOnline;
-        private long lastJoin;
-        private String name;
-        private PlayerRank playerRank;
-        private String currentServer;
-    }
-
-    private final HashMap<UUID, FriendEntry> friendEntryMap = new HashMap<>();
 
     public FriendEntry getFriendEntry(UUID uuid) {
-        return friendEntryMap.computeIfAbsent(uuid, ignore -> new FriendEntry(uuid, coreAPI));
-    }
-
-    public void removeFriendEntry(UUID uuid) {
-        friendEntryMap.remove(uuid);
+        return loadFriendEntry(uuid);
     }
 
     public void updateFriendEntry(UUID uuid, String data, String extra) {
@@ -164,15 +165,6 @@ public class FriendManager {
     public void updateFriendRequestEntry(UUID uuid, String data) {
         FriendEntry friendEntry = getFriendEntry(uuid);
         friendEntry.updateFriendRequestEntry(uuid, data);
-    }
-
-    public void loadFriendEntry(UUID uuid, boolean isRequest) {
-        FriendEntry friendEntry = getFriendEntry(uuid);
-        friendEntry.loadFriendEntry(uuid, isRequest);
-    }
-
-    public void loadFriendEntryAsync(UUID uuid, boolean isRequest) {
-        coreAPI.getExecutor().execute(() -> loadFriendEntry(uuid, isRequest));
     }
 
     public void loadFriend(UUID uuid, Friend friend) {
@@ -190,11 +182,84 @@ public class FriendManager {
         return friendEntry.getFriend(uuid);
     }
 
-    public List<Friend> getFriendList(UUID uuid, int page, FriendEntry.SortOption sortOption) {
+    public List<Friend> getFriendList(UUID uuid, int page, SortOption sortOption) {
         FriendEntry friendEntry = getFriendEntry(uuid);
-        List<Friend> list = new ArrayList<>(friendEntry.friendCache.values());
+        List<Friend> list = new ArrayList<>(friendEntry.getFriendCache().values());
         list.sort(sortOption.getComparator());
-        return friendEntry.getListForPage(page, list, 10);
+        friendEntry.setSortOption(sortOption);
+        return getListForPage(page, list, 10);
+    }
+
+
+    public List<Friend> getListForPage(int page, List<Friend> list, int slotsPerPage) {
+        int startIndex = (page - 1) * slotsPerPage;
+        int endIndex = startIndex + slotsPerPage;
+
+        if (startIndex >= list.size()) {
+            return new ArrayList<>();
+        }
+
+        if (endIndex > list.size()) {
+            endIndex = list.size();
+        }
+        return list.subList(startIndex, endIndex);
+    }
+
+    private int getMaxPages(List<Friend> list, int slotsPerPage) {
+        int totalItems = list.size();
+        return (int) Math.ceil((double) totalItems / slotsPerPage);
+    }
+
+    private String convertTime(long milliseconds) {
+        long seconds = milliseconds / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+        String result = "";
+
+        if (days > 0) {
+            result += days + "d ";
+            hours = hours % 24;
+        }
+        if (hours > 0) {
+            result += hours + "h ";
+            minutes = minutes % 60;
+        }
+        if (minutes > 0 && days == 0) {
+            result += minutes + "m";
+        }
+
+        return result.trim();
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum SortOption {
+        LASTONLINE_RECENTLY(" Last online §8(§6recently §7➡ §6long§8)", (o1, o2) -> {
+            boolean o1Online = o1.isOnline();
+            boolean o2Online = o2.isOnline();
+            if (o1Online && !o2Online) {
+                return -1;
+            } else if (o1Online == o2Online) {
+                return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
+            } else {
+                return 1;
+            }
+        }),
+        LASTONLINE_LONG(" Last online §8(§6long §7➡ §6recently§8)", Comparator.comparingLong(Friend::getLastJoin)),
+        NAME_A_TO_Z(" Name §8(§6A §7➡ §6Z§8)", Comparator.comparing(Friend::getName)),
+        NAME_Z_TO_A(" Name §8(§6Z §7➡ §6A§8)", (o1, o2) -> o2.getName().compareTo(o1.getName())),
+        RANK(" Ranks §8(§4Admin §7➡ §7Player§8)", (o1, o2) -> {
+            if (o1.getPlayerRank().getSortId() < o2.getPlayerRank().getSortId()) {
+                return -1;
+            } else if (o1.getPlayerRank().getSortId() > o2.getPlayerRank().getSortId()) {
+                return 1;
+            } else return 0;
+
+        });
+
+        private final String lore;
+        private final Comparator<Friend> comparator;
     }
 
     public HashMap<UUID, Friend> getFriendCache(UUID uuid) {
@@ -205,220 +270,32 @@ public class FriendManager {
         return getFriendEntry(uuid).getFriendRequestCache();
     }
 
-    @Getter
-    @Setter
-    public static class FriendEntry {
 
-        private UUID uuid;
-
-        private CoreAPI coreAPI;
-
-        private final HashMap<UUID, Friend> friendCache = new HashMap<>();
-        private final HashMap<UUID, Friend> friendRequestCache = new HashMap<>();
+    public CompletableFuture<FriendEntry> getFriendAsync(UUID uuid) {
+        CompletableFuture<FriendEntry> completableFuture = new CompletableFuture<>();
 
 
-        private int page = 1;
-        private SortOption sortOption = SortOption.LASTONLINE_RECENTLY;
+        return completableFuture;
+    }
 
-        public FriendEntry(UUID uuid, CoreAPI coreAPI) {
-            this.uuid = uuid;
-            this.coreAPI = coreAPI;
-
-            coreAPI.getFriendService().getEntityAsync(uuid, () -> coreAPI.getFriendService().getRepository().findFirstById(uuid), friendProfile -> {
-                if (friendProfile == null) return;
-
-
-                long start = System.currentTimeMillis();
-
-                friendProfile.getFriendList().forEach(friendUUID -> {
-                    loadFriendEntry(friendUUID, false);
-                });
-
-
-                coreAPI.getFriendService().saveEntity(friendProfile, true, true);
-
-                friendProfile.getFriendReqeustsList().forEach(requestUUID -> {
-                    loadFriendEntry(requestUUID, true);
-                });
-                long end = System.currentTimeMillis();
-
-                long time = (end / start);
-                // System.out.println("[!] loading friends of " + player.getName() + " in " + time + "ms");
-
-            });
-
-        }
-
-        public void loadFriend(UUID uuid, Friend friend) {
-            friendCache.put(uuid, friend);
-        }
-
-        public void removeFriend(UUID uuid) {
-            friendCache.remove(uuid);
-        }
-
-        public Friend getFriend(UUID uuid) {
-            return friendCache.get(uuid);
-        }
-
-        public void loadFriendEntry(UUID uuid, boolean isRequest) {
-            PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid, () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
-            SkinProfile skinProfile = coreAPI.getSkinService().getEntity(uuid, () -> coreAPI.getSkinService().getRepository().findFirstById(uuid));
-
-            String value;
-            String signature;
-            if (skinProfile == null) {
-                value = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGZk" +
-                    "NWJkZTk5NGUwYTY0N2FmMTgyMzY4MWE2MTNjMmJmYzNkOTczNmY4ODlkYmY4YzNiYmJhNWExM2Y4ZWQifX19";
-                signature = "";
+    private FriendEntry loadFriendEntry(UUID uuid) {
+        if (friendEntryMap.containsKey(uuid)) {
+            CachedFriendEntry entry = friendEntryMap.get(uuid);
+            if (System.currentTimeMillis() >= entry.getExpiredAt()) {
+                return insertIntoFriendMap(uuid);
             } else {
-                value = skinProfile.getValue();
-                signature = skinProfile.getSignature();
+                return entry.getFriendEntry();
             }
-
-
-            Friend friend = new Friend();
-
-            PlayerRank playerRank = PlayerRank.valueOf(playerProfile.getRank());
-
-            friend.setUuid(uuid);
-            friend.setOnline(playerProfile.isOnline());
-            friend.setCurrentServer(playerProfile.getServerName());
-            friend.setName(playerProfile.getPlayerName());
-            friend.setLastJoin(playerProfile.getLastJoin());
-            friend.setPlayerRank(playerRank);
-            friend.setValue(value);
-            friend.setSignature(signature);
-
-            if (isRequest) {
-                friendRequestCache.put(uuid, friend);
-            } else {
-                friendCache.put(uuid, friend);
-            }
-
+        } else {
+            return insertIntoFriendMap(uuid);
         }
+    }
 
-        public void loadFriendEntryAsync(UUID uuid, boolean isRequest) {
-            coreAPI.getExecutor().execute(() -> loadFriendEntry(uuid, isRequest));
-        }
+    private FriendEntry insertIntoFriendMap(UUID uuid) {
+        FriendEntry friendEntry = new FriendEntry(uuid, coreAPI);
 
-        public void updateFriendEntry(UUID uuid, String data, String extra) {
-
-            if (data.equalsIgnoreCase("add")) {
-
-                loadFriendEntryAsync(uuid, false);
-
-            } else if (data.equalsIgnoreCase("remove")) {
-
-                friendCache.remove(uuid);
-
-            } else if (data.equalsIgnoreCase("server_update")) {
-                if (friendCache.isEmpty()) return;
-
-                Friend friend = friendCache.get(uuid);
-                if (friend == null) return;
-                friend.setCurrentServer(extra);
-                friendCache.put(uuid, friend);
-
-            } else if (data.equalsIgnoreCase("online")) {
-                if (friendCache.isEmpty()) return;
-
-                Friend friend = friendCache.get(uuid);
-                if (friend == null) return;
-                friend.setOnline(true);
-                friendCache.put(uuid, friend);
-
-            } else if (data.equalsIgnoreCase("offline")) {
-                if (friendCache.isEmpty()) return;
-
-
-                Friend friend = friendCache.get(uuid);
-                if (friend == null) return;
-                friend.setOnline(false);
-                friendCache.put(uuid, friend);
-
-            }
-
-        }
-
-        public void updateFriendRequestEntry(UUID uuid, String data) {
-            if (data.equalsIgnoreCase("send")) {
-                loadFriendEntryAsync(uuid, true);
-            } else if (data.equalsIgnoreCase("remove")) {
-                friendRequestCache.remove(uuid);
-            }
-        }
-
-
-        private List<Friend> getListForPage(int page, List<Friend> list, int slotsPerPage) {
-            int startIndex = (page - 1) * slotsPerPage;
-            int endIndex = startIndex + slotsPerPage;
-
-            if (startIndex >= list.size()) {
-                return new ArrayList<>();
-            }
-
-            if (endIndex > list.size()) {
-                endIndex = list.size();
-            }
-            return list.subList(startIndex, endIndex);
-        }
-
-        private int getMaxPages(List<Friend> list, int slotsPerPage) {
-            int totalItems = list.size();
-            return (int) Math.ceil((double) totalItems / slotsPerPage);
-        }
-
-        private String convertTime(long milliseconds) {
-            long seconds = milliseconds / 1000;
-            long minutes = seconds / 60;
-            long hours = minutes / 60;
-            long days = hours / 24;
-            String result = "";
-
-            if (days > 0) {
-                result += days + "d ";
-                hours = hours % 24;
-            }
-            if (hours > 0) {
-                result += hours + "h ";
-                minutes = minutes % 60;
-            }
-            if (minutes > 0 && days == 0) {
-                result += minutes + "m";
-            }
-
-            return result.trim();
-        }
-
-        @Getter
-        @AllArgsConstructor
-        public enum SortOption {
-            LASTONLINE_RECENTLY(" Last online §8(§6recently §7➡ §6long§8)", (o1, o2) -> {
-                boolean o1Online = o1.isOnline();
-                boolean o2Online = o2.isOnline();
-                if (o1Online && !o2Online) {
-                    return -1;
-                } else if (o1Online == o2Online) {
-                    return o1Online ? 0 : Long.compare(o2.getLastJoin(), o1.getLastJoin());
-                } else {
-                    return 1;
-                }
-            }),
-            LASTONLINE_LONG(" Last online §8(§6long §7➡ §6recently§8)", Comparator.comparingLong(Friend::getLastJoin)),
-            NAME_A_TO_Z(" Name §8(§6A §7➡ §6Z§8)", Comparator.comparing(Friend::getName)),
-            NAME_Z_TO_A(" Name §8(§6Z §7➡ §6A§8)", (o1, o2) -> o2.getName().compareTo(o1.getName())),
-            RANK(" Ranks §8(§4Admin §7➡ §7Player§8)", (o1, o2) -> {
-                if (o1.getPlayerRank().getSortId() < o2.getPlayerRank().getSortId()) {
-                    return -1;
-                } else if (o1.getPlayerRank().getSortId() > o2.getPlayerRank().getSortId()) {
-                    return 1;
-                } else return 0;
-
-            });
-
-            private final String lore;
-            private final Comparator<Friend> comparator;
-        }
+        CachedFriendEntry cachedFriendEntry = new CachedFriendEntry(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(30), friendEntry);
+        friendEntryMap.put(uuid, cachedFriendEntry);
+        return friendEntry;
     }
 }
