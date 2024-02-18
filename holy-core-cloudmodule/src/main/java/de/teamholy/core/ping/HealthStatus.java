@@ -9,18 +9,18 @@ import lombok.Getter;
  * Written by charon
  **/
 @Getter
-public enum PingResponse {
+public enum HealthStatus {
 
     ONLINE,
     OFFLINE,
     SHUTDOWN,
     UNKNOWN;
 
-    public static PingResponse fromBoolean(boolean online) {
+    public static HealthStatus fromBoolean(boolean online) {
         return online ? ONLINE : OFFLINE;
     }
 
-    public static PingResponse fromString(String string) {
+    public static HealthStatus fromString(String string) {
         if (string == null) return UNKNOWN;
         return switch (string.toLowerCase()) {
             case "online" -> ONLINE;

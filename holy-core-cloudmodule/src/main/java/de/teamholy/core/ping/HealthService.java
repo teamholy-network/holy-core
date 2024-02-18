@@ -4,18 +4,13 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.service.ServiceEnvironmentType;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
 import de.dytanic.cloudnet.driver.service.ServiceLifeCycle;
-import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.api.utility.DiscordWebhook;
-import de.teamholy.core.paste.PasteService;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Queue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Copyright (c) charon, All Rights Reserved
@@ -24,13 +19,13 @@ import java.util.concurrent.TimeoutException;
  * Written by charon
  **/
 
-public class PingService {
+public class HealthService {
 
     public HashMap<String, Long> pingMap = new HashMap<>();
 
     public void addPing(String server) {
         pingMap.remove(server);
-        pingMap.put(server, System.currentTimeMillis());
+        pingMap.put(server, System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5));
     }
 
     public void removePing(String server) {

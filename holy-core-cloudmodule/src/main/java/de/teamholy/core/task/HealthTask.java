@@ -1,8 +1,7 @@
 package de.teamholy.core.task;
 
-import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.CloudModuleCore;
-import de.teamholy.core.ping.PingService;
+import de.teamholy.core.ping.HealthService;
 
 import java.util.HashMap;
 
@@ -12,26 +11,26 @@ import java.util.HashMap;
  * Proprietary and confidential
  * Written by charon
  **/
-public class ServiceAliveTask implements Runnable {
+public class HealthTask implements Runnable {
 
-    private final PingService pingService;
+    private final HealthService healthService;
 
-    public ServiceAliveTask(PingService pingService) {
-        this.pingService = pingService;
+    public HealthTask(HealthService healthService) {
+        this.healthService = healthService;
     }
 
     @Override
     public void run() {
-        HashMap<String, Long> pingMap = pingService.pingMap;
+        HashMap<String, Long> pingMap = healthService.pingMap;
         for (String server : pingMap.keySet()) {
            // CloudModuleCore.getInstance().getLogger().info("[!] Checking " + server + " for aliveness with last ping " + (System.currentTimeMillis() - pingService.getLastPing(server)) + " seconds ago");
-            if (System.currentTimeMillis() - pingService.getLastPing(server) > 10000) {
+            if (System.currentTimeMillis() >= healthService.getLastPing(server)) {
 
-                if (pingService.stopService(server)) {
+                if (healthService.stopService(server)) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Service " + server + " is dead. Stopping service.");
 
-                    pingService.removePing(server);
-                    pingService.sendDiscordWebhook(server);
+                    healthService.removePing(server);
+                    healthService.sendDiscordWebhook(server);
                 }
             }
         }

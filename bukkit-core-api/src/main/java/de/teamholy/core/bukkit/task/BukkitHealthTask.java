@@ -10,7 +10,7 @@ import de.teamholy.core.bukkit.BukkitCore;
  * Proprietary and confidential
  * Written by charon
  **/
-public class ServiceAliveTask implements Runnable {
+public class BukkitHealthTask implements Runnable {
 
     @Override
     public void run() {

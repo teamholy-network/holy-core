@@ -14,7 +14,7 @@ import de.teamholy.core.bukkit.manager.CloudMessageManager;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
-import de.teamholy.core.bukkit.task.ServiceAliveTask;
+import de.teamholy.core.bukkit.task.BukkitHealthTask;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -23,12 +23,8 @@ import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -73,7 +69,7 @@ public class BukkitCore extends JavaPlugin {
         cloudMessageManager = new CloudMessageManager(this);
 
         System.out.println("Starting ServiceAliveTask\n");
-        Bukkit.getScheduler().runTaskTimer(this, new ServiceAliveTask(), 0, 20*5);
+        Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20*3);
         System.out.println("\nStarted ServiceAliveTask");
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];

@@ -6,9 +6,8 @@ import de.dytanic.cloudnet.driver.module.ModuleTask;
 import de.dytanic.cloudnet.module.NodeCloudNetModule;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.event.CloudMessageEvent;
-import de.teamholy.core.ping.PingService;
-import de.teamholy.core.task.ServiceAliveTask;
-import de.teamholy.core.task.StatsResetTask;
+import de.teamholy.core.ping.HealthService;
+import de.teamholy.core.task.HealthTask;
 import eu.koboo.en2do.Credentials;
 import lombok.Getter;
 
@@ -35,7 +34,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
     public static boolean DAILY;
     public static boolean MONTHLY;
 
-    private PingService pingService;
+    private HealthService healthService;
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -60,12 +59,28 @@ public class CloudModuleCore extends NodeCloudNetModule {
         sortManager = new RankingSortManager();
 
 
-        pingService = new PingService();
+        healthService = new HealthService();
 
-        service.scheduleAtFixedRate(new ServiceAliveTask(pingService), 5, 5, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(new HealthTask(healthService), 0, 1, TimeUnit.SECONDS);
 
         CloudNetDriver.getInstance().getEventManager()
-            .registerListener(new CloudMessageEvent(pingService)); //Register a listener object on the event manager
+            .registerListener(new CloudMessageEvent(healthService)); //Register a listener object on the event manager
+    }
+
+    @ModuleTask(event = ModuleLifeCycle.UNLOADED)
+    public void unload() {
+        getConfig().append("daily", DAILY);
+        getConfig().append("monthly", MONTHLY);
+        saveConfig();
+
+
+        service.shutdown();
+        healthService.pingMap.clear();
+
+
+        sortManager = null;
+        healthService = null;
+        coreAPI = null;
     }
 
     @ModuleTask(event = ModuleLifeCycle.STOPPED)
@@ -75,7 +90,6 @@ public class CloudModuleCore extends NodeCloudNetModule {
         saveConfig();
 
         service.shutdown();
-        pingService.pingMap.clear();
+        healthService.pingMap.clear();
     }
-
 }

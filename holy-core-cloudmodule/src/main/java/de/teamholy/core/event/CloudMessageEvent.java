@@ -1,11 +1,15 @@
 package de.teamholy.core.event;
 
+import de.dytanic.cloudnet.command.commands.CommandReload;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
+import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStartEvent;
 import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStopEvent;
-import de.dytanic.cloudnet.ext.bridge.bukkit.event.BukkitCloudServiceStopEvent;
-import de.teamholy.core.ping.PingResponse;
-import de.teamholy.core.ping.PingService;
+import de.teamholy.core.CloudModuleCore;
+import de.teamholy.core.ping.HealthStatus;
+import de.teamholy.core.ping.HealthService;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) charon, All Rights Reserved
@@ -15,10 +19,10 @@ import de.teamholy.core.ping.PingService;
  **/
 public class CloudMessageEvent {
 
-    private final PingService pingService;
+    private final HealthService healthService;
 
-    public CloudMessageEvent(PingService pingService) {
-        this.pingService = pingService;
+    public CloudMessageEvent(HealthService healthService) {
+        this.healthService = healthService;
     }
 
     @EventListener
@@ -29,18 +33,23 @@ public class CloudMessageEvent {
         if (event.getMessage() == null) return;
 
         if (event.getMessage().equalsIgnoreCase("ping:response")) {
-            PingResponse response = PingResponse.fromString(event.getData().getString("response"));
+            HealthStatus response = HealthStatus.fromString(event.getData().getString("response"));
             String service = event.getData().getString("server");
 
             if (response.isOnline()) {
-                pingService.addPing(service);
+                healthService.addPing(service);
             }
         }
     }
 
     @EventListener
     public void onHandleServiceStop(CloudServiceStopEvent event) {
-        pingService.removePing(event.getServiceInfo().getServiceId().getName());
+        healthService.removePing(event.getServiceInfo().getServiceId().getName());
+    }
+
+    @EventListener
+    public void onCloudServiceStart(CloudServiceStartEvent event) {
+        CloudModuleCore.getInstance().getService().schedule(() -> healthService.addPing(event.getServiceInfo().getServiceId().getName()), 3, TimeUnit.SECONDS);
     }
 
 
