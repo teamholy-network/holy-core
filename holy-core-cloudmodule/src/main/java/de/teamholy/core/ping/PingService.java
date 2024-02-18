@@ -51,7 +51,7 @@ public class PingService {
         for (var serverInfo : serviceInfoSnapshots) {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
-                    serverInfo.provider().stop();
+                    serverInfo.provider().kill();
                     return true;
                 }
             }
