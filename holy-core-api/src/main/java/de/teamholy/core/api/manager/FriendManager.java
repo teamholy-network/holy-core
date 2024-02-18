@@ -1,8 +1,5 @@
 package de.teamholy.core.api.manager;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
@@ -11,22 +8,12 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.friend.entry.Friend;
 import de.teamholy.core.api.entities.friend.entry.FriendEntry;
-import de.teamholy.core.api.entities.player.PlayerProfile;
-import de.teamholy.core.api.entities.skin.SkinProfile;
-import de.teamholy.core.api.utility.PlayerRank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

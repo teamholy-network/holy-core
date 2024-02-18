@@ -43,18 +43,19 @@ public class FriendEntry {
     }
 
     public void loadFriends() {
-        FriendProfile friendProfile = coreAPI.getFriendService().getEntity(uuid, () -> coreAPI.getFriendService().getRepository().findFirstById(uuid));
-        if (friendProfile == null) return;
+        coreAPI.getFriendService().getEntityAsync(uuid, () -> coreAPI.getFriendService().getRepository().findFirstById(uuid), friendProfile -> {
+            if (friendProfile == null) return;
 
-        friendProfile.getFriendList().forEach(friendUUID -> {
-            loadFriendEntry(friendUUID, false);
-        });
+            friendProfile.getFriendList().forEach(friendUUID -> {
+                loadFriendEntry(friendUUID, false);
+            });
 
 
-        coreAPI.getFriendService().saveEntity(friendProfile, true, true);
+            coreAPI.getFriendService().saveEntity(friendProfile, true, true);
 
-        friendProfile.getFriendReqeustsList().forEach(requestUUID -> {
-            loadFriendEntry(requestUUID, true);
+            friendProfile.getFriendReqeustsList().forEach(requestUUID -> {
+                loadFriendEntry(requestUUID, true);
+            });
         });
     }
 
