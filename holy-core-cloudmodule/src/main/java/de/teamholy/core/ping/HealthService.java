@@ -53,16 +53,16 @@ public class HealthService {
                     sendDiscordWebhook(serverInfo, name).whenComplete((url, throwable) -> {
                         if (throwable != null) {
                             CloudModuleCore.getInstance().getLogger().info("[!] Failed to get logs! " + throwable.getMessage());
-
                         } else {
                             DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1208189101895843910/ZW4eLq8qHYWUopADKcA2VfeGB3Pt6XEJooToALlboBwatIHQak_jG6A-WYTd-Ura96HC");
                             webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
                             webhook.setUsername("HealthService");
 
+
                             webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("HealthService")
                                 .addField("Stopped server", name, true)
                                 .addField("Log", url, false)
-                                .setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
+                                .setColor(Color.ORANGE).setThumbnail("https://static.thenounproject.com/png/70488-200.png").setFooter("TeamHolyDE", "https://i.imgur.com/k3mtKpE.png"));
 
                             CloudModuleCore.getInstance().getExecutorService().execute(webhook::execute);
                             CloudModuleCore.getInstance().getLogger().info("[!] Posted to Discord!");
