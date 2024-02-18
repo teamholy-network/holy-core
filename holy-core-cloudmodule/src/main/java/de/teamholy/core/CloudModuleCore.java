@@ -75,8 +75,10 @@ public class CloudModuleCore extends NodeCloudNetModule {
         saveConfig();
 
 
+        if (healthService != null)
+            healthService.pingMap.clear();
+
         service.shutdown();
-        healthService.pingMap.clear();
         executorService.shutdown();
 
     }

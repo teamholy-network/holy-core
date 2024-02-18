@@ -6,11 +6,14 @@ import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
 import de.dytanic.cloudnet.driver.service.ServiceLifeCycle;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.api.utility.DiscordWebhook;
+import de.teamholy.core.api.paste.PasteService;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 
 /**
  * Copyright (c) charon, All Rights Reserved
@@ -45,51 +48,65 @@ public class HealthService {
         for (var serverInfo : serviceInfoSnapshots) {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
-                    CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Trying to kill...");
+                    CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Saving logs and trying to kill...");
+
+                    sendDiscordWebhook(serverInfo, name).whenComplete((url, throwable) -> {
+                        if (throwable != null) {
+                            CloudModuleCore.getInstance().getLogger().info("[!] Failed to get logs! " + throwable.getMessage());
+
+                        } else {
+                            DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1208189101895843910/ZW4eLq8qHYWUopADKcA2VfeGB3Pt6XEJooToALlboBwatIHQak_jG6A-WYTd-Ura96HC");
+                            webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
+                            webhook.setUsername("HealthService");
+
+                            webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("HealthService")
+                                .addField("Stopped server", name, true)
+                                .addField("Log", url, false)
+                                .setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
+
+                            CloudModuleCore.getInstance().getExecutorService().execute(webhook::execute);
+                            CloudModuleCore.getInstance().getLogger().info("[!] Posted to Discord!");
+                        }
+                    });
+
                     serverInfo.provider().kill();
+                    CloudModuleCore.getInstance().getLogger().info("[✔] Killed Dead Server: " + name + ". Posting to Discord...");
                 }
             }
         }
     }
 
+    private final String regex = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
+    private final Pattern pattern = Pattern.compile(regex);
 
-    public void sendDiscordWebhook(String msg) {
+    public CompletableFuture<String> sendDiscordWebhook(ServiceInfoSnapshot serviceInfoSnapshot, String msg) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        future.completeAsync(() -> {
+            String pasteURL = "Not Provided.";
 
-        String pasteURL = "Not provided.";
-/*
-       try {
-            Queue<String> logMessages = Wrapper.getInstance().getCloudServiceProvider(msg).getCachedLogMessages();
+            Queue<String> logMessages = serviceInfoSnapshot.provider().getCachedLogMessages();
+            CloudModuleCore.getInstance().getLogger().info("[!] Found " + logMessages.size() + " log messages for " + msg);
             if (!logMessages.isEmpty()) {
 
                 StringBuilder sb = new StringBuilder();
-
                 try {
                     for (String message : logMessages) {
+                        if (message.contains("logged in with entity id") || message.contains("lost connection:")) {
+                            message = message.replaceAll("\\[.+]", "");
+                        }
                         sb.append(message).append("\n");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                pasteURL = PasteService.paste(msg, sb.toString());
+                pasteURL = PasteService.paste("HealthService - " + msg, sb.toString());
                 CloudModuleCore.getInstance().getLogger().info("[!] Pasted log to " + pasteURL);
-            } else {
-                pasteURL = "Not provided.";
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-*/
+            return pasteURL;
+        });
 
-        DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1208189101895843910/ZW4eLq8qHYWUopADKcA2VfeGB3Pt6XEJooToALlboBwatIHQak_jG6A-WYTd-Ura96HC");
-        webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
-        webhook.setUsername("PingService - TeamHolyDE");
 
-        webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("PingService")
-            .addField("Stopped server", msg, true)
-            .addField("Log", pasteURL, false)
-            .setColor(Color.ORANGE).setThumbnail("https://i.imgur.com/0w7sO7f.png").setFooter("TeamHolyDE", ""));
-
-        webhook.execute();
+        return future;
     }
 
 }

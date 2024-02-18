@@ -25,10 +25,8 @@ public class HealthTask implements Runnable {
         for (String server : pingMap.keySet()) {
             if (System.currentTimeMillis() - healthService.getLastPing(server) <= 10000L) continue;
 
-            healthService.stopService(server);
-
             healthService.removePing(server);
-            healthService.sendDiscordWebhook(server);
+            healthService.stopService(server);
         }
     }
 }

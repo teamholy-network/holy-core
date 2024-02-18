@@ -1,8 +1,4 @@
-package de.teamholy.core.paste;
-
-import com.google.gson.JsonObject;
-import de.dytanic.cloudnet.wrapper.Wrapper;
-import de.teamholy.core.api.utility.DiscordWebhook;
+package de.teamholy.core.api.paste;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -10,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.List;
 

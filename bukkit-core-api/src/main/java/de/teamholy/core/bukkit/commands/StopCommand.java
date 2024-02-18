@@ -16,12 +16,9 @@ public class StopCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!(commandSender instanceof Player player)) return false;
-
-        if (!player.hasPermission("teamholy.stop")) return false;
+        if (!commandSender.hasPermission("teamholy.stop")) return false;
 
         BukkitCore.RESTART = true;
-
 
         final int[] i = {5};
 
