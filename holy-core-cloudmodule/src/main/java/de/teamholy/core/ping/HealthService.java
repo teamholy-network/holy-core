@@ -55,12 +55,12 @@ public class HealthService {
                             CloudModuleCore.getInstance().getLogger().info("[!] Failed to get logs! " + throwable.getMessage());
                         } else {
                             sendDiscordWebhook(name, url);
-                            CloudModuleCore.getInstance().getLogger().info("[!] Posted to Discord!");
+                            CloudModuleCore.getInstance().getLogger().info("[✔] Posted to Discord!");
                         }
                     });
 
                     serverInfo.provider().kill();
-                    CloudModuleCore.getInstance().getLogger().info("[✔] Killed Dead Server: " + name + ". Posting to Discord...");
+                    CloudModuleCore.getInstance().getLogger().info("[✔] Killed Dead Server: " + name + "!");
                 }
             }
         }
