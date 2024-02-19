@@ -50,21 +50,11 @@ public class HealthService {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Saving logs and trying to kill...");
 
-                    sendDiscordWebhook(serverInfo, name).whenComplete((url, throwable) -> {
+                    createPaste(serverInfo, name).whenComplete((url, throwable) -> {
                         if (throwable != null) {
                             CloudModuleCore.getInstance().getLogger().info("[!] Failed to get logs! " + throwable.getMessage());
                         } else {
-                            DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1208189101895843910/ZW4eLq8qHYWUopADKcA2VfeGB3Pt6XEJooToALlboBwatIHQak_jG6A-WYTd-Ura96HC");
-                            webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
-                            webhook.setUsername("HealthService");
-
-
-                            webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("HealthService")
-                                .addField("Stopped server", name, true)
-                                .addField("Log", url, false)
-                                .setColor(Color.ORANGE).setThumbnail("https://static.thenounproject.com/png/70488-200.png").setFooter("TeamHolyDE", "https://i.imgur.com/k3mtKpE.png"));
-
-                            CloudModuleCore.getInstance().getExecutorService().execute(webhook::execute);
+                            sendDiscordWebhook(name, url);
                             CloudModuleCore.getInstance().getLogger().info("[!] Posted to Discord!");
                         }
                     });
@@ -76,10 +66,20 @@ public class HealthService {
         }
     }
 
-    private final String regex = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
-    private final Pattern pattern = Pattern.compile(regex);
+    private void sendDiscordWebhook(String name, String url) {
+        DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1208189101895843910/ZW4eLq8qHYWUopADKcA2VfeGB3Pt6XEJooToALlboBwatIHQak_jG6A-WYTd-Ura96HC");
+        webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
+        webhook.setUsername("HealthService");
 
-    public CompletableFuture<String> sendDiscordWebhook(ServiceInfoSnapshot serviceInfoSnapshot, String msg) {
+        webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("HealthService")
+            .addField("Stopped server", name, true)
+            .addField("Log", url, false)
+            .setColor(Color.ORANGE).setThumbnail("https://static.thenounproject.com/png/70488-200.png").setFooter("TeamHolyDE", "https://i.imgur.com/k3mtKpE.png"));
+
+        CloudModuleCore.getInstance().getExecutorService().execute(webhook::execute);
+    }
+
+    public CompletableFuture<String> createPaste(ServiceInfoSnapshot serviceInfoSnapshot, String msg) {
         CompletableFuture<String> future = new CompletableFuture<>();
         future.completeAsync(() -> {
             String pasteURL = "Not Provided.";
@@ -91,15 +91,13 @@ public class HealthService {
                 StringBuilder sb = new StringBuilder();
                 try {
                     for (String message : logMessages) {
-                        if (message.contains("logged in with entity id") || message.contains("lost connection:")) {
-                            message = message.replaceAll("\\[.+]", "");
-                        }
                         sb.append(message).append("\n");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                pasteURL = PasteService.paste("HealthService - " + msg, sb.toString());
+                //pasteURL = PasteService.paste("HealthService - " + msg, sb.toString());
+                pasteURL = PasteService.logFile(msg, sb.toString());
                 CloudModuleCore.getInstance().getLogger().info("[!] Pasted log to " + pasteURL);
             }
             return pasteURL;
