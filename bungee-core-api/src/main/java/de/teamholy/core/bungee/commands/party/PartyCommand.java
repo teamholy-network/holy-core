@@ -230,6 +230,11 @@ public class PartyCommand extends Command {
 
                 Party party = partyHandler.getPartyByPlayerUUID(target.getUniqueId());
 
+                if (party == null) {
+                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7is not in a party!");
+                    return;
+                }
+
                 if (party.getMaxSize() != -1 && party.getMaxSize() == party.getPartyPlayers().size()) {
                     player.sendMessage(prefix + "The party is full!");
                     return;
