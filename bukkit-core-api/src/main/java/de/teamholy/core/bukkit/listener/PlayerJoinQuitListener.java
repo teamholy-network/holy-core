@@ -12,6 +12,7 @@ import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
 import de.teamholy.core.bukkit.perks.Perk;
 import de.teamholy.core.bukkit.perks.PerkRankType;
+import de.teamholy.core.bukkit.utils.SkinChanger;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -140,20 +141,7 @@ public class PlayerJoinQuitListener implements Listener {
                 signature = skinProfile.getSignature();
             }
 
-           /* if (UUIDUtility.isCracked(player.getUniqueId(), player.getName())) {
-                GameProfile gameProfile = ((CraftPlayer) player).getHandle().getProfile();
-                gameProfile.getProperties().clear();
-                gameProfile.getProperties().put("textures", new Property("textures", value, signature));
 
-                for (Player online : Bukkit.getOnlinePlayers()) {
-                    online.hidePlayer(player);
-                    online.showPlayer(player);
-                }
-            }*/
-
-/*                String finalSignature = signature;
-                String finalValue = value;
-            Bukkit.getScheduler().runTask(bukkitCore, () -> MarkupAPI.changeSkin(player,finalValue,finalSignature));*/
 
         });
     }
