@@ -62,7 +62,7 @@ public class PostLoginListener implements Listener {
                         proxiedPlayer.disconnect(proxyManager.kickMessage);
                         proxyManager.sendProxyWarning(proxiedPlayer, ipAddress);
                     } else {
-                        proxyManager.checkZplays(ipAddress, isProxy -> {
+                        proxyManager.checkProxy(ipAddress, (isProxy, countryName, org) -> {
                             if (isProxy) {
                                 proxiedPlayer.sendMessage(proxyManager.kickMessage);
                                 proxyManager.sendProxyWarning(proxiedPlayer, ipAddress);
