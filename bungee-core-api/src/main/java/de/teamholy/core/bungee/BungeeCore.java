@@ -188,6 +188,10 @@ public class BungeeCore extends Plugin {
         }, 30, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+            publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
+        }, 20, 20, TimeUnit.MINUTES);
+
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
             coreAPI.getMetricsManager().saveMetric(document);
         }, 0, 2, TimeUnit.SECONDS);
