@@ -25,7 +25,7 @@ public class ConfigManager {
         try {
             // Load the config file from the same direction as the jar file
 
-            String path = System.getProperty("user.dir") + "/mongodb.cfg";
+            String path = "/home/Cloud/mongodb.cfg";
             Yaml yaml = YamlParser.parseFilePath(path);
             System.out.println("Loaded config file, path: " + path);
 
