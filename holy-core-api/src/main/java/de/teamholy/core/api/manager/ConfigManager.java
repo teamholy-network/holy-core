@@ -14,6 +14,7 @@ public class ConfigManager {
 
     String username;
     String password;
+    String redisPassword;
     String host;
     int port;
     String database;
@@ -22,10 +23,15 @@ public class ConfigManager {
     public ConfigManager() {
 
         try {
-            Yaml yaml = YamlParser.parseFilePath("mongodb.cfg");
+            // Load the config file from the same direction as the jar file
+
+            String path = System.getProperty("user.dir") + "/mongodb.cfg";
+            Yaml yaml = YamlParser.parseFilePath(path);
+            System.out.println("Loaded config file, path: " + path);
 
             username = yaml.getString("username");
             password = yaml.getString("password");
+            redisPassword = yaml.getString("redisPassword");
             host = yaml.getString("host");
             port = yaml.getInt("port");
             database = yaml.getString("database");
@@ -36,4 +42,5 @@ public class ConfigManager {
         }
 
     }
+
 }
