@@ -1,21 +1,16 @@
 package de.teamholy.core.bungee.commands.friend;
 
-import de.teamholy.core.api.entities.friend.entry.Friend;
-import de.teamholy.core.api.entities.friend.entry.FriendEntry;
-import de.teamholy.core.api.manager.FriendManager;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /* copyright by Yassino */
 public class FriendCommand extends Command {
@@ -37,7 +32,7 @@ public class FriendCommand extends Command {
             sendHelp(proxiedPlayer);
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
-                printFriendList(proxiedPlayer, 1);
+                printFriendList(proxiedPlayer);
             } else if (args[0].equalsIgnoreCase("requests")) {
 
 
@@ -48,7 +43,7 @@ public class FriendCommand extends Command {
                             .append(" ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + getName(uuid)))
                             .create());
                     });
-                    if (friendProfile.getFriendReqeustsList().isEmpty()) {
+                    if (friendProfile.getFriendReqeustsList().size() == 0) {
                         proxiedPlayer.sendMessage("§c-/-");
                     }
                     proxiedPlayer.sendMessage(prefix + "Friend request list §a" + friendProfile.getFriendReqeustsList().size());
@@ -57,18 +52,7 @@ public class FriendCommand extends Command {
                 sendHelp(proxiedPlayer);
             }
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("list")) {
-                int page;
-
-                try {
-                    page = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    proxiedPlayer.sendMessage(prefix + "§cPlease enter a valid number");
-                    return;
-                }
-                if (page < 1) page = 1;
-                printFriendList(proxiedPlayer, page);
-            } else if (args[0].equalsIgnoreCase("add")) {
+            if (args[0].equalsIgnoreCase("add")) {
                 UUID target = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
 
                 if (target == null) {
@@ -257,98 +241,25 @@ public class FriendCommand extends Command {
     }
 
 
-    public static void printFriendList(ProxiedPlayer proxiedPlayer, int page) {
-        FriendEntry friendEntry = BungeeCore.getAPI().getFriendManager().getFriendEntry(proxiedPlayer.getUniqueId());
-        var friendCache = friendEntry.getFriendCache();
-
-        if (friendCache.isEmpty()) {
-            proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cYour friend list is empty!"));
-            return;
-        }
-
-        proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "Friend list §a" + friendCache.size() +
-            "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8(§7Page §e" + page + "§8)"));
-
-            /*
-            friendProfile.getFriendList().forEach(friendUUID -> {
-                if (friendUUID.equals(proxiedPlayer.getUniqueId())) return;
-                FriendManager.FriendEntry friendEntry = FriendManager.FriendEntry.friendCache.get(friendUUID);
-            });*/
-
-        ArrayList<Friend> friendArrayList = friendCache
-            .values()
-            .stream()
-            .sorted(friendEntry.getSortOption().getComparator()).collect(Collectors.toCollection(ArrayList::new));
-
-        List<TextComponent> sorted = sortOnlineOffline(friendArrayList, page);
-        if (sorted.isEmpty()) {
-            proxiedPlayer.sendMessage(TextComponent.fromLegacyText(prefix + "§cThis page is empty!"));
-            return;
-        }
-        sorted.forEach(proxiedPlayer::sendMessage);
-    }
-
-    private static String convertTime(long milliseconds) {
-        long seconds = milliseconds / 1000;
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-        long days = hours / 24;
-        String result = "";
-
-        if (days > 0) {
-            result += days + "d ";
-            hours = hours % 24;
-        }
-        if (hours > 0) {
-            result += hours + "h ";
-            minutes = minutes % 60;
-        }
-        if (minutes > 0 && days == 0) {
-            result += minutes + "m";
-        }
-
-        return result.trim();
-    }
-
-
-    private static List<TextComponent> sortOnlineOffline(List<Friend> list, int pageNumber) {
-        // in the list of the uuids should the online players be first
-
-        list.sort((o1, o2) -> {
-            ProxiedPlayer player1 = ProxyServer.getInstance().getPlayer(o1.getUuid());
-            ProxiedPlayer player2 = ProxyServer.getInstance().getPlayer(o2.getUuid());
-            if (player1 != null && player2 == null) {
-                return -1;
-            } else if (player1 == null && player2 != null) {
-                return 1;
+    public static void printFriendList(ProxiedPlayer proxiedPlayer) {
+        BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
+            proxiedPlayer.sendMessage(prefix + "Friend list §a" + friendProfile.getFriendList().size() + "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8»");
+            StringBuilder online = new StringBuilder();
+            ;
+            AtomicInteger i = new AtomicInteger();
+            for (UUID uuid : friendProfile.getFriendList()) {
+                i.getAndIncrement();
+                String nameColor = getColor(uuid) + getName(uuid);
+                online.append(nameColor + "§7, ");
+                if (i.get() == 10) break;
+            }
+            if (friendProfile.getFriendList().size() == 0) {
+                proxiedPlayer.sendMessage("§c-/-");
             } else {
-                return 0;
+                proxiedPlayer.sendMessage(online.toString());
+                proxiedPlayer.sendMessage("§7... and §a" + (friendProfile.getFriendList().size() - 10) + " §7other");
             }
         });
-
-        List<TextComponent> onlineOfflineList = new ArrayList<>();
-
-        int startIndex = (pageNumber - 1) * 10;
-        int endIndex = Math.min(startIndex + 10, list.size());
-
-        for (int i = startIndex; i < endIndex; i++) {
-            Friend friend = list.get(i);
-            UUID uuid = friend.getUuid();
-            ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
-            TextComponent textComponent = new TextComponent("§8- " + getColor(uuid) + getName(uuid));
-            if (player != null) {
-                textComponent.addExtra("§8: §aOnline §7on §6" + player.getServer().getInfo().getName());
-                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend jump " + player.getName()));
-                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aJump to " + getColor(uuid) + getName(uuid)).create()));
-                onlineOfflineList.add(textComponent);
-            } else {
-                textComponent.addExtra(" §8(§cOffline§8)");
-                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cOffline §7since §6" + convertTime(System.currentTimeMillis() - friend.getLastJoin())).create()));
-                onlineOfflineList.add(textComponent);
-            }
-        }
-
-        return onlineOfflineList;
     }
 
     private void sendHelp(ProxiedPlayer proxiedPlayer) {
@@ -358,7 +269,7 @@ public class FriendCommand extends Command {
         proxiedPlayer.sendMessage(prefix + "/friend accept (player)");
         proxiedPlayer.sendMessage(prefix + "/friend deny (player)");
         proxiedPlayer.sendMessage(prefix + "/friend jump (player)");
-        proxiedPlayer.sendMessage(prefix + "/friend list (page)");
+        proxiedPlayer.sendMessage(prefix + "/friend list");
         proxiedPlayer.sendMessage(prefix + "/friend requests");
         proxiedPlayer.sendMessage(prefix + "/msg (player)");
         proxiedPlayer.sendMessage("§8§m-----------------------------");
