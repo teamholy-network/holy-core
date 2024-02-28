@@ -103,7 +103,7 @@ public class BungeeCore extends Plugin {
         new PartyListener();
 
         if (!ProxyServer.getInstance().getName().startsWith("TestProxy")) {
-            redisQueueListener = new RedisQueueListener("127.0.0.1", 6379, "ashGbdkLcxasHvcjsh#aihvb!jsbbbvksddfc");
+            redisQueueListener = new RedisQueueListener("127.0.0.1", 6379, coreAPI.getConfig().getRedisPassword());
             redisQueueListener.init(); // Glaub so ist besser habs davor im constructor gemacht
         }
 
