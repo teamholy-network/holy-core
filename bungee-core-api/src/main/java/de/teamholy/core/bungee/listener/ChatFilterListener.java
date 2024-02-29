@@ -224,7 +224,6 @@ public class ChatFilterListener implements Listener {
                     String line = scanner.nextLine().trim().toLowerCase();
                     if (!line.startsWith("#") && !line.isEmpty()) {
                         domains.add(line);
-                        bungeeCore.getLogger().info("Loaded domain: " + line);
                     }
                 }
 

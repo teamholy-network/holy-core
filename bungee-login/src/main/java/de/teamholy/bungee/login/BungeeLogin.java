@@ -52,11 +52,13 @@ public class BungeeLogin extends Plugin {
 
         instance = this;
 
-
+/*
         ConfigManager config = new ConfigManager();
         manger =  new MongoManager(Credentials.
             of("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin"
-                , "holy"));
+                , "holy"));*/
+
+        manger = BungeeCore.getAPI().getMongoManager();
 
         repo = manger.create(PlayerConnectRepository.class);
 

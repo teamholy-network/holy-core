@@ -100,6 +100,52 @@ public class CoreAPI {
         this.rankingManager = new RankingManager(this);
         this.metricsManager = new MetricsManager(this);
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        System.out.println("loading core API ---------------");
+    }
+
+
+    public CoreAPI(Credentials credentials) {
+        CloudManager cloudManager1;
+
+        config = null;
+        this.mongoManager = new MongoManager(credentials);
+
+
+        this.redissonManager = new RedissonManager(this);
+
+        this.playerService = new PlayerService(this);
+        this.banService = new BanService(this);
+        this.gameService = new GameService(this);
+        this.friendService = new FriendService(this);
+        this.skinService = new SkinService(this);
+        this.punishHistoryService = new PunishHistoryService(this);
+        this.clanService = new ClanService(this);
+        this.clanPlayerService = new ClanPlayerService(this);
+        this.staffService = new StaffService(this);
+        this.nickManager = new NickManager(this);
+        this.muteService = new MuteService(this);
+        this.perkPlayerService = new PerkPlayerService(this);
+        this.bannerService = new BannerService(this);
+        this.statsProfileService = new StatsProfileService(this);
+
+
+        try {
+            cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+        } catch (NoClassDefFoundError error) {
+            cloudManager1 = new CloudManager(this, null);
+        }
+
+        this.cloudManager = cloudManager1;
+        this.uuidManager = new UUIDManager(this);
+        this.reportManager = new ReportManager(this);
+        this.clanManager = new ClanManager(this, clanService);
+        this.coinManager = new CoinManager(this);
+        this.staffManager = new StaffManager(this);
+        this.friendManager = new FriendManager(this);
+        this.rankingManager = new RankingManager(this);
+        this.metricsManager = new MetricsManager(this);
+        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+
     }
 
     public void onDisable() {
