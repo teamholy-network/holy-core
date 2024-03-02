@@ -8,6 +8,7 @@ import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.commands.StopCommand;
+import de.teamholy.core.bukkit.commands.WhitelistCommand;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
 import de.teamholy.core.bukkit.perks.Perk;
@@ -46,6 +47,11 @@ public class PlayerJoinQuitListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
+
+        if (WhitelistCommand.ISWHITELIST && !WhitelistCommand.WHITELIST.contains(event.getPlayer().getName())) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "§cThis server is currently in §c§lwhitelist §cmode");
+        }
+
         if (BukkitCore.RESTART) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "§cServer restart");
         }
@@ -104,9 +110,6 @@ public class PlayerJoinQuitListener implements Listener {
             BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
 
 
-
-
-
             String value;
             String signature;
             if (UUIDUtility.isCracked(player.getUniqueId(), player.getName())) {
@@ -140,7 +143,6 @@ public class PlayerJoinQuitListener implements Listener {
                 value = skinProfile.getValue();
                 signature = skinProfile.getSignature();
             }
-
 
 
         });

@@ -5,6 +5,8 @@ load: STARTUP
 depend: [ ProtocolLib, CloudNet-Bridge ]
 
 commands:
+    whitelist:
+        aliases: [ wl ]
     reportsgui:
         aliases: [ rgui, reportstaffgui ]
     xyz:

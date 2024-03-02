@@ -76,6 +76,7 @@ public class BukkitCore extends JavaPlugin {
 
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
         getCommand("stopcore").setExecutor(new de.teamholy.core.bukkit.commands.StopCommand());
+        getCommand("whitelist").setExecutor(new de.teamholy.core.bukkit.commands.WhitelistCommand());
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         new PlayerJoinQuitListener(this);

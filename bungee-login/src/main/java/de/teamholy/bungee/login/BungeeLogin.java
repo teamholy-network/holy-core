@@ -52,12 +52,6 @@ public class BungeeLogin extends Plugin {
 
         instance = this;
 
-/*
-        ConfigManager config = new ConfigManager();
-        manger =  new MongoManager(Credentials.
-            of("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin"
-                , "holy"));*/
-
         manger = BungeeCore.getAPI().getMongoManager();
 
         repo = manger.create(PlayerConnectRepository.class);
@@ -66,18 +60,6 @@ public class BungeeLogin extends Plugin {
 
         captchaManager = new CaptchaManager();
         captchaManager.init();
-
-//		System.out.println("started with merg prozess");
-//		List<PlayerObject> playerObjects = new ArrayList<>();
-//		for (PlayerProfile playerProfile : BungeeCore.getAPI().getPlayerService().getRepository().findAll()) {
-//				PlayerObject playerObject = new PlayerObject();
-//				playerObject.setPremium(true);
-//				playerObject.setName(playerProfile.getPlayerName().toLowerCase(Locale.ROOT));
-//				playerObject.setUuid(playerProfile.getPlayerId());
-//				playerObject.setIps(new HashMap<>());
-//				playerObjects.add(playerObject);
-//		}
-//		repo.saveAll(playerObjects);
 
         ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText("§7Loaded §a" + this.getDescription().getName()));
 
