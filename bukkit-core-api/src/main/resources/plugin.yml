@@ -12,3 +12,12 @@ commands:
     xyz:
     stopcore:
         aliases: [stopc, stop]
+    sudo:
+    tpblock:
+    gc:
+    bcommand:
+    location:
+    gamemode:
+        aliases: [ gm ]
+    chatclear:
+        aliases: [ cc ]
