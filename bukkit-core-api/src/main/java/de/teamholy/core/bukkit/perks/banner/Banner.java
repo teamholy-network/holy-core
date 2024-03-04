@@ -1,4 +1,4 @@
-package de.teamholy.core.bukkit.perks;
+package de.teamholy.core.bukkit.perks.banner;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

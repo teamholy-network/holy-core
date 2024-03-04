@@ -1,6 +1,8 @@
-package de.teamholy.core.bukkit.perks;
+package de.teamholy.core.bukkit.perks.model;
 
 import de.teamholy.core.api.utility.Gamemodes;
+import de.teamholy.core.bukkit.perks.enums.PerkRankType;
+import de.teamholy.core.bukkit.perks.enums.PerkType;
 import lombok.Getter;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;

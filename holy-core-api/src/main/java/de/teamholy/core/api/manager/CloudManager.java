@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 public class CloudManager {
 
     CoreAPI coreAPI;
-    IPlayerManager playerManager;
+    IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     public String getColor(UUID uuid) {
         if (uuid == Punish.getConsoleUuid()) return "§4§l";

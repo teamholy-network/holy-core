@@ -2,18 +2,21 @@ package de.teamholy.core.bukkit.listener;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
+import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.skin.SkinProfile;
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bukkit.BukkitCore;
-import de.teamholy.core.bukkit.commands.StopCommand;
 import de.teamholy.core.bukkit.commands.WhitelistCommand;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
-import de.teamholy.core.bukkit.perks.Perk;
-import de.teamholy.core.bukkit.perks.PerkRankType;
-import de.teamholy.core.bukkit.utils.SkinChanger;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.npc.models.NPCPlayer;
+import de.teamholy.core.bukkit.perks.model.Perk;
+import de.teamholy.core.bukkit.perks.enums.PerkRankType;
+import eu.koboo.markup.MarkupAPI;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -65,39 +68,36 @@ public class PlayerJoinQuitListener implements Listener {
 
         bukkitCore.getCoreAPI().getExecutor().submit(() -> {
 
-            PerkPlayerProfile perkPlayerProfile;
+            PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            ClanPlayerProfile clanPlayerProfile = BukkitCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
+            PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
+
+
 
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
-            perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
-            if (perkPlayerProfile == null) {
-                perkPlayerProfile = BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
-            }
 
-            Perk stick = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
-            Perk block = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
-            Perk chat = bukkitCore.getPerkCache().getPerkHashMap().get(perkPlayerProfile.getChatPerk());
+            Perk stick = bukkitCore.getPerkManager().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
+            Perk block = bukkitCore.getPerkManager().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
+            Perk chat = bukkitCore.getPerkManager().getPerkHashMap().get(perkPlayerProfile.getChatPerk());
 
 
             boolean needUpdate = false;
 
             if (!player.hasPermission(PerkRankType.PREMIUM.getPermission())) {
-                if (!stick.isRankPerk() && stick.getId() != 100) needUpdate = true;
-                if (!block.isRankPerk() && block.getId() != 0) needUpdate = true;
-                if (!chat.isRankPerk() && chat.getId() != 200) needUpdate = true;
+                if (stick.isBuyAble() && stick.getId() != 100) needUpdate = true;
+                if (block.isBuyAble() && block.getId() != 0) needUpdate = true;
+                if (chat.isBuyAble() && chat.getId() != 200) needUpdate = true;
             }
 
 
             String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby", "Bridge"};
 
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
-
-
                 for (String supportedServer : supportedServers) {
                     if (BukkitCore.getInstance().getGroup().startsWith(supportedServer)) {
                         customBannerManager.setAndPlaceCustomBanner1(player, perkPlayerProfile.getCustomBanner());
                     }
                 }
-
             }
 
             if (needUpdate) {
@@ -107,8 +107,16 @@ public class PlayerJoinQuitListener implements Listener {
                 BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
             }
 
-            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
 
+            PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = new PlayerCacheManager.CachedBukkitPlayer(
+                    player,
+                    PlayerRank.valueOf(playerProfile.getRank()),
+                    new NPCPlayer(player),
+                    (clanPlayerProfile == null ? null : bukkitCore.getCoreAPI().getClanManager().getClanById(clanPlayerProfile.getClanId())),
+                    perkPlayerProfile
+            );
+
+            bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
 
             String value;
             String signature;
@@ -144,6 +152,18 @@ public class PlayerJoinQuitListener implements Listener {
                 signature = skinProfile.getSignature();
             }
 
+            Bukkit.getScheduler().runTask(bukkitCore, () -> {
+                if (!BukkitCore.getInstance().getGroup().toLowerCase().contains("lobby")) {
+                    if (playerProfile.isAutoNick()) {
+                        Bukkit.getScheduler().runTaskLater(bukkitCore,() -> player.chat("/nick"),1);
+                    } else {
+                        Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),7);
+                    }
+                } else {
+                    Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),7);
+                }
+            });
+
 
         });
     }
@@ -152,7 +172,7 @@ public class PlayerJoinQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
-        bukkitCore.getPerkCache().getPerkPlayerProfileHashMap().remove(playerUUID);
+        bukkitCore.getPlayerCacheManager().getCachedPlayers().remove(playerUUID);
         customBannerManager.removeCustomBanner(event.getPlayer());
         if (packetmanager.gameStatePacketLoopTask.containsKey(playerUUID)) {
             packetmanager.gameStatePacketLoopTask.get(playerUUID).cancel();

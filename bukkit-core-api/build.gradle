@@ -9,6 +9,7 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
+    compileOnly 'com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9'
 
     implementation("eu.koboo:yaml-config:$yamlVersion")
 

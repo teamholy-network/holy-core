@@ -6,12 +6,16 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
+import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.utility.CustomBanner;
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import eu.koboo.markup.MarkupAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -79,23 +83,17 @@ public class CloudMessageListener {
                 }
             }
         } else if (event.getMessage().equalsIgnoreCase("banner")) {
-
-            System.out.println(message);
-
             String target = message.getString("target");
             String type = message.getString("type");
             String instruction = message.getString("instruction");
 
-            System.out.println("found command");
-
             Player player = bukkitCore.getServer().getPlayer(target);
 
-            System.out.println("found player");
 
             if (player == null) return;
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
-            PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+            PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
 
             if (type.equalsIgnoreCase("toggle")) {
 
@@ -108,7 +106,11 @@ public class CloudMessageListener {
                     perkPlayerProfile.getCustomBanner().setActivated(false);
 
                 }
-                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+
+                PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+                cachedBukkitPlayer.setPerkPlayerProfile(perkPlayerProfile);
+                bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
+
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
             } else if (type.equalsIgnoreCase("set")) {
                 try {
@@ -140,7 +142,12 @@ public class CloudMessageListener {
                     customBanner.setPatterns(patternsList);
                     customBanner.setActivated(true);
                     perkPlayerProfile.setCustomBanner(customBanner);
-                    BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+
+                    PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+                    cachedBukkitPlayer.setPerkPlayerProfile(perkPlayerProfile);
+                    bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
+
+
                     BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                     customBannerManager.setAndPlaceCustomBanner1(player, customBanner);
 
@@ -153,6 +160,37 @@ public class CloudMessageListener {
             }
 
 
+        } else if (event.getMessage().equalsIgnoreCase("rank_update")) {
+            UUID uuid = UUID.fromString(event.getData().getString("uuid"));
+            if (bukkitCore.getPlayerCacheManager().getCachedPlayers().containsKey(uuid)) {
+
+                Bukkit.getScheduler().runTaskLaterAsynchronously(bukkitCore, () -> {
+
+                    PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(uuid, () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
+                    PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(uuid);
+                    cachedBukkitPlayer.setRank(PlayerRank.valueOf(playerProfile.getRank()));
+
+                    bukkitCore.getPlayerCacheManager().getCachedPlayers().put(uuid, cachedBukkitPlayer);
+                    Bukkit.getScheduler().runTaskLater(bukkitCore, () -> MarkupAPI.updateNameTag(Bukkit.getPlayer(uuid)), 3);
+                }, 3);
+
+            }
+        } else if (event.getMessage().equalsIgnoreCase("clan_update")) {
+            UUID uuid = UUID.fromString(event.getData().getString("uuid"));
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) return;
+
+            Bukkit.getScheduler().runTaskLaterAsynchronously(bukkitCore, () -> {
+
+                PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(uuid);
+                ClanPlayerProfile clanPlayerProfile = BukkitCore.getAPI().getClanPlayerService().getRedisCache().get(player.getUniqueId());
+                if (clanPlayerProfile != null) {
+                    cachedBukkitPlayer.setClan(BukkitCore.getAPI().getClanManager().getClanById(clanPlayerProfile.getClanId()));
+                } else cachedBukkitPlayer.setClan(null);
+
+                Bukkit.getScheduler().runTaskLater(bukkitCore, () -> MarkupAPI.updateNameTag(player), 10);
+
+            }, 3);
         }
     }
 

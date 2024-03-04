@@ -2,20 +2,24 @@ package de.teamholy.core.bukkit.perks;
 
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
-import de.teamholy.core.api.utility.CustomBanner;
+import de.teamholy.core.api.utility.AbstractConfiguration;
 import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.perks.enums.PerkRankType;
+import de.teamholy.core.bukkit.perks.enums.PerkType;
+import de.teamholy.core.bukkit.perks.model.Perk;
 import de.teamholy.core.bukkit.utils.Inventory;
 import de.teamholy.core.bukkit.utils.ItemBuilder;
+import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.material.Wool;
 
+import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,9 +31,61 @@ public class PerkManager {
 
     private List<Pattern> patterns;
 
-    private CustomBannerManager customBannerManager;
+    @Getter
+    private final HashMap<Integer, Perk> perkHashMap = new HashMap<>();
+
+
+    private final CustomBannerManager customBannerManager;
 
     public PerkManager(BukkitCore bukkitCore) {
+
+        Perk defaultStick = new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
+
+        Perk defaultBlock = new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
+
+        Perk chat = new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
+
+        Perk cBanner = new Perk(99999, "Custom Banner", Material.BANNER, (byte) 0, PerkType.CBANNER, 15000, PerkRankType.PLAYER, null);
+
+        AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"), "perks");
+        configuration.load();
+        configuration.append("default.stick", 100, true);
+        configuration.append("default.block", 0, true);
+        configuration.append("default.chat", 200, true);
+        configuration.append("perks.block", List.of(defaultBlock), false);
+        configuration.append("perks.stick", List.of(defaultStick), false);
+        configuration.append("perks.chat", List.of(chat), false);
+        configuration.save();
+
+        configuration.getList("perks.block", Perk.class).forEach(o -> {
+            Perk perk = (Perk) o;
+            System.out.println(perk.getMaterial() + String.valueOf(perk.getSubId()));
+            if (perk.getMaterial() != null) {
+                perkHashMap.put(perk.getId(), perk);
+            }
+        });
+
+        configuration.getList("perks.chat", Perk.class).forEach(o -> {
+            Perk perk = (Perk) o;
+            if (perk.getMaterial() != null) {
+                perkHashMap.put(perk.getId(), perk);
+            }
+        });
+
+
+        configuration.getList("perks.stick", Perk.class).forEach(o -> {
+            Perk perk = (Perk) o;
+            if (perk.getMaterial() != Material.BANNER) {
+                perk.setBannerMeta(null, null);
+            }
+            if (perk.getMaterial() != null) {
+                perkHashMap.put(perk.getId(), perk);
+            }
+        });
+
+        perkHashMap.put(99999, cBanner);
+
+
         this.customBannerManager = new CustomBannerManager(bukkitCore);
         startChangingRainbowPerks();
     }
@@ -50,8 +106,8 @@ public class PerkManager {
             if (item != null && (item.getType() == Material.WOOL || item.getType() == Material.STAINED_GLASS)) {
 
                 if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).toLowerCase().contains("rainbow")) {
-                    PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
-                    Perk perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
+                    PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
+                    Perk perk = perkHashMap.get(perkPlayerProfile.getBlockPerk());
                     ItemBuilder itemBuilder = new ItemBuilder(item.getType(), item.getAmount(), new Random().nextInt(16))
                         .setName(item.getItemMeta().getDisplayName())
                         .setLore(item.getItemMeta().getLore());
@@ -72,21 +128,21 @@ public class PerkManager {
     }
 
     public ItemBuilder getPerk(Player player, PerkType perkType) {
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
         Perk perk;
         ItemBuilder itemBuilder = null;
         if (perkPlayerProfile == null) return null;
 
 
         if (perkType == PerkType.STICK) {
-            perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
+            perk = perkHashMap.get(perkPlayerProfile.getStickPerk());
 
             if (perk == null) {
-                perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
+                perk = perkHashMap.get(100);
             } else if (perk.getNotSupportedGamemodes() != null) {
                 for (Gamemodes notSupportedGamemode : perk.getNotSupportedGamemodes()) {
                     if (notSupportedGamemode.getCloudGroups().contains(BukkitCore.getInstance().getGroup())) {
-                        perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(100);
+                        perk = perkHashMap.get(100);
                     }
                 }
             }
@@ -97,13 +153,13 @@ public class PerkManager {
             }
 
         } else if (perkType == PerkType.BLOCK) {
-            perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
+            perk = perkHashMap.get(perkPlayerProfile.getBlockPerk());
             if (perk == null) {
-                perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(0);
+                perk = perkHashMap.get(0);
             } else if (perk.getNotSupportedGamemodes() != null) {
                 for (Gamemodes notSupportedGamemode : perk.getNotSupportedGamemodes()) {
                     if (notSupportedGamemode.getCloudGroups().contains(BukkitCore.getInstance().getGroup())) {
-                        perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(0);
+                        perk = perkHashMap.get(0);
                     }
                 }
             }
@@ -130,7 +186,7 @@ public class PerkManager {
             openSecondPerkInventory(player, PerkType.BLOCK, SortOptionPerk.NORMAL, SortOptionPlayer.ALL));
 
 
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
 
         String dieLore = perkPlayerProfile.getCustomBanner().isActivated() ? "§l§aselected" : "§7Click to §l§aselect";
 
@@ -159,7 +215,9 @@ public class PerkManager {
                     customBannerManager.removeCustomBanner(player);
                 }
 
-                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+                PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+                cachedBukkitPlayer.setPerkPlayerProfile(perkPlayerProfile);
+
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 player.closeInventory();
             } else {
@@ -173,7 +231,10 @@ public class PerkManager {
                 perkPlayerProfile.getOwnedPerks().add(99999);
 
                 playerProfile.setCoins(playerProfile.getCoins() - 5000);
-                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+
+                PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+                cachedBukkitPlayer.setPerkPlayerProfile(perkPlayerProfile);
+
                 BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
                 BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
                 player.sendMessage(prefix + "§7You successfully bought the §eCustom Banner §7perk for §e5000 §6coins!");
@@ -189,7 +250,7 @@ public class PerkManager {
     }
 
     public void openSecondPerkInventory(Player player, PerkType perkType, PerkManager.SortOptionPerk sortOptionPerk, PerkManager.SortOptionPlayer sortOptionPlayer) {
-        int inventorySize = checkInventorySize((int) BukkitCore.getInstance().getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == perkType).count()) + 9;
+        int inventorySize = checkInventorySize((int) perkHashMap.values().stream().filter(perk -> perk.getPerkType() == perkType).count()) + 9;
         Inventory inventory = new Inventory("§8» §6Perks", inventorySize);
 
         player.playSound(player.getLocation(), Sound.CLICK, 1F, 100F);
@@ -253,10 +314,10 @@ public class PerkManager {
 
 
     private void showPerks(Player player, PerkType perkType, PerkManager.SortOptionPerk sortOptionPerk, PerkManager.SortOptionPlayer sortOptionPlayer, Inventory inventory) {
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().get(player.getUniqueId());
+        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
 
 
-        List<Perk> perks = BukkitCore.getInstance().getPerkCache().getPerkHashMap().values().stream().filter(perk -> perk.getPerkType() == perkType).filter(perk -> switch (sortOptionPlayer) {
+        List<Perk> perks = perkHashMap.values().stream().filter(perk -> perk.getPerkType() == perkType).filter(perk -> switch (sortOptionPlayer) {
             case OWNED ->
                 (perk.isBuyAble() && perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission()));
             case UNOWNED ->
@@ -354,8 +415,11 @@ public class PerkManager {
                 player.sendMessage(prefix + "§7You selected the §e" + finalName + " §6perk!");
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 2f, 2f);
 
-                BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
-                BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, false);
+                PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+                cachedBukkitPlayer.setPerkPlayerProfile(perkPlayerProfile);
+                BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
+
+                BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
 
             });
 
@@ -409,7 +473,12 @@ public class PerkManager {
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 2f, 2f);
 
             perkPlayerProfile.getOwnedPerks().add(perk.getId());
-            BukkitCore.getInstance().getPerkCache().getPerkPlayerProfileHashMap().put(player.getUniqueId(), perkPlayerProfile);
+
+            PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+            cachedBukkitPlayer.setPerkPlayerProfile(perkPlayerProfile);
+            BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
+
+
             BukkitCore.getAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
             BukkitCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
         });

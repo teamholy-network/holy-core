@@ -1,39 +1,34 @@
 package de.teamholy.core.bukkit;
 
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.manager.MetricsManager;
-import de.teamholy.core.api.utility.AbstractConfiguration;
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bukkit.commands.*;
 import de.teamholy.core.bukkit.config.ChatTabConfig;
-import de.teamholy.core.bukkit.listener.CloudMessageListener;
-import de.teamholy.core.bukkit.listener.PlayerChatListener;
-import de.teamholy.core.bukkit.listener.PlayerJoinQuitListener;
-import de.teamholy.core.bukkit.manager.CloudMessageManager;
-import de.teamholy.core.bukkit.manager.CustomBannerManager;
-import de.teamholy.core.bukkit.manager.LocationManager;
-import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.listener.*;
+import de.teamholy.core.bukkit.manager.*;
 import de.teamholy.core.bukkit.perks.*;
+import de.teamholy.core.bukkit.perks.listener.UsePerkListener;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
 import de.teamholy.core.bukkit.task.BukkitHealthTask;
+import eu.koboo.markup.MarkupAPI;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -50,11 +45,11 @@ public class BukkitCore extends JavaPlugin {
     CustomBannerManager customBannerManager;
     MetricsManager metricsManager;
     CoreAPI coreAPI;
-    PerkCache perkCache;
     PerkManager perkManager;
     ChatTabConfig chatTabConfig;
     LocationManager locationManager;
     PlayerCacheManager playerCacheManager;
+    StatsManager statsManager;
 
     public static String PREFIX = "§6Teamholy §8× §7";
 
@@ -76,103 +71,32 @@ public class BukkitCore extends JavaPlugin {
     public void onEnable() {
         coreAPI = new CoreAPI();
         metricsManager = new MetricsManager(this.coreAPI);
-        perkCache = new PerkCache();
         perkManager = new PerkManager(this);
         cloudMessageManager = new CloudMessageManager(this);
         chatTabConfig = new ChatTabConfig();
         locationManager = new LocationManager();
         playerCacheManager = new PlayerCacheManager();
+        customBannerManager = new CustomBannerManager(this);
+        statsManager = new StatsManager();
+
+        new BukkitCloudManager(this);
 
         registerCommands();
+        registerListeners();
+        clearAllWorlds();
 
         System.out.println("Starting ServiceAliveTask\n");
         Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20 * 3);
-        System.out.println("\nStarted ServiceAliveTask");
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
-
         protocolManager = ProtocolLibrary.getProtocolManager();
+        protocolManager.addPacketListener(new TabCompleteListener(this, PacketType.Play.Client.TAB_COMPLETE));
 
-        new PlayerJoinQuitListener(this);
-        new CustomBannerManager(this);
-        new UsePerkListener();
-        new CloudMessageListener(this);
-        new PlayerChatListener(this);
-
-        customBannerManager = new CustomBannerManager(this);
-
-
-        Perk defaultStick = new Perk(100, "Stick", Material.STICK, (byte) 0, PerkType.STICK, -1, PerkRankType.PLAYER, null);
-
-        Perk defaultBlock = new Perk(0, "Sandstone", Material.SANDSTONE, (byte) 0, PerkType.BLOCK, -1, PerkRankType.PLAYER, null);
-
-        Perk chat = new Perk(200, "7-Grey", Material.INK_SACK, (byte) 7, PerkType.CHAT, -1, PerkRankType.PLAYER, null);
-
-        Perk cBanner = new Perk(99999, "Custom Banner", Material.BANNER, (byte) 0, PerkType.CBANNER, 15000, PerkRankType.PLAYER, null);
-
-        AbstractConfiguration configuration = new AbstractConfiguration(new File("plugins/core"), "perks");
-        configuration.load();
-        configuration.append("default.stick", 100, true);
-        configuration.append("default.block", 0, true);
-        configuration.append("default.chat", 200, true);
-        configuration.append("perks.block", List.of(defaultBlock), false);
-        configuration.append("perks.stick", List.of(defaultStick), false);
-        configuration.append("perks.chat", List.of(chat), false);
-        configuration.save();
-
-        configuration.getList("perks.block", Perk.class).forEach(o -> {
-            Perk perk = (Perk) o;
-            System.out.println(perk.getMaterial() + String.valueOf(perk.getSubId()));
-            if (perk.getMaterial() != null) {
-                getPerkCache().getPerkHashMap().put(perk.getId(), perk);
-            }
-        });
-
-        configuration.getList("perks.chat", Perk.class).forEach(o -> {
-            Perk perk = (Perk) o;
-            if (perk.getMaterial() != null) {
-                getPerkCache().getPerkHashMap().put(perk.getId(), perk);
-            }
-        });
-
-
-        configuration.getList("perks.stick", Perk.class).forEach(o -> {
-            Perk perk = (Perk) o;
-            if (perk.getMaterial() != Material.BANNER) {
-                perk.setBannerMeta(null, null);
-            }
-            if (perk.getMaterial() != null) {
-                getPerkCache().getPerkHashMap().put(perk.getId(), perk);
-            }
-        });
-
-        getPerkCache().getPerkHashMap().put(99999, cBanner);
 
 
         BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
-
             cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
-
         }, 0, 50);
-
-
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            for (World world : Bukkit.getWorlds()) {
-                world.setMonsterSpawnLimit(0);
-                world.setTicksPerMonsterSpawns(8888888);
-                world.setTime(1000);
-                world.setDifficulty(Difficulty.EASY);
-                world.setGameRuleValue("doDaylightCycle", "false");
-                world.setGameRuleValue("doMobSpawning", "false");
-                for (Entity ent : Bukkit.getWorld(world.getName()).getEntities()) {
-                    if (ent instanceof Animals)
-                        ent.remove();
-                    if (ent instanceof Monster)
-                        ent.remove();
-                }
-            }
-        }, 200);
-
 
     }
 
@@ -190,6 +114,36 @@ public class BukkitCore extends JavaPlugin {
         getCommand("whitelist").setExecutor(new de.teamholy.core.bukkit.commands.WhitelistCommand());
     }
 
+    private void registerListeners() {
+        new PlayerNameTagListener(this);
+        new PlayerJoinQuitListener(this);
+        new CustomBannerManager(this);
+        new UsePerkListener();
+        new CloudMessageListener(this);
+        new PlayerChatListener(this);
+        new CommandListener(this);
+        new NickListener(this);
+    }
+
+    private void clearAllWorlds() {
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            for (World world : Bukkit.getWorlds()) {
+                world.setMonsterSpawnLimit(0);
+                world.setTicksPerMonsterSpawns(8888888);
+                world.setTime(1000);
+                world.setDifficulty(Difficulty.EASY);
+                world.setGameRuleValue("doDaylightCycle", "false");
+                world.setGameRuleValue("doMobSpawning", "false");
+                for (Entity ent : Bukkit.getWorld(world.getName()).getEntities()) {
+                    if (ent instanceof Animals)
+                        ent.remove();
+                    if (ent instanceof Monster)
+                        ent.remove();
+                }
+            }
+        }, 200);
+    }
+
     @Override
     public void onDisable() {
         coreAPI.getMetricsManager().removeMetric(this.getServer().getServerName());
@@ -202,5 +156,13 @@ public class BukkitCore extends JavaPlugin {
 
     public static CoreAPI getAPI() {
         return instance.getCoreAPI();
+    }
+
+    public String getPlayerColor(UUID uuid, boolean withNick) {
+        if (withNick && MarkupAPI.isNicked(Bukkit.getPlayer(uuid))) {
+            return PlayerRank.PLAYER.getColorCode();
+        }
+
+        return coreAPI.getCloudManager().getColor(uuid);
     }
 }

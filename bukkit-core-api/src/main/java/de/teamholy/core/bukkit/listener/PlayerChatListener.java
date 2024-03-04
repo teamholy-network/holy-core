@@ -1,6 +1,10 @@
 package de.teamholy.core.bukkit.listener;
 
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.perks.model.Perk;
+import eu.koboo.markup.MarkupAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -24,36 +28,24 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+        if (BukkitCore.getInstance().isChatPrefix()) {
+            String message = event.getMessage().replace("%","%%");
+            Player player = event.getPlayer();
 
-        Player player = event.getPlayer();
-        String message = event.getMessage().replace("%", "%%");
-
-        if (!message.contains("@")) return;
-
-        int index = message.indexOf("@");
-
-        if (index < message.length() - 1) {
-            String name = message.substring(index + 1).split(" ", 2)[0];
-
-            List<Player> players = Bukkit.getOnlinePlayers().stream()
-                .filter(p -> p.getName().toLowerCase().startsWith(name.toLowerCase()))
-                .collect(Collectors.toList());
-
-            if (players.size() == 1) {
-                Player target = players.get(0);
-                String string = ChatColor.AQUA + "@§l" + target.getName() + ChatColor.RESET;
-                message = message.replaceFirst("@" + name, string);
-                event.setMessage(message);
+            if(MarkupAPI.isNicked(player)) {
+                event.setFormat(PlayerRank.PLAYER.getChatPrefix() + player.getDisplayName() + " §8» §7" +  message);
+                return;
             }
 
+            PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+            Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(cachedBukkitPlayer.getPerkPlayerProfile().getChatPerk());
+            if (perk == null) {
+                event.setCancelled(true);
+                return;
+            }
+            String[] color = perk.getName().split("-");
+            event.setFormat(cachedBukkitPlayer.getRank().getChatPrefix() + event.getPlayer().getName() + " §8» §" + color[0] + message);
         }
-
-
-
-
-
-
-
 
     }
 }

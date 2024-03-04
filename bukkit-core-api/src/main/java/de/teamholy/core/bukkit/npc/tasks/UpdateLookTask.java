@@ -2,9 +2,6 @@ package de.teamholy.core.bukkit.npc.tasks;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import de.teamholy.api.BukkitHolyAPI;
-import de.teamholy.api.bukkit.npc.models.NPCPlayer;
-import de.teamholy.api.interfaces.ILabyMod;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

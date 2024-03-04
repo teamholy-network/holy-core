@@ -1,4 +1,4 @@
-package de.teamholy.core.bukkit.perks;
+package de.teamholy.core.bukkit.perks.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

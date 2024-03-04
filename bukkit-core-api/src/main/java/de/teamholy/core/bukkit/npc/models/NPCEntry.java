@@ -1,8 +1,11 @@
 package de.teamholy.core.bukkit.npc.models;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
+import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.utils.Reflection;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,7 +87,7 @@ public class NPCEntry extends Reflection {
                 i = 3.4;
                 break;
         }
-        hologram = HologramsAPI.createHologram(BukkitHolyAPI.getInstance(), locationTemp.add(0, i, 0));
+        hologram = HologramsAPI.createHologram(BukkitCore.getInstance(), locationTemp.add(0, i, 0));
         hologram.getVisibilityManager().showTo(player);
         hologram.getVisibilityManager().setVisibleByDefault(false);
         for (String line : lines) {
@@ -182,7 +185,7 @@ public class NPCEntry extends Reflection {
                     removeTablist(player);
                     teleport(location, player);
                 }
-            }.runTaskLater(BukkitHolyAPI.getInstance(), 2);
+            }.runTaskLater(BukkitCore.getInstance(), 2);
         }
     }
 
@@ -226,7 +229,7 @@ public class NPCEntry extends Reflection {
                     updateEquipment(player);
                     updateHeldItem(player);
                 }
-            }.runTaskLater(BukkitHolyAPI.getInstance(), 2);
+            }.runTaskLater(BukkitCore.getInstance(), 2);
         }
     }
 
