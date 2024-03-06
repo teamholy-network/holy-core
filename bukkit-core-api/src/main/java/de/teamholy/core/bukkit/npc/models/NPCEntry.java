@@ -123,7 +123,7 @@ public class NPCEntry extends Reflection {
             System.out.println("NPC Skin UUID is null");
             return;
         }
-        SkinEntry skinEntry = BukkitHolyAPI.getInstance().getBukkitCacheHandler().getSkinEntryHashMap().get(uuid);
+        SkinEntry skinEntry = BukkitCore.getInstance().getNpcService().getSkinEntryHashMap().get(uuid);
 
         PropertyMap properties = this.gameProfile.getProperties();
 

@@ -51,7 +51,7 @@ public class SkinEntry {
 
                 System.out.println("Error while fetching skin for " + uuid + " using default skin: " + exception.getMessage());
             }
-            skinEntryHashMap.put(uuid, this);
+            BukkitCore.getInstance().getNpcService().getSkinEntryHashMap().put(uuid, this);
             consumer.accept(this);
         });
     }

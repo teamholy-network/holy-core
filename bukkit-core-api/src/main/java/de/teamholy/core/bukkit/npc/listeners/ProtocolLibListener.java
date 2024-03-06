@@ -4,11 +4,12 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListeningWhitelist;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
-import de.teamholy.api.BukkitHolyAPI;
-import de.teamholy.api.bukkit.npc.event.PlayerInteractAtNPCEvent;
-import de.teamholy.api.bukkit.npc.event.action.InteractAction;
-import de.teamholy.api.bukkit.npc.models.NPCEntry;
-import de.teamholy.api.bukkit.npc.models.NPCPlayer;
+
+import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.npc.event.PlayerInteractAtNPCEvent;
+import de.teamholy.core.bukkit.npc.event.action.InteractAction;
+import de.teamholy.core.bukkit.npc.models.NPCEntry;
+import de.teamholy.core.bukkit.npc.models.NPCPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -25,7 +26,7 @@ public class ProtocolLibListener implements PacketListener {
 
     @Override
     public Plugin getPlugin() {
-        return BukkitHolyAPI.getInstance();
+        return BukkitCore.getInstance();
     }
 
     @Override
@@ -37,9 +38,10 @@ public class ProtocolLibListener implements PacketListener {
     @Override
     public void onPacketReceiving(PacketEvent event) {
 
-        NPCPlayer playerEntry = BukkitHolyAPI.getInstance().getBukkitCacheHandler().getNpcPlayerHashMap().get(event.getPlayer().getUniqueId());
+        NPCPlayer npcPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getNpcPlayer();
+
         NPCEntry npcEntry = null;
-        for (NPCEntry npc : playerEntry.getNpcs().values()) {
+        for (NPCEntry npc : npcPlayer.getNpcs().values()) {
             if (event.getPacket().getIntegers().read(0).equals(npc.getEntityId())) {
                 npcEntry = npc;
             }
@@ -61,7 +63,7 @@ public class ProtocolLibListener implements PacketListener {
                     return;
                 }
                 NPCEntry finalNpcEntry = npcEntry;
-                Bukkit.getScheduler().runTask(BukkitHolyAPI.getInstance(), () -> Bukkit.getPluginManager().callEvent(new PlayerInteractAtNPCEvent(event.getPlayer(), finalNpcEntry, interactAction)));
+                Bukkit.getScheduler().runTask(BukkitCore.getInstance(), () -> Bukkit.getPluginManager().callEvent(new PlayerInteractAtNPCEvent(event.getPlayer(), finalNpcEntry, interactAction)));
             } catch (Exception ignored) {
 
             }

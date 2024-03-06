@@ -2,6 +2,9 @@ package de.teamholy.core.bukkit.npc.tasks;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.npc.models.NPCPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -14,8 +17,9 @@ public class UpdateLookTask {
         (new BukkitRunnable() {
             public void run() {
                 try {
-                    for (NPCPlayer npcPlayerEntry : BukkitHolyAPI.getInstance().getBukkitCacheHandler().getNpcPlayerHashMap().values()) {
-                        npcPlayerEntry.getNpcs().values().forEach(npcEntry -> {
+                    for (PlayerCacheManager.CachedBukkitPlayer npcPlayerEntry : BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().values()) {
+                        NPCPlayer npcPlayer = npcPlayerEntry.getNpcPlayer();
+                        npcPlayer.getNpcs().values().forEach(npcEntry -> {
                             Player player = npcEntry.getPlayer();
 
                             if (npcEntry.isInRange(player))
@@ -29,7 +33,7 @@ public class UpdateLookTask {
                                 player.setVelocity(player.getLocation().getDirection().clone().multiply(-0.5).normalize());
                                 player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1.0F, 1.0F);
                                 npcEntry.animation(player,0);
-                                Bukkit.getScheduler().runTaskLater(BukkitHolyAPI.getInstance(),() -> {
+                                Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(),() -> {
                                     forceEmote(player,npcEntry.getUuid(),37);
                                 },1);
                             }
@@ -37,7 +41,7 @@ public class UpdateLookTask {
                     }
                 } catch (Exception ignored) {}
             }
-        }).runTaskTimerAsynchronously(BukkitHolyAPI.getInstance(), 0L, 1L);
+        }).runTaskTimerAsynchronously(BukkitCore.getInstance(), 0L, 1L);
     }
 
     private void forceEmote(Player receiver, UUID npcUUID, int emoteId ) {
@@ -51,7 +55,7 @@ public class UpdateLookTask {
         array.add(forcedEmote);
 
         // Send to LabyMod using the API
-        ILabyMod.sendLMCMessage( receiver, "emote_api", array );
+        //ILabyMod.sendLMCMessage( receiver, "emote_api", array );
     }
 
 }

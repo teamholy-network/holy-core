@@ -11,6 +11,8 @@ import de.teamholy.core.bukkit.commands.*;
 import de.teamholy.core.bukkit.config.ChatTabConfig;
 import de.teamholy.core.bukkit.listener.*;
 import de.teamholy.core.bukkit.manager.*;
+import de.teamholy.core.bukkit.npc.NPCManager;
+import de.teamholy.core.bukkit.npc.NPCService;
 import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.perks.listener.UsePerkListener;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
@@ -50,6 +52,7 @@ public class BukkitCore extends JavaPlugin {
     LocationManager locationManager;
     PlayerCacheManager playerCacheManager;
     StatsManager statsManager;
+    NPCService npcService;
 
     public static String PREFIX = "§6Teamholy §8× §7";
 
@@ -78,6 +81,7 @@ public class BukkitCore extends JavaPlugin {
         playerCacheManager = new PlayerCacheManager();
         customBannerManager = new CustomBannerManager(this);
         statsManager = new StatsManager();
+        NPCService npcService = new NPCService();
 
         new BukkitCloudManager(this);
 
