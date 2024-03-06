@@ -1,5 +1,8 @@
 package de.teamholy.core.bukkit.npc;
 
+import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.npc.models.NPCEntry;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -35,10 +38,10 @@ public class NPCBuilder {
     }
 
     public void build(Player player) {
-        if (BukkitHolyAPI.getInstance().getBukkitCacheHandler().getNpcPlayerHashMap().get(player.getUniqueId()) != null) {
-            BukkitHolyAPI.getInstance().getBukkitCacheHandler().getNpcPlayerHashMap().get(player.getUniqueId()).getNpcs().put(name,
+        PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+        if (cachedBukkitPlayer != null) {
+            cachedBukkitPlayer.getNpcPlayer().getNpcs().put(name,
                     new NPCEntry(displayName, this.skin, location, maxSeeRange, maxTargetRange, looker, kickBack).setPlayer(player).addHolo(holoLines));
-
         }
       }
 }

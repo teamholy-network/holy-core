@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.npc.listeners;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListeningWhitelist;
+import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 
@@ -15,31 +16,19 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
 
-public class ProtocolLibListener implements PacketListener {
+public class ProtocolLibListener extends PacketAdapter {
 
-    @Override
-    public ListeningWhitelist getReceivingWhitelist() {
-        return ListeningWhitelist.newBuilder()
-                .types(PacketType.Play.Client.USE_ENTITY)
-                .build();
-    }
-
-    @Override
-    public Plugin getPlugin() {
-        return BukkitCore.getInstance();
-    }
-
-    @Override
-    public ListeningWhitelist getSendingWhitelist() {
-        return ListeningWhitelist.EMPTY_WHITELIST;
+    public ProtocolLibListener(Plugin plugin) {
+        super(plugin, PacketType.Play.Client.USE_ENTITY);
     }
 
 
     @Override
     public void onPacketReceiving(PacketEvent event) {
 
-        NPCPlayer npcPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getNpcPlayer();
+        if (event.getPacket().getType() != PacketType.Play.Client.USE_ENTITY) return;
 
+        NPCPlayer npcPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getNpcPlayer();
         NPCEntry npcEntry = null;
         for (NPCEntry npc : npcPlayer.getNpcs().values()) {
             if (event.getPacket().getIntegers().read(0).equals(npc.getEntityId())) {
@@ -70,8 +59,4 @@ public class ProtocolLibListener implements PacketListener {
         }
     }
 
-    @Override
-    public void onPacketSending(PacketEvent arg0) {
-
-    }
 }

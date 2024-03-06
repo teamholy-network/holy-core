@@ -11,7 +11,6 @@ import de.teamholy.core.bukkit.commands.*;
 import de.teamholy.core.bukkit.config.ChatTabConfig;
 import de.teamholy.core.bukkit.listener.*;
 import de.teamholy.core.bukkit.manager.*;
-import de.teamholy.core.bukkit.npc.NPCManager;
 import de.teamholy.core.bukkit.npc.NPCService;
 import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.perks.listener.UsePerkListener;
@@ -73,6 +72,7 @@ public class BukkitCore extends JavaPlugin {
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
+        protocolManager = ProtocolLibrary.getProtocolManager();
         metricsManager = new MetricsManager(this.coreAPI);
         perkManager = new PerkManager(this);
         cloudMessageManager = new CloudMessageManager(this);
@@ -81,7 +81,7 @@ public class BukkitCore extends JavaPlugin {
         playerCacheManager = new PlayerCacheManager();
         customBannerManager = new CustomBannerManager(this);
         statsManager = new StatsManager();
-        NPCService npcService = new NPCService();
+        npcService = new NPCService(this);
 
         new BukkitCloudManager(this);
 
@@ -93,7 +93,6 @@ public class BukkitCore extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20 * 3);
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
-        protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new TabCompleteListener(this, PacketType.Play.Client.TAB_COMPLETE));
 
 
