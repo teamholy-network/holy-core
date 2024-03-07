@@ -61,7 +61,6 @@ public class BukkitCore extends JavaPlugin {
     StatsManager statsManager;
     NPCService npcService;
 
-    IPlayerManager playerManager;
 
     public static String PREFIX = "§6Teamholy §8× §7";
 
@@ -93,7 +92,6 @@ public class BukkitCore extends JavaPlugin {
         statsManager = new StatsManager();
         npcService = new NPCService(this);
 
-        playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
         new BukkitCloudManager(this);
 
