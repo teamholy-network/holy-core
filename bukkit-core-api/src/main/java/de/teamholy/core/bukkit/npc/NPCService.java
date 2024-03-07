@@ -5,6 +5,7 @@ import de.teamholy.core.bukkit.npc.listeners.PlayerMoveListener;
 import de.teamholy.core.bukkit.npc.listeners.ProtocolLibListener;
 import de.teamholy.core.bukkit.npc.models.NPCSkinRepository;
 import de.teamholy.core.bukkit.npc.models.SkinEntry;
+import de.teamholy.core.bukkit.npc.tasks.UpdateLookTask;
 import lombok.Getter;
 import org.bukkit.plugin.Plugin;
 
@@ -26,6 +27,7 @@ public class NPCService {
         npcSkinRepository = bukkitCore.getCoreAPI().getMongoManager().create(NPCSkinRepository.class);
 
         new PlayerMoveListener(bukkitCore);
+        new UpdateLookTask();
     }
 
 
