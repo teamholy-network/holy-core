@@ -10,9 +10,11 @@ import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.commands.WhitelistCommand;
+import de.teamholy.core.bukkit.event.CachedPlayerJoinEvent;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import de.teamholy.core.bukkit.manager.PacketManager;
 import de.teamholy.core.bukkit.manager.PlayerCacheManager;
+import de.teamholy.core.bukkit.npc.event.PlayerInteractAtNPCEvent;
 import de.teamholy.core.bukkit.npc.models.NPCPlayer;
 import de.teamholy.core.bukkit.perks.model.Perk;
 import de.teamholy.core.bukkit.perks.enums.PerkRankType;
@@ -68,13 +70,24 @@ public class PlayerJoinQuitListener implements Listener {
         Player player = event.getPlayer();
         event.setJoinMessage(null);
 
-        bukkitCore.getCoreAPI().getExecutor().submit(() -> {
+        bukkitCore.getCoreAPI().getExecutor().execute(() -> {
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
             ClanPlayerProfile clanPlayerProfile = BukkitCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
             PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
 
+            PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = new PlayerCacheManager.CachedBukkitPlayer(
+                player,
+                PlayerRank.valueOf(playerProfile.getRank()),
+                new NPCPlayer(player),
+                (clanPlayerProfile == null ? null : bukkitCore.getCoreAPI().getClanManager().getClanById(clanPlayerProfile.getClanId())),
+                perkPlayerProfile
+            );
+
+            bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
+
+            Bukkit.getScheduler().runTask(bukkitCore, () -> Bukkit.getScheduler().runTask(BukkitCore.getInstance(), () -> Bukkit.getPluginManager().callEvent(new CachedPlayerJoinEvent(cachedBukkitPlayer))));
 
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
 
@@ -110,15 +123,8 @@ public class PlayerJoinQuitListener implements Listener {
             }
 
 
-            PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = new PlayerCacheManager.CachedBukkitPlayer(
-                    player,
-                    PlayerRank.valueOf(playerProfile.getRank()),
-                    new NPCPlayer(player),
-                    (clanPlayerProfile == null ? null : bukkitCore.getCoreAPI().getClanManager().getClanById(clanPlayerProfile.getClanId())),
-                    perkPlayerProfile
-            );
 
-            bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
+
 
             String value;
             String signature;
