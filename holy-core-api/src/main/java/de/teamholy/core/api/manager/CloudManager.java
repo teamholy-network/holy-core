@@ -24,8 +24,11 @@ import java.util.concurrent.ExecutionException;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 public class CloudManager {
+
+    public CloudManager(CoreAPI coreAPI) {
+        this.coreAPI = coreAPI;
+    }
 
     CoreAPI coreAPI;
     IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);

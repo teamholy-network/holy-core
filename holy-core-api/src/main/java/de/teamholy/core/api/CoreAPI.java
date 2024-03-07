@@ -86,10 +86,12 @@ public class CoreAPI {
         this.statsProfileService = new StatsProfileService(this);
 
         try {
-            cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+            cloudManager1 = new CloudManager(this);
         } catch (NoClassDefFoundError error) {
-            cloudManager1 = new CloudManager(this, null);
+            cloudManager1 = new CloudManager(this);
         }
+
+
         this.cloudManager = cloudManager1;
         this.uuidManager = new UUIDManager(this);
         this.reportManager = new ReportManager(this);
@@ -130,9 +132,9 @@ public class CoreAPI {
 
 
         try {
-            cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+            cloudManager1 = new CloudManager(this);
         } catch (NoClassDefFoundError error) {
-            cloudManager1 = new CloudManager(this, null);
+            cloudManager1 = new CloudManager(this);
         }
 
         this.cloudManager = cloudManager1;

@@ -2,10 +2,8 @@ package eu.koboo.markup;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.mojang.authlib.properties.Property;
-import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.api.CoreAPI;
 import eu.koboo.markup.adapter.PacketPlayServerNamedEntitySpawnAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerPlayerInfoAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerScoreboardTeamAdapter;
@@ -94,7 +92,8 @@ public class MarkupAPI extends JavaPlugin {
     public void onEnable() {
         api = this;
 
-        nickProfilesRepository = BukkitCore.getAPI().getMongoManager().create(NickProfilesRepository.class);
+        CoreAPI coreAPI = new CoreAPI();
+        nickProfilesRepository = coreAPI.getMongoManager().create(NickProfilesRepository.class);
 
         saveDefaultConfig();
 

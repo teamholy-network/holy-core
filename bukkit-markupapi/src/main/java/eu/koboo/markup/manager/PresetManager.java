@@ -2,8 +2,6 @@ package eu.koboo.markup.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mojang.authlib.properties.Property;
-import de.teamholy.core.bukkit.BukkitCore;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
 import eu.koboo.markup.util.PlayerPreset;
@@ -12,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.*;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.SecureRandom;

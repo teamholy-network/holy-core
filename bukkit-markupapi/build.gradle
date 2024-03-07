@@ -22,5 +22,4 @@ dependencies {
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
     compileOnly(project(':holy-core-api'))
     compileOnly("eu.koboo:en2do:$en2doVersion")
-    compileOnly(project(':bukkit-core-api'))
 }

@@ -32,9 +32,9 @@ public class UsePerkListener implements Listener {
         if (event.getAction() != null || event.getItem() != null || event.getItem().getType() != null || event.getItem().getType() != Material.AIR || event.getItem().getItemMeta() != null) {
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (event.getItem() == null) return;
-                PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).perkPlayerProfile();
+                PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getPerkPlayerProfile();
                 if (perkPlayerProfile == null) return;
-                if (BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getStickPerk()).getMaterial() == event.getMaterial()) {
+                if (BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(perkPlayerProfile.getStickPerk()).getMaterial() == event.getMaterial()) {
                     if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                         event.setCancelled(true);
                     }
@@ -46,9 +46,9 @@ public class UsePerkListener implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
     public void onPlace(BlockPlaceEvent event) {
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).perkPlayerProfile();
+        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getPerkPlayerProfile();
         if (perkPlayerProfile == null) return;
-        Perk perk = BukkitCore.getInstance().getPerkCache().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
+        Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
 
 
 
