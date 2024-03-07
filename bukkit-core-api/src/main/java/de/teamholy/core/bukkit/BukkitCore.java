@@ -43,6 +43,9 @@ public class BukkitCore extends JavaPlugin {
 
     ProtocolManager protocolManager;
     CloudMessageManager cloudMessageManager;
+
+
+
     CustomBannerManager customBannerManager;
     MetricsManager metricsManager;
     CoreAPI coreAPI;
