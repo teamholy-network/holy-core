@@ -3,6 +3,8 @@ package de.teamholy.core.bukkit;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.manager.MetricsManager;
@@ -59,6 +61,8 @@ public class BukkitCore extends JavaPlugin {
     StatsManager statsManager;
     NPCService npcService;
 
+    IPlayerManager playerManager;
+
     public static String PREFIX = "§6Teamholy §8× §7";
 
 
@@ -88,6 +92,8 @@ public class BukkitCore extends JavaPlugin {
         customBannerManager = new CustomBannerManager(this);
         statsManager = new StatsManager();
         npcService = new NPCService(this);
+
+        playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
         new BukkitCloudManager(this);
 

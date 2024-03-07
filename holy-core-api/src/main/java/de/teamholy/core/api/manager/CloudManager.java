@@ -26,12 +26,11 @@ import java.util.concurrent.ExecutionException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CloudManager {
 
-    public CloudManager(CoreAPI coreAPI) {
+    public CloudManager(CoreAPI coreAPI, IPlayerManager playerManager) {
         this.coreAPI = coreAPI;
     }
 
     CoreAPI coreAPI;
-    IPlayerManager playerManager = CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class);
 
     public String getColor(UUID uuid) {
         if (uuid == Punish.getConsoleUuid()) return "§4§l";

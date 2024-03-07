@@ -19,6 +19,7 @@ import de.teamholy.core.bukkit.perks.enums.PerkRankType;
 import eu.koboo.markup.MarkupAPI;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import net.bytebuddy.implementation.bytecode.constant.DefaultValue;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -65,6 +66,7 @@ public class PlayerJoinQuitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
 
         Player player = event.getPlayer();
+        event.setJoinMessage(null);
 
         bukkitCore.getCoreAPI().getExecutor().submit(() -> {
 
@@ -172,6 +174,7 @@ public class PlayerJoinQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         UUID playerUUID = event.getPlayer().getUniqueId();
+        event.setQuitMessage(null);
         PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().remove(playerUUID);
         cachedBukkitPlayer.getNpcPlayer().getNpcs().forEach((s, npcEntry) -> {
             if (npcEntry.getHologram() != null) npcEntry.getHologram().delete();

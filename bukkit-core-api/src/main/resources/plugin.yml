@@ -2,7 +2,7 @@ name: bukkit-core
 version: 1.0
 main: de.teamholy.core.bukkit.BukkitCore
 load: STARTUP
-depend: [ ProtocolLib, CloudNet-Bridge ]
+depend: [ ProtocolLib, CloudNet-Bridge, CloudNet ]
 
 commands:
     whitelist:

@@ -18,7 +18,7 @@ dependencies {
 
 
     implementation(project(':holy-core-api'))
-    implementation(project(':bukkit-markupapi'))
+    compileOnly(project(':bukkit-markupapi'))
 }
 
 repositories {
