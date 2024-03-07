@@ -1,6 +1,7 @@
 package de.teamholy.core.bukkit.npc.listeners;
 
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import de.teamholy.core.bukkit.npc.models.NPCEntry;
 import de.teamholy.core.bukkit.npc.models.NPCPlayer;
 import org.bukkit.entity.Player;
@@ -58,6 +59,9 @@ public final class PlayerMoveListener implements Listener {
     }
 
     private NPCPlayer getNpcPlayer(UUID uuid) {
-        return BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(uuid).getNpcPlayer();
+        PlayerCacheManager.CachedBukkitPlayer cachedPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(uuid);
+        if (cachedPlayer == null) return null;
+
+        return cachedPlayer.getNpcPlayer();
     }
 }
