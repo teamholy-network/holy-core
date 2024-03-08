@@ -3,6 +3,7 @@ package de.teamholy.core.bukkit.perks.listener;
 import com.google.common.collect.Maps;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import de.teamholy.core.bukkit.perks.model.Perk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,7 +47,9 @@ public class UsePerkListener implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
     public void onPlace(BlockPlaceEvent event) {
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getPerkPlayerProfile();
+        PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId());
+        if (cachedBukkitPlayer == null) return;
+        PerkPlayerProfile perkPlayerProfile = cachedBukkitPlayer.getPerkPlayerProfile();
         if (perkPlayerProfile == null) return;
         Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
 

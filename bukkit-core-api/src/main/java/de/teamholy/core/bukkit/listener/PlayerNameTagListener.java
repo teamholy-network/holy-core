@@ -27,6 +27,8 @@ public class PlayerNameTagListener implements Listener {
 
         Player player = event.getPlayer();
         PlayerCacheManager.CachedBukkitPlayer playerCache = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+        if (playerCache == null) return;
+        
         PlayerRank playerRank = playerCache.getRank();
 
         if (playerRank == null) return;
