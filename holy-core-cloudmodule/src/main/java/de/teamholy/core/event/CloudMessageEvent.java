@@ -1,6 +1,7 @@
 package de.teamholy.core.event;
 
 import de.dytanic.cloudnet.command.commands.CommandReload;
+import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
 import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStartEvent;
@@ -39,17 +40,16 @@ public class CloudMessageEvent {
             if (response.isOnline()) {
                 healthService.addPing(service);
             }
+        } else if (event.getMessage().equalsIgnoreCase("ping:initial")) {
+            healthService.getServiceInfoSnapshots().add(CloudNetDriver.getInstance().getCloudServiceProvider().getCloudServiceByName(event.getData().getString("server")));
         }
+
     }
 
     @EventListener
     public void onHandleServiceStop(CloudServiceStopEvent event) {
         healthService.removePing(event.getServiceInfo().getServiceId().getName());
-    }
-
-    @EventListener
-    public void onCloudServiceStart(CloudServiceStartEvent event) {
-        CloudModuleCore.getInstance().getService().schedule(() -> healthService.addPing(event.getServiceInfo().getServiceId().getName()), 3, TimeUnit.SECONDS);
+        healthService.getServiceInfoSnapshots().remove(event.getServiceInfo());
     }
 
 

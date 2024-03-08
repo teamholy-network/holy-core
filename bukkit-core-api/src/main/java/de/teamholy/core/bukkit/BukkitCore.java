@@ -3,6 +3,7 @@ package de.teamholy.core.bukkit;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
@@ -100,6 +101,7 @@ public class BukkitCore extends JavaPlugin {
         clearAllWorlds();
 
         System.out.println("Starting ServiceAliveTask\n");
+        coreAPI.getCloudManager().sendCloudMessage("alive", "ping:initial", new JsonDocument().append("server", Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName()).append("response", "online"));
         Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20 * 3);
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];

@@ -1,5 +1,6 @@
 package de.teamholy.core.ping;
 
+import com.google.common.collect.Lists;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.service.ServiceEnvironmentType;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
@@ -7,10 +8,12 @@ import de.dytanic.cloudnet.driver.service.ServiceLifeCycle;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.paste.PasteService;
+import lombok.Getter;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
@@ -25,6 +28,8 @@ import java.util.regex.Pattern;
 public class HealthService {
 
     public HashMap<String, Long> pingMap = new HashMap<>();
+    @Getter
+    private List<ServiceInfoSnapshot> serviceInfoSnapshots = Lists.newArrayList();
 
     public void addPing(String server) {
         pingMap.put(server, System.currentTimeMillis());
@@ -39,8 +44,6 @@ public class HealthService {
     }
 
     public void stopService(String name) {
-        Collection<ServiceInfoSnapshot> serviceInfoSnapshots = CloudNetDriver.getInstance().getCloudServiceProvider()
-            .getCloudServices();
 
         if (serviceInfoSnapshots.isEmpty()) {
             return;
@@ -74,7 +77,7 @@ public class HealthService {
         webhook.addEmbed(new DiscordWebhook.EmbedObject().setTitle("HealthService")
             .addField("Stopped server", name, true)
             .addField("Log", url, false)
-            .setColor(Color.ORANGE).setThumbnail("https://static.thenounproject.com/png/70488-200.png").setFooter("TeamHolyDE", "https://i.imgur.com/k3mtKpE.png"));
+            .setColor(Color.ORANGE).setThumbnail("https://static.thenounproject.com/png/70488-200.png").setFooter("TeamHolyDE - ", "https://i.imgur.com/k3mtKpE.png"));
 
         CloudModuleCore.getInstance().getExecutorService().execute(webhook::execute);
     }
