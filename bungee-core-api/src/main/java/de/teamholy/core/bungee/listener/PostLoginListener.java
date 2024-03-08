@@ -45,6 +45,15 @@ public class PostLoginListener implements Listener {
     public void onLogin(PostLoginEvent loginEvent) {
         ProxiedPlayer proxiedPlayer = loginEvent.getPlayer();
 
+        proxiedPlayer.sendMessage("");
+        proxiedPlayer.sendMessage("          §f§lWELCOME ON §6§lTEAMHOLY          ");
+        proxiedPlayer.sendMessage("");
+        proxiedPlayer.sendMessage("§3Discord §8» §7https://discord.gg/teamholy");
+        proxiedPlayer.sendMessage("§cStore §8» §7https://shop.teamholy.de");
+        proxiedPlayer.sendMessage("§6Vote §8» §7https://teamholy.de/vote");
+        proxiedPlayer.sendMessage("§5Website §8» §7https://teamholy.de");
+        proxiedPlayer.sendMessage("");
+
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
         FriendProfile friendProfile;
@@ -248,6 +257,7 @@ public class PostLoginListener implements Listener {
                 BungeeCore.getAPI().getReportManager().addReport(report);
             }
         });
+
 
 
     }

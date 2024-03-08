@@ -48,6 +48,7 @@ public class PlayerNameTagListener implements Listener {
             suffix = suffix + " §a☃";
         } else if (player.getName().equalsIgnoreCase("Yassino")) {
             suffix = suffix + " §2♫";
+            event.setDisplaySuffix(" §2♫");
         }
 
         // Fake PLAYER rank if we got a nicked player

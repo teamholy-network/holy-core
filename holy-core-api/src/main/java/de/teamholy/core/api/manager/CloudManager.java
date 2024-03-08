@@ -28,9 +28,11 @@ public class CloudManager {
 
     public CloudManager(CoreAPI coreAPI, IPlayerManager playerManager) {
         this.coreAPI = coreAPI;
+        this.playerManager = playerManager;
     }
 
     CoreAPI coreAPI;
+    IPlayerManager playerManager;
 
     public String getColor(UUID uuid) {
         if (uuid == Punish.getConsoleUuid()) return "§4§l";

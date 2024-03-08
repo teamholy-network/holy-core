@@ -23,7 +23,7 @@ public class HealthTask implements Runnable {
     public void run() {
         HashMap<String, Long> pingMap = new HashMap<>(healthService.pingMap);
         for (String server : pingMap.keySet()) {
-            if (System.currentTimeMillis() - healthService.getLastPing(server) <= 30000L) continue;
+            if (System.currentTimeMillis() - healthService.getLastPing(server) <= 5000) continue;
 
             healthService.removePing(server);
             healthService.stopService(server);
