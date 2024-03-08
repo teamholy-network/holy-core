@@ -4,7 +4,7 @@ package de.teamholy.core.api.constants;
 public class Message {
 
 
-    public static final String PREFIX = "§8[§fTeam§6Holy§8] ";
+    public static final String PREFIX = "§6Teamholy §8× §7";
     public static final String CLAN_PREFIX = "§6Clan §8× §7";
     public static final String PUNISH_PREFIX = "§cPunish §8× §7";
     public static final String LOOKUP_PREFIX = "§5LookUp §8× §7";

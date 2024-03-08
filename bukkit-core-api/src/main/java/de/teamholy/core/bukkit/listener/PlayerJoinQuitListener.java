@@ -91,18 +91,8 @@ public class PlayerJoinQuitListener implements Listener {
 
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
 
-            Perk stick = bukkitCore.getPerkManager().getPerkHashMap().get(perkPlayerProfile.getStickPerk());
-            Perk block = bukkitCore.getPerkManager().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
-            Perk chat = bukkitCore.getPerkManager().getPerkHashMap().get(perkPlayerProfile.getChatPerk());
 
 
-            boolean needUpdate = false;
-
-            if (!player.hasPermission(PerkRankType.PREMIUM.getPermission())) {
-                if (stick.isBuyAble() && stick.getId() != 100) needUpdate = true;
-                if (block.isBuyAble() && block.getId() != 0) needUpdate = true;
-                if (chat.isBuyAble() && chat.getId() != 200) needUpdate = true;
-            }
 
 
             String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby", "Bridge"};
@@ -113,13 +103,6 @@ public class PlayerJoinQuitListener implements Listener {
                         customBannerManager.setAndPlaceCustomBanner1(player, perkPlayerProfile.getCustomBanner());
                     }
                 }
-            }
-
-            if (needUpdate) {
-                perkPlayerProfile.setStickPerk(100);
-                perkPlayerProfile.setChatPerk(200);
-                perkPlayerProfile.setBlockPerk(0);
-                BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().saveEntity(perkPlayerProfile, true, true);
             }
 
 

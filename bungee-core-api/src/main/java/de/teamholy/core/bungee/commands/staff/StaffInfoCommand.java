@@ -20,6 +20,7 @@ public class StaffInfoCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         if (!sender.hasPermission("teamholy.team")) {
             BungeeUtil.sendNoPermission(sender);
+            return;
         }
 
         if (!sender.hasPermission("teamholy.staffinfo.others")) {
