@@ -49,7 +49,7 @@ public class PostLoginListener implements Listener {
         proxiedPlayer.sendMessage("          §f§lWELCOME ON §6§lTEAMHOLY          ");
         proxiedPlayer.sendMessage("");
         proxiedPlayer.sendMessage("§3Discord §8» §7https://discord.gg/teamholy");
-        proxiedPlayer.sendMessage("§cStore §8» §7https://shop.teamholy.de");
+        proxiedPlayer.sendMessage("§cStore §8» §7https://teamholy.de/shop");
         proxiedPlayer.sendMessage("§6Vote §8» §7https://teamholy.de/vote");
         proxiedPlayer.sendMessage("§5Website §8» §7https://teamholy.de");
         proxiedPlayer.sendMessage("");
