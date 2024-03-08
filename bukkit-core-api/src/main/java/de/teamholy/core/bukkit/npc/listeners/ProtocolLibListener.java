@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import de.teamholy.core.bukkit.npc.event.PlayerInteractAtNPCEvent;
 import de.teamholy.core.bukkit.npc.event.action.InteractAction;
 import de.teamholy.core.bukkit.npc.models.NPCEntry;
@@ -28,7 +29,9 @@ public class ProtocolLibListener extends PacketAdapter {
 
         if (event.getPacket().getType() != PacketType.Play.Client.USE_ENTITY) return;
 
-        NPCPlayer npcPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getNpcPlayer();
+        PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId());
+        if (cachedBukkitPlayer == null) return;
+        NPCPlayer npcPlayer = cachedBukkitPlayer.getNpcPlayer();
         NPCEntry npcEntry = null;
         for (NPCEntry npc : npcPlayer.getNpcs().values()) {
             if (event.getPacket().getIntegers().read(0).equals(npc.getEntityId())) {
