@@ -146,15 +146,15 @@ public class StaffInfoCommand extends Command {
             Message.STAFF_INFO_PREFIX, username, days,
             profile.getBanProfileList()
                 .stream()
-                .filter(banProfile -> banProfile.getCreateDate() <= (System.currentTimeMillis() - timemillis))
+                .filter(banProfile -> banProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
                 .count(),
             profile.getMuteProfileList()
                 .stream()
-                .filter(muteProfile -> muteProfile.getCreateDate() <= (System.currentTimeMillis() - timemillis))
+                .filter(muteProfile -> muteProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
                 .count(),
             profile.getReportList()
                 .stream()
-                .filter(report -> report.getTime() <= (System.currentTimeMillis() - timemillis))
+                .filter(report -> report.getTime() >= (System.currentTimeMillis() - timemillis))
                 .count()
         );
     }
