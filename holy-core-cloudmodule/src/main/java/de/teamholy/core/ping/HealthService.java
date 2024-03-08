@@ -62,6 +62,7 @@ public class HealthService {
                         }
                     });
 
+                    serviceInfoSnapshots.remove(serverInfo);
                     serverInfo.provider().kill();
                     CloudModuleCore.getInstance().getLogger().info("[✔] Killed Dead Server: " + name + "!");
                 }
