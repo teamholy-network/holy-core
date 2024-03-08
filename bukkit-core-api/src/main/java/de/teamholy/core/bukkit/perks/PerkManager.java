@@ -128,7 +128,9 @@ public class PerkManager {
     }
 
     public ItemBuilder getPerk(Player player, PerkType perkType) {
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
+        PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
+        if (cachedBukkitPlayer == null) return null;
+        PerkPlayerProfile perkPlayerProfile = cachedBukkitPlayer.getPerkPlayerProfile();
         Perk perk;
         ItemBuilder itemBuilder = null;
         if (perkPlayerProfile == null) return null;

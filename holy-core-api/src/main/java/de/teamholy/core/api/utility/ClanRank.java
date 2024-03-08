@@ -17,14 +17,11 @@ public enum ClanRank {
     String fancy;
 
     public static String parsePrefix(ClanRank clanRank) {
-        switch (clanRank) {
-            case LEADER:
-                return "§4";
-            case MOD:
-                return "§c";
-            default:
-                return "§a";
-        }
+        return switch (clanRank) {
+            case LEADER -> "§4";
+            case MOD -> "§c";
+            default -> "§a";
+        };
     }
 
     public String getFancy() {

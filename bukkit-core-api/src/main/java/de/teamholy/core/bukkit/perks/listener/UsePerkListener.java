@@ -3,6 +3,7 @@ package de.teamholy.core.bukkit.perks.listener;
 import com.google.common.collect.Maps;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.bukkit.BukkitCore;
+import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import de.teamholy.core.bukkit.perks.model.Perk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,9 @@ public class UsePerkListener implements Listener {
         if (event.getAction() != null || event.getItem() != null || event.getItem().getType() != null || event.getItem().getType() != Material.AIR || event.getItem().getItemMeta() != null) {
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (event.getItem() == null) return;
-                PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getPerkPlayerProfile();
+                PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId());
+                if (cachedBukkitPlayer == null) return;
+                PerkPlayerProfile perkPlayerProfile = cachedBukkitPlayer.getPerkPlayerProfile();
                 if (perkPlayerProfile == null) return;
                 if (BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(perkPlayerProfile.getStickPerk()).getMaterial() == event.getMaterial()) {
                     if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -46,7 +49,9 @@ public class UsePerkListener implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
     public void onPlace(BlockPlaceEvent event) {
-        PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId()).getPerkPlayerProfile();
+        PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId());
+        if (cachedBukkitPlayer == null) return;
+        PerkPlayerProfile perkPlayerProfile = cachedBukkitPlayer.getPerkPlayerProfile();
         if (perkPlayerProfile == null) return;
         Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
 

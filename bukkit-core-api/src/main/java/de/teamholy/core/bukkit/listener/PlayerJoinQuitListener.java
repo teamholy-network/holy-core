@@ -165,9 +165,11 @@ public class PlayerJoinQuitListener implements Listener {
         UUID playerUUID = event.getPlayer().getUniqueId();
         event.setQuitMessage(null);
         PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().remove(playerUUID);
-        cachedBukkitPlayer.getNpcPlayer().getNpcs().forEach((s, npcEntry) -> {
-            if (npcEntry.getHologram() != null) npcEntry.getHologram().delete();
-        });
+        if (cachedBukkitPlayer != null) {
+            cachedBukkitPlayer.getNpcPlayer().getNpcs().forEach((s, npcEntry) -> {
+                if (npcEntry.getHologram() != null) npcEntry.getHologram().delete();
+            });
+        }
         customBannerManager.removeCustomBanner(event.getPlayer());
         if (packetmanager.gameStatePacketLoopTask.containsKey(playerUUID)) {
             packetmanager.gameStatePacketLoopTask.get(playerUUID).cancel();
