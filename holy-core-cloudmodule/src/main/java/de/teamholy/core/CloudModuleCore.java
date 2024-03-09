@@ -5,6 +5,7 @@ import de.dytanic.cloudnet.driver.module.ModuleLifeCycle;
 import de.dytanic.cloudnet.driver.module.ModuleTask;
 import de.dytanic.cloudnet.module.NodeCloudNetModule;
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.command.HealthServiceCommand;
 import de.teamholy.core.event.CloudMessageEvent;
 import de.teamholy.core.ping.HealthService;
 import de.teamholy.core.task.HealthTask;
@@ -62,6 +63,8 @@ public class CloudModuleCore extends NodeCloudNetModule {
         HealthTask healthTask = new HealthTask(healthService);
         service.scheduleAtFixedRate(healthTask, 5, 1, TimeUnit.SECONDS);
 
+
+        registerCommand(new HealthServiceCommand());
         CloudNetDriver.getInstance().getEventManager()
             .registerListener(new CloudMessageEvent(healthService)); //Register a listener object on the event manager
     }

@@ -45,23 +45,35 @@ public class HealthService {
 
     public void stopService(String name) {
 
+
+        System.out.println("_________________________");
+        System.out.println("1111111111111111111111111");
+        System.out.println("1111111111111111111111111");
+        System.out.println("_________________________");
         if (serviceInfoSnapshots.isEmpty()) {
             return;
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (ServiceInfoSnapshot serviceInfoSnapshot : serviceInfoSnapshots) {
+            sb.append(serviceInfoSnapshot.getServiceId().getName()).append(", ");
+        }
+        CloudModuleCore.getInstance().getLogger().info("[!] Found " + serviceInfoSnapshots.size() + " services: " + sb);
+
+        System.out.println("_________________________");
+        System.out.println("22222222222222222222222222");
+        System.out.println("222222222222222222222222222");
+        System.out.println("_________________________");
         for (var serverInfo : serviceInfoSnapshots) {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
+                System.out.println("_________________________");
+                System.out.println("3333333333333333333333333");
+                System.out.println("33333333333333333333333");
+                System.out.println("_________________________");
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Saving logs and trying to kill...");
 
-                    createPaste(serverInfo, name).whenComplete((url, throwable) -> {
-                        if (throwable != null) {
-                            CloudModuleCore.getInstance().getLogger().info("[!] Failed to get logs! " + throwable.getMessage());
-                        } else {
-                            sendDiscordWebhook(name, url);
-                            CloudModuleCore.getInstance().getLogger().info("[✔] Posted to Discord!");
-                        }
-                    });
-
+                    sendDiscordWebhook(name, "No link provided");
                     serviceInfoSnapshots.remove(serverInfo);
                     serverInfo.provider().kill();
                     CloudModuleCore.getInstance().getLogger().info("[✔] Killed Dead Server: " + name + "!");

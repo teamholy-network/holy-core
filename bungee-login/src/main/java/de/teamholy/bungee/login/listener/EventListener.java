@@ -34,8 +34,6 @@ public class EventListener implements Listener {
 
     PlayerConnectRepository repo = BungeeLogin.repo;
 
-    //ConcurrentHashMap<String, PlayerObject> cache = TeamHolyLogin.cache;
-
     ConcurrentHashMap<String, CrackedProfiles> crackedipnames = BungeeLogin.crackedipnames;
 
     ConcurrentHashMap<String, String> iphostname = BungeeLogin.iphostname;
@@ -156,10 +154,17 @@ public class EventListener implements Listener {
                 profile.setBedrock(true);
                 return;
             }
-            event.getConnection().setOnlineMode(profile.isPremium());
+            if (event.getConnection().isOnlineMode()) {
+                event.getConnection().setOnlineMode(true);
+                System.out.println("Online Mode");
+            } else {
+                event.getConnection().setOnlineMode(profile.isPremium());
+                System.out.println("Offline Mode - " + profile.isPremium());
+            }
             if (profile.isPremium()) {
                 profile.setPremium(false);
             }
+
         }
     }
 
