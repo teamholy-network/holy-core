@@ -1,6 +1,7 @@
 package de.teamholy.core.ping;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.service.ServiceEnvironmentType;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -27,9 +29,10 @@ import java.util.regex.Pattern;
 
 public class HealthService {
 
-    public HashMap<String, Long> pingMap = new HashMap<>();
     @Getter
-    private List<ServiceInfoSnapshot> serviceInfoSnapshots = Lists.newArrayList();
+    public ConcurrentHashMap<String, Long> pingMap = new ConcurrentHashMap<>();
+    @Getter
+    private List<ServiceInfoSnapshot> serviceInfoSnapshots = Lists.newCopyOnWriteArrayList();
 
     public void addPing(String server) {
         pingMap.put(server, System.currentTimeMillis());
@@ -46,10 +49,6 @@ public class HealthService {
     public void stopService(String name) {
 
 
-        System.out.println("_________________________");
-        System.out.println("1111111111111111111111111");
-        System.out.println("1111111111111111111111111");
-        System.out.println("_________________________");
         if (serviceInfoSnapshots.isEmpty()) {
             return;
         }
@@ -60,16 +59,8 @@ public class HealthService {
         }
         CloudModuleCore.getInstance().getLogger().info("[!] Found " + serviceInfoSnapshots.size() + " services: " + sb);
 
-        System.out.println("_________________________");
-        System.out.println("22222222222222222222222222");
-        System.out.println("222222222222222222222222222");
-        System.out.println("_________________________");
         for (var serverInfo : serviceInfoSnapshots) {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
-                System.out.println("_________________________");
-                System.out.println("3333333333333333333333333");
-                System.out.println("33333333333333333333333");
-                System.out.println("_________________________");
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Saving logs and trying to kill...");
 
@@ -93,34 +84,6 @@ public class HealthService {
             .setColor(Color.ORANGE).setThumbnail("https://static.thenounproject.com/png/70488-200.png").setFooter("TeamHolyDE - ", "https://i.imgur.com/k3mtKpE.png"));
 
         CloudModuleCore.getInstance().getExecutorService().execute(webhook::execute);
-    }
-
-    public CompletableFuture<String> createPaste(ServiceInfoSnapshot serviceInfoSnapshot, String msg) {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        future.completeAsync(() -> {
-            String pasteURL = "Not Provided.";
-
-            Queue<String> logMessages = serviceInfoSnapshot.provider().getCachedLogMessages();
-            CloudModuleCore.getInstance().getLogger().info("[!] Found " + logMessages.size() + " log messages for " + msg);
-            if (!logMessages.isEmpty()) {
-
-                StringBuilder sb = new StringBuilder();
-                try {
-                    for (String message : logMessages) {
-                        sb.append(message).append("\n");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //pasteURL = PasteService.paste("HealthService - " + msg, sb.toString());
-                pasteURL = PasteService.logFile(msg, sb.toString());
-                CloudModuleCore.getInstance().getLogger().info("[!] Pasted log to " + pasteURL);
-            }
-            return pasteURL;
-        });
-
-
-        return future;
     }
 
 }

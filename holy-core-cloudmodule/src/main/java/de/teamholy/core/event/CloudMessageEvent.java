@@ -1,16 +1,14 @@
 package de.teamholy.core.event;
 
-import de.dytanic.cloudnet.command.commands.CommandReload;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
-import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStartEvent;
 import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStopEvent;
-import de.teamholy.core.CloudModuleCore;
+import de.dytanic.cloudnet.driver.event.events.service.CloudServiceUnregisterEvent;
+import de.dytanic.cloudnet.ext.bridge.bukkit.event.BukkitCloudServiceUnregisterEvent;
 import de.teamholy.core.ping.HealthStatus;
 import de.teamholy.core.ping.HealthService;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) charon, All Rights Reserved
@@ -51,6 +49,13 @@ public class CloudMessageEvent {
         healthService.removePing(event.getServiceInfo().getServiceId().getName());
         healthService.getServiceInfoSnapshots().remove(event.getServiceInfo());
     }
+
+    @EventListener
+    public void onHandleServiceStart(CloudServiceUnregisterEvent event) {
+        healthService.removePing(event.getServiceInfo().getName());
+        healthService.getServiceInfoSnapshots().remove(event.getServiceInfo());
+    }
+
 
 
 }
