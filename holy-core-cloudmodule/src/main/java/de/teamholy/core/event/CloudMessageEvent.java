@@ -5,7 +5,10 @@ import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
 import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStopEvent;
 import de.dytanic.cloudnet.driver.event.events.service.CloudServiceUnregisterEvent;
+import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
+import de.dytanic.cloudnet.event.service.CloudServicePostStopEvent;
 import de.dytanic.cloudnet.ext.bridge.bukkit.event.BukkitCloudServiceUnregisterEvent;
+import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.ping.HealthStatus;
 import de.teamholy.core.ping.HealthService;
 
@@ -45,17 +48,25 @@ public class CloudMessageEvent {
     }
 
     @EventListener
-    public void onHandleServiceStop(CloudServiceStopEvent event) {
-        healthService.removePing(event.getServiceInfo().getServiceId().getName());
-        healthService.getServiceInfoSnapshots().remove(event.getServiceInfo());
+    public void handle(CloudServiceStopEvent event) {
+        removedFromCache(event.getServiceInfo());
     }
 
     @EventListener
-    public void onHandleServiceStart(CloudServiceUnregisterEvent event) {
-        healthService.removePing(event.getServiceInfo().getName());
-        healthService.getServiceInfoSnapshots().remove(event.getServiceInfo());
+    public void handle(CloudServicePostStopEvent event) {
+        removedFromCache(event.getCloudService().getServiceInfoSnapshot());
     }
 
+    @EventListener
+    public void handle(CloudServiceUnregisterEvent event) {
+        removedFromCache(event.getServiceInfo());
+    }
+
+    private void removedFromCache(ServiceInfoSnapshot serviceInfoSnapshot) {
+        String serviceName = serviceInfoSnapshot.getServiceId().getName();
+        healthService.getServiceInfoSnapshots().removeIf(snapshot -> snapshot.getName().startsWith(serviceName));
+        healthService.getPingMap().remove(serviceName);
+    }
 
 
 }

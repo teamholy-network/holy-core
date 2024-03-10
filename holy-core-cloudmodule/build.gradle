@@ -5,6 +5,7 @@ dependencies {
 
     compileOnly ("de.dytanic.cloudnet:cloudnet:$cloudnetVersion")
     compileOnly ("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
+    compileOnly ("de.dytanic.cloudnet:cloudnet-driver:$cloudnetVersion")
 
     implementation(project(':holy-core-api'))
 }
