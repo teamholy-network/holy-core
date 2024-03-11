@@ -130,35 +130,34 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerHandshakeEvent event) {
-        if (event.getHandshake().getRequestedProtocol() == 2) {
-            String hostname = event.getHandshake().getHost().toLowerCase(Locale.ROOT);
-            CrackedProfiles profile = getCrackedProfile(event.getConnection());
-            iphostname.put(event.getConnection().getAddress().getAddress().getHostAddress(), hostname);
-            if (hostname.contains("premium")) {
-                event.getConnection().setOnlineMode(true);
-                profile.setPremium(true);
-                return;
-            } else if (hostname.contains("cracked")) {
-                event.getConnection().setOnlineMode(false);
-                profile.setPremium(false);
-                return;
-            } else if (hostname.contains("bedrock")) {
-                event.getConnection().setOnlineMode(false);
-                profile.setBedrock(true);
-                return;
-            }
-            if (event.getConnection().isOnlineMode()) {
-                event.getConnection().setOnlineMode(true);
-                System.out.println("Online Mode");
-            } else {
-                event.getConnection().setOnlineMode(profile.isPremium());
-                System.out.println("Offline Mode - " + profile.isPremium());
-            }
-            if (profile.isPremium()) {
-                profile.setPremium(false);
-            }
-
+        if (event.getHandshake().getRequestedProtocol() != 2) return;
+        String hostname = event.getHandshake().getHost().toLowerCase(Locale.ROOT);
+        CrackedProfiles profile = getCrackedProfile(event.getConnection());
+        iphostname.put(event.getConnection().getAddress().getAddress().getHostAddress(), hostname);
+        if (hostname.contains("premium")) {
+            event.getConnection().setOnlineMode(true);
+            profile.setPremium(true);
+            return;
+        } else if (hostname.contains("cracked")) {
+            event.getConnection().setOnlineMode(false);
+            profile.setPremium(false);
+            return;
+        } else if (hostname.contains("bedrock")) {
+            event.getConnection().setOnlineMode(false);
+            profile.setBedrock(true);
+            return;
         }
+        if (event.getConnection().isOnlineMode()) {
+            event.getConnection().setOnlineMode(true);
+            System.out.println("Online Mode");
+        } else {
+            event.getConnection().setOnlineMode(profile.isPremium());
+            System.out.println("Offline Mode - " + profile.isPremium());
+        }
+        if (profile.isPremium()) {
+            profile.setPremium(false);
+        }
+
     }
 
     @EventHandler
@@ -251,50 +250,51 @@ public class EventListener implements Listener {
                     object.setPremium(!profile.isBedrock());
                     object.setBedrock(profile.isBedrock());
                     object.setUuid(player.getUniqueId());
-                    object.setIps(new HashMap<String, Long>());
+                    object.setIps(new HashMap<>());
                 }
 
                 object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
                 BungeeLogin.setiphostname(player, object);
                 repo.save(object);
-            } else {
-                PlayerObject object = new PlayerObject();
-                object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
-                object.setName(name);
-                object.setPremium(!profile.isBedrock());
-                object.setBedrock(profile.isBedrock());
-                object.setUuid(player.getUniqueId());
-                BungeeLogin.setiphostname(player, object);
-                repo.save(object);
-            }
-        });
-
-    }
-
-    @EventHandler
-    public void onChat(ChatEvent event) {
-        Connection sender = event.getSender();
-
-        if (sender instanceof ProxiedPlayer player) {
-            if (CaptchaManager.getInstance().getCapcha(player).isPresent()) {
-                event.setCancelled(true);
                 return;
             }
 
+            PlayerObject object = new PlayerObject();
+            object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
+            object.setName(name);
+            object.setPremium(!profile.isBedrock());
+            object.setBedrock(profile.isBedrock());
+            object.setUuid(player.getUniqueId());
+            BungeeLogin.setiphostname(player, object);
+            repo.save(object);
+    });
 
-            System.out.println("Chat is player");
-        }
+}
 
-        if (!loggedin.contains(sender)) {
-            String message = event.getMessage().toLowerCase(Locale.ROOT);
-            if (message.startsWith("/login ")) {
-                return;
-            }
-            if (message.startsWith("/register ")) {
-                return;
-            }
+@EventHandler
+public void onChat(ChatEvent event) {
+    Connection sender = event.getSender();
+
+    if (sender instanceof ProxiedPlayer player) {
+        if (CaptchaManager.getInstance().getCapcha(player).isPresent()) {
             event.setCancelled(true);
+            return;
         }
 
+
+        System.out.println("Chat is player");
     }
+
+    if (!loggedin.contains(sender)) {
+        String message = event.getMessage().toLowerCase(Locale.ROOT);
+        if (message.startsWith("/login ")) {
+            return;
+        }
+        if (message.startsWith("/register ")) {
+            return;
+        }
+        event.setCancelled(true);
+    }
+
+}
 }
