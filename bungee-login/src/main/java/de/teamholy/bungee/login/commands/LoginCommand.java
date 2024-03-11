@@ -21,37 +21,35 @@ public class LoginCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (sender instanceof ProxiedPlayer) {
-            ProxiedPlayer player = (ProxiedPlayer) sender;
+        if (!(sender instanceof ProxiedPlayer player)) return;
 
-            if (BungeeLogin.loggedin.contains(player)) return;
-            
-            if (CaptchaManager.getInstance().getCapcha(player).isPresent()) {
-                player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cYou have to Solve the Captcha first to Register your Account"));
-                CaptchaManager.getInstance().getCapcha(player).ifPresent(captcha -> {
-                    player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + captcha.link));
-                });
-            	return;
-            }
-            
-            if (args.length < 1) {
+        if (BungeeLogin.loggedin.contains(player)) return;
+
+        if (CaptchaManager.getInstance().getCapcha(player).isPresent()) {
+            player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cYou have to Solve the Captcha first to Register your Account"));
+            CaptchaManager.getInstance().getCapcha(player).ifPresent(captcha -> player
+                .sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + captcha.link)));
+            return;
+        }
+
+        if (args.length < 1) {
+            player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cWrong Password"));
+            return;
+        }
+
+        TaskAPI.runAsync(() -> {
+            PlayerConnectRepository repo = BungeeLogin.repo;
+
+            String hashedpassword = repo.findFirstById(player.getName().toLowerCase(Locale.ROOT)).getPasswordhash();
+
+            if (!hashedpassword.equals(BungeeLogin.hash(args[0]))) {
                 player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cWrong Password"));
                 return;
             }
-			TaskAPI.runAsync(() -> {
-	            PlayerConnectRepository repo = BungeeLogin.repo;
-	
-	            String hashedpassword = repo.findFirstById(player.getName().toLowerCase(Locale.ROOT)).getPasswordhash();
-	
-	            if (!hashedpassword.equals(BungeeLogin.hash(args[0]))) {
-	                player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cWrong Password"));
-	                return;
-	            }
-	            
-	            BotManager.loggin();
 
-                BungeeLogin.login(player);
-			});
-        }
+            BotManager.loggin();
+
+            BungeeLogin.login(player);
+        });
     }
 }

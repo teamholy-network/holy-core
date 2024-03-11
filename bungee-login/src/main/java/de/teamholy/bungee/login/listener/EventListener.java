@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.teamholy.bungee.login.BungeeLogin;
 import de.teamholy.bungee.login.api.TaskAPI;
+import de.teamholy.bungee.login.filter.NameFilter;
 import de.teamholy.bungee.login.manager.BotManager;
 import de.teamholy.bungee.login.manager.CaptchaManager;
 import de.teamholy.bungee.login.model.CrackedProfiles;
@@ -18,11 +19,11 @@ import de.teamholy.bungee.login.repositories.PlayerConnectRepository;
 import de.teamholy.bungee.login.util.UUIDUtility;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
-import de.teamholy.login.filter.NameFilter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.*;
@@ -40,20 +41,23 @@ public class EventListener implements Listener {
 
     Set<ProxiedPlayer> loggedin = BungeeLogin.loggedin;
 
+    private final String alreadyRegistered = """
+        §cThis name is registered as a §6§lPremium §7user
+         §cChange your name to play on §6Team§fHoly
+         §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de\s
+        §7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support""";
+
 
     public EventListener() {
 
-
-        ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () -> {
+        ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () ->
             crackedipnames.forEach((key, value) -> {
                 if (value.getTime() < System.currentTimeMillis() - 20000) {
                     crackedipnames.remove(key);
                 }
-            });
-        }, 1, 1, TimeUnit.SECONDS);
-        ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () -> {
-            iphostname.clear();
-        }, 3, 3, TimeUnit.HOURS);
+            }), 1, 1, TimeUnit.SECONDS);
+        ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () ->
+            iphostname.clear(), 3, 3, TimeUnit.HOURS);
     }
 
     public CrackedProfiles getCrackedProfile(PendingConnection user) {
@@ -76,54 +80,39 @@ public class EventListener implements Listener {
             event.setCancelReason(text);
             event.getConnection().disconnect(text);
         }
-
-
     }
 
     @EventHandler
     public void onHandle(LoginEvent event) {
         PendingConnection pendingConnection = event.getConnection();
         String name = pendingConnection.getName();
-        if (!containsLoggedIn(name)) {
-            if (!pendingConnection.isOnlineMode() && !UUIDUtility.isBedrock(pendingConnection.getUniqueId(), name)) {
-                TaskAPI.runAsync(() -> {
-                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
+        if (containsLoggedIn(name)) return;
 
-                    if (playerProfile != null && !playerProfile.getPlayerId().equals(pendingConnection.getUniqueId())) {
-                        event.setCancelled(true);
+        if (pendingConnection.isOnlineMode() || UUIDUtility.isBedrock(pendingConnection.getUniqueId(), name)) return;
 
-                        String alreadyRegistered = "§cThis name is registered as a §6§lPremium §7user" +
-                            "\n §cChange your name to play on §6Team§fHoly" +
-                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                            "\n" +
-                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
+        TaskAPI.runAsync(() -> {
+            PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
 
-                        if (repo.existsById(name)) {
-                            PlayerObject object = repo.findFirstById(name);
+            if (playerProfile == null || playerProfile.getPlayerId().equals(pendingConnection.getUniqueId())) return;
+            event.setCancelled(true);
 
-                            if (object.isPremium()) {
-                                event.setCancelled(true);
-                                pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-                                return;
-                            }
-                        }
-                        if (UUIDUtility.isCracked(pendingConnection.getUniqueId(), name)) {
-                            if (UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) {
-                                event.setCancelled(true);
-                                pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-                                return;
-                            }
-                        }
+            if (existsByName(name)) {
+                PlayerObject object = repo.findFirstById(name);
 
-
-//                        event.setCancelReason(TextComponent.fromLegacyText(alreadyRegistered));
-                        //                      pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-
-                        //                    System.out.println("Cancelled login for " + name + " because of already registered");
-                    }
-                });
+                if (object.isPremium()) {
+                    event.setCancelled(true);
+                    pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
+                    return;
+                }
             }
-        }
+
+            if (UUIDUtility.isCracked(pendingConnection.getUniqueId(), name)) {
+                if (!UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) return;
+                event.setCancelled(true);
+                pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
+            }
+        });
+
     }
 
     private boolean containsLoggedIn(String name) {
@@ -133,6 +122,10 @@ public class EventListener implements Listener {
             }
         }
         return false;
+    }
+
+    private boolean existsByName(String name) {
+        return repo.existsById(name);
     }
 
     @EventHandler
@@ -172,119 +165,117 @@ public class EventListener implements Listener {
     public void onLogin(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         String name = player.getName().toLowerCase(Locale.ROOT);
-        if (!loggedin.contains(player)) {
-            CrackedProfiles profile = getCrackedProfile(player.getPendingConnection());
+        if (loggedin.contains(player)) return;
+        CrackedProfiles profile = getCrackedProfile(player.getPendingConnection());
 
-            if (!player.getPendingConnection().isOnlineMode() && !UUIDUtility.isBedrock(player.getUniqueId(), player.getName())) {
-                ServerInfo info = ProxyServer.getInstance().constructServerInfo("login-limbo", new InetSocketAddress("127.0.0.1", 65535), "", false);
-                event.setTarget(info);
-                TaskAPI.runAsync(() -> {
-                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
+        if (!player.getPendingConnection().isOnlineMode() && !UUIDUtility.isBedrock(player.getUniqueId(), player.getName())) {
+            ServerInfo info = ProxyServer.getInstance().constructServerInfo("login-limbo", new InetSocketAddress("127.0.0.1", 65535), "", false);
+            event.setTarget(info);
+            TaskAPI.runAsync(() -> {
+                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
 
-                    if (playerProfile != null) {
-                        String alreadyRegistered = "§cThis name is registered as a §6§lPremium §7user" +
-                            "\n §cChange your name to play on §6Team§fHoly" +
-                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                            "\n" +
-                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
-
-                        if (repo.existsById(name)) {
-                            PlayerObject object = repo.findFirstById(name);
-
-                            if (object.isPremium()) {
-                                event.setCancelled(true);
-                                player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-                                return;
-                            }
-                        }
-                        if (UUIDUtility.isCracked(player.getUniqueId(), name)) {
-                            if (UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) {
-                                event.setCancelled(true);
-                                player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-                                return;
-                            }
-                        }
-                    }
-
-                    if (repo.existsById(name)) {
+                if (playerProfile != null) {
+                    if (existsByName(name)) {
                         PlayerObject object = repo.findFirstById(name);
 
                         if (object.isPremium()) {
                             event.setCancelled(true);
-
-                            player.disconnect(TextComponent.fromLegacyText(
-                                "§cThis name is registered as a §6§lPremium §7user" +
-                                    "\n §cChange your name to play on §6Team§fHoly" +
-                                    "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                                    "\n" +
-                                    "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support"));
+                            player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
                             return;
                         }
-                        for (Entry<String, Long> entry : object.getIps().entrySet()) {
-                            if (entry.getValue() > System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 2) {
-                                if (player.getAddress().getAddress().getHostAddress().equals(entry.getKey())) {
-                                    BungeeLogin.login(player);
-                                    return;
-                                }
-                            }
-                        }
-
-                    } else {
-                        PlayerObject object = new PlayerObject();
-                        object.setName(name);
-                        object.setUuid(player.getUniqueId());
-                        object.setPremium(false);
-                        BungeeLogin.setiphostname(player, object);
-                        repo.save(object);
                     }
+                    if (UUIDUtility.isCracked(player.getUniqueId(), name)) {
+                        if (UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) {
+                            event.setCancelled(true);
+                            player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
+                            return;
+                        }
+                    }
+                }
 
+                if (existsByName(name)) {
                     PlayerObject object = repo.findFirstById(name);
-                    if (object.getPasswordhash() == null) {
-                        if (BotManager.isBotProtectionEnableRegister()) {
-                            CaptchaManager.getInstance().createCaptcha(player);
-                        }
-                        player.sendMessage(BungeeLogin.PREFIX + "/register (password) (password)");
-                    } else {
-                        if (BotManager.isBotProtectionEnableLogin()) {
-                            CaptchaManager.getInstance().createCaptcha(player);
-                        }
-                        player.sendMessage(BungeeLogin.PREFIX + "/login (password)");
-                    }
-                });
-            } else {
-                TaskAPI.runAsync(() -> {
-                    profile.setPremium(true);
-                    loggedin.add(player);
-                    if (repo.existsById(name)) {
-                        PlayerObject object = repo.findFirstById(name);
-                        if (!object.isPremium()) {
-                            object.setPremium(!profile.isBedrock());
-                            object.setBedrock(profile.isBedrock());
-                            object.setUuid(player.getUniqueId());
-                            object.setIps(new HashMap<String, Long>());
-                        }
 
-                        object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
-                        BungeeLogin.setiphostname(player, object);
-                        repo.save(object);
-                    } else {
-                        PlayerObject object = new PlayerObject();
-                        object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
-                        object.setName(name);
-                        object.setPremium(!profile.isBedrock());
-                        object.setBedrock(profile.isBedrock());
-                        object.setUuid(player.getUniqueId());
-                        BungeeLogin.setiphostname(player, object);
-                        repo.save(object);
+                    if (object.isPremium()) {
+                        event.setCancelled(true);
+
+                        player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
+                        return;
                     }
-                });
-            }
+                    for (Entry<String, Long> entry : object.getIps().entrySet()) {
+                        if (entry.getValue() < System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 2) continue;
+
+                        if (player.getAddress().getAddress().getHostAddress().equals(entry.getKey())) {
+                            BungeeLogin.login(player);
+                            return;
+                        }
+                    }
+
+                } else {
+                    PlayerObject object = new PlayerObject();
+                    object.setName(name);
+                    object.setUuid(player.getUniqueId());
+                    object.setPremium(false);
+                    BungeeLogin.setiphostname(player, object);
+                    repo.save(object);
+                }
+
+                PlayerObject object = repo.findFirstById(name);
+                if (object.getPasswordhash() == null) {
+                    if (BotManager.isBotProtectionEnableRegister()) {
+                        CaptchaManager.getInstance().createCaptcha(player);
+                    }
+                    player.sendMessage(BungeeLogin.PREFIX + "/register (password) (password)");
+                } else {
+                    if (BotManager.isBotProtectionEnableLogin()) {
+                        CaptchaManager.getInstance().createCaptcha(player);
+                    }
+                    player.sendMessage(BungeeLogin.PREFIX + "/login (password)");
+                }
+            });
+
+            return;
         }
+
+        TaskAPI.runAsync(() -> {
+            profile.setPremium(true);
+            loggedin.add(player);
+            if (existsByName(name)) {
+                PlayerObject object = repo.findFirstById(name);
+
+                if (object == null) {
+                    return;
+                }
+
+                if (!object.isPremium()) {
+                    object.setPremium(!profile.isBedrock());
+                    object.setBedrock(profile.isBedrock());
+                    object.setUuid(player.getUniqueId());
+                    object.setIps(new HashMap<String, Long>());
+                }
+
+                object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
+                BungeeLogin.setiphostname(player, object);
+                repo.save(object);
+            } else {
+                PlayerObject object = new PlayerObject();
+                object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
+                object.setName(name);
+                object.setPremium(!profile.isBedrock());
+                object.setBedrock(profile.isBedrock());
+                object.setUuid(player.getUniqueId());
+                BungeeLogin.setiphostname(player, object);
+                repo.save(object);
+            }
+        });
+
     }
 
     @EventHandler
     public void onChat(ChatEvent event) {
-        if (event.getSender() instanceof ProxiedPlayer player) {
+        Connection sender = event.getSender();
+
+        if (sender instanceof ProxiedPlayer player) {
             if (CaptchaManager.getInstance().getCapcha(player).isPresent()) {
                 event.setCancelled(true);
                 return;
@@ -294,7 +285,7 @@ public class EventListener implements Listener {
             System.out.println("Chat is player");
         }
 
-        if (!loggedin.contains(event.getSender())) {
+        if (!loggedin.contains(sender)) {
             String message = event.getMessage().toLowerCase(Locale.ROOT);
             if (message.startsWith("/login ")) {
                 return;

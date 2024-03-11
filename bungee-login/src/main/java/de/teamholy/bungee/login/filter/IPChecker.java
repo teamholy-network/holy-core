@@ -33,7 +33,7 @@ public class IPChecker {
 		scheduler.scheduleAtFixedRate(() -> {
 			threads.execute(() -> {
 				try {
-					RestAPIResponse ipcheckeralive = RestAPI.getInstance().get("http://ipcheck.skydb.de/alive");
+					RestAPIResponse ipcheckeralive = RestAPI.getINSTANCE().get("http://ipcheck.skydb.de/alive");
 					if (ipcheckeralive.getFailed()) {
 						serviceonline = false;
 					} else {
@@ -51,7 +51,7 @@ public class IPChecker {
 			return false;
 		}
 		if (serviceonline) {
-			RestAPIResponse isipresidental = RestAPI.getInstance().get("http://ipcheck.skydb.de/residental?ip=" + ip);
+			RestAPIResponse isipresidental = RestAPI.getINSTANCE().get("http://ipcheck.skydb.de/residental?ip=" + ip);
 			if (isipresidental.getFailed()) {
 				serviceonline = false;
 			} else {
@@ -68,7 +68,7 @@ public class IPChecker {
 
 	public IPCheckerResult getIPInfo(String ip) {
 		if (serviceonline) {
-			RestAPIResponse getIPInfo = RestAPI.getInstance().get("http://ipcheck.skydb.de/getinfo?ip=" + ip);
+			RestAPIResponse getIPInfo = RestAPI.getINSTANCE().get("http://ipcheck.skydb.de/getinfo?ip=" + ip);
 			if (getIPInfo.getFailed()) {
 				serviceonline = false;
 			} else {
