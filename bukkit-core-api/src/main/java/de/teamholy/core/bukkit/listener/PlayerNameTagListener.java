@@ -48,6 +48,7 @@ public class PlayerNameTagListener implements Listener {
 
         if (player.getName().equalsIgnoreCase("Gregorr")) {
             suffix = suffix + " §a☃";
+            event.setDisplaySuffix(" §c╭ᑎ╮");
         } else if (player.getName().equalsIgnoreCase("Yassino")) {
             suffix = suffix + " §2♫";
             event.setDisplaySuffix(" §2♫");
