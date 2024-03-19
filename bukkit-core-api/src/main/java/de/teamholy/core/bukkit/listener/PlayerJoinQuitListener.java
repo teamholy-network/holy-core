@@ -67,10 +67,12 @@ public class PlayerJoinQuitListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
 
-        Player player = event.getPlayer();
         event.setJoinMessage(null);
 
         bukkitCore.getCoreAPI().getExecutor().execute(() -> {
+
+            Player player = event.getPlayer();
+            if (player == null) return;
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
             ClanPlayerProfile clanPlayerProfile = BukkitCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
@@ -84,6 +86,7 @@ public class PlayerJoinQuitListener implements Listener {
                 (clanPlayerProfile == null ? null : bukkitCore.getCoreAPI().getClanManager().getClanById(clanPlayerProfile.getClanId())),
                 perkPlayerProfile
             );
+
 
             bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
 
