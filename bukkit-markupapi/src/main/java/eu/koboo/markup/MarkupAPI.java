@@ -15,6 +15,9 @@ import eu.koboo.markup.manager.TeamManager;
 import eu.koboo.markup.repository.NickProfilesRepository;
 import eu.koboo.markup.util.PlayerMeta;
 import eu.koboo.markup.util.PlayerPreset;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -27,16 +30,21 @@ import java.net.URLConnection;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MarkupAPI extends JavaPlugin {
 
     public static final String NICK_PREFIX = "§5Nick §8× §7";
 
     private static MarkupAPI api;
 
-    private NickManager nickManager;
-    private PresetManager presetManager;
-    private TeamManager teamManager;
-    private NickProfilesRepository nickProfilesRepository;
+    @Getter
+    NickManager nickManager;
+    @Getter
+    PresetManager presetManager;
+    @Getter
+    TeamManager teamManager;
+    @Getter
+    NickProfilesRepository nickProfilesRepository;
 
     public static void updateNameTag(Player player) {
         api.getTeamManager().announceUpdate(player);
@@ -122,22 +130,6 @@ public class MarkupAPI extends JavaPlugin {
     @Override
     public void onDisable() {
         nickManager.getPlayerMetaMap().forEach((uuid, playerMeta) -> Bukkit.getPluginManager().callEvent(new PlayerPostUnnickEvent(Bukkit.getPlayer(uuid),playerMeta)));
-    }
-
-    public NickManager getNickManager() {
-        return nickManager;
-    }
-
-    public PresetManager getPresetManager() {
-        return presetManager;
-    }
-
-    public TeamManager getTeamManager() {
-        return teamManager;
-    }
-
-    public NickProfilesRepository getNickProfilesRepository() {
-        return nickProfilesRepository;
     }
 
     private void handleCommandRegistration(String command, CommandExecutor executor) {
