@@ -72,7 +72,7 @@ public class PlayerJoinQuitListener implements Listener {
         bukkitCore.getCoreAPI().getExecutor().execute(() -> {
 
             Player player = event.getPlayer();
-            if (player == null) return;
+            if (player == null || !player.isOnline()) return;
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
             ClanPlayerProfile clanPlayerProfile = BukkitCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));

@@ -63,7 +63,6 @@ public class HealthService {
             if (serverInfo.getServiceId().getName().startsWith(name)) {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Saving logs and trying to kill...");
-
                     sendDiscordWebhook(name, "No link provided");
                     serviceInfoSnapshots.remove(serverInfo);
                     serverInfo.provider().kill();
