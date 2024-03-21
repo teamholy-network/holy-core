@@ -41,7 +41,7 @@ public class NPCBuilder {
         PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
         if (cachedBukkitPlayer != null) {
             cachedBukkitPlayer.getNpcPlayer().getNpcs().put(name,
-                    new NPCEntry(displayName, this.skin, location, maxSeeRange, maxTargetRange, looker, kickBack).setPlayer(player).addHolo(holoLines));
+                new NPCEntry(displayName, this.skin, location, maxSeeRange, maxTargetRange, looker, kickBack).setPlayer(player).addHolo(holoLines));
         }
-      }
+    }
 }

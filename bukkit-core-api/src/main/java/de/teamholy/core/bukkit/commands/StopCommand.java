@@ -14,7 +14,9 @@ public class StopCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!commandSender.hasPermission("teamholy.stop")) return false;
+        if (!commandSender.hasPermission("teamholy.stop")) {
+            return false;
+        }
 
         BukkitCore.RESTART = true;
 
@@ -38,7 +40,6 @@ public class StopCommand implements CommandExecutor {
                 i[0]--;
             }
         }.runTaskTimer(BukkitCore.getInstance(), 0, 20);
-
 
 
         return false;

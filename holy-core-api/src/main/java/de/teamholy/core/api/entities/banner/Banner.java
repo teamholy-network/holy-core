@@ -15,7 +15,6 @@ public class Banner {
     private ObjectId bannerId;
 
 
-
     private String id;
     private String name;
     private String baseColor;

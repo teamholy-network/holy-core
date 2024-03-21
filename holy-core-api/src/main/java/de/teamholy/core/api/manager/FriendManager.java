@@ -5,10 +5,12 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.friend.FriendProfile;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.*;
+import java.util.UUID;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -126,7 +128,6 @@ public class FriendManager {
         JsonDocument jsonDocument = new JsonDocument().append("player", player).append("target", target).append("type", message);
         coreAPI.getCloudManager().sendCloudMessage("bukkit", "friendrequest_update", jsonDocument);
     }
-
 
 
 }

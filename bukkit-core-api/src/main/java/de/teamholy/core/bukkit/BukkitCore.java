@@ -46,7 +46,6 @@ public class BukkitCore extends JavaPlugin {
     CloudMessageManager cloudMessageManager;
 
 
-
     CustomBannerManager customBannerManager;
     MetricsManager metricsManager;
     CoreAPI coreAPI;
@@ -103,13 +102,9 @@ public class BukkitCore extends JavaPlugin {
         protocolManager.addPacketListener(new TabCompleteListener(this, PacketType.Play.Client.TAB_COMPLETE));
 
 
-
         BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
             cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
         }, 0, 50);
-
-
-
 
 
     }

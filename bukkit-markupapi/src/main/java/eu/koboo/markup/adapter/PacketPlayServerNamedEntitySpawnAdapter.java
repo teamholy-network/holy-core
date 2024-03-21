@@ -29,16 +29,16 @@ public class PacketPlayServerNamedEntitySpawnAdapter extends PacketAdapter {
 
         if (playerMeta == null) return;
 
-            WrapperPlayServerNamedEntitySpawn newPacket = new WrapperPlayServerNamedEntitySpawn();
+        WrapperPlayServerNamedEntitySpawn newPacket = new WrapperPlayServerNamedEntitySpawn();
 
-            newPacket.setEntityID(packet.getEntityID());
-            newPacket.setPitch(packet.getPitch());
-            newPacket.setPlayerUUID(playerMeta.getNickUUID());
-            newPacket.setPosition(packet.getPosition());
-            newPacket.setYaw(packet.getYaw());
-            newPacket.setPitch(packet.getPitch());
+        newPacket.setEntityID(packet.getEntityID());
+        newPacket.setPitch(packet.getPitch());
+        newPacket.setPlayerUUID(playerMeta.getNickUUID());
+        newPacket.setPosition(packet.getPosition());
+        newPacket.setYaw(packet.getYaw());
+        newPacket.setPitch(packet.getPitch());
 
-            event.setPacket(newPacket.getHandle());
+        event.setPacket(newPacket.getHandle());
 
     }
 

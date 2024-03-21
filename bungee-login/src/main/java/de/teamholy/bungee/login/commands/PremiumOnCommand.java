@@ -12,35 +12,35 @@ import java.util.Locale;
 
 public class PremiumOnCommand extends Command {
 
-	public PremiumOnCommand(String name) {
-		super(name);
-	}
+    public PremiumOnCommand(String name) {
+        super(name);
+    }
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
-		if (sender instanceof ProxiedPlayer) {
-			ProxiedPlayer player = (ProxiedPlayer) sender;
-			if (!player.hasPermission("holylogin.premiumon")) {
-				player.sendMessage(TextComponent.fromLegacyText("§cKeine Rechte"));
-				return;
-			}
-			
-			if (args.length < 2) {
-				player.sendMessage(TextComponent.fromLegacyText("§c/setpremium <player> <yes/no>"));
-				return;
-			}
-			TaskAPI.runAsync(() -> {
-				String target = args[0].toLowerCase(Locale.ROOT);
-				if (BungeeLogin.repo.existsById(target)) {
-					PlayerObject object = BungeeLogin.repo.findFirstById(target);
-					object.setPremium(args[1].equalsIgnoreCase("yes"));
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if (sender instanceof ProxiedPlayer) {
+            ProxiedPlayer player = (ProxiedPlayer) sender;
+            if (!player.hasPermission("holylogin.premiumon")) {
+                player.sendMessage(TextComponent.fromLegacyText("§cKeine Rechte"));
+                return;
+            }
+
+            if (args.length < 2) {
+                player.sendMessage(TextComponent.fromLegacyText("§c/setpremium <player> <yes/no>"));
+                return;
+            }
+            TaskAPI.runAsync(() -> {
+                String target = args[0].toLowerCase(Locale.ROOT);
+                if (BungeeLogin.repo.existsById(target)) {
+                    PlayerObject object = BungeeLogin.repo.findFirstById(target);
+                    object.setPremium(args[1].equalsIgnoreCase("yes"));
                     BungeeLogin.repo.save(object);
-					player.sendMessage(TextComponent.fromLegacyText("§cDer Account von " + args[0] + " wurden auf Premium "+object.isPremium()+" gesetzt"));
-				} else {
-					player.sendMessage(TextComponent.fromLegacyText("§cDer Account " + args[0] + " wurde noch nicht registriert"));
-				}
-			});
-		}
-	}
+                    player.sendMessage(TextComponent.fromLegacyText("§cDer Account von " + args[0] + " wurden auf Premium " + object.isPremium() + " gesetzt"));
+                } else {
+                    player.sendMessage(TextComponent.fromLegacyText("§cDer Account " + args[0] + " wurde noch nicht registriert"));
+                }
+            });
+        }
+    }
 
 }

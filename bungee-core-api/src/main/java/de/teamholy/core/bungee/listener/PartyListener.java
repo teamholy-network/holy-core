@@ -30,7 +30,7 @@ public class PartyListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
 
         if (event.getFrom() != null && event.getFrom().getName().toLowerCase().contains("bw") && player.getServer().getInfo().getName().toLowerCase().contains("lobby")) {
-            BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit","cameFromBw", JsonDocument.newDocument("uuid",player.getUniqueId().toString()));
+            BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "cameFromBw", JsonDocument.newDocument("uuid", player.getUniqueId().toString()));
         }
 
         Party party = BungeeCore.getInstance().getPartyManager().getPartyByPlayerUUID(player.getUniqueId());

@@ -2,6 +2,9 @@ package de.teamholy.core.bungee.manager;
 
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.utility.DiscordWebhook;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.json.JSONObject;
 import org.redisson.api.RFuture;
@@ -13,14 +16,15 @@ import java.util.Scanner;
 
 import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProxyManager {
 
     CoreAPI coreAPI;
 
-    private final RListAsync<String> proxyCollection;
+    RListAsync<String> proxyCollection;
 
-    public final String kickMessage;
-
+    @Getter
+    String kickMessage;
 
     public ProxyManager(CoreAPI coreAPI) {
         this.coreAPI = coreAPI;
@@ -58,14 +62,10 @@ public class ProxyManager {
 
                 callback.onResult(isProxy, countryName, org);
 
-
                 scanner.close();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         });
     }
 
@@ -82,14 +82,10 @@ public class ProxyManager {
 
                 callback.onResult(stringBuilder.toString().contains("false"));
 
-
                 scanner.close();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         });
     }
 
@@ -109,15 +105,11 @@ public class ProxyManager {
                 String asn = asnInt == -1 ? "" : String.valueOf(asnInt);
 
                 callback.onResult(asn);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
-
-
-
 
     public interface ContainsProxyCallback {
         void onResult(boolean isProxy, String countryName, String org);
@@ -135,9 +127,7 @@ public class ProxyManager {
         return "§cYou got kicked from the network! §7[§cError: 403§7]\n\n§7If nothing is wrong with your connection, please just open a ticket on our Discord.";
     }
 
-
     public void sendProxyWarning(ProxiedPlayer proxiedPlayer, String proxy) {
-
         coreAPI.getExecutor().execute(() -> {
             checkProxy(proxy, (isProxy, countryName, org) -> {
                     DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1071587864330125372/hvtEqts6aBI7wTWq5DUp13QiWD9byAU-XGEN8hJTsAv1PyEl4tITwSO9kxgADkcMsCC6");
@@ -152,19 +142,14 @@ public class ProxyManager {
                             .setThumbnail("https://minotar.net/helm/" + proxiedPlayer.getUniqueId().toString() + "/100.png")
                             .setColor(Color.orange)
                             .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png")
-
                     );
-
                     webhook.execute();
                 }
-
             );
-
         });
     }
 
     public void sendAsnWarning(ProxiedPlayer proxiedPlayer, String proxy, String asn) {
-
         coreAPI.getExecutor().execute(() -> {
             checkProxy(proxy, (isProxy, countryName, org) -> {
                     DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1071587864330125372/hvtEqts6aBI7wTWq5DUp13QiWD9byAU-XGEN8hJTsAv1PyEl4tITwSO9kxgADkcMsCC6");
@@ -181,14 +166,10 @@ public class ProxyManager {
                             .setThumbnail("https://minotar.net/helm/" + proxiedPlayer.getUniqueId().toString() + "/100.png")
                             .setColor(Color.orange)
                             .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png")
-
                     );
-
                     webhook.execute();
                 }
-
             );
-
         });
     }
 }

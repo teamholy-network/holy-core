@@ -60,7 +60,7 @@ public class MarkupAPI extends JavaPlugin {
     }
 
     public static void changeSkin(Player player, String value, String signature) {
-        api.getNickManager().apply(player, player.getName(), player.getUniqueId(), new Property("textures",value,signature));
+        api.getNickManager().apply(player, player.getName(), player.getUniqueId(), new Property("textures", value, signature));
     }
 
     public static void unnick(Player player) {
@@ -127,12 +127,12 @@ public class MarkupAPI extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        nickManager.getPlayerMetaMap().forEach((uuid, playerMeta) -> Bukkit.getPluginManager().callEvent(new PlayerPostUnnickEvent(Bukkit.getPlayer(uuid),playerMeta)));
+        nickManager.getPlayerMetaMap().forEach((uuid, playerMeta) -> Bukkit.getPluginManager().callEvent(new PlayerPostUnnickEvent(Bukkit.getPlayer(uuid), playerMeta)));
     }
 
     private void handleCommandRegistration(String command, CommandExecutor executor) {
         String key = "register-cmd-" + command;
-        if(getConfig().contains(key) && getConfig().getBoolean(key)) {
+        if (getConfig().contains(key) && getConfig().getBoolean(key)) {
             getCommand(command).setExecutor(executor);
         }
     }

@@ -33,7 +33,7 @@ public class TopHolo {
     private static final String TOP_10_HEADER_FOOTER = "§8§m----------§f§lTOP 10§8§m----------";
     private static final String EMPTY_PLAYER_LINE = "§7-/-";
 
-    private final HashMap<StatsType, HashMap<Integer,TopPlayer>> top = new HashMap<>();
+    private final HashMap<StatsType, HashMap<Integer, TopPlayer>> top = new HashMap<>();
 
     public TopHolo(Location location, Gamemodes gamemode, ItemStack itemStack) {
         for (StatsType value : StatsType.values()) {
@@ -54,7 +54,6 @@ public class TopHolo {
                 player.playSound(player.getLocation(), Sound.CLICK, 1, 100);
 
 
-
                 switch (statsType) {
                     case DAILY -> statsType = StatsType.ALLTIME;
                     case MONTHLY -> statsType = StatsType.DAILY;
@@ -71,7 +70,7 @@ public class TopHolo {
                 top.put(value, refreshTop(value));
             }
 
-            Bukkit.getScheduler().runTask(BukkitCore.getInstance(),() -> updateHologram(StatsType.ALLTIME));
+            Bukkit.getScheduler().runTask(BukkitCore.getInstance(), () -> updateHologram(StatsType.ALLTIME));
         }, 10, 20 * 60 * 5);
     }
 
@@ -80,7 +79,7 @@ public class TopHolo {
         TextLine textLine = (TextLine) hologram.getLine(1);
         textLine.setText(TOP_10_HEADER_FOOTER);
         for (int i = 2; i <= 11; i++) {
-            TopPlayer topPlayer = top.get(statsType).get(i -1);
+            TopPlayer topPlayer = top.get(statsType).get(i - 1);
             int value = (int) Math.round(topPlayer.value);
             textLine = (TextLine) hologram.getLine(i);
             if (topPlayer != null) {
@@ -116,11 +115,11 @@ public class TopHolo {
         scoredSortedSet.entryRangeReversed(0, 9).forEach((entry) -> {
             ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) entry;
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(scoredEntry.getValue(),
-                    () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(scoredEntry.getValue()));
+                () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(scoredEntry.getValue()));
 
             int rank = top.size() + 1;
 
-            top.put(rank, new TopPlayer(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(),scoredEntry.getScore(), rank));
+            top.put(rank, new TopPlayer(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), scoredEntry.getScore(), rank));
         });
 
         return top;

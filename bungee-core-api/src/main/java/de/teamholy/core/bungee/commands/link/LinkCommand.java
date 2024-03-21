@@ -9,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class LinkCommand extends Command {
 
     LinkManager linkManager;
+
     public LinkCommand(String name) {
         super(name);
         linkManager = BungeeCore.getInstance().getLinkManager();
@@ -34,12 +35,10 @@ public class LinkCommand extends Command {
             return;
         }
 
-
         if (linkManager.playerLinked(player)) {
             player.sendMessage("§6Web §8× §7You are already linked!");
             return;
         }
-
 
         String linkCode = linkManager.getPlayerLinkCode(player);
 
@@ -49,9 +48,5 @@ public class LinkCommand extends Command {
         }
 
         linkManager.sendLinkMessageToPlayer(player, linkCode);
-
-
-
-
     }
 }

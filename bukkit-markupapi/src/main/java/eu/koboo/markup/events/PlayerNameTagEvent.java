@@ -56,9 +56,13 @@ public class PlayerNameTagEvent extends Event {
         this.suffix = suffix;
     }
 
-    public String getDisplaySuffix() {return displaySuffix;}
+    public String getDisplaySuffix() {
+        return displaySuffix;
+    }
 
-    public void setDisplaySuffix(String displaySuffix) {this.displaySuffix = displaySuffix;}
+    public void setDisplaySuffix(String displaySuffix) {
+        this.displaySuffix = displaySuffix;
+    }
 
     @Override
     public HandlerList getHandlers() {

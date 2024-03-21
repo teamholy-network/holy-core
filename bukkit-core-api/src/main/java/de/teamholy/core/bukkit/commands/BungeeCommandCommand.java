@@ -21,7 +21,7 @@ public class BungeeCommandCommand implements CommandExecutor {
                 stringBuilder.append(strings[a] + " ");
             }
         }
-        BukkitCore.getAPI().getCloudManager().sendCloudMessage("command","command", JsonDocument.newDocument("command",stringBuilder.toString()));
+        BukkitCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("command", stringBuilder.toString()));
 
         return false;
     }

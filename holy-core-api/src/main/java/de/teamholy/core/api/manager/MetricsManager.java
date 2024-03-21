@@ -7,8 +7,8 @@ import lombok.experimental.FieldDefaults;
 import org.redisson.api.RMap;
 import org.redisson.codec.JsonJacksonCodec;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
 public class MetricsManager {

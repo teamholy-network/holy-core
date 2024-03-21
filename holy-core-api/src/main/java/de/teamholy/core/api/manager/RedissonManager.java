@@ -4,7 +4,6 @@ import de.teamholy.core.api.CoreAPI;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
 import org.jetbrains.annotations.NotNull;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

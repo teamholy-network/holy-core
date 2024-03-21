@@ -7,7 +7,7 @@ import de.teamholy.core.bukkit.BukkitCore;
 
 import java.lang.management.ManagementFactory;
 
-public class CloudMessageManager  {
+public class CloudMessageManager {
 
     private BukkitCore bukkitCore;
 
@@ -43,7 +43,6 @@ public class CloudMessageManager  {
             OperatingSystemMXBean.class);
         return osBean.getProcessCpuLoad() * 100;
     }
-
 
 
 }

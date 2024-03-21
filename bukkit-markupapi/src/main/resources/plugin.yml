@@ -4,7 +4,7 @@ author: Koboo
 main: eu.koboo.markup.MarkupAPI
 depend: [ ProtocolLib ]
 commands:
-  hardnick:
-  nick:
-  nicklist:
-  reloadpresets:
+    hardnick:
+    nick:
+    nicklist:
+    reloadpresets:

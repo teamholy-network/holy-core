@@ -7,15 +7,12 @@ import org.bukkit.event.HandlerList;
 /* copyright by Yassino */
 public class CachedPlayerJoinEvent extends Event {
 
-
     private static final HandlerList handlers = new HandlerList();
     private final PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer;
 
     public CachedPlayerJoinEvent(PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer) {
         this.cachedBukkitPlayer = cachedBukkitPlayer;
     }
-
-
 
     public HandlerList getHandlers() {
         return handlers;

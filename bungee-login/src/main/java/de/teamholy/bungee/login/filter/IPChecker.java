@@ -11,72 +11,72 @@ import java.util.concurrent.*;
 
 public class IPChecker {
 
-	@Setter
+    @Setter
     @Getter
     private static IPChecker Instance = new IPChecker();
 
-	@Getter
-	private boolean serviceonline = false;
+    @Getter
+    private boolean serviceonline = false;
 
-	Set<String> badips = ConcurrentHashMap.newKeySet();
+    Set<String> badips = ConcurrentHashMap.newKeySet();
 
-	ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-	ExecutorService threads = Executors.newCachedThreadPool();
+    ExecutorService threads = Executors.newCachedThreadPool();
 
-	public IPChecker() {
-		scheduler.scheduleAtFixedRate(() -> {
-			threads.execute(() -> {
-				try {
-					RestAPIResponse ipcheckeralive = RestAPI.getInstance().get("http://ipcheck.skydb.de/alive");
-					if (ipcheckeralive.getFailed()) {
-						serviceonline = false;
-					} else {
-						serviceonline = true;
-					}
-					Thread.sleep(60000);
-				} catch (Exception e) {
-				}
-			});
-		}, 0, 1, TimeUnit.MINUTES);
-	}
+    public IPChecker() {
+        scheduler.scheduleAtFixedRate(() -> {
+            threads.execute(() -> {
+                try {
+                    RestAPIResponse ipcheckeralive = RestAPI.getInstance().get("http://ipcheck.skydb.de/alive");
+                    if (ipcheckeralive.getFailed()) {
+                        serviceonline = false;
+                    } else {
+                        serviceonline = true;
+                    }
+                    Thread.sleep(60000);
+                } catch (Exception e) {
+                }
+            });
+        }, 0, 1, TimeUnit.MINUTES);
+    }
 
-	public boolean isipresidental(String ip) {
-		if (badips.contains(ip)) {
-			return false;
-		}
-		if (serviceonline) {
-			RestAPIResponse isipresidental = RestAPI.getInstance().get("http://ipcheck.skydb.de/residental?ip=" + ip);
-			if (isipresidental.getFailed()) {
-				serviceonline = false;
-			} else {
-				if (isipresidental.getText().contains("false")) {
-					badips.add(ip);
-					return false;
-				} else {
-					return true;
-				}
-			}
-		}
-		return true;
-	}
+    public boolean isipresidental(String ip) {
+        if (badips.contains(ip)) {
+            return false;
+        }
+        if (serviceonline) {
+            RestAPIResponse isipresidental = RestAPI.getInstance().get("http://ipcheck.skydb.de/residental?ip=" + ip);
+            if (isipresidental.getFailed()) {
+                serviceonline = false;
+            } else {
+                if (isipresidental.getText().contains("false")) {
+                    badips.add(ip);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
 
-	public IPCheckerResult getIPInfo(String ip) {
-		if (serviceonline) {
-			RestAPIResponse getIPInfo = RestAPI.getInstance().get("http://ipcheck.skydb.de/getinfo?ip=" + ip);
-			if (getIPInfo.getFailed()) {
-				serviceonline = false;
-			} else {
-				Gson gson = new Gson();
-				return gson.fromJson(getIPInfo.getText(), IPCheckerResult.class);
-			}
+    public IPCheckerResult getIPInfo(String ip) {
+        if (serviceonline) {
+            RestAPIResponse getIPInfo = RestAPI.getInstance().get("http://ipcheck.skydb.de/getinfo?ip=" + ip);
+            if (getIPInfo.getFailed()) {
+                serviceonline = false;
+            } else {
+                Gson gson = new Gson();
+                return gson.fromJson(getIPInfo.getText(), IPCheckerResult.class);
+            }
 
-		}
-		return null;
-	}
+        }
+        return null;
+    }
 
-	public void start(Runnable run, long time) {
-		scheduler.schedule(() -> threads.execute(run) , time, TimeUnit.MILLISECONDS);
-	}
+    public void start(Runnable run, long time) {
+        scheduler.schedule(() -> threads.execute(run), time, TimeUnit.MILLISECONDS);
+    }
 
 }

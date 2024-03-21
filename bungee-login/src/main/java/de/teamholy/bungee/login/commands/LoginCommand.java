@@ -25,33 +25,33 @@ public class LoginCommand extends Command {
             ProxiedPlayer player = (ProxiedPlayer) sender;
 
             if (BungeeLogin.loggedin.contains(player)) return;
-            
+
             if (CaptchaManager.getInstance().getCapcha(player).isPresent()) {
                 player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cYou have to Solve the Captcha first to Register your Account"));
                 CaptchaManager.getInstance().getCapcha(player).ifPresent(captcha -> {
                     player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + captcha.link));
                 });
-            	return;
+                return;
             }
-            
+
             if (args.length < 1) {
                 player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cWrong Password"));
                 return;
             }
-			TaskAPI.runAsync(() -> {
-	            PlayerConnectRepository repo = BungeeLogin.repo;
-	
-	            String hashedpassword = repo.findFirstById(player.getName().toLowerCase(Locale.ROOT)).getPasswordhash();
-	
-	            if (!hashedpassword.equals(BungeeLogin.hash(args[0]))) {
-	                player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cWrong Password"));
-	                return;
-	            }
-	            
-	            BotManager.loggin();
+            TaskAPI.runAsync(() -> {
+                PlayerConnectRepository repo = BungeeLogin.repo;
+
+                String hashedpassword = repo.findFirstById(player.getName().toLowerCase(Locale.ROOT)).getPasswordhash();
+
+                if (!hashedpassword.equals(BungeeLogin.hash(args[0]))) {
+                    player.sendMessage(TextComponent.fromLegacyText(BungeeLogin.PREFIX + "§cWrong Password"));
+                    return;
+                }
+
+                BotManager.loggin();
 
                 BungeeLogin.login(player);
-			});
+            });
         }
     }
 }

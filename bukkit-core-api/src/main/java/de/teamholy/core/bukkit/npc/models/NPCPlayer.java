@@ -7,7 +7,8 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 /* copyright by Yassino */
-@Getter @Setter
+@Getter
+@Setter
 public class NPCPlayer {
 
     private HashMap<String, NPCEntry> npcs;

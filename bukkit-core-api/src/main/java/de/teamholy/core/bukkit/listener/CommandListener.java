@@ -18,7 +18,7 @@ public class CommandListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, bukkitCore);
     }
 
-    public static String[] blockedCommands = {"holograms","pl","plugins","tell","me","?","about","icanhasbukkit","ver","version","help"};
+    public static String[] blockedCommands = {"holograms", "pl", "plugins", "tell", "me", "?", "about", "icanhasbukkit", "ver", "version", "help"};
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {

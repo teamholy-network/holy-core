@@ -14,10 +14,10 @@ public class StatsManager {
 
     public void addStat(String game, String key, UUID uuid) {
         GameProfile gameProfile = BukkitCore.getAPI().getGameService().getEntity(uuid, () -> BukkitCore.getAPI().getGameService().getRepository().findFirstById(uuid));
-            gameProfile.addStat(game, StatsType.DAILY, key, 1);
-            gameProfile.addStat(game, StatsType.MONTHLY, key, 1);
-            gameProfile.addStat(game, StatsType.ALLTIME, key, 1);
-            BukkitCore.getAPI().getGameService().saveEntity(gameProfile, true, true);
+        gameProfile.addStat(game, StatsType.DAILY, key, 1);
+        gameProfile.addStat(game, StatsType.MONTHLY, key, 1);
+        gameProfile.addStat(game, StatsType.ALLTIME, key, 1);
+        BukkitCore.getAPI().getGameService().saveEntity(gameProfile, true, true);
     }
 
     public int handleTrophie(UUID uuid, String game, TrophieAdjustType adjustType, int trophies) {

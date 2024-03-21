@@ -70,6 +70,7 @@ public class Pagifier<T> {
         }
         return false;
     }
+
     public int getTotalPages() {
         return pages.size();
     }

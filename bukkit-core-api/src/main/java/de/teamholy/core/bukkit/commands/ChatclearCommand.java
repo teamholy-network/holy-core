@@ -27,7 +27,7 @@ public class ChatclearCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         if (!player.hasPermission("teamholy.chatclear"))
             return false;
-        Bukkit.getOnlinePlayers().forEach(all ->  {
+        Bukkit.getOnlinePlayers().forEach(all -> {
             if (!all.hasPermission("teamholy.chatclear")) {
                 for (String string : this.strings) {
                     all.sendMessage(string);

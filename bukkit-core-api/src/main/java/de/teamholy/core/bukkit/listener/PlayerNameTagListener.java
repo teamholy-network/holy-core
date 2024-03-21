@@ -28,7 +28,7 @@ public class PlayerNameTagListener implements Listener {
         Player player = event.getPlayer();
         PlayerCacheManager.CachedBukkitPlayer playerCache = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
         if (playerCache == null) return;
-        
+
         PlayerRank playerRank = playerCache.getRank();
 
         if (playerRank == null) return;
@@ -61,7 +61,7 @@ public class PlayerNameTagListener implements Listener {
             suffix = "";
         }
 
-        if(player.getName().equalsIgnoreCase("Koboo")) {
+        if (player.getName().equalsIgnoreCase("Koboo")) {
             prefix = "§8[§5Koboo§8] §7";
         }
 

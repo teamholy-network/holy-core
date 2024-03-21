@@ -16,7 +16,6 @@ public class PlayerChatListener implements Listener {
     BukkitCore bukkitCore;
 
 
-
     public PlayerChatListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
         Bukkit.getPluginManager().registerEvents(this, bukkitCore);
@@ -25,11 +24,11 @@ public class PlayerChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         if (BukkitCore.getInstance().isChatPrefix()) {
-            String message = event.getMessage().replace("%","%%");
+            String message = event.getMessage().replace("%", "%%");
             Player player = event.getPlayer();
 
-            if(MarkupAPI.isNicked(player)) {
-                event.setFormat(PlayerRank.PLAYER.getChatPrefix() + player.getDisplayName() + " §8» §7" +  message);
+            if (MarkupAPI.isNicked(player)) {
+                event.setFormat(PlayerRank.PLAYER.getChatPrefix() + player.getDisplayName() + " §8» §7" + message);
                 return;
             }
 

@@ -88,7 +88,7 @@ public class CoreAPI {
         try {
             cloudManager = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
         } catch (NoClassDefFoundError error) {
-            cloudManager = new CloudManager(this,null);
+            cloudManager = new CloudManager(this, null);
         }
         this.cloudManager = cloudManager;
 

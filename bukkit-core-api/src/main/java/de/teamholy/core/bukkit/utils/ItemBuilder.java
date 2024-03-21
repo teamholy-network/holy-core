@@ -189,12 +189,12 @@ public class ItemBuilder {
     public ItemBuilder withGlow(boolean b) {
         if (b) {
             this.itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
-            ItemMeta meta  = this.itemStack.getItemMeta();
+            ItemMeta meta = this.itemStack.getItemMeta();
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             this.itemStack.setItemMeta(meta);
         } else {
             this.itemStack.removeEnchantment(Enchantment.DURABILITY);
-            ItemMeta meta  = this.itemStack.getItemMeta();
+            ItemMeta meta = this.itemStack.getItemMeta();
             meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
             this.itemStack.setItemMeta(meta);
         }
@@ -217,7 +217,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setId(int id) {
-        this.itemStack.setDurability((short)id);
+        this.itemStack.setDurability((short) id);
         return this;
     }
 

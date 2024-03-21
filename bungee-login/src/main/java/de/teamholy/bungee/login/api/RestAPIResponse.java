@@ -4,24 +4,24 @@ import lombok.Getter;
 
 public class RestAPIResponse {
 
-	@Getter
+    @Getter
     private String text;
 
-	private boolean failed;
+    private boolean failed;
 
-	@Getter
+    @Getter
     private String url;
-	
-	public RestAPIResponse(String text,boolean failed, String url) {
-		this.url = url;
-		this.text = text;
-		this.failed = failed;
-	}
+
+    public RestAPIResponse(String text, boolean failed, String url) {
+        this.url = url;
+        this.text = text;
+        this.failed = failed;
+    }
 
 
     public boolean getFailed() {
-		return failed;
-	}
+        return failed;
+    }
 
 
 }

@@ -88,10 +88,10 @@ public class BanLoginListener implements Listener {
 
                 bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, true, true);
 
-                BungeeCore.getInstance().getProxy().getScheduler().schedule(BungeeCore.getInstance(),() -> {
+                BungeeCore.getInstance().getProxy().getScheduler().schedule(BungeeCore.getInstance(), () -> {
                     ProxiedPlayer player = BungeeCore.getInstance().getProxy().getPlayer(loginEvent.getConnection().getName());
                     if (player != null) player.disconnect(BanUtil.generateBanScreen(banProfile));
-                },2,TimeUnit.SECONDS);
+                }, 2, TimeUnit.SECONDS);
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
                 return true;
             }

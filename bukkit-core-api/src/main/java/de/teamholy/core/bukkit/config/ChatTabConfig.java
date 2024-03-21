@@ -14,11 +14,11 @@ public class ChatTabConfig {
     private File file = new File("plugins/API/config.yml");
     public FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 
-    public ChatTabConfig(){
+    public ChatTabConfig() {
         configuration.options().copyDefaults(true);
         getConfiguration().options().header("Deaktivere Chat & tab prefix.");
-        configuration.addDefault("ChatPrefix",true);
-        configuration.addDefault("TabPrefix",true);
+        configuration.addDefault("ChatPrefix", true);
+        configuration.addDefault("TabPrefix", true);
         BukkitCore.getInstance().setChatPrefix(configuration.getBoolean("ChatPrefix"));
         BukkitCore.getInstance().setTabPrefix(configuration.getBoolean("TabPrefix"));
         try {

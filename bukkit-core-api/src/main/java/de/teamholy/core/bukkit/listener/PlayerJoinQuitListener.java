@@ -91,9 +91,6 @@ public class PlayerJoinQuitListener implements Listener {
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
 
 
-
-
-
             String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby", "Bridge"};
 
             if (perkPlayerProfile.getCustomBanner().isActivated()) {
@@ -103,9 +100,6 @@ public class PlayerJoinQuitListener implements Listener {
                     }
                 }
             }
-
-
-
 
 
             String value;
@@ -145,12 +139,12 @@ public class PlayerJoinQuitListener implements Listener {
             Bukkit.getScheduler().runTask(bukkitCore, () -> {
                 if (!BukkitCore.getInstance().getGroup().toLowerCase().contains("lobby")) {
                     if (playerProfile.isAutoNick()) {
-                        Bukkit.getScheduler().runTaskLater(bukkitCore,() -> player.chat("/nick"),1);
+                        Bukkit.getScheduler().runTaskLater(bukkitCore, () -> player.chat("/nick"), 1);
                     } else {
-                        Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),7);
+                        Bukkit.getScheduler().runTaskLater(bukkitCore, () -> MarkupAPI.updateNameTag(player), 7);
                     }
                 } else {
-                    Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),7);
+                    Bukkit.getScheduler().runTaskLater(bukkitCore, () -> MarkupAPI.updateNameTag(player), 7);
                 }
             });
 

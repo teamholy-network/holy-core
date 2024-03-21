@@ -1,7 +1,6 @@
 package de.teamholy.core.api.utility;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +14,7 @@ public enum TrophieLeague {
     UNRANKED(0, "§7Noob", -1, 999, "§7N"),
     B1(1, "§cBronze I", 1000, 1149, "§cI"),
     B2(2, "§cBronze II", 1150, 1299, "§cII"),
-    B3(3, "§cBronze III", 1300 ,1399 , "§cIII"),
+    B3(3, "§cBronze III", 1300, 1399, "§cIII"),
     S1(4, "§fSilver I", 1400, 1899, "§fI"),
     S2(5, "§fSilver II", 1900, 2399, "§fII"),
     S3(6, "§fSilver III", 2400, 2999, "§fIII"),

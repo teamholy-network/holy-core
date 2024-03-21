@@ -90,7 +90,7 @@ public class CaptchaManager {
             list.add(captcha);
 
             String linkurl = "https://teamholy.de/captcha/" + result;
-            String checkurl =  RESTBASE + "holy/captcha/get/" + "/" + BungeeLogin.APIKEY + "/" + player.getName().toLowerCase(Locale.ROOT);
+            String checkurl = RESTBASE + "holy/captcha/get/" + "/" + BungeeLogin.APIKEY + "/" + player.getName().toLowerCase(Locale.ROOT);
 
             captcha.setLink(linkurl);
             captcha.setCheckurl(checkurl);

@@ -95,7 +95,7 @@ public class BungeeLogin extends Plugin {
 
         String name = player.getName().toLowerCase(Locale.ROOT);
         PlayerObject object = repo.findFirstById(name.toLowerCase(Locale.ROOT));
-        object.getIps().put(player.getAddress().getAddress().getHostAddress(),System.currentTimeMillis());
+        object.getIps().put(player.getAddress().getAddress().getHostAddress(), System.currentTimeMillis());
         setiphostname(player, object);
         repo.save(object);
         player.connect(ProxyServer.getInstance().getServerInfo("Lobby-1"));

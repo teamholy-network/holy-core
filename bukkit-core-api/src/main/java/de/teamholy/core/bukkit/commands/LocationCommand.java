@@ -17,7 +17,7 @@ public class LocationCommand implements CommandExecutor {
             if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("set")) {
                     player.sendMessage(BukkitCore.PREFIX + "location " + args[1] + " set");
-                    BukkitCore.getInstance().getLocationManager().addLocation(args[1],player.getLocation());
+                    BukkitCore.getInstance().getLocationManager().addLocation(args[1], player.getLocation());
                 }
             } else {
                 player.sendMessage(BukkitCore.PREFIX + "/location set (name)");

@@ -18,7 +18,7 @@ public class NickListener implements Listener {
 
     @EventHandler
     public void onPostNick(PlayerPostNickEvent event) {
-        BukkitCore.getAPI().getNickManager().addNick(event.getPlayer().getUniqueId(),event.getPlayerMeta().getNickName());
+        BukkitCore.getAPI().getNickManager().addNick(event.getPlayer().getUniqueId(), event.getPlayerMeta().getNickName());
     }
 
     @EventHandler

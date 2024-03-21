@@ -122,10 +122,10 @@ public class StaffInfoCommand extends Command {
 
     private String formatStaffProfile(StaffProfile profile, String username) {
         return String.format("""
-                        %sHere are the staff stats of §2%s§7:
-                        §7Banned players §8» §2%d
-                        §7Muted players §8» §2%d
-                        §7Finished reports §8» §2%d""",
+                %sHere are the staff stats of §2%s§7:
+                §7Banned players §8» §2%d
+                §7Muted players §8» §2%d
+                §7Finished reports §8» §2%d""",
 
             Message.STAFF_INFO_PREFIX,
             username,
@@ -136,13 +136,13 @@ public class StaffInfoCommand extends Command {
 
     private String formatTimeStaffProfile(StaffProfile profile, String username, int days) {
 
-        long timemillis = (long) days*24*60*60*1000;
+        long timemillis = (long) days * 24 * 60 * 60 * 1000;
 
         return String.format("""
-                        %sHere are the staff stats of §2%s §7§o(last %dd)§r§8:
-                        §7Banned players §8» §2%d
-                        §7Muted players §8» §2%d
-                        §7Finished reports §8» §2%d""",
+                %sHere are the staff stats of §2%s §7§o(last %dd)§r§8:
+                §7Banned players §8» §2%d
+                §7Muted players §8» §2%d
+                §7Finished reports §8» §2%d""",
             Message.STAFF_INFO_PREFIX, username, days,
             profile.getBanProfileList()
                 .stream()

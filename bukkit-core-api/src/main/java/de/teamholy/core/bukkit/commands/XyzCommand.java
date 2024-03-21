@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-
 public class XyzCommand implements CommandExecutor {
 
     private CustomBannerManager customBannerManager;
@@ -25,7 +24,6 @@ public class XyzCommand implements CommandExecutor {
         Player player = (Player) commandSender;
 
         String instruction = strings[0];
-
 
 
         if (!player.hasPermission("*")) {

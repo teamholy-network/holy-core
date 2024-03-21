@@ -47,7 +47,7 @@ public class UsePerkListener implements Listener {
 
     }
 
-    @EventHandler (priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlace(BlockPlaceEvent event) {
         PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId());
         if (cachedBukkitPlayer == null) return;
@@ -56,9 +56,9 @@ public class UsePerkListener implements Listener {
         Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(perkPlayerProfile.getBlockPerk());
 
 
-
         if (ChatColor.stripColor(perk.getName()).toLowerCase().contains("rainbow") &&
-            (event.getBlock().getType() == Material.WOOL || event.getBlock().getType() == Material.STAINED_GLASS)) {            Player player = event.getPlayer();
+            (event.getBlock().getType() == Material.WOOL || event.getBlock().getType() == Material.STAINED_GLASS)) {
+            Player player = event.getPlayer();
             if (!randomColor.containsKey(player)) randomColor.put(player, 0);
 
 

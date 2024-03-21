@@ -29,29 +29,30 @@ public class UpdateLookTask {
                                 npcEntry.createTargetLocation(player);
                             }
 
-                            if (npcEntry.isKickBack() && player != null && npcEntry.getLocation().getWorld().getUID().equals(player.getWorld().getUID()) && npcEntry.getLocation().distance(player.getLocation()) <= 1.8D ) {
+                            if (npcEntry.isKickBack() && player != null && npcEntry.getLocation().getWorld().getUID().equals(player.getWorld().getUID()) && npcEntry.getLocation().distance(player.getLocation()) <= 1.8D) {
                                 player.setVelocity(player.getLocation().getDirection().clone().multiply(-0.5).normalize());
                                 player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1.0F, 1.0F);
-                                npcEntry.animation(player,0);
-                                Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(),() -> {
-                                    forceEmote(player,npcEntry.getUuid(),37);
-                                },1);
+                                npcEntry.animation(player, 0);
+                                Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+                                    forceEmote(player, npcEntry.getUuid(), 37);
+                                }, 1);
                             }
                         });
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }).runTaskTimerAsynchronously(BukkitCore.getInstance(), 0L, 1L);
     }
 
-    private void forceEmote(Player receiver, UUID npcUUID, int emoteId ) {
+    private void forceEmote(Player receiver, UUID npcUUID, int emoteId) {
         // List of all forced emotes
         JsonArray array = new JsonArray();
 
         // Emote and target NPC
         JsonObject forcedEmote = new JsonObject();
-        forcedEmote.addProperty( "uuid", npcUUID.toString() );
-        forcedEmote.addProperty( "emote_id", emoteId );
+        forcedEmote.addProperty("uuid", npcUUID.toString());
+        forcedEmote.addProperty("emote_id", emoteId);
         array.add(forcedEmote);
 
         // Send to LabyMod using the API

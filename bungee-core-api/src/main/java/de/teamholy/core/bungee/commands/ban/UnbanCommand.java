@@ -57,8 +57,10 @@ public class UnbanCommand extends SenderCommand {
                 BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
 
 
-                if (sender instanceof ProxiedPlayer player) BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
-                else BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
+                if (sender instanceof ProxiedPlayer player)
+                    BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
+                else
+                    BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
 

@@ -57,7 +57,7 @@ public class CommandNick implements CommandExecutor {
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§7You're now unnicked!");
         }
 
-        cooldown.put(player.getUniqueId(),System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5));
+        cooldown.put(player.getUniqueId(), System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5));
 
         return true;
     }

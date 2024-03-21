@@ -15,14 +15,14 @@ public class RestAPI {
     private static RestAPI instance = new RestAPI();
 
     public RestAPIResponse get(String urlstring) {
-        return get(urlstring,15000, null);
+        return get(urlstring, 15000, null);
     }
 
-    public RestAPIResponse get(String urlstring,Proxy proxy) {
-        return get(urlstring,15000, proxy);
+    public RestAPIResponse get(String urlstring, Proxy proxy) {
+        return get(urlstring, 15000, proxy);
     }
 
-    public RestAPIResponse get(String urlstring,int timeout,Proxy proxy) {
+    public RestAPIResponse get(String urlstring, int timeout, Proxy proxy) {
         String response = "";
         try {
             URL url = new URL(urlstring.replaceAll("\n", ""));

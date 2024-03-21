@@ -243,11 +243,11 @@ public class NPCEntry extends Reflection {
 
     public void updateEquipment(Player player) {
         PacketPlayOutEntityEquipment[] packet = {
-                new PacketPlayOutEntityEquipment(this.entityId, 1, CraftItemStack.asNMSCopy(this.helmet)),
-                new PacketPlayOutEntityEquipment(this.entityId, 2, CraftItemStack.asNMSCopy(this.chestplate)),
-                new PacketPlayOutEntityEquipment(this.entityId, 3, CraftItemStack.asNMSCopy(this.leggings)),
-                new PacketPlayOutEntityEquipment(this.entityId, 4, CraftItemStack.asNMSCopy(this.boots)),
-                new PacketPlayOutEntityEquipment(this.entityId, 0, CraftItemStack.asNMSCopy(this.heldItem))};
+            new PacketPlayOutEntityEquipment(this.entityId, 1, CraftItemStack.asNMSCopy(this.helmet)),
+            new PacketPlayOutEntityEquipment(this.entityId, 2, CraftItemStack.asNMSCopy(this.chestplate)),
+            new PacketPlayOutEntityEquipment(this.entityId, 3, CraftItemStack.asNMSCopy(this.leggings)),
+            new PacketPlayOutEntityEquipment(this.entityId, 4, CraftItemStack.asNMSCopy(this.boots)),
+            new PacketPlayOutEntityEquipment(this.entityId, 0, CraftItemStack.asNMSCopy(this.heldItem))};
 
         if (player == null) {
             return;
@@ -289,10 +289,10 @@ public class NPCEntry extends Reflection {
         PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo();
 
         PacketPlayOutPlayerInfo.PlayerInfoData data = packet.new PlayerInfoData(gameProfile, 1, EnumGamemode.NOT_SET,
-                CraftChatMessage.fromString(" ")[0]);
+            CraftChatMessage.fromString(" ")[0]);
 
         List<PacketPlayOutPlayerInfo.PlayerInfoData> players = (List<PacketPlayOutPlayerInfo.PlayerInfoData>) getValue(
-                packet, "b");
+            packet, "b");
         players.add(data);
 
         setValue(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
@@ -304,10 +304,10 @@ public class NPCEntry extends Reflection {
         PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo();
 
         PacketPlayOutPlayerInfo.PlayerInfoData data = packet.new PlayerInfoData(gameProfile, 1, EnumGamemode.NOT_SET,
-                CraftChatMessage.fromString(" ")[0]);
+            CraftChatMessage.fromString(" ")[0]);
 
         List<PacketPlayOutPlayerInfo.PlayerInfoData> players = (List<PacketPlayOutPlayerInfo.PlayerInfoData>) getValue(
-                packet, "b");
+            packet, "b");
         players.add(data);
 
         setValue(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
@@ -333,7 +333,7 @@ public class NPCEntry extends Reflection {
     public void look(float yaw, float pitch, Player player) {
         if (player != null) {
             PacketPlayOutEntity.PacketPlayOutEntityLook packet = new PacketPlayOutEntity.PacketPlayOutEntityLook(
-                    this.entityId, byteMaker(yaw), byteMaker(pitch), true);
+                this.entityId, byteMaker(yaw), byteMaker(pitch), true);
             PacketPlayOutEntityHeadRotation packetHead = new PacketPlayOutEntityHeadRotation();
 
             setValue(packetHead, "a", this.entityId);

@@ -12,7 +12,7 @@ public class DeletePlayerCommand extends Command {
 
 
     public DeletePlayerCommand() {
-        super("resetcringe","*");
+        super("resetcringe", "*");
     }
 
     @Override
@@ -59,8 +59,6 @@ public class DeletePlayerCommand extends Command {
 
             BungeeCore.getAPI().getFriendService().getRedisCache().remove(uuid);
             BungeeCore.getAPI().getFriendService().getRepository().deleteById(uuid);
-
-
 
 
             proxiedPlayer.sendMessage("§cDaten wurden erfolgreich gelöscht!");

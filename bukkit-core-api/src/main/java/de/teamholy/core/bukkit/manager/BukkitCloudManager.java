@@ -23,7 +23,7 @@ public class BukkitCloudManager implements Listener {
     public void onListen(ChannelMessageReceiveEvent event) {
         if (event.getMessage() == null) return;
 
-        bukkitCore.getServer().getPluginManager().callEvent(new CloudChannelListenEvent(event.getData(),event.getMessage(),event.getChannel()));
+        bukkitCore.getServer().getPluginManager().callEvent(new CloudChannelListenEvent(event.getData(), event.getMessage(), event.getChannel()));
     }
 
 }

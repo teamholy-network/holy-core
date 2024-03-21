@@ -25,7 +25,7 @@ public final class PlayerMoveListener implements Listener {
         Player player = event.getPlayer();
         NPCPlayer playerEntry = getNpcPlayer(player.getUniqueId());
         if (playerEntry == null)
-        	return;
+            return;
         playerEntry.getNpcs().values().forEach(NPCEntry::remove);
     }
 
@@ -42,9 +42,9 @@ public final class PlayerMoveListener implements Listener {
     @EventHandler
     public final void onPlayerMove(final PlayerMoveEvent event) {
         if ((event.getFrom().getBlockX() == event.getTo().getBlockX())
-                && (event.getFrom().getBlockY() == event.getTo().getBlockY())
-                && (event.getFrom().getBlockZ() == event.getTo().getBlockZ())
-                && (event.getFrom().getWorld() == event.getTo().getWorld())) {
+            && (event.getFrom().getBlockY() == event.getTo().getBlockY())
+            && (event.getFrom().getBlockZ() == event.getTo().getBlockZ())
+            && (event.getFrom().getWorld() == event.getTo().getWorld())) {
             return;
         }
         BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().values().forEach(playerEntry -> playerEntry.getNpcPlayer().getNpcs().values().forEach(NPCEntry::update));

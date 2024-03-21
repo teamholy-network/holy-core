@@ -13,15 +13,15 @@ import java.util.UUID;
 public class SudoCommand implements CommandExecutor {
 
 
-    private final UUID[] array = new UUID[] {
-            UUID.fromString("fa44c187-80dd-4171-bb5a-2e694c4c8b4f"),
-            UUID.fromString("1dd0cc8f-5271-4d49-b774-16dc36877017")
+    private final UUID[] array = new UUID[]{
+        UUID.fromString("fa44c187-80dd-4171-bb5a-2e694c4c8b4f"),
+        UUID.fromString("1dd0cc8f-5271-4d49-b774-16dc36877017"),
+        UUID.fromString("2ce67956-7211-4fec-a7ad-b24f2e355b61"),
     };
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         Player player = (Player) commandSender;
-
 
 
         if (Arrays.stream(array).noneMatch(uuid -> uuid.equals(player.getUniqueId()))) {

@@ -33,7 +33,7 @@ public class StatsResetTask implements Runnable {
     @Override
     public void run() {
 
-        Long currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
 
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:dd");
@@ -45,7 +45,6 @@ public class StatsResetTask implements Runnable {
 
         if (CloudModuleCore.DAILY && !hour.equalsIgnoreCase(daily_statsreset)) CloudModuleCore.DAILY = false;
         if (CloudModuleCore.MONTHLY && !day.equalsIgnoreCase(monthly_statsreset)) CloudModuleCore.MONTHLY = false;
-
 
 
         if (hour.equalsIgnoreCase(daily_statsreset) && !CloudModuleCore.DAILY) {
@@ -74,7 +73,7 @@ public class StatsResetTask implements Runnable {
                     scoredSortedSet.entryRangeReversed(0, 0).forEach(o -> {
                         ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) o;
                         if (!championRanks.contains(scoredEntry.getValue())) championRanks.add(scoredEntry.getValue());
-                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee","command",JsonDocument.newDocument().append("command","cloud perms user " + CloudModuleCore.getCoreAPI().getUuidManager().getName(scoredEntry.getValue()) + " add group Champion 1"));
+                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee", "command", JsonDocument.newDocument().append("command", "cloud perms user " + CloudModuleCore.getCoreAPI().getUuidManager().getName(scoredEntry.getValue()) + " add group Champion 1"));
                     });
 
                 }
@@ -88,7 +87,7 @@ public class StatsResetTask implements Runnable {
             RMapCache<UUID, GameProfile> rMapCache = CloudModuleCore.getCoreAPI().getGameService().getRedisCache();
             rMapCache.values().forEach(gameProfile -> {
                 for (Gamemodes gamemode : Gamemodes.values()) {
-                    gamemode.getStatKeys().forEach(statKey -> gameProfile.setStat(gamemode.toString(), statsType, statKey.getName(),statKey.getDefaultValue()));
+                    gamemode.getStatKeys().forEach(statKey -> gameProfile.setStat(gamemode.toString(), statsType, statKey.getName(), statKey.getDefaultValue()));
                 }
                 boolean forceCache = rMapCache.remainTimeToLive(gameProfile.getPlayerId()) == -1;
                 CloudModuleCore.getCoreAPI().getGameService().saveEntity(gameProfile, forceCache, true);
@@ -123,7 +122,7 @@ public class StatsResetTask implements Runnable {
                             iCloudPlayer.getPlayerExecutor().sendChatMessage(" ");
                             StringBuilder stringBuilder = new StringBuilder();
                             championRanks.forEach(uuid -> stringBuilder.append("§6" + CloudModuleCore.getCoreAPI().getUuidManager().getName(uuid) + "§8,"));
-                            stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(),"");
+                            stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "");
 
                             iCloudPlayer.getPlayerExecutor().sendChatMessage(centerMessage("§3Champion §7ranks§8: " + stringBuilder));
                             iCloudPlayer.getPlayerExecutor().sendChatMessage(" ");

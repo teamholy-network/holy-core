@@ -85,7 +85,6 @@ public class PostDisconnectListener implements Listener {
         }
 
 
-
         BungeeCore.getAPI().getStaffService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.MINUTES);
         BungeeCore.getAPI().getClanPlayerService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.MINUTES);
         BungeeCore.getAPI().getFriendService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.MINUTES);

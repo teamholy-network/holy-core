@@ -68,12 +68,12 @@ public class PostLoginListener implements Listener {
             BungeeCore.getAPI().getExecutor().execute(() -> {
                 proxyManager.containsProxy(ipAddress).thenAccept(contains -> {
                     if (contains) {
-                        proxiedPlayer.disconnect(proxyManager.kickMessage);
+                        proxiedPlayer.disconnect(proxyManager.getKickMessage());
                         proxyManager.sendProxyWarning(proxiedPlayer, ipAddress);
                     } else {
                         proxyManager.checkProxy(ipAddress, (isProxy, countryName, org) -> {
                             if (isProxy) {
-                                proxiedPlayer.sendMessage(proxyManager.kickMessage);
+                                proxiedPlayer.sendMessage(proxyManager.getKickMessage());
                                 proxyManager.sendProxyWarning(proxiedPlayer, ipAddress);
                                 proxyManager.addProxy(ipAddress);
                             } else {
@@ -87,7 +87,7 @@ public class PostLoginListener implements Listener {
                     if (asn != null) {
                         for (String blockedIsaEntry : blockedIsns) {
                             if (asn.contains(blockedIsaEntry)) {
-                                proxiedPlayer.disconnect(proxyManager.kickMessage);
+                                proxiedPlayer.disconnect(proxyManager.getKickMessage());
                                 proxyManager.sendAsnWarning(proxiedPlayer, ipAddress, asn);
                                 break;
                             }
@@ -257,7 +257,6 @@ public class PostLoginListener implements Listener {
                 BungeeCore.getAPI().getReportManager().addReport(report);
             }
         });
-
 
 
     }

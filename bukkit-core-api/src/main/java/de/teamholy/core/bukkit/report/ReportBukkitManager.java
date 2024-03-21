@@ -90,7 +90,7 @@ public class ReportBukkitManager implements CommandExecutor {
         int filterId = this.filterId.getOrDefault(player.getUniqueId(), 0);
         copiedList.sort(getFilterById(filterId));
 
-       // copiedList.forEach(report -> Bukkit.broadcastMessage(String.valueOf(report.isTargetOnline())));
+        // copiedList.forEach(report -> Bukkit.broadcastMessage(String.valueOf(report.isTargetOnline())));
 
         playerPagifier.put(player.getUniqueId(), playerReports);
 

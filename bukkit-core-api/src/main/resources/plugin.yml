@@ -10,7 +10,7 @@ commands:
         aliases: [ rgui, reportstaffgui ]
     xyz:
     stopcore:
-        aliases: [stopc, stop]
+        aliases: [ stopc, stop ]
     sudo:
     tpblock:
     gc:

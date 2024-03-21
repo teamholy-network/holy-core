@@ -74,7 +74,7 @@ public class LookupCommand extends SenderCommand {
                 String country = "§cNo country found";
 
                 try {
-                    scanner = new Scanner(new URL( RESTBASE + "holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
+                    scanner = new Scanner(new URL(RESTBASE + "holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
                     String response = scanner.useDelimiter("\\A").next();
                     JSONObject jsonResponse = new JSONObject(response);
 
@@ -90,7 +90,6 @@ public class LookupCommand extends SenderCommand {
                         scanner.close();
                     }
                 }
-
 
 
                 player.sendMessage(Message.LINE);
