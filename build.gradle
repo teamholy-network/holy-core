@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 
 plugins {
-    id 'java'
+    id('java')
     id('com.github.johnrengelman.shadow') version('7.1.2')
     id('net.kyori.blossom') version('1.2.0')
 }
@@ -14,7 +14,6 @@ subprojects {
 
     group("$projectGroup")
     version("$projectVersion")
-
 
     repositories {
         mavenCentral()
@@ -104,7 +103,6 @@ subprojects {
     processResources {
         filter {
             it.replace('PROJECT_VERSION': "${projectVersion}".toString())
-                .replace('PROJECT_NAME': project.name)
         }
     }
 }

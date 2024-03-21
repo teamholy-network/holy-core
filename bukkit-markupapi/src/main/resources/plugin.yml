@@ -1,5 +1,5 @@
 name: MarkupAPI
-version: 1.9
+version: PROJECT_VERSION
 author: Koboo
 main: eu.koboo.markup.MarkupAPI
 depend: [ ProtocolLib ]
