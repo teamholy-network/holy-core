@@ -18,7 +18,6 @@ public class IPInfoCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        // TODO Auto-generated method stub
         if (sender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) sender;
             if (!player.hasPermission("holylogin.ipinfo")) {

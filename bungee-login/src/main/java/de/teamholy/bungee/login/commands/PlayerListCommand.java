@@ -18,12 +18,10 @@ public class PlayerListCommand extends Command {
 
     public PlayerListCommand(String name) {
         super(name);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        // TODO Auto-generated method stub
         if (sender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) sender;
             if (!player.hasPermission("holylogin.playerlist")) {
