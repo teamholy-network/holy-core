@@ -1,9 +1,14 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-@Getter @AllArgsConstructor
+@Getter
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum TrophieLeague {
 
 
@@ -31,11 +36,10 @@ public enum TrophieLeague {
     E3(21, "§3Champion III", 50000, 99999, "§3III"),
     M(22, "§4Master", 100000, -1, "§4☣");
 
-    private final int id;
-    private final String name;
-    private final int minRange, maxRange;
-    private final String shortName;
-
+    int id;
+    String name;
+    int minRange, maxRange;
+    String shortName;
 
     public static TrophieLeague getEloRank(int elo) {
         TrophieLeague trophieLeague = null;

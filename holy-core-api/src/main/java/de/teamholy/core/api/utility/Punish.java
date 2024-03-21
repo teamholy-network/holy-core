@@ -1,5 +1,10 @@
 package de.teamholy.core.api.utility;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +15,9 @@ public class Punish {
     private static final Map<Integer, BanReason> banReasonMap = new HashMap<>();
     private static final Map<Integer, MuteReason> muteReasonMap = new HashMap<>();
 
+    @Getter
     private static final BanReason[] banValues = BanReason.values();
+    @Getter
     private static final MuteReason[] muteValues = MuteReason.values();
 
     private static final UUID CONSOLE_UUID = UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670");
@@ -18,14 +25,6 @@ public class Punish {
     static {
         Arrays.stream(getBanValues()).forEach(reason -> banReasonMap.put(reason.getId(), reason));
         Arrays.stream(getMuteValues()).forEach(reason -> muteReasonMap.put(reason.getId(), reason));
-    }
-
-    public static BanReason[] getBanValues() {
-        return banValues;
-    }
-
-    public static MuteReason[] getMuteValues() {
-        return muteValues;
     }
 
     public static UUID getConsoleUuid() {
@@ -44,6 +43,9 @@ public class Punish {
         BAN, MUTE;
     }
 
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    @Getter
+    @RequiredArgsConstructor
     public enum BanReason implements PunishReason {
 
         HACKING(1, "Client Modifications", TimeUnit.DAYS.toMillis(30)),
@@ -64,33 +66,15 @@ public class Punish {
         String englishText;
         long duration;
 
-        BanReason(int id, String englishText, long duration) {
-            this.id = id;
-            this.englishText = englishText;
-            this.duration = duration;
-        }
-
-        @Override
-        public int getId() {
-            return id;
-        }
-
-        @Override
-        public String getEnglishText() {
-            return englishText;
-        }
-
-        @Override
-        public long getDuration() {
-            return duration;
-        }
-
         @Override
         public Type getType() {
             return Type.BAN;
         }
     }
 
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    @Getter
+    @RequiredArgsConstructor
     public enum MuteReason implements PunishReason {
 
         //TEST(0,"Test", TimeUnit.MINUTES.toMillis(5)),
@@ -101,31 +85,9 @@ public class Punish {
         PROVOCATION(5, "Provocation", TimeUnit.DAYS.toMillis(3)),
         CHOICEOFWORDS(6, "Choice of Words", TimeUnit.DAYS.toMillis(7));
 
-
         int id;
         String englishText;
         long duration;
-
-        MuteReason(int id, String englishText, long duration) {
-            this.id = id;
-            this.englishText = englishText;
-            this.duration = duration;
-        }
-
-        @Override
-        public int getId() {
-            return id;
-        }
-
-        @Override
-        public String getEnglishText() {
-            return englishText;
-        }
-
-        @Override
-        public long getDuration() {
-            return duration;
-        }
 
         @Override
         public Type getType() {

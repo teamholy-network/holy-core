@@ -88,6 +88,9 @@ public class PasteService {
     }
 
 
+    // Main method in a bukkit-plugin?
+    // Are you the bravest I've ever seen or the dumbest?
+    // I can't really decide on that ;)
     public static void main(String[] args) throws Exception {
         String response = paste("Test2", "Test");
         System.out.println(response);

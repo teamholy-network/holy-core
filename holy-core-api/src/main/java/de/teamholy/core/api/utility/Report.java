@@ -12,9 +12,12 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Report {
 
-    UUID sender, target;
+    UUID sender;
+    UUID target;
     UUID viewer;
-    Long time, viewerSince;
-    String reason, chatlogID;
+    Long time;
+    Long viewerSince;
+    String reason;
+    String chatlogID;
     boolean targetOnline;
 }

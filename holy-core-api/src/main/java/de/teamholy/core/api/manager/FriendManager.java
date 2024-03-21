@@ -12,14 +12,10 @@ import java.util.*;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class FriendManager {
 
-
     CoreAPI coreAPI;
-
-    public FriendManager(CoreAPI coreAPI) {
-        this.coreAPI = coreAPI;
-    }
 
     public boolean isFriend(UUID player, UUID target) {
         FriendProfile friendProfile = coreAPI.getFriendService().getEntity(target, () -> coreAPI.getFriendService().getRepository().findFirstById(target));

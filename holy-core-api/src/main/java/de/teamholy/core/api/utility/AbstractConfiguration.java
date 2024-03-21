@@ -3,7 +3,10 @@ package de.teamholy.core.api.utility;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -13,18 +16,20 @@ import java.util.List;
 
 /* copyright by Yassino */
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AbstractConfiguration {
 
-    private File path;
-    private File configFile;
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private JsonObject baseObject = new JsonObject();
+    File path;
+    File configFile;
+    Gson gson;
+    @NonFinal
+    JsonObject baseObject = new JsonObject();
 
     public AbstractConfiguration(File path, String fileName) {
         this.path = path;
-        path.mkdirs();
-        configFile = new File(path, fileName + ".json");
-
+        this.path.mkdirs();
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.configFile = new File(path, fileName + ".json");
         if (!configFile.exists()) {
             save();
         }

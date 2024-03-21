@@ -13,14 +13,13 @@ import java.util.HashMap;
 @FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
 public class MetricsManager {
 
+    CoreAPI coreAPI;
     RMap<String, Map<String, String>> metricsCollection;
 
-    CoreAPI coreAPI;
-
     public MetricsManager(CoreAPI coreAPI) {
-        metricsCollection = coreAPI.getRedissonManager().getRedissonClient().getMap("metrics_collection", new JsonJacksonCodec());
         this.coreAPI = coreAPI;
-
+        this.metricsCollection = coreAPI.getRedissonManager().getRedissonClient()
+            .getMap("metrics_collection", new JsonJacksonCodec());
     }
 
     public void saveMetric(JsonDocument jsonDocument) {

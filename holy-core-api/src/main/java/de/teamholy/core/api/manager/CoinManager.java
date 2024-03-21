@@ -36,11 +36,11 @@ public class CoinManager {
     public void setCoins(UUID uuid, long coins, boolean forceCache) {
         PlayerProfile playerProfile = coreAPI.getPlayerService().getEntity(uuid,
             () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid));
-        if (playerProfile == null)
+        if (playerProfile == null) {
             return;
-        long newCoins = coins;
-        playerProfile.setCoins(newCoins);
-        sendMessage(uuid, newCoins);
+        }
+        playerProfile.setCoins(coins);
+        sendMessage(uuid, coins);
         coreAPI.getPlayerService().saveEntity(playerProfile, forceCache, true);
     }
 

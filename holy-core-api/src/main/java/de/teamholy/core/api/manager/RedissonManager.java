@@ -20,7 +20,6 @@ public class RedissonManager {
     @NotNull
     Config config;
 
-    @NonFinal
     RedissonClient redissonClient;
 
     public RedissonManager(@NotNull CoreAPI plugin) {

@@ -80,6 +80,13 @@ public class CloudManager {
 
     /*
     musste das mit der db machen weil die cloud seeeeehhhhhrrr langsam im picken von der UUID anhand des namens ist
+
+    Koboo: Kann mit en2do 3.1.7 deutlich einfacher und hübscher umgesetzt werden.
+    Außerdem würde ich empfehlen einen CompoundIndex auf die Felder zu setzen, dann ist es teilweise
+    schneller als 'ne SQL-Datenbank mit Primary Key ;)
+
+    Habe aber auch einen ganz anderen und neuen UUIDFetcher gebaut, sagt Bescheid,
+    dann basteln wir den ein. ^^
      */
     public String[] getUserInfo(String nameOrUuid) {
         CompletableFuture<String[]> userinfo = new CompletableFuture<>();

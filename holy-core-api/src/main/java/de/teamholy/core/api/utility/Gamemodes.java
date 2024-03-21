@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 
@@ -55,11 +56,12 @@ public enum Gamemodes {
     List<StatKey> statKeys;
     List<String> cloudGroups;
 
-    @Getter @AllArgsConstructor
+    @Getter
+    @AllArgsConstructor
+    @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class StatKey {
 
-        private String name;
-        private int defaultValue;
-
+        String name;
+        int defaultValue;
     }
 }

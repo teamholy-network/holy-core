@@ -126,8 +126,4 @@ public class BungeeLogin extends Plugin {
         }
     }
 
-//	public static boolean isCracked(UUID uuid, String username) {
-//		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(StandardCharsets.UTF_8)).equals(uuid);
-//	}
-
 }

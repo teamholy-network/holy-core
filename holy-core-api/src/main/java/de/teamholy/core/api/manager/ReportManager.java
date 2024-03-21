@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PUBLIC, makeFinal = true)
+@Getter
 public class ReportManager {
 
-    @Getter
     RMap<UUID, Report> reportRMap;
 
     public ReportManager(CoreAPI coreAPI) {

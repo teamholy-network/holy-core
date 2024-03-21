@@ -2,6 +2,7 @@ package de.teamholy.core.api.constants;
 
 public class Project {
 
+    // Still unused since 24.01.2023. I'm felling ignored :^(
     public static final String BUILD_TIME_FORMAT = "PROJECT_TIME_FORMAT";
     public static final String BUILD_TIME_MILLIS = "PROJECT_TIME_MILLIS";
     public static final String BUILD_COMMIT = "PROJECT_COMMIT";

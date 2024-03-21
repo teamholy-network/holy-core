@@ -21,7 +21,6 @@ public class UUIDManager {
         this.remotePlayerUuidMap.expire(Duration.ofMinutes(15));
     }
 
-
     public UUID getUUID(String name) {
         if (name.equalsIgnoreCase("console")) {
             return Punish.getConsoleUuid();

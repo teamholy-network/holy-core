@@ -34,7 +34,7 @@ public class TimeUtil {
         long inSeconds = TimeUnit.SECONDS.convert(time, timeUnit);
         if (inSeconds >= 86400L) {
             long days = inSeconds / 86400L;
-            msg = msg + days + (shortify ? "d " : ((days == 1L) ? " days, " : " days, "));
+            msg = msg + days + (shortify ? "d " : ((days == 1L) ? " day, " : " days, "));
             inSeconds %= 86400L;
         }
         if (inSeconds >= 3600L) {
