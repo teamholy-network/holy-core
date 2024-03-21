@@ -12,7 +12,6 @@ dependencies {
     // DO NOT IMPLEMENT ALREADY IMPLEMENTED JARS
     compileOnly(project(':holy-core-api'))
     compileOnly(project(':bungee-core-api'))
-    compileOnly("redis.clients:jedis:$jedisVersion")
 
     // Provided by core-api
     //implementation("eu.koboo:en2do:$en2doVersion")

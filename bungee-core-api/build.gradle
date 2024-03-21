@@ -1,10 +1,14 @@
+plugins {
+    id('java-library')
+}
+
 dependencies {
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("io.github.waterfallmc:waterfall-api:1.18-R0.1-SNAPSHOT")
 
-    implementation("redis.clients:jedis:$jedisVersion")
-    implementation(project(':holy-core-api'))
+    api("redis.clients:jedis:$jedisVersion")
+    api(project(':holy-core-api'))
 
     // Provided by "core-api"
     //implementation("eu.koboo:en2do:$en2doVersion")

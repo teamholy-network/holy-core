@@ -1,3 +1,7 @@
+plugins {
+    id('java-library')
+}
+
 dependencies {
     compileOnly("org.spigotmc:spigot:$spigotVersion")
     compileOnly("org.spigotmc:spigot-api:$spigotVersion")
@@ -16,9 +20,9 @@ dependencies {
     //implementation("eu.koboo:yaml-config:$yamlVersion")
 
     compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    api("com.fasterxml.jackson.core:jackson-core:2.15.2")
 
-    implementation(project(':holy-core-api'))
+    api(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))
 }
 
