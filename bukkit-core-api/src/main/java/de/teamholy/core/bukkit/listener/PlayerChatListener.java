@@ -6,14 +6,10 @@ import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import de.teamholy.core.bukkit.perks.model.Perk;
 import eu.koboo.markup.MarkupAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class PlayerChatListener implements Listener {
 

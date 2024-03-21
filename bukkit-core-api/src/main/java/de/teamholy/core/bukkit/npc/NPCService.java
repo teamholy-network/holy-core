@@ -7,7 +7,6 @@ import de.teamholy.core.bukkit.npc.models.NPCSkinRepository;
 import de.teamholy.core.bukkit.npc.models.SkinEntry;
 import de.teamholy.core.bukkit.npc.tasks.UpdateLookTask;
 import lombok.Getter;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.UUID;

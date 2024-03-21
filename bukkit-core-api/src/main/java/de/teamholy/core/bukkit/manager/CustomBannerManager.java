@@ -1,26 +1,19 @@
 package de.teamholy.core.bukkit.manager;
 
 
-
-import de.teamholy.core.api.entities.banner.Banner;
-import de.teamholy.core.api.entities.banner.BannerRepository;
 import de.teamholy.core.api.utility.CustomBanner;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.block.banner.Pattern;
-
-
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
 
 
 public class CustomBannerManager {
