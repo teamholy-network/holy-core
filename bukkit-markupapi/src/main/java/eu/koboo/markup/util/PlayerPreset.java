@@ -1,6 +1,5 @@
 package eu.koboo.markup.util;
 
-import com.mojang.authlib.properties.Property;
 import eu.koboo.en2do.repository.entity.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

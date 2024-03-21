@@ -7,7 +7,10 @@ import de.teamholy.core.api.CoreAPI;
 import eu.koboo.markup.adapter.PacketPlayServerNamedEntitySpawnAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerPlayerInfoAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerScoreboardTeamAdapter;
-import eu.koboo.markup.commands.*;
+import eu.koboo.markup.commands.CommandHardNick;
+import eu.koboo.markup.commands.CommandNick;
+import eu.koboo.markup.commands.CommandNickList;
+import eu.koboo.markup.commands.CommandReloadPresets;
 import eu.koboo.markup.events.PlayerPostUnnickEvent;
 import eu.koboo.markup.manager.NickManager;
 import eu.koboo.markup.manager.PresetManager;
@@ -23,12 +26,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MarkupAPI extends JavaPlugin {
