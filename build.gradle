@@ -45,10 +45,10 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:$lombokVersion")
     }
 
-
-    compileJava.options.encoding = 'UTF-8'
-    tasks.withType(JavaCompile) {
+    compileJava {
         options.encoding = 'UTF-8'
+        options.fork = true
+        options.incremental = true
     }
 
     java {
@@ -98,6 +98,13 @@ subprojects {
             maven(MavenPublication) {
                 from components.java
             }
+        }
+    }
+
+    processResources {
+        filter {
+            it.replace('PROJECT_VERSION': "${projectVersion}".toString())
+                .replace('PROJECT_NAME': project.name)
         }
     }
 }

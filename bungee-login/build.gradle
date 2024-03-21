@@ -11,6 +11,4 @@ dependencies {
 
     implementation(project(':holy-core-api'))
     implementation(project(':bungee-core-api'))
-
-
 }
