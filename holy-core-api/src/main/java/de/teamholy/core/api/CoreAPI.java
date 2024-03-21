@@ -60,7 +60,6 @@ public class CoreAPI {
 
     public CoreAPI() {
 
-        CloudManager cloudManager1;
         this.config = new ConfigManager();
         this.mongoManager = new MongoManager(Credentials.
             of("mongodb://" + config.getUsername() + ":" + config.getPassword() + "@" + config.getHost() + ":" + config.getPort() + "/?authSource=admin"
@@ -85,14 +84,15 @@ public class CoreAPI {
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
 
+        CloudManager cloudManager;
         try {
-            cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
+            cloudManager = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
         } catch (NoClassDefFoundError error) {
-            cloudManager1 = new CloudManager(this,null);
+            cloudManager = new CloudManager(this,null);
         }
+        this.cloudManager = cloudManager;
 
 
-        this.cloudManager = cloudManager1;
         this.uuidManager = new UUIDManager(this);
         this.reportManager = new ReportManager(this);
         this.clanManager = new ClanManager(this, clanService);
