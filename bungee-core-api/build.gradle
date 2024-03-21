@@ -1,11 +1,14 @@
 dependencies {
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation 'redis.clients:jedis:5.0.1'
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("io.github.waterfallmc:waterfall-api:1.18-R0.1-SNAPSHOT")
 
+    implementation("redis.clients:jedis:$jedisVersion")
     implementation(project(':holy-core-api'))
+
+    // Provided by "core-api"
+    //implementation("eu.koboo:en2do:$en2doVersion")
+    //implementation("org.redisson:redisson:$redissonVersion")
+    //implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    //implementation 'redis.clients:jedis:5.0.1'
 }

@@ -17,12 +17,18 @@ subprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
         maven {
-            url 'https://papermc.io/repo/repository/maven-public/'
+            name('paper-repo')
+            url('https://papermc.io/repo/repository/maven-public/')
+        }
+        maven {
+            name("dmully-repo")
+            url('https://repo.dmulloy2.net/repository/public/')
         }
         maven {
             name('cloudnet-repo')
-            url 'https://repo.cloudnetservice.eu/repository/releases/'
+            url('https://repo.cloudnetservice.eu/repository/releases/')
         }
         maven {
             name('koboo-repo')

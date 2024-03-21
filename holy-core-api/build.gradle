@@ -1,10 +1,18 @@
+plugins {
+    id('java-library')
+}
+
 dependencies {
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    implementation 'org.mongodb:bson:4.10.2'
+    // "api" is the same as implementation.
+    // It is provided by plugin "java-library"
+    // and enables projects, which use this module,
+    // to access its dependencies e.g. en2do or redisson
+    api("eu.koboo:en2do:$en2doVersion")
+    api("org.redisson:redisson:$redissonVersion")
+    api("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    api("org.mongodb:bson:4.10.2")
+    api("eu.koboo:yaml-config:$yamlVersion")
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    implementation("eu.koboo:yaml-config:$yamlVersion")
 }
