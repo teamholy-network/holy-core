@@ -1,14 +1,10 @@
 package de.teamholy.core.bungee;
 
-import com.google.common.collect.Lists;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.teamholy.core.api.CoreAPI;
-import de.teamholy.core.api.entities.game.GameProfile;
-import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
-import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -125,7 +121,9 @@ public class BungeeCore extends Plugin {
         new KickCommand(new String[]{"kick", "kim"}, "teamholy.kick");
 
 
-        new ChatFilterListener(this);
+        // DO NOT DO THIS AGAIN OR ILL HAUNT YOU ~ Koboo
+        //new ChatFilterListener(this);
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatFilterListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatLogListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
@@ -163,9 +161,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
 
-
         chatFilterManager.loadFilteredWords();
-
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
 
@@ -209,10 +205,6 @@ public class BungeeCore extends Plugin {
     public void onDisable() {
         coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
         coreAPI.onDisable();
-    }
-
-    public static BungeeCore getInstance() {
-        return instance;
     }
 
     public static CoreAPI getAPI() {

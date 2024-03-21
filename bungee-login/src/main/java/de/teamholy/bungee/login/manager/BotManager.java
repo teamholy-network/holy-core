@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 public class BotManager {
 
 	private static int registers = 0;
-
 	private static int loggins = 0;
 	
 	public static void init() {

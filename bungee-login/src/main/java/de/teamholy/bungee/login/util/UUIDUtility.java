@@ -27,7 +27,7 @@ public class UUIDUtility {
 		return UUIDType.PREMIUM;
 	}
 
-	public static enum UUIDType {
+	public enum UUIDType {
 		BEDROCK, PREMIUM, CRACKED
 	};
 }

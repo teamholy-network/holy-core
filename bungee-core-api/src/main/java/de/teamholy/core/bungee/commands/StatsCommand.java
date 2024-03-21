@@ -2,8 +2,8 @@ package de.teamholy.core.bungee.commands;
 
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
-import de.teamholy.core.api.utility.TrophieLeague;
 import de.teamholy.core.api.utility.Gamemodes;
+import de.teamholy.core.api.utility.TrophieLeague;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import de.teamholy.core.bungee.util.ChatAction;

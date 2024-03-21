@@ -7,7 +7,6 @@ import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ChatFilterManager;
 import de.teamholy.core.bungee.manager.ChatLogManager;
-import de.teamholy.core.bungee.model.ChatLog;
 import de.teamholy.core.bungee.util.DiffMatch;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -37,9 +36,8 @@ public class ChatFilterListener implements Listener {
 
     DiffMatch diffMatch = new DiffMatch();
 
-    public ChatFilterListener(BungeeCore bungeeCore) {
-        this.bungeeCore = bungeeCore;
-        ProxyServer.getInstance().getPluginManager().registerListener(bungeeCore, this);
+    public ChatFilterListener() {
+        this.bungeeCore = BungeeCore.getInstance();
         loadDomains();
     }
 

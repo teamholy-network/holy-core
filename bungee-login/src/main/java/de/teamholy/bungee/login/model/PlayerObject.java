@@ -20,7 +20,7 @@ public class PlayerObject {
     @Id
     String name;
     UUID uuid;
-    HashMap<String, Long> ips = new HashMap<String, Long>();
+    HashMap<String, Long> ips = new HashMap<>();
     String passwordhash;
     String hostname;
 }
