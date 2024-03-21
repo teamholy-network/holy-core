@@ -1,13 +1,5 @@
 package de.teamholy.bungee.login.listener;
 
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import de.teamholy.bungee.login.BungeeLogin;
 import de.teamholy.bungee.login.api.TaskAPI;
 import de.teamholy.bungee.login.manager.BotManager;
@@ -28,6 +20,14 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("deprecation")
 public class EventListener implements Listener {

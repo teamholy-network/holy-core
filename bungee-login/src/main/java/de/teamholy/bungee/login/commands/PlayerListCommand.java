@@ -1,9 +1,5 @@
 package de.teamholy.bungee.login.commands;
 
-import java.util.Locale;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import de.teamholy.bungee.login.BungeeLogin;
 import de.teamholy.bungee.login.api.TaskAPI;
 import de.teamholy.bungee.login.model.PlayerObject;
@@ -13,6 +9,10 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+
+import java.util.Locale;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PlayerListCommand extends Command {
 

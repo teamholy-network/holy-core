@@ -1,18 +1,13 @@
 package de.teamholy.bungee.login.filter;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import com.google.gson.Gson;
-
 import de.teamholy.bungee.login.api.RestAPI;
 import de.teamholy.bungee.login.api.RestAPIResponse;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
+import java.util.concurrent.*;
 
 public class IPChecker {
 

@@ -1,7 +1,5 @@
 package de.teamholy.bungee.login.commands;
 
-import java.util.Locale;
-
 import de.teamholy.bungee.login.BungeeLogin;
 import de.teamholy.bungee.login.api.TaskAPI;
 import de.teamholy.bungee.login.manager.BotManager;
@@ -11,6 +9,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+
+import java.util.Locale;
 
 public class LoginCommand extends Command {
 

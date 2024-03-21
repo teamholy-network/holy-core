@@ -1,7 +1,5 @@
 package de.teamholy.bungee.login.commands;
 
-import java.util.regex.Pattern;
-
 import de.teamholy.bungee.login.api.TaskAPI;
 import de.teamholy.bungee.login.filter.IPChecker;
 import de.teamholy.bungee.login.filter.IPCheckerResult;
@@ -9,6 +7,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+
+import java.util.regex.Pattern;
 
 public class IPInfoCommand extends Command {
 
