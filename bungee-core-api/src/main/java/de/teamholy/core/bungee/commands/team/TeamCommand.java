@@ -22,9 +22,12 @@ public class TeamCommand extends Command {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
+        // Bro third time the same error? You really want me to spam it xD
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
-        if (!player.hasPermission("teamholy.team"))
+
+        if (!player.hasPermission("teamholy.team")) {
             return;
+        }
 
         int i = 0;
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {

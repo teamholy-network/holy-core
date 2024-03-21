@@ -16,8 +16,12 @@ public class TeamChatCommand extends Command {
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
 
+        // I'm executing this command as console, just produce the error here.
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
-        if (!player.hasPermission("teamholy.team")) return;
+
+        if (!player.hasPermission("teamholy.team")) {
+            return;
+        }
 
         StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
 
@@ -35,8 +39,8 @@ public class TeamChatCommand extends Command {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (int a = 0; a < strings.length; a++) {
-            stringBuilder.append(strings[a] + " ");
+        for (String string : strings) {
+            stringBuilder.append(string).append(" ");
         }
 
         BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeamchat §8× " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §8» §7" + stringBuilder.toString().replace("&", "§"));

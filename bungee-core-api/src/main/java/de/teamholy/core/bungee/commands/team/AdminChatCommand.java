@@ -22,11 +22,14 @@ public class AdminChatCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
 
+        // I'm executing this command as console, just produce the error here.
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        if (!player.hasPermission("teamholy.team")) return;
+
+        if (!player.hasPermission("teamholy.team")) {
+            return;
+        }
 
         StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
-
 
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (!adminRanks.contains(playerProfile.getRank())) {
@@ -44,8 +47,8 @@ public class AdminChatCommand extends Command {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (int a = 0; a < args.length; a++) {
-            stringBuilder.append(args[a] + " ");
+        for (String arg : args) {
+            stringBuilder.append(arg).append(" ");
         }
 
         BungeeCore.getInstance().getBungeePlayerManager().notifyAdmin("§f§kKLK§r §4§lADMINCHAT §f§kKLK§r §8× " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §8» §7" + stringBuilder.toString().replace("&", "§"));
