@@ -25,7 +25,7 @@ public class HealthTask implements Runnable {
         try {
             ConcurrentHashMap<String, Long> pingMap = CloudModuleCore.getInstance().getHealthService().getPingMap();
             for (String server : pingMap.keySet()) {
-                if (pingMap.get(server) != null && System.currentTimeMillis() - healthService.getLastPing(server) <= 5000) continue;
+                if (pingMap.get(server) != null && System.currentTimeMillis() - healthService.getLastPing(server) <= 12000) continue;
 
                 healthService.removePing(server);
                 healthService.stopService(server);

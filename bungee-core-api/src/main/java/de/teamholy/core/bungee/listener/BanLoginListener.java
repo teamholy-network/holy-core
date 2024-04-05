@@ -77,6 +77,13 @@ public class BanLoginListener implements Listener {
 
             BanProfile punishProfile = punishService.getEntity(playerAcc.getPlayerId(), () -> punishService.getRepository().findFirstById(playerAcc.getPlayerId()));
             if (punishProfile != null && punishProfile.active() && !punishProfile.getReason().equalsIgnoreCase(Punish.BanReason.BAN_BYPASS.getEnglishText())) {
+
+                if (playerAcc.getPlayerName().equalsIgnoreCase(loginEvent.getConnection().getName())) {
+                    loginEvent.setCancelled(true);
+                    loginEvent.setCancelReason("§cPlease join with §6premium.teamholy.net §cif you are a premium account.");
+                    return false;
+                }
+
                 Punish.BanReason banReason = Punish.BanReason.BAN_BYPASS;
                 BanProfile banProfile = new BanProfile();
                 banProfile.setPlayerId(loginEvent.getConnection().getUniqueId());
