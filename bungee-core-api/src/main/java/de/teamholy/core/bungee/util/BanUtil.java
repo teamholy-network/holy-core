@@ -97,7 +97,7 @@ public class BanUtil {
                 .append(dateString)
                 .append("\n\n");
 
-        builder.append("§7You can make an unban appeal at §ehttps://forum.teamholy.de/\n")
+        builder.append("§7You can make an unban appeal by opening a ticket on §ehttps://dc.teamholy.de/\n")
             .append("\n")
             .append(Message.LINE)
             .append("\n");
