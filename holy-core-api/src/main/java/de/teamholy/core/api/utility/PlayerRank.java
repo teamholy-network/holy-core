@@ -50,13 +50,22 @@ public enum PlayerRank {
         102, 0, 102),
     CHAMPION("Champion", "§3Champion §8┃ §3", "§3Champ §8┃ §3", "§3", 8400,
         51, 51, 255),
-    VIP("VIP", "§dVIP §8┃ §d", "§dVIP §8┃ §d", "§d", 8500,
+    VIP("VIP", "§dVIP §8┃ §d", "§dVIP §8┃ §d", "§d", 8600,
         204, 0, 153),
-    PREMIUMPLUS("PremiumPlus", "§ePremium+ §8┃ §e", "§ePrem+ §8┃ §e", "§e", 8600,
+
+    PREMIUMPLUS("PremiumPlus", "§ePremium+ §8┃ §e", "§ePrem+ §8┃ §e", "§e", 8500,
+        255, 255, 0),
+    // VIP WEEK
+    PREMIUM("Premium", "§dVIP §8┃ §d", "§dVIP §8┃ §d", "§d", 8600,
+        204, 0, 153),
+    PLAYER("Player", "§dVIP §8┃ §d", "§dVIP §8┃ §d", "§d", 8600,
+        204, 0, 153);
+
+/*    PREMIUMPLUS("PremiumPlus", "§ePremium+ §8┃ §e", "§ePrem+ §8┃ §e", "§e", 8500,
         255, 255, 0),
     PREMIUM("Premium", "§6Premium §8┃ §6", "§6Premium §8┃ §6", "§6", 8700,
         204, 102, 0),
-    PLAYER("Player", "§7", "§7", "§7", 9000, 80, 80, 80);
+    PLAYER("Player", "§7", "§7", "§7", 9000, 80, 80, 80);*/
 
     String name;
     String chatPrefix;
