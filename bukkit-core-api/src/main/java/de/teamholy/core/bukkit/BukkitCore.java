@@ -109,9 +109,9 @@ public class BukkitCore extends JavaPlugin {
 
 
 
-        BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
+       /* BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
             cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
-        }, 0, 50);
+        }, 0, 50); */
 
 
 

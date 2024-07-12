@@ -7,7 +7,7 @@ import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ChatFilterManager;
 import de.teamholy.core.bungee.manager.ChatLogManager;
-import de.teamholy.core.bungee.model.ChatLog;
+import de.teamholy.core.bungee.manager.LensRedisManager;
 import de.teamholy.core.bungee.util.DiffMatch;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 public class ChatFilterListener implements Listener {
 
     BungeeCore bungeeCore;
+    LensRedisManager lensRedisManager;
 
     public static final HashMap<UUID, String> LASTMESSAGES = new HashMap<>();
 
@@ -39,6 +40,7 @@ public class ChatFilterListener implements Listener {
 
     public ChatFilterListener(BungeeCore bungeeCore) {
         this.bungeeCore = bungeeCore;
+        this.lensRedisManager = bungeeCore.getLensRedisManager();
         ProxyServer.getInstance().getPluginManager().registerListener(bungeeCore, this);
         loadDomains();
     }
@@ -88,9 +90,7 @@ public class ChatFilterListener implements Listener {
                             return;
                         }
 
-                        LinkedList<ChatLogManager.Message> chatlog = ChatLogManager
-                            .CHATLOGS
-                            .getOrDefault(proxiedPlayer.getUniqueId(), Lists.newLinkedList());
+                        LinkedList<ChatLogManager.Message> chatlog = ChatLogManager.CHATLOGS.getOrDefault(proxiedPlayer.getUniqueId(), Lists.newLinkedList());
 
                         if (chatlog.stream().noneMatch(message1 -> message1.message().contains(bannedWord))) {
                             chatlog.add(new ChatLogManager.Message(event.getMessage(), proxiedPlayer.getServer().getInfo().getName(), System.currentTimeMillis()));
@@ -177,6 +177,7 @@ public class ChatFilterListener implements Listener {
             event.setCancelled(true);
         }
 
+        lensRedisManager.addMessage(proxiedPlayer.getUniqueId(), event.getMessage(), proxiedPlayer.getDisplayName());
         LASTMESSAGES.put(proxiedPlayer.getUniqueId(), event.getMessage());
 
     }

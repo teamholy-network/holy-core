@@ -18,6 +18,7 @@ import de.teamholy.core.bungee.commands.friend.FriendCommand;
 import de.teamholy.core.bungee.commands.friend.FriendListCommand;
 import de.teamholy.core.bungee.commands.friend.MSGCommand;
 import de.teamholy.core.bungee.commands.friend.ReplyCommand;
+import de.teamholy.core.bungee.commands.lens.LensCommand;
 import de.teamholy.core.bungee.commands.link.LinkCommand;
 import de.teamholy.core.bungee.commands.link.RelinkCommand;
 import de.teamholy.core.bungee.commands.mute.MuteCommand;
@@ -77,6 +78,8 @@ public class BungeeCore extends Plugin {
 
     ProxyManager proxyManager;
 
+    LensRedisManager lensRedisManager;
+
     public BungeeCore() {
         instance = this;
     }
@@ -94,6 +97,7 @@ public class BungeeCore extends Plugin {
         helpers = new Helpers();
         linkManager = new LinkManager();
         proxyManager = new ProxyManager(this.coreAPI);
+        lensRedisManager = new LensRedisManager(this.coreAPI);
 
         new LoginListener();
         new BanLoginListener(this);
@@ -117,7 +121,7 @@ public class BungeeCore extends Plugin {
         new LookupCommand();
         new AdminClanCommand();
         new ClanCommand();
-        new CoinsCommand();
+        new CoinsCommand(this.coreAPI);
         new CustomPunishCommand();
         new CloudMessageListener(this.coreAPI);
 
@@ -162,6 +166,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
 
 
         chatFilterManager.loadFilteredWords();
@@ -193,7 +198,7 @@ public class BungeeCore extends Plugin {
             publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
         }, 20, 20, TimeUnit.MINUTES);
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+       ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
             coreAPI.getMetricsManager().saveMetric(document);
         }, 0, 2, TimeUnit.SECONDS);

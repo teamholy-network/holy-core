@@ -100,8 +100,10 @@ public class RedisQueueListener {
                                 cloudManager.sendCloudMessage("bukkit", "banner", command);
                                 sendDiscordWebhook("Update Custom Banner for " + target);
                             }
-                            default ->
+                            default -> {
                                 ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
+                                sendDiscordWebhook(msg);
+                            }
                         }
 
                     }

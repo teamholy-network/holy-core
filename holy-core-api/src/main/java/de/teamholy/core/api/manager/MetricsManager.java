@@ -29,7 +29,6 @@ public class MetricsManager {
             return;
         }
         if (coreAPI.getRedissonManager().getRedissonClient().isShutdown()) {
-            System.out.println("redissonClient is shutdown");
             return;
         }
         if (metricsCollection == null) {

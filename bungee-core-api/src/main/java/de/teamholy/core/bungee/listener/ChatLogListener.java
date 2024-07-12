@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ChatLogManager;
+import de.teamholy.core.bungee.manager.LensRedisManager;
 import de.teamholy.core.bungee.model.ChatLog;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -29,7 +30,6 @@ public class ChatLogListener implements Listener {
         if (message.startsWith("/")) return;
 
         chatLogManager.addMessageToChatlog(playerUUID, new ChatLogManager.Message(message, serverName, System.currentTimeMillis()));
-
     }
 
 

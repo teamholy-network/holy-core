@@ -86,7 +86,7 @@ public class CoinManager {
         return decimalFormat.format(integer);
     }
 
-    private void sendMessage(UUID uuid, long coins) {
+    public void sendMessage(UUID uuid, long coins) {
         coreAPI.getCloudManager().sendCloudMessage("bukkit", "coins_update", JsonDocument.newDocument("uuid", uuid.toString()).append("coins", coins));
     }
 }

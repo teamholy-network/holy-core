@@ -1,0 +1,51 @@
+package de.teamholy.core.bungee.commands.lens;
+
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.Command;
+
+public class LensCommand extends Command {
+    public LensCommand(String name) {
+        super(name);
+    }
+
+    @Override
+    public void execute(CommandSender commandSender, String[] strings) {
+
+
+      /*  if (!(commandSender instanceof ProxiedPlayer player)) {
+            return;
+        } */
+
+        if (!commandSender.hasPermission("*")) {
+            return;
+        }
+
+        String target = strings[0];
+
+        ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
+
+        if (targetPlayer == null) {
+            return;
+        }
+
+        String reason = strings[1];
+        String multiply = strings[2];
+        String max = strings[3];
+
+        switch (reason) {
+            case "faultscore":
+                targetPlayer.sendMessage("§cGuardian §8× §7Your messages have been §cflagged §7by our system. Please avoid toxic behaviour!" +
+                    " §8(§7" + multiply + "/" + max + "§8)");
+                targetPlayer.sendMessage("§cGuardian §8× §7Learn more about this on §6teamholy.de/guardian");
+                break;
+            case "punishmultiplier":
+                targetPlayer.sendMessage("§cGuardian §8× §7You have been §cpunished §7for your behavior " +
+                    "§8(§7x" + multiply + "§8)");
+                break;
+        }
+
+
+    }
+}
