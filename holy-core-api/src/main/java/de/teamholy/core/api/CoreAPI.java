@@ -16,6 +16,7 @@ import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
 import de.teamholy.core.api.entities.stats.StatsProfileService;
 import de.teamholy.core.api.manager.*;
+import de.teamholy.core.api.rabbit.Rabbit;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
 import lombok.AccessLevel;
@@ -42,6 +43,9 @@ public class CoreAPI {
     RankingManager rankingManager;
     MetricsManager metricsManager;
     ExecutorService executor;
+
+
+    Rabbit rabbit;
 
     PlayerService playerService;
     BanService banService;
@@ -84,6 +88,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
+        this.rabbit = new Rabbit(config.getRabbitConnection());
 
         try {
             cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
@@ -129,6 +134,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
+        this.rabbit = new Rabbit(config.getRabbitConnection());
 
 
         try {

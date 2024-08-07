@@ -16,6 +16,7 @@ public class ConfigManager {
     String password;
     String redisPassword;
     String host;
+    String rabbitConnection;
     int port;
     String database;
     boolean useAuthSource;
@@ -36,6 +37,7 @@ public class ConfigManager {
             port = yaml.getInt("port");
             database = yaml.getString("database");
             useAuthSource = yaml.getBoolean("useAuthSource");
+            rabbitConnection = yaml.getString("rabbitConnection");
 
         } catch (IOException e) {
             throw new RuntimeException(e);

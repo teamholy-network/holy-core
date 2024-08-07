@@ -1,14 +1,10 @@
 package de.teamholy.core.bungee;
 
-import com.google.common.collect.Lists;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.teamholy.core.api.CoreAPI;
-import de.teamholy.core.api.entities.game.GameProfile;
-import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
-import de.teamholy.core.api.utility.Gamemodes;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -19,8 +15,7 @@ import de.teamholy.core.bungee.commands.friend.FriendListCommand;
 import de.teamholy.core.bungee.commands.friend.MSGCommand;
 import de.teamholy.core.bungee.commands.friend.ReplyCommand;
 import de.teamholy.core.bungee.commands.lens.LensCommand;
-import de.teamholy.core.bungee.commands.link.LinkCommand;
-import de.teamholy.core.bungee.commands.link.RelinkCommand;
+import de.teamholy.core.bungee.commands.link.LinkV2Command;
 import de.teamholy.core.bungee.commands.mute.MuteCommand;
 import de.teamholy.core.bungee.commands.mute.UnmuteCommand;
 import de.teamholy.core.bungee.commands.party.PartyChatCommand;
@@ -46,6 +41,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
+
 import java.util.concurrent.TimeUnit;
 
 
@@ -56,7 +52,7 @@ public class BungeeCore extends Plugin {
     @Getter
     private static BungeeCore instance;
 
-    public static String RESTBASE = "http://45.90.97.163:3004/"; //quickfix, removed later
+    public static String RESTBASE = "http://77.90.7.8:3004/"; //quickfix, removed later
 
     @Getter
     CoreAPI coreAPI;
@@ -106,6 +102,7 @@ public class BungeeCore extends Plugin {
         new PostLoginListener(this.proxyManager);
         new PostDisconnectListener();
         new PartyListener();
+        new RabbitQueueListener(this);
 
         if (!ProxyServer.getInstance().getName().startsWith("TestProxy")) {
             redisQueueListener = new RedisQueueListener("127.0.0.1", 6379, coreAPI.getConfig().getRedisPassword());
@@ -161,12 +158,13 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
+        //ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
+       // ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkV2Command("link"));
 
 
         chatFilterManager.loadFilteredWords();
@@ -214,10 +212,6 @@ public class BungeeCore extends Plugin {
     public void onDisable() {
         coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
         coreAPI.onDisable();
-    }
-
-    public static BungeeCore getInstance() {
-        return instance;
     }
 
     public static CoreAPI getAPI() {
