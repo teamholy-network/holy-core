@@ -46,7 +46,7 @@ public enum PlayerRank {
         0, 102, 255),
     HOLY("Holy", "§6Holy §8┃ §f", "§6Holy §8┃ §f", "§f", 8250,
         255, 255, 255),
-    YOUTUBER("Youtuber", "§5Youtuber §8┃ §5", "§5YT §8┃ §5", "§5", 8300,
+/*    YOUTUBER("Youtuber", "§5Youtuber §8┃ §5", "§5YT §8┃ §5", "§5", 8300,
         102, 0, 102),
     CHAMPION("Champion", "§3Champion §8┃ §3", "§3Champ §8┃ §3", "§3", 8400,
         51, 51, 255),
@@ -56,7 +56,19 @@ public enum PlayerRank {
         255, 255, 0),
     PREMIUM("Premium", "§6Premium §8┃ §6", "§6Premium §8┃ §6", "§6", 8700,
         204, 102, 0),
-    PLAYER("Player", "§7", "§7", "§7", 9000, 80, 80, 80);
+    PLAYER("Player", "§7", "§7", "§7", 9000, 80, 80, 80);  */
+    YOUTUBER("Youtuber", "§5Youtuber §8┃ §5", "§5YT §8┃ §5", "§5", 8248,
+    102, 0, 102),
+    CHAMPION("Champion", "§3Champion §8┃ §3", "§3Champ §8┃ §3", "§3", 8249,
+        51, 51, 255),
+    VIP("VIP", "§6Holy §8┃ §f", "§6Holy §8┃ §f", "§f", 8250,
+        255, 255, 255),
+    PREMIUMPLUS("PremiumPlus","§6Holy §8┃ §f", "§6Holy §8┃ §f", "§f", 8250,
+        255, 255, 255),
+    PREMIUM("Premium", "§6Holy §8┃ §f", "§6Holy §8┃ §f", "§f", 8250,
+        255, 255, 255),
+    PLAYER("Player", "§6Holy §8┃ §f", "§6Holy §8┃ §f", "§f", 8250,
+        255, 255, 255);
 
     String name;
     String chatPrefix;
