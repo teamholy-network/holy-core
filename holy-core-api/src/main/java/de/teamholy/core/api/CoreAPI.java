@@ -45,7 +45,7 @@ public class CoreAPI {
     ExecutorService executor;
 
 
-    Rabbit rabbit;
+   // Rabbit rabbit;
 
     PlayerService playerService;
     BanService banService;
@@ -88,7 +88,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
-        this.rabbit = new Rabbit(config.getRabbitConnection());
+        //this.rabbit = new Rabbit(config.getRabbitConnection());
 
         try {
             cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
@@ -134,7 +134,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
-        this.rabbit = new Rabbit(config.getRabbitConnection());
+        //this.rabbit = new Rabbit(config.getRabbitConnection());
 
 
         try {

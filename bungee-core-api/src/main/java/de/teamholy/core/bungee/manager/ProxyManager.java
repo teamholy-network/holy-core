@@ -69,30 +69,6 @@ public class ProxyManager {
         });
     }
 
-    public void checkZplays(String proxy, LucaZplaysCallback callback) {
-        coreAPI.getExecutor().execute(() -> {
-            try {
-                URL url = new URL("http://ipcheck.skydb.de/residental?ip=" + proxy);
-                Scanner scanner = new Scanner(url.openStream());
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while (scanner.hasNext()) {
-                    stringBuilder.append(scanner.next());
-                }
-
-                callback.onResult(stringBuilder.toString().contains("false"));
-
-
-                scanner.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        });
-    }
-
     public void checkASN(String proxy, ASNCallback callback) {
         coreAPI.getExecutor().execute(() -> {
             try {

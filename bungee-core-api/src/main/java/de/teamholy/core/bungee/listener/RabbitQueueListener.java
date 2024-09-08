@@ -1,4 +1,4 @@
-package de.teamholy.core.bungee.listener;
+/*package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.teamholy.core.api.CoreAPI;
@@ -50,4 +50,4 @@ public class RabbitQueueListener {
        return ProxyServer.getInstance().getPlayer(name);
     }
 
-}
+}*/

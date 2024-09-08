@@ -102,7 +102,7 @@ public class BungeeCore extends Plugin {
         new PostLoginListener(this.proxyManager);
         new PostDisconnectListener();
         new PartyListener();
-        new RabbitQueueListener(this);
+        //new RabbitQueueListener(this);
 
         if (!ProxyServer.getInstance().getName().startsWith("TestProxy")) {
             redisQueueListener = new RedisQueueListener("127.0.0.1", 6379, coreAPI.getConfig().getRedisPassword());

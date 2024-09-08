@@ -51,7 +51,6 @@ public class BukkitCore extends JavaPlugin {
     CloudMessageManager cloudMessageManager;
 
 
-
     CustomBannerManager customBannerManager;
     MetricsManager metricsManager;
     CoreAPI coreAPI;
@@ -114,9 +113,6 @@ public class BukkitCore extends JavaPlugin {
         }, 0, 50); */
 
 
-
-
-
     }
 
     private void registerCommands() {
@@ -154,10 +150,8 @@ public class BukkitCore extends JavaPlugin {
                 world.setGameRuleValue("doDaylightCycle", "false");
                 world.setGameRuleValue("doMobSpawning", "false");
                 for (Entity ent : Bukkit.getWorld(world.getName()).getEntities()) {
-                    if (ent instanceof Animals)
-                        ent.remove();
-                    if (ent instanceof Monster)
-                        ent.remove();
+                    if (ent instanceof Animals) ent.remove();
+                    if (ent instanceof Monster) ent.remove();
                 }
             }
         }, 200);
