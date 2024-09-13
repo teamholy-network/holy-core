@@ -31,7 +31,7 @@ public class LinkV2Command extends Command {
             return;
         }
 
-        sendAsyncHttpRequest("http://77.90.7.8:3004/holy/link/v2/verify/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd/" + player.getUniqueId().toString() + "/" + code).thenAccept(response -> {
+        sendAsyncHttpRequest("http://185.244.25.8:3004/holy/link/v2/verify/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd/" + player.getUniqueId().toString() + "/" + code).thenAccept(response -> {
             if (response == null) {
                 commandSender.sendMessage("§cError: An error occurred while processing your request");
                 return;
