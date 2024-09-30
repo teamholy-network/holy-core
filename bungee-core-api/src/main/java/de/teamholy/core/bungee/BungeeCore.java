@@ -52,7 +52,7 @@ public class BungeeCore extends Plugin {
     @Getter
     private static BungeeCore instance;
 
-    public static String RESTBASE = "http://185.244.25.8:3004/"; //quickfix, removed later
+    public static String RESTBASE = "http://185.14.92.243.8:3004/"; //quickfix, removed later
 
     @Getter
     CoreAPI coreAPI;
