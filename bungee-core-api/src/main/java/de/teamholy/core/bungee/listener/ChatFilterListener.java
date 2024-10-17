@@ -45,7 +45,7 @@ public class ChatFilterListener implements Listener {
         loadDomains();
     }
 
-    @EventHandler
+    @EventHandler (priority = 64)
     public void onChat(ChatEvent event) {
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getSender();
 
@@ -54,11 +54,11 @@ public class ChatFilterListener implements Listener {
         if (message.startsWith("/imitate")) {
 
             String[] args = message.split(" ");
-            if (args.length != 1) return;
+            if (args.length < 2) return;
 
-            for (String s : new String[]{"2sa", "beule"}) {
-                if (args[0].equalsIgnoreCase(s)) {
-                    proxiedPlayer.sendMessage("§cKannste knicken");
+            for (String s : new String[]{"2sa", "beide"}) {
+                if (args[1].toLowerCase().equalsIgnoreCase(s)) {
+                    proxiedPlayer.disconnect("§cYou have been banned for imitating a staff member");
                     event.setCancelled(true);
                     return;
                 }
