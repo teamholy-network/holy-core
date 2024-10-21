@@ -19,7 +19,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     compileOnly 'net.md-5:bungeecord-chat:1.8-SNAPSHOT'
     compileOnly 'com.github.azbh111:craftbukkit-1.8.8:R'
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.8.0'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.3.0'
     compileOnly(project(':holy-core-api'))
     compileOnly("eu.koboo:en2do:$en2doVersion")
 }

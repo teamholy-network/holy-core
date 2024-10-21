@@ -28,7 +28,7 @@ public class TeamManager implements Listener {
     }
 
     public void announceUpdate(Player player) {
-        service.execute(() -> {
+        //service.execute(() -> {
             PlayerMeta playerMeta = markupAPI.getNickManager().getPlayerMeta(player.getUniqueId());
             String playerName = playerMeta != null ? playerMeta.getNickName() : player.getName();
             for (Player online : Bukkit.getOnlinePlayers()) {
@@ -37,7 +37,7 @@ public class TeamManager implements Listener {
                 String otherName = otherMeta != null ? otherMeta.getNickName() : online.getName();
                 fireNameTagEvent(online, player, otherName);
             }
-        });
+        //});
     }
 
     private void fireNameTagEvent(Player player, Player other, String name) {

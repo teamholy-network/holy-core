@@ -12,7 +12,6 @@ public class GameProfileReflection {
 
     private static Field NAME_FIELD;
     private static Field UUID_FIELD;
-
     private static Field PLAY_OUT_INFO;
 
     static {
@@ -26,15 +25,16 @@ public class GameProfileReflection {
             PLAY_OUT_INFO = PacketPlayOutPlayerInfo.class.getDeclaredField("b");
             PLAY_OUT_INFO.setAccessible(true);
         } catch (Exception e) {
-            Bukkit.broadcastMessage("Reflection error! Couldn't use NickAPI!");
+            Bukkit.getLogger().severe("Reflection error! Couldn't use NickAPI!");
+            e.printStackTrace();
         }
     }
 
     public static void setName(GameProfile profile, String name) {
         try {
             NAME_FIELD.set(profile, name);
-        } catch (IllegalAccessException ignored) {
-
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
@@ -42,6 +42,7 @@ public class GameProfileReflection {
         try {
             UUID_FIELD.set(profile, uuid);
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
@@ -49,6 +50,7 @@ public class GameProfileReflection {
         try {
             PLAY_OUT_INFO.set(packet, list);
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

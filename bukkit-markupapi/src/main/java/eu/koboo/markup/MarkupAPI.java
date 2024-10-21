@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 
 public class MarkupAPI extends JavaPlugin {
 
-    public static final String NICK_PREFIX = "§5Nick §8× §7";
+    public static final String NICK_PREFIX = "§dN§5ick §8× §7";
 
     private static MarkupAPI api;
 

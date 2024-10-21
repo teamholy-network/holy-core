@@ -107,10 +107,10 @@ public class BukkitCore extends JavaPlugin {
         protocolManager.addPacketListener(new TabCompleteListener(this, PacketType.Play.Client.TAB_COMPLETE));
 
 
-
-       /* BukkitCore.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(BukkitCore.getInstance(), () -> {
-            cloudMessageManager.sendBungeeReport("bungee", "ohio:report");
-        }, 0, 50); */
+        BukkitCore.getInstance().getServer().getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
+            Bukkit.getWorlds().forEach(World::save);
+            System.out.println("Saved all worlds");
+        }, 10 * 20);
 
 
     }

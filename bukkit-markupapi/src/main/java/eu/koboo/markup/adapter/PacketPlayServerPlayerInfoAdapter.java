@@ -16,9 +16,6 @@ import eu.koboo.markup.wrapper.WrapperPlayServerPlayerInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Contens
- */
 public class PacketPlayServerPlayerInfoAdapter extends PacketAdapter {
 
     private final MarkupAPI markupAPI;
@@ -69,7 +66,5 @@ public class PacketPlayServerPlayerInfoAdapter extends PacketAdapter {
 
         packet.setData(playerInfoDataList);
         event.setPacket(packet.getHandle());
-
     }
-
 }
