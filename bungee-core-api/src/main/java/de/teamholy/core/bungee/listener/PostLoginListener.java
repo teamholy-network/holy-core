@@ -180,6 +180,13 @@ public class PostLoginListener implements Listener {
             });
         }
 
+        // special rainbow clay perk
+        if (!perkPlayerProfile.getOwnedPerks().contains(30) && playerProfile.getOnlineTime() > 288000000) {
+            perkPlayerProfile.getOwnedPerks().add(30);
+            proxiedPlayer.sendMessage("§6Perk §8× §7You have unlocked the §4R§ca§6i§en§ab§2o§bw Clay Perk §7for playing §b80 hours");
+            save = true;
+        }
+
         if (proxiedPlayer.hasPermission("teamholy.team")) {
             StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
             boolean updateStaffDB = false;
@@ -258,7 +265,6 @@ public class PostLoginListener implements Listener {
                 BungeeCore.getAPI().getReportManager().addReport(report);
             }
         });
-
 
 
     }

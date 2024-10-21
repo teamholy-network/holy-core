@@ -58,7 +58,8 @@ public class UsePerkListener implements Listener {
 
 
         if (ChatColor.stripColor(perk.getName()).toLowerCase().contains("rainbow") &&
-            (event.getBlock().getType() == Material.WOOL || event.getBlock().getType() == Material.STAINED_GLASS)) {            Player player = event.getPlayer();
+            (event.getBlock().getType() == Material.WOOL || event.getBlock().getType() == Material.STAINED_GLASS || event.getBlock().getType() == Material.STAINED_CLAY)) {
+            Player player = event.getPlayer();
             if (!randomColor.containsKey(player)) randomColor.put(player, 0);
 
 

@@ -103,7 +103,7 @@ public class PerkManager {
     private void changeRainbowColorInInventory(Player player) {
         int i = 0;
         for (ItemStack item : player.getOpenInventory().getTopInventory()) {
-            if (item != null && (item.getType() == Material.WOOL || item.getType() == Material.STAINED_GLASS)) {
+            if (item != null) {
 
                 if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).toLowerCase().contains("rainbow")) {
                     PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId()).getPerkPlayerProfile();
@@ -115,6 +115,8 @@ public class PerkManager {
                     if (item.getType() == Material.WOOL && ChatColor.stripColor(perk.getName()).toLowerCase().contains("wool")) {
                         itemBuilder.withGlow(true);
                     } else if (item.getType() == Material.STAINED_GLASS && ChatColor.stripColor(perk.getName()).toLowerCase().contains("glass")) {
+                        itemBuilder.withGlow(true);
+                    } else if (item.getType() == Material.STAINED_CLAY && ChatColor.stripColor(perk.getName()).toLowerCase().contains("clay")) {
                         itemBuilder.withGlow(true);
                     }
 
@@ -287,6 +289,9 @@ public class PerkManager {
                 openSecondPerkInventory(player, perkType, SortOptionPerk.RANK, sortOptionPlayer);
             }
             if (sortOptionPerk == SortOptionPerk.RANK) {
+                openSecondPerkInventory(player, perkType, SortOptionPerk.SPECIAL, sortOptionPlayer);
+            }
+            if (sortOptionPerk == SortOptionPerk.SPECIAL) {
                 openSecondPerkInventory(player, perkType, SortOptionPerk.NORMAL, sortOptionPlayer);
             }
 
@@ -326,7 +331,6 @@ public class PerkManager {
                 (perk.isBuyAble() && !perkPlayerProfile.getOwnedPerks().contains(perk.getId())) || (!perk.isBuyAble() && !player.hasPermission(perk.getPerkRankType().getPermission()));
             default -> true;
         }).collect(Collectors.toList());
-
 
         if (sortOptionPerk == SortOptionPerk.RANK) {
             perks.removeIf(Perk::isBuyAble);
@@ -371,11 +375,14 @@ public class PerkManager {
 
             if (
                 perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isBuyAble()
-                    || !perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission())
+                    || !perk.isBuyAble() && player.hasPermission(perk.getPerkRankType().getPermission()) && !perk.isSpecial()
                     || perkPlayerProfile.getOwnedPerks().contains(perk.getId()) && perk.isSpecial()
             ) {
 
-                list.clear();
+                if (!perk.isSpecial()) {
+                    list.clear();
+                }
+
                 list.add("§ayou own this perk, click to select");
             }
 

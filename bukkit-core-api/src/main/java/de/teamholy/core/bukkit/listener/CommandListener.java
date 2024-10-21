@@ -23,7 +23,7 @@ public class CommandListener implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (event.getMessage().toLowerCase(Locale.ROOT).startsWith("/vulcan") && !player.hasPermission("teamholy.anticheat")) {
+        if ((event.getMessage().toLowerCase(Locale.ROOT).startsWith("/vulcan") || event.getMessage().toLowerCase().startsWith("/karhu")) && !player.hasPermission("teamholy.anticheat")) {
             player.sendMessage("Unknown command. Type \"/help\" for help.");
             event.setCancelled(true);
             return;
