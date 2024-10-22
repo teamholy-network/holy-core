@@ -68,10 +68,10 @@ public class PlayerJoinQuitListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
 
         event.setJoinMessage(null);
+        Player player = event.getPlayer();
 
         bukkitCore.getCoreAPI().getExecutor().execute(() -> {
 
-            Player player = event.getPlayer();
             if (player == null || !player.isOnline()) return;
 
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
@@ -90,13 +90,13 @@ public class PlayerJoinQuitListener implements Listener {
 
             bukkitCore.getPlayerCacheManager().getCachedPlayers().put(player.getUniqueId(), cachedBukkitPlayer);
 
-            Bukkit.getScheduler().runTask(bukkitCore, () -> Bukkit.getScheduler().runTask(BukkitCore.getInstance(), () -> Bukkit.getPluginManager().callEvent(new CachedPlayerJoinEvent(cachedBukkitPlayer))));
+            Bukkit.getScheduler().runTask(bukkitCore, () -> {
+                if (player.isOnline()) {
+                    Bukkit.getPluginManager().callEvent(new CachedPlayerJoinEvent(cachedBukkitPlayer));
+                }
+            });
 
             SkinProfile skinProfile = BukkitCore.getAPI().getSkinService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getSkinService().getRepository().findFirstById(player.getUniqueId()));
-
-
-
-
 
             String[] supportedServers = new String[]{"Lobby", "PremiumLobby", "MLGRush", "Clutches", "TestLobby", "Bridge"};
 
@@ -151,10 +151,10 @@ public class PlayerJoinQuitListener implements Listener {
                     if (playerProfile.isAutoNick()) {
                         Bukkit.getScheduler().runTaskLater(bukkitCore,() -> player.chat("/nick"),1);
                     } else {
-                        Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),7);
+                        Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),4);
                     }
                 } else {
-                    Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),7);
+                    Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),4);
                 }
             });
 
