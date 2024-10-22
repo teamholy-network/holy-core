@@ -27,6 +27,11 @@ public class PacketPlayServerPlayerInfoAdapter extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
+
+        if (event.isPlayerTemporary()) {
+            return;
+        }
+
         WrapperPlayServerPlayerInfo packet = new WrapperPlayServerPlayerInfo(event.getPacket());
 
         if (markupAPI.getNickManager().getPlayerMetaMap().containsKey(event.getPlayer().getUniqueId())) {
