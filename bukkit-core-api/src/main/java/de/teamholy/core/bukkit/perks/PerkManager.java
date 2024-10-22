@@ -334,6 +334,7 @@ public class PerkManager {
 
         if (sortOptionPerk == SortOptionPerk.RANK) {
             perks.removeIf(Perk::isBuyAble);
+            perks.removeIf(Perk::isSpecial);
             List<PerkRankType> rankOrder = Arrays.asList(PerkRankType.PLAYER, PerkRankType.PREMIUM, PerkRankType.VIP, PerkRankType.HOLY);
             perks.sort(Comparator.comparingInt(p -> rankOrder.indexOf(p.getPerkRankType())));
         } else if (sortOptionPerk == SortOptionPerk.COINS) {
