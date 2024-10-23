@@ -28,6 +28,7 @@ public class ProtocolLibListener extends PacketAdapter {
     public void onPacketReceiving(PacketEvent event) {
 
         if (event.getPacket().getType() != PacketType.Play.Client.USE_ENTITY) return;
+        if (event.isPlayerTemporary()) return;
 
         PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(event.getPlayer().getUniqueId());
         if (cachedBukkitPlayer == null) return;
