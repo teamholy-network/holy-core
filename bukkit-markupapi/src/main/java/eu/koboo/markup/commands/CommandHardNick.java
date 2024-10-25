@@ -71,7 +71,7 @@ public class CommandHardNick implements CommandExecutor {
                 return false;
             }
         } else {
-            markupAPI.getNickManager().resetPlayer(player);
+            markupAPI.getNickManager().resetPlayer(player, false);
             player.sendMessage(MarkupAPI.NICK_PREFIX + "§7You're now unnicked!");
         }
 

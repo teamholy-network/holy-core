@@ -20,12 +20,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.UUID;
-import java.util.function.Consumer;
+
 
 public class MarkupAPI extends JavaPlugin {
 
@@ -58,7 +54,7 @@ public class MarkupAPI extends JavaPlugin {
     }
 
     public static void unnick(Player player) {
-        api.getNickManager().resetPlayer(player);
+        api.getNickManager().resetPlayer(player,false);
     }
 
     public static boolean isNicked(Player player) {

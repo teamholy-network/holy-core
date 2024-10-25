@@ -92,13 +92,13 @@ public class NickManager implements Listener {
             player.setDisplayName(nickName);
         }
 
-        refreshPlayer(player, playerMeta, true, false);
+        refreshPlayer(player, playerMeta, true, false, false);
 
         PlayerPostNickEvent playerPostNickEvent = new PlayerPostNickEvent(player, playerMeta);
         Bukkit.getPluginManager().callEvent(playerPostNickEvent);
     }
 
-    public void resetPlayer(Player player) {
+    public void resetPlayer(Player player, boolean leave) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         GameProfile profile = craftPlayer.getProfile();
         PlayerMeta playerMeta = playerMetaMap.get(player.getUniqueId());
@@ -116,6 +116,20 @@ public class NickManager implements Listener {
             return;
         }
 
+        if (leave) {
+            // Remove the player from the tab list before refreshing
+            WrapperPlayServerPlayerInfo removePacket = new WrapperPlayServerPlayerInfo();
+            WrappedGameProfile wrapperProfiled = playerMeta.getNickedProfile();
+
+            removePacket.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
+            PlayerInfoData playerInfoData = new PlayerInfoData(wrapperProfiled, 0, null, null);
+            removePacket.setData(Collections.singletonList(playerInfoData));
+
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                removePacket.sendPacket(onlinePlayer);
+            }
+        }
+
         playerMetaMap.remove(player.getUniqueId());
 
         if (playerMeta.getRealName() != null) {
@@ -129,21 +143,21 @@ public class NickManager implements Listener {
             profile.getProperties().put("textures", playerMeta.getRealTextures());
         }
 
-        refreshPlayer(player, playerMeta, false, false);
+        refreshPlayer(player, playerMeta, false, false, leave);
         PlayerPostUnnickEvent playerPostUnnickEvent = new PlayerPostUnnickEvent(player, playerMeta);
         Bukkit.getPluginManager().callEvent(playerPostUnnickEvent);
         //cantSee.forEach(cantSeePlayer -> cantSeePlayer.hidePlayer(craftPlayer));
     }
 
     @SuppressWarnings("all")
-    private void refreshPlayer(Player player, PlayerMeta playerMeta, boolean nick, boolean onlyChangeSkin) {
+    private void refreshPlayer(Player player, PlayerMeta playerMeta, boolean nick, boolean onlyChangeSkin, boolean leave) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
 
         WrapperPlayServerEntityDestroy destroy = createDestroy(player);
         WrapperPlayServerPlayerInfo removeInfoAll;
-        WrapperPlayServerPlayerInfo addInfoAll;
+        WrapperPlayServerPlayerInfo addInfoAll = null;
         WrapperPlayServerPlayerInfo removeInfoPlayer;
-        WrapperPlayServerPlayerInfo addInfoPlayer;
+        WrapperPlayServerPlayerInfo addInfoPlayer = null;
 
 
         if (!onlyChangeSkin) {
@@ -158,9 +172,11 @@ public class NickManager implements Listener {
                 // If we are NOT going to nick, remove the previous nick player
                 removeInfoAll = createRemoveInfoNick(false, player, playerMeta);
                 removeInfoPlayer = createRemoveInfoNick(true, player, playerMeta);
-                // and add the real player
-                addInfoAll = createAddInfoReal(player, playerMeta);
-                addInfoPlayer = createAddInfoReal(player, playerMeta);
+                // and add the real player ~edit if hes not leaving
+                if (!leave) {
+                    addInfoAll = createAddInfoReal(player, playerMeta);
+                    addInfoPlayer = createAddInfoReal(player, playerMeta);
+                }
             }
         } else {
             // If we are going to nick, remove the real player
@@ -187,6 +203,7 @@ public class NickManager implements Listener {
             }
         }
 
+        if (leave) return;
         updateOwnSkin(player);
 
         WrapperPlayServerNamedEntitySpawn spawn = createSpawn(player, playerMeta);
@@ -197,7 +214,6 @@ public class NickManager implements Listener {
                 online.showPlayer(player);
             }
         }
-
 
     }
 
@@ -344,8 +360,9 @@ public class NickManager implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         PlayerMeta playerMeta = playerMetaMap.remove(event.getPlayer().getUniqueId());
         if (playerMeta != null) {
-            resetPlayer(event.getPlayer());
-            Bukkit.getPluginManager().callEvent(new PlayerPostUnnickEvent(event.getPlayer(),playerMeta));
+            resetPlayer(event.getPlayer(), true);
+
+            Bukkit.getPluginManager().callEvent(new PlayerPostUnnickEvent(event.getPlayer(), playerMeta));
         }
 
     }
