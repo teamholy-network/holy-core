@@ -116,19 +116,6 @@ public class NickManager implements Listener {
             return;
         }
 
-        if (leave) {
-            // Remove the player from the tab list before refreshing
-            WrapperPlayServerPlayerInfo removePacket = new WrapperPlayServerPlayerInfo();
-            WrappedGameProfile wrapperProfiled = playerMeta.getNickedProfile();
-
-            removePacket.setAction(EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
-            PlayerInfoData playerInfoData = new PlayerInfoData(wrapperProfiled, 0, null, null);
-            removePacket.setData(Collections.singletonList(playerInfoData));
-
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-                removePacket.sendPacket(onlinePlayer);
-            }
-        }
 
         playerMetaMap.remove(player.getUniqueId());
 
@@ -172,11 +159,8 @@ public class NickManager implements Listener {
                 // If we are NOT going to nick, remove the previous nick player
                 removeInfoAll = createRemoveInfoNick(false, player, playerMeta);
                 removeInfoPlayer = createRemoveInfoNick(true, player, playerMeta);
-                // and add the real player ~edit if hes not leaving
-                if (!leave) {
-                    addInfoAll = createAddInfoReal(player, playerMeta);
-                    addInfoPlayer = createAddInfoReal(player, playerMeta);
-                }
+                addInfoAll = createAddInfoReal(player, playerMeta);
+                addInfoPlayer = createAddInfoReal(player, playerMeta);
             }
         } else {
             // If we are going to nick, remove the real player
@@ -203,7 +187,6 @@ public class NickManager implements Listener {
             }
         }
 
-        if (leave) return;
         updateOwnSkin(player);
 
         WrapperPlayServerNamedEntitySpawn spawn = createSpawn(player, playerMeta);
