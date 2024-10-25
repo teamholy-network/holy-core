@@ -74,6 +74,11 @@ public class PlayerJoinQuitListener implements Listener {
 
             if (player == null || !player.isOnline()) return;
 
+            if (bukkitCore.getPlayerCacheManager().getCachedPlayers().containsKey(player.getUniqueId())) {
+                player.kickPlayer("§cPlease rejoin the server!");
+                return;
+            }
+
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
             ClanPlayerProfile clanPlayerProfile = BukkitCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
             PerkPlayerProfile perkPlayerProfile = BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getEntity(player.getUniqueId(), () -> BukkitCore.getInstance().getCoreAPI().getPerkPlayerService().getRepository().findFirstById(player.getUniqueId()));

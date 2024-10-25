@@ -125,6 +125,7 @@ public class BukkitCore extends JavaPlugin {
         getCommand("bcommand").setExecutor(new BungeeCommandCommand());
         getCommand("gamemode").setExecutor(new GamemodeCommand());
         getCommand("reportsgui").setExecutor(new ReportBukkitManager());
+        getCommand("buglog").setExecutor(new BugLogCommand());
         getCommand("stopcore").setExecutor(new de.teamholy.core.bukkit.commands.StopCommand());
         getCommand("whitelist").setExecutor(new de.teamholy.core.bukkit.commands.WhitelistCommand());
     }

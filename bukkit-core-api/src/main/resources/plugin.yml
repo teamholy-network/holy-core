@@ -20,3 +20,4 @@ commands:
         aliases: [ gm ]
     clearchat:
         aliases: [ chatc, clch ]
+    buglog:
