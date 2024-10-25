@@ -18,5 +18,5 @@ commands:
     location:
     gamemode:
         aliases: [ gm ]
-    chatclear:
-        aliases: [ cc ]
+    clearchat:
+        aliases: [ chatc, clch ]
