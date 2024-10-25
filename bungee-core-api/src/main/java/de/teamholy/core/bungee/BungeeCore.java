@@ -9,6 +9,7 @@ import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
 import de.teamholy.core.bungee.commands.clan.AdminClanCommand;
+import de.teamholy.core.bungee.commands.clan.ClanChatCommand;
 import de.teamholy.core.bungee.commands.clan.ClanCommand;
 import de.teamholy.core.bungee.commands.friend.FriendCommand;
 import de.teamholy.core.bungee.commands.friend.FriendListCommand;
@@ -162,6 +163,7 @@ public class BungeeCore extends Plugin {
        // ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClanChatCommand("cc", "cchat","clanc"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkV2Command("link"));
