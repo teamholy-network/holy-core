@@ -110,6 +110,10 @@ public class FriendManager {
             defaultMaxFriends = 500;
         }
 
+        if (CloudNetDriver.getInstance().getPermissionManagement().hasPermission(permissionUser, "teamholy.friend.1000")) {
+            defaultMaxFriends = 1000;
+        }
+
         return defaultMaxFriends;
     }
 
