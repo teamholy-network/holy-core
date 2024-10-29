@@ -21,6 +21,9 @@ public class PacketPlayServerScoreboardScoreAdapter extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
+        if (event.isPlayerTemporary()) {
+            return;
+        }
         WrapperPlayServerScoreboardScore packet = new WrapperPlayServerScoreboardScore(event.getPacket());
 
         Player player = Bukkit.getPlayer(packet.getScoreName());

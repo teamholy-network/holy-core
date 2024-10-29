@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.utils;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import de.teamholy.core.bukkit.BukkitCore;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,13 +35,15 @@ public class ScoreboardAPI {
     }
     public ScoreboardAPI setLine(int line, String string) {
         if (!contains(line)) {
-            Team team = scoreboard.registerNewTeam(ChatColor.values()[line].toString());
-            team.addEntry(ChatColor.values()[line].toString());
-            List<String> list = splitText(string);
-            team.setPrefix(list.get(0));
-            if (list.size() == 2)
-                team.setSuffix(list.get(1));
-            objective.getScore(ChatColor.values()[line].toString()).setScore(line);
+            Bukkit.getScheduler().runTask(BukkitCore.getInstance(),() -> {
+                Team team = scoreboard.registerNewTeam(ChatColor.values()[line].toString());
+                team.addEntry(ChatColor.values()[line].toString());
+                List<String> list = splitText(string);
+                team.setPrefix(list.get(0));
+                if (list.size() == 2)
+                    team.setSuffix(list.get(1));
+                objective.getScore(ChatColor.values()[line].toString()).setScore(line);
+            });
             return this;
         }
         return this;
@@ -67,14 +70,16 @@ public class ScoreboardAPI {
     }
 
     public ScoreboardAPI updateLine(int line, String string) {
-        Team team = scoreboard.getTeam(ChatColor.values()[line].toString());
-        List<String> list = splitText(string);
-        team.setPrefix(list.get(0));
-        if (list.size() == 2) {
-            team.setSuffix(list.get(1));
-        } else {
-            team.setSuffix("");
-        }
+        Bukkit.getScheduler().runTask(BukkitCore.getInstance(),() -> {
+            Team team = scoreboard.getTeam(ChatColor.values()[line].toString());
+            List<String> list = splitText(string);
+            team.setPrefix(list.get(0));
+            if (list.size() == 2) {
+                team.setSuffix(list.get(1));
+            } else {
+                team.setSuffix("");
+            }
+        });
         return this;
     }
 

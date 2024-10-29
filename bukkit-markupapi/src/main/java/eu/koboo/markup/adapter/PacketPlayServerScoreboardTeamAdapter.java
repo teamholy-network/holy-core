@@ -23,6 +23,10 @@ public class PacketPlayServerScoreboardTeamAdapter extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent event) {
+        if (event.isPlayerTemporary()) {
+            return;
+        }
+
         WrapperPlayServerScoreboardTeam packet = new WrapperPlayServerScoreboardTeam(event.getPacket());
 
         Iterator<String> playerIterator = packet.getPlayers().iterator();
