@@ -106,13 +106,6 @@ public class BukkitCore extends JavaPlugin {
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
         protocolManager.addPacketListener(new TabCompleteListener(this, PacketType.Play.Client.TAB_COMPLETE));
 
-
-        BukkitCore.getInstance().getServer().getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
-            Bukkit.getWorlds().forEach(World::save);
-            System.out.println("Saved all worlds");
-        }, 10 * 20);
-
-
     }
 
     private void registerCommands() {
