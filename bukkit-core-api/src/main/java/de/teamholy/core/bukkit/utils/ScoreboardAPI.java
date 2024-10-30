@@ -25,7 +25,7 @@ public class ScoreboardAPI {
     private Objective objective;
     private String colorCode;
 
-    public ScoreboardAPI createScoreboard(Player player,String colorcode) {
+    public ScoreboardAPI createScoreboard(Player player, String colorcode) {
         this.player = player;
         this.colorCode = colorcode;
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -33,17 +33,16 @@ public class ScoreboardAPI {
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         return this;
     }
+
     public ScoreboardAPI setLine(int line, String string) {
         if (!contains(line)) {
-            Bukkit.getScheduler().runTask(BukkitCore.getInstance(),() -> {
-                Team team = scoreboard.registerNewTeam(ChatColor.values()[line].toString());
-                team.addEntry(ChatColor.values()[line].toString());
-                List<String> list = splitText(string);
-                team.setPrefix(list.get(0));
-                if (list.size() == 2)
-                    team.setSuffix(list.get(1));
-                objective.getScore(ChatColor.values()[line].toString()).setScore(line);
-            });
+            Team team = scoreboard.registerNewTeam(ChatColor.values()[line].toString());
+            team.addEntry(ChatColor.values()[line].toString());
+            List<String> list = splitText(string);
+            team.setPrefix(list.get(0));
+            if (list.size() == 2)
+                team.setSuffix(list.get(1));
+            objective.getScore(ChatColor.values()[line].toString()).setScore(line);
             return this;
         }
         return this;
@@ -70,16 +69,14 @@ public class ScoreboardAPI {
     }
 
     public ScoreboardAPI updateLine(int line, String string) {
-        Bukkit.getScheduler().runTask(BukkitCore.getInstance(),() -> {
-            Team team = scoreboard.getTeam(ChatColor.values()[line].toString());
-            List<String> list = splitText(string);
-            team.setPrefix(list.get(0));
-            if (list.size() == 2) {
-                team.setSuffix(list.get(1));
-            } else {
-                team.setSuffix("");
-            }
-        });
+        Team team = scoreboard.getTeam(ChatColor.values()[line].toString());
+        List<String> list = splitText(string);
+        team.setPrefix(list.get(0));
+        if (list.size() == 2) {
+            team.setSuffix(list.get(1));
+        } else {
+            team.setSuffix("");
+        }
         return this;
     }
 
@@ -130,13 +127,12 @@ public class ScoreboardAPI {
             String lastColor = ChatColor.getLastColors(prefix);
             String suffix = lastColor + (prefix.endsWith("§") ? "§" : "") + iterator.next();
             list.add(prefix.endsWith("§") ? removeLastCharacter(prefix) : prefix);
-            list.add((suffix.length() > 16 ? suffix.substring(0,16): suffix));
+            list.add((suffix.length() > 16 ? suffix.substring(0, 16) : suffix));
         } else {
             list.add(prefix.endsWith("§") ? removeLastCharacter(prefix) : prefix);
         }
         return list;
     }
-
 
 
     private String removeLastCharacter(String str) {
