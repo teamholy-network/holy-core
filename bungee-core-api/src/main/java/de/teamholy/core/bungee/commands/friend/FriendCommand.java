@@ -98,7 +98,7 @@ public class FriendCommand extends Command {
                 ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(target);
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
-                proxiedPlayer.sendMessage(prefix + "You send a friend request to " + getColor(target) + getName(target));
+                proxiedPlayer.sendMessage(prefix + "You sent a friend request to " + getColor(target) + getName(target));
                 BungeeCore.getAPI().getFriendManager().sendFriendRequest(proxiedPlayer.getUniqueId(), target, isOnline);
 
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
