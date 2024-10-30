@@ -53,7 +53,7 @@ public class BungeeCore extends Plugin {
     @Getter
     private static BungeeCore instance;
 
-    public static String RESTBASE = "http://185.14.92.243.8:3004/"; //quickfix, removed later
+    public static String RESTBASE = "http://185.14.92.243:3004/"; //quickfix, removed later
 
     @Getter
     CoreAPI coreAPI;
@@ -160,10 +160,10 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
         //ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
-       // ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
+        // ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClanChatCommand("cc", "cchat","clanc"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClanChatCommand("cc", "cchat", "clanc"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkV2Command("link"));
@@ -198,7 +198,7 @@ public class BungeeCore extends Plugin {
             publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
         }, 20, 20, TimeUnit.MINUTES);
 
-       ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
             coreAPI.getMetricsManager().saveMetric(document);
         }, 0, 2, TimeUnit.SECONDS);
