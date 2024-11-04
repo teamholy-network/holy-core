@@ -83,4 +83,13 @@ subprojects {
         replaceToken('PROJECT_GRADLE', "$gradle.gradleVersion")
         replaceToken('PROJECT_VERSION', "$projectVersion")
     }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+
 }
