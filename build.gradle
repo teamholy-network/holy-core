@@ -83,21 +83,4 @@ subprojects {
         replaceToken('PROJECT_GRADLE', "$gradle.gradleVersion")
         replaceToken('PROJECT_VERSION', "$projectVersion")
     }
-
-    publishing {
-        repositories {
-            maven {
-                url('https://reposilite.koboo.eu/releases')
-                credentials {
-                    username(System.getenv('REPO_USER'))
-                    password(System.getenv('REPO_TOKEN'))
-                }
-            }
-        }
-        publications {
-            maven(MavenPublication) {
-                from components.java
-            }
-        }
-    }
 }
