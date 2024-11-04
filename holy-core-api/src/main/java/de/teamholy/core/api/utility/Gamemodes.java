@@ -42,6 +42,11 @@ public enum Gamemodes {
     ), List.of("SGFFA")),
     CLUTCHES("b", "", Lists.newArrayList(), List.of("Clutches")),
     BRIDGE("b", "", Lists.newArrayList(), List.of("Bridge")),
+    SKYWARSFFA("3", "trophies", List.of(
+        new StatKey("kills",0),
+        new StatKey("deaths",0),
+        new StatKey("trophies",1000)
+    ), List.of("SkywarsFFA")),
     RUSHBW("c","trophies", List.of(
         new StatKey("kills",0),
         new StatKey("deaths",0),
