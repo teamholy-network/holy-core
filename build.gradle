@@ -26,10 +26,6 @@ subprojects {
             url 'https://repo.cloudnetservice.eu/repository/releases/'
         }
         maven {
-            name('koboo-repo')
-            url('https://reposilite.koboo.eu/releases')
-        }
-        maven {
             name('spigot-repo')
             url('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
         }
