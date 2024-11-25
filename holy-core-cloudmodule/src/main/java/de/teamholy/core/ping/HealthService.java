@@ -60,7 +60,7 @@ public class HealthService {
         CloudModuleCore.getInstance().getLogger().info("[!] Found " + serviceInfoSnapshots.size() + " services: " + sb);
 
         for (var serverInfo : serviceInfoSnapshots) {
-            if (serverInfo.getServiceId().getName().startsWith(name)) {
+            if (serverInfo.getServiceId().getName().toLowerCase().contains("lobby") && serverInfo.getServiceId().getName().equalsIgnoreCase(name)) {
                 if (serverInfo.getLifeCycle() == ServiceLifeCycle.RUNNING && serverInfo.getServiceId().getEnvironment() == ServiceEnvironmentType.MINECRAFT_SERVER) {
                     CloudModuleCore.getInstance().getLogger().info("[!] Found Dead Server: " + name + ". Saving logs and trying to kill...");
                     sendDiscordWebhook(name, "No link provided");
