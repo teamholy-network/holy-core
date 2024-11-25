@@ -1,12 +1,14 @@
 package de.teamholy.core.api.manager;
 
-import eu.koboo.yaml.Yaml;
-import eu.koboo.yaml.YamlParser;
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlReader;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
@@ -17,27 +19,26 @@ public class ConfigManager {
     String redisPassword;
     String host;
     String rabbitConnection;
-    int port;
+    String port;
     String database;
-    boolean useAuthSource;
+    String useAuthSource;
 
     public ConfigManager() {
 
         try {
-            // Load the config file from the same direction as the jar file
-
             String path = "/home/Cloud/mongodb.cfg";
-            Yaml yaml = YamlParser.parseFilePath(path);
+            YamlReader reader = new YamlReader(new FileReader(path));
+            Map<String, Object> yamlMap = (Map<String, Object>) reader.read();
             System.out.println("Loaded config file, path: " + path);
 
-            username = yaml.getString("username");
-            password = yaml.getString("password");
-            redisPassword = yaml.getString("redisPassword");
-            host = yaml.getString("host");
-            port = yaml.getInt("port");
-            database = yaml.getString("database");
-            useAuthSource = yaml.getBoolean("useAuthSource");
-            rabbitConnection = yaml.getString("rabbitConnection");
+            username = (String) yamlMap.get("username");
+            password = (String) yamlMap.get("password");
+            redisPassword = (String) yamlMap.get("redisPassword");
+            host = (String) yamlMap.get("host");
+            port = (String) yamlMap.get("port");
+            database = (String) yamlMap.get("database");
+            useAuthSource = (String) yamlMap.get("useAuthSource");
+            rabbitConnection = (String) yamlMap.get("rabbitConnection");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
