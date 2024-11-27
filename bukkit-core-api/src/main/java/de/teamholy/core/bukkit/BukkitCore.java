@@ -101,7 +101,7 @@ public class BukkitCore extends JavaPlugin {
 
         System.out.println("Starting ServiceAliveTask\n");
         coreAPI.getCloudManager().sendCloudMessage("alive", "ping:initial", new JsonDocument().append("server", Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName()).append("response", "online"));
-        Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20 * 3);
+        Bukkit.getScheduler().runTaskTimer(this, new BukkitHealthTask(), 0, 20);
 
         group = Wrapper.getInstance().getCurrentServiceInfoSnapshot().getServiceId().getName().split("-")[0];
         protocolManager.addPacketListener(new TabCompleteListener(this, PacketType.Play.Client.TAB_COMPLETE));
