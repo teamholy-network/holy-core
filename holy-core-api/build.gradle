@@ -7,4 +7,5 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    implementation 'com.esotericsoftware.yamlbeans:yamlbeans:1.17'}
+    implementation 'com.esotericsoftware.yamlbeans:yamlbeans:1.17'
+}

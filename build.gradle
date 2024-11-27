@@ -6,6 +6,9 @@ plugins {
     id('net.kyori.blossom') version('1.2.0')
 }
 
+def HolyRepoUser = project.findProperty("HolyRepoUser")
+def HolyRepoPass = project.findProperty("HolyRepoPass")
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'com.github.johnrengelman.shadow'
@@ -82,10 +85,27 @@ subprojects {
 
     publishing {
         publications {
-            maven(MavenPublication) {
+            normalJar(MavenPublication) {
                 from components.java
+
+                groupId = project.group
+                artifactId = project.name
+                version = project.version
             }
         }
+        repositories {
+            maven {
+                url = uri("https://repo.gin1.cc/repository/releases/")
+                credentials {
+                    username = HolyRepoUser
+                    password = HolyRepoPass
+                }
+            }
+        }
+    }
+
+    tasks.named("publish") {
+        dependsOn("jar")
     }
 
 }
