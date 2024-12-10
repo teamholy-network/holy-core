@@ -36,9 +36,19 @@ subprojects {
             name('jitpack-repo')
             url('https://jitpack.io/')
         }
+        maven {
+            name('skydb-repo')
+            url('https://repository.skydb.de')
+        }
+    }
+
+    shadowJar {
+        relocate('de.skydb.translateapi.bindings', 'de.teamholy.core.translation')
     }
 
     dependencies {
+        implementation 'de.skydb.translationapi:TranslateAPI-Bindings:0.0.1-SNAPSHOT'
+
         // Eliminate some boilerplate
         compileOnly("org.projectlombok:lombok:$lombokVersion")
         annotationProcessor("org.projectlombok:lombok:$lombokVersion")
