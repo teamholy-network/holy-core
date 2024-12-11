@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -26,10 +27,9 @@ public class OnlinetimeCommand extends Command {
             if (!proxiedPlayer.hasPermission("onlinetime.others")) return;
             UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[0]);
             if (uuid == null) {
-                proxiedPlayer.sendMessage("§6OnlineTime §8× §7Diesen Spieler gibt es nicht");
+                proxiedPlayer.sendMessage("§6"+"OnlineTime §8× §7"+ BungeeTranslateAPI.translate(proxiedPlayer,"Diesen Spieler gibt es nicht"));
                 return;
             }
-
             showOnlineTime(proxiedPlayer, uuid);
         }
     }
@@ -40,8 +40,8 @@ public class OnlinetimeCommand extends Command {
             long millis = playerProfile.getOnlineTime();
             long hours = millis / 3600000L;
             long minT = millis - hours * 3600000L;
-            long min = minT / 60000L;
-            proxiedPlayer.sendMessage("§6OnlineTime §8× §7The onlinetime of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(uuid) + " §7is " + hours + "§6 hours §7and " + min + " §6minutes");
+            long min = minT / 60000L;                                                                                                 //"§6 hours §7and " + min + " §6minutes"
+            proxiedPlayer.sendMessage("§6OnlineTime §8× §7"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"The onlinetime of {}§7 is {}§6 hours §7and {}§6 minutes" , BungeeCore.getAPI().getCloudManager().getColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(uuid) ,String.valueOf(hours), String.valueOf(min)));
         });
     }
 }
