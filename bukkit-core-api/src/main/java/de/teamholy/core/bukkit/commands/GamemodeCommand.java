@@ -15,8 +15,8 @@ public class GamemodeCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         if (!player.hasPermission("minecraft.command.gamemode")) return false;
         if (args.length == 0) {
-            player.sendMessage("§c/"+command.getLabel() + "§a1§7/§a2§7/§a3");
-            if (player.hasPermission("minecraft.command.gamemode.others")) player.sendMessage("§c/"+command.getLabel() + "§a1§7/§a2§7/§a3 ("+BukkitTranslateAPI.translate(player,"player")+")");
+            player.sendMessage("§c/"+command.getLabel() + " §a1§7/§a2§7/§a3");
+            if (player.hasPermission("minecraft.command.gamemode.others")) player.sendMessage("§c/"+command.getLabel() + " §a1§7/§a2§7/§a3 ("+BukkitTranslateAPI.translate(player,"player")+")");
         } else if (args.length == 1) {
             try {
                 GameMode gameMode = GameMode.getByValue(Integer.parseInt(args[0]));
@@ -52,7 +52,7 @@ public class GamemodeCommand implements CommandExecutor {
 
     private void setGamemode(GameMode gamemode, Player player, Player target) {
         target.setGameMode(gamemode);
-        target.sendMessage("§a"+BukkitTranslateAPI.translate(target,"Du bist nun im Gamemode") + "§e" + BukkitTranslateAPI.translate(target, gamemode.toString()));
+        target.sendMessage("§a"+BukkitTranslateAPI.translate(target,"Du bist nun im Gamemode") + " §e" + BukkitTranslateAPI.translate(target, gamemode.toString()));
         if (target != player) {
             player.sendMessage(BukkitTranslateAPI.translatePlaceholder(player,"§aDu hast §7{} §ain den gamemode §e{} §agesetzt", target.getName(), gamemode.toString()));
         }
