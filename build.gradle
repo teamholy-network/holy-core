@@ -38,7 +38,7 @@ subprojects {
         }
         maven {
             name('skydb-repo')
-            url('https://repository.skydb.de')
+            url('https://repository.skydb.de/repo')
         }
     }
 
