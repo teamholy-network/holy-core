@@ -1,5 +1,6 @@
 package eu.koboo.markup.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
 import org.bukkit.command.Command;
@@ -23,15 +24,15 @@ public class CommandNickList implements CommandExecutor {
         }
         Player player = (Player) commandSender;
         if (!player.hasPermission("teamholy.team")) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cYou don't have permission to do that!");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+ BukkitTranslateAPI.translate(player,"You don't have permission to do that!"));
             return false;
         }
         if (!markupAPI.getPresetManager().isLoad()) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cThe nicksystem is currently disabled!");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"The nicksystem is currently disabled!"));
             return false;
         }
         if (strings.length != 0) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cUsage: §7/nicklist");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"Usage")+": §7/nicklist");
             return false;
         }
         player.sendMessage(MarkupAPI.NICK_PREFIX + "§7Nicked players§8:");
