@@ -13,7 +13,10 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -56,6 +59,17 @@ public class BungeePlayerManager {
                 player.sendMessage(message);
             }
         }
+    }
+
+    public Set<ProxiedPlayer> getClanMessagePlayers(Clan clan) {
+        Set<ProxiedPlayer> uuids = ConcurrentHashMap.newKeySet();
+        for (UUID member : clan.getMembers()) {
+            ProxiedPlayer player = ProxyServer.getInstance().getPlayer(member);
+            if (player != null && player.isConnected()) {
+                uuids.add(player);
+            }
+        }
+        return uuids;
     }
 
     public void notifyStaff(String message) {
