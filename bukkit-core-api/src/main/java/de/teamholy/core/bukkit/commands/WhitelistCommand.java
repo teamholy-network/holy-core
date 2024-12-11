@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,27 +25,27 @@ public class WhitelistCommand implements CommandExecutor {
             case 0 -> {
                 sendHelp(player);
                 player.sendMessage("");
-                player.sendMessage("§aWhitelist is currently " + (ISWHITELIST ? "§a§lon" : "§a§loff"));
+                player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"Whitelist is currently")+ " "+ (ISWHITELIST ? "§a§l"+BukkitTranslateAPI.translate(player,"on") : "§a§l"+BukkitTranslateAPI.translate(player,"off")));
                 StringBuilder builder = new StringBuilder();
                 for (String s1 : WHITELIST) {
                     builder.append(s1).append(", ");
                 }
-                player.sendMessage("§aWhitelisted players: §e" + builder);
+                player.sendMessage("§a"+ BukkitTranslateAPI.translate(player,"Whitelisted players")+": §e" + builder);
             }
 
             case 1 -> {
 
                 if (strings[0].equalsIgnoreCase("on")) {
                     ISWHITELIST = true;
-                    player.sendMessage("§aWhitelist is now §a§lon");
-                    player.sendMessage("§aYou were added to the whitelist §eautomatically");
+                    player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"Whitelist is now")+" §a§l"+BukkitTranslateAPI.translate(player,"on"));
+                    player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"You were added to the whitelist §eautomatically"));
                     WHITELIST.add(player.getName());
                 } else if (strings[0].equalsIgnoreCase("off")) {
                     ISWHITELIST = false;
-                    player.sendMessage("§aWhitelist is now §a§loff");
+                    player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"Whitelist is now ")+"§a§l"+BukkitTranslateAPI.translate(player,"off"));
                 } else if (strings[0].equalsIgnoreCase("clear")) {
                     WHITELIST.clear();
-                    player.sendMessage("§aWhitelist cleared!");
+                    player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"Whitelist cleared!"));
                 } else {
                     sendHelp(player);
                 }
@@ -59,7 +60,7 @@ public class WhitelistCommand implements CommandExecutor {
                     player.sendMessage("§aPlayer §e" + strings[1] + " §aadded to the whitelist");
                 } else if (strings[0].equalsIgnoreCase("remove")) {
                     WHITELIST.remove(strings[1]);
-                    player.sendMessage("§aPlayer §e" + strings[1] + " §aremoved from the whitelist");
+                    player.sendMessage("§a"+BukkitTranslateAPI.translate(player, "Player")+" §e" + strings[1] + "§a" + BukkitTranslateAPI.translate(player," removed from the whitelist"));
                 } else {
                     sendHelp(player);
                 }
@@ -71,8 +72,8 @@ public class WhitelistCommand implements CommandExecutor {
     }
 
     private void sendHelp(Player player) {
-        player.sendMessage("§c/whitelist add <player>");
-        player.sendMessage("§c/whitelist remove <player>");
+        player.sendMessage("§c/whitelist add <"+BukkitTranslateAPI.translate(player, "player")+">");
+        player.sendMessage("§c/whitelist remove <"+BukkitTranslateAPI.translate(player, "player")+">");
         player.sendMessage("§c/whitelist on");
         player.sendMessage("§c/whitelist off");
     }

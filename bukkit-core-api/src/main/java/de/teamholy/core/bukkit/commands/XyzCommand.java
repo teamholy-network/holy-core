@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.CustomBannerManager;
 import org.bukkit.Bukkit;
@@ -29,12 +30,12 @@ public class XyzCommand implements CommandExecutor {
 
 
         if (!player.hasPermission("*")) {
-            player.sendMessage("Unknown command. Type \"/help\" for help.");
+            player.sendMessage(BukkitTranslateAPI.translate(player,"Unknown command. Type \"/help\" for help."));
         }
 
 
         if (instruction.equalsIgnoreCase("update")) {
-            player.sendMessage("§aBanners updated");
+            player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"Banners updated"));
             return false;
         } else if (instruction.equalsIgnoreCase("set")) {
             String target = strings[1];
@@ -47,11 +48,11 @@ public class XyzCommand implements CommandExecutor {
             Player targetPlayer = Bukkit.getPlayer(target);
 
             if (targetPlayer == null) {
-                player.sendMessage("§cPlayer not found");
+                player.sendMessage("§c"+BukkitTranslateAPI.translate(player,"Player not found"));
                 return false;
             }
 
-            player.sendMessage("§aBanner set for " + targetPlayer.getName());
+            player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"Banner set for ") + targetPlayer.getName());
         }
 
         return false;

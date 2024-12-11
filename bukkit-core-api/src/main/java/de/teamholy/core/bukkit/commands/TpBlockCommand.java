@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,7 +15,7 @@ public class TpBlockCommand implements CommandExecutor {
         if (!player.hasPermission("*")) return false;
 
         Location loc = new Location(player.getWorld(), player.getLocation().getBlockX() + 0.5D, player.getLocation().getBlockY() + 0.5D, player.getLocation().getBlockZ() + 0.5D,player.getLocation().getYaw(),player.getLocation().getPitch());
-        player.sendMessage("Teleport!");
+        player.sendMessage(BukkitTranslateAPI.translate(player,"Teleport!"));
         player.teleport(loc);
         return false;
     }
