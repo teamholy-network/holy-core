@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.team;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
@@ -28,10 +29,16 @@ public class TeamNotifyCommand extends Command {
 
         String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
         if (staffProfile.isNotify()) {
-            BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §ain");
+            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §ain");
+            BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                staffmember.sendMessage("§cTeam §8× "+ BungeeTranslateAPI.translatePlaceholder(staffmember,"{}§7 has logged in", name));
+            });
         } else {
-            player.sendMessage("§cTeam §8× " + name + " §7has logged §cout");
-            BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §cout");
+            player.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(player,"{}§7 has logged out", name));
+            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §cout");
+            BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                staffmember.sendMessage("§cTeam §8× "+ BungeeTranslateAPI.translatePlaceholder(staffmember,"{}§7 has logged out", name));
+            });
         }
 
     }

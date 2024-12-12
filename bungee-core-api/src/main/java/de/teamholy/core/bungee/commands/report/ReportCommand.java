@@ -21,7 +21,7 @@ public class ReportCommand extends Command {
 
     private String prefix = "§cReport §8× §7";
     private ReportManager reportHandler = BungeeCore.getAPI().getReportManager();
-    private String[] reportReasons = new String[]{"Hacking", "Autoclicker", "Bugusing", "Trolling", "Skin", "Boosting", "Name", "Spam", "Provocation", "Insult", "Advertising"};
+    private String[] reportReasons = new String[]{"Hacking", "Autoclicker", "Bugusing", "Trolling", "Skin", "Boosting", "Name", "Spam", "Provocation", "Insult", "Advertising", "Teaming"};
 
     public ReportCommand(String name) {
         super(name);

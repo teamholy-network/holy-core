@@ -4,6 +4,7 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.driver.permission.PermissionUserGroupInfo;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.clan.Clan;
@@ -54,7 +55,7 @@ public class LookupCommand extends SenderCommand {
                 String target = args[0];
                 UUID uuid = BungeeUtil.parseTargetArgument(target);
                 if (uuid == null) {
-                    player.sendMessage(Message.LOOKUP_PREFIX + "§cError while fetching Data about §e" + target + "§c!");
+                    player.sendMessage(Message.LOOKUP_PREFIX + "§c"+ BungeeTranslateAPI.translate(player,"Error while fetching Data about")+" §e" + target + "§c!");
                     return;
                 }
 
@@ -71,7 +72,7 @@ public class LookupCommand extends SenderCommand {
 
 
                 Scanner scanner = null;
-                String country = "§cNo country found";
+                String country = "§c"+BungeeTranslateAPI.translate(player,"No country found");
 
                 try {
                     scanner = new Scanner(new URL( RESTBASE + "holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
@@ -95,25 +96,25 @@ public class LookupCommand extends SenderCommand {
 
                 player.sendMessage(Message.LINE);
                 player.sendMessage("");
-                TextComponent nameComp = new TextComponent("§7Name §8» ");
-                nameComp.addExtra(new ChatAction().text(BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7Click to copy uuid").component());
+                TextComponent nameComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Name")+" §8» ");
+                nameComp.addExtra(new ChatAction().text(BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy uuid")).component());
                 player.sendMessage(nameComp);
 
-                TextComponent cracked = new TextComponent("§7Premium Account §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName()) ? "§cno" : "§ayes"));
+                TextComponent cracked = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Premium Account")+" §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName()) ? "§c"+BungeeTranslateAPI.translate(player,"no") : "§a"+BungeeTranslateAPI.translate(player,"yes")));
                 player.sendMessage(cracked);
 
-                TextComponent onlineComp = new TextComponent("§7Status §8» ");
+                TextComponent onlineComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Status")+" §8» ");
                 if (playerProfile.isOnline()) {
-                    onlineComp.addExtra(new ChatAction().text("§aOnline §8(§7" + playerProfile.getServerName() + "§8)").execute("server " + playerProfile.getServerName()).hover("§7Click to jump on " + playerProfile.getServerName()).component());
+                    onlineComp.addExtra(new ChatAction().text("§a"+BungeeTranslateAPI.translate(player,"Online")+" §8(§7" + playerProfile.getServerName() + "§8)").execute("server " + playerProfile.getServerName()).hover("§7"+BungeeTranslateAPI.translatePlaceholder(player,"Click to jump on {}", playerProfile.getServerName())).component());
                 } else {
                     onlineComp.addExtra(new TextComponent("§cOffline"));
                 }
                 player.sendMessage(onlineComp);
 
-                TextComponent onlinetimeComp = new TextComponent("§7Onlinetime §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(), TimeUnit.MILLISECONDS));
+                TextComponent onlinetimeComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Onlinetime")+" §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(), TimeUnit.MILLISECONDS));
                 player.sendMessage(onlinetimeComp);
 
-                TextComponent coins = new TextComponent("§7Coins §8» §6" + BungeeCore.getAPI().getCoinManager().formatInteger(playerProfile.getCoins()));
+                TextComponent coins = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Coins")+" §8» §6" + BungeeCore.getAPI().getCoinManager().formatInteger(playerProfile.getCoins()));
                 player.sendMessage(coins);
 
                 TextComponent tokens = new TextComponent("§7Tokens §8» §6");
@@ -124,24 +125,24 @@ public class LookupCommand extends SenderCommand {
 
                 if (player.hasPermission("teamholy.check.admin")) {
                     TextComponent ipComp = new TextComponent("§7IP §8» ");
-                    ipComp.addExtra(new ChatAction().text("§6" + playerProfile.getIp()).suggest(playerProfile.getIp()).hover("§7Click to copy IP").component());
+                    ipComp.addExtra(new ChatAction().text("§6" + playerProfile.getIp()).suggest(playerProfile.getIp()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy IP")).component());
                     player.sendMessage(ipComp);
                 }
 
-                TextComponent countryComp = new TextComponent("§7Country §8» §6" + country);
+                TextComponent countryComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Country")+" §8» §6" + country);
                 player.sendMessage(countryComp);
 
 
                 TextComponent accComp = new TextComponent("§7Accounts §8» ");
                 List<PlayerProfile> profileList = BungeeCore.getAPI().getPlayerService().getRepository().findManyByIp(playerProfile.getIp());
                 int size = profileList.isEmpty() ? 0 : profileList.size() - 1;
-                accComp.addExtra(new ChatAction().text("§6" + size + " alt(s)").hover("§7Click to show account list").execute("lookup 3 " + playerProfile.getPlayerId()).component());
+                accComp.addExtra(new ChatAction().text("§6" + size + " alt(s)").hover("§7"+BungeeTranslateAPI.translate(player,"Click to show account list")).execute("lookup 3 " + playerProfile.getPlayerId()).component());
                 player.sendMessage(accComp);
                 player.sendMessage("");
 
-                player.sendMessage("§7First Join §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
-                player.sendMessage("§7Last Join §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin()));
-                player.sendMessage("§7Registered since §8» §6" + TimeUtil.beautifyTime(playerProfile.getLastJoin() - playerProfile.getFirstJoin(), TimeUnit.MILLISECONDS, true));
+                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"First Join")+" §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
+                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"Last Join")+" §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin()));
+                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"Registered since")+" §8» §6" + TimeUtil.beautifyTime(playerProfile.getLastJoin() - playerProfile.getFirstJoin(), TimeUnit.MILLISECONDS, true));
 
                 player.sendMessage("");
 

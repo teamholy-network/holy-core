@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.team;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
@@ -22,7 +23,7 @@ public class TeamChatCommand extends Command {
         StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
 
         if (!staffProfile.isNotify()) {
-            player.sendMessage("§cYou are not logged in! /notify");
+            player.sendMessage("§c"+ BungeeTranslateAPI.translate(player,"You are not logged in!")+" /notify");
             return;
         }
 
@@ -30,7 +31,7 @@ public class TeamChatCommand extends Command {
             return;
 
         if (strings.length == 0) {
-            player.sendMessage("§cTeamchat §8× §7/teamchat (message)");
+            player.sendMessage("§cTeamchat §8× §7/teamchat ("+BungeeTranslateAPI.translate(player,"message")+")");
             return;
         }
 
