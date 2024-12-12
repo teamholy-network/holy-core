@@ -122,41 +122,35 @@ public class StaffInfoCommand extends Command {
     }
 
     private String formatStaffProfile(StaffProfile profile, String username, UUID author) {
-        return String.format(BungeeTranslateAPI.translate(author, """
-                        %sHere are the staff stats of §2%s§7:
-                        §7Banned players §8» §2%d
-                        §7Muted players §8» §2%d
-                        §7Finished reports §8» §2%d"""),
+        StringBuilder builder = new StringBuilder();
+        builder.append(BungeeTranslateAPI.translatePlaceholder(author,"{}Here are the staff stats of §2{}§7:", Message.STAFF_INFO_PREFIX, username));
+        builder.append("\n"+BungeeTranslateAPI.translatePlaceholder(author,"§7Banned players §8» §2{}", String.valueOf(profile.getBanProfileList().size())));
+        builder.append("\n"+BungeeTranslateAPI.translatePlaceholder(author,"§7Muted players §8» §2{}", String.valueOf(profile.getMuteProfileList().size())));
+        builder.append("\n"+BungeeTranslateAPI.translatePlaceholder(author,"§7Finished reports §8» §2{}", String.valueOf(profile.getReportList().size())));
 
-            Message.STAFF_INFO_PREFIX,
-            username,
-            profile.getBanProfileList().size(),
-            profile.getMuteProfileList().size(),
-            profile.getReportList().size());
+        return builder.toString();
     }
 
     private String formatTimeStaffProfile(StaffProfile profile, String username, int days, UUID author) {
 
         long timemillis = (long) days*24*60*60*1000;
 
-        return String.format(BungeeTranslateAPI.translate(author,"""
-                        %sHere are the staff stats of §2%s §7§o(last %dd)§r§8:
-                        §7Banned players §8» §2%d
-                        §7Muted players §8» §2%d
-                        §7Finished reports §8» §2%d"""),
-            Message.STAFF_INFO_PREFIX, username, days,
-            profile.getBanProfileList()
-                .stream()
-                .filter(banProfile -> banProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
-                .count(),
-            profile.getMuteProfileList()
-                .stream()
-                .filter(muteProfile -> muteProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
-                .count(),
-            profile.getReportList()
-                .stream()
-                .filter(report -> report.getTime() >= (System.currentTimeMillis() - timemillis))
-                .count()
-        );
+        StringBuilder builder = new StringBuilder();
+        builder.append(BungeeTranslateAPI.translatePlaceholder(author,"{}Here are the staff stats of §2{} §7§o(last {}d)§r§8", Message.STAFF_INFO_PREFIX, username, String.valueOf(days)));
+        builder.append("\n"+BungeeTranslateAPI.translatePlaceholder(author,"§7Banned players §8» §2{}", String.valueOf(profile.getBanProfileList()
+            .stream()
+            .filter(banProfile -> banProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
+            .count())));
+        builder.append("\n"+BungeeTranslateAPI.translatePlaceholder(author,"§7Muted players §8» §2{}", String.valueOf(profile.getMuteProfileList()
+            .stream()
+            .filter(muteProfile -> muteProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
+            .count())));
+        builder.append("\n"+BungeeTranslateAPI.translatePlaceholder(author,"§7Finished reports §8» §2{}", String.valueOf(profile.getReportList()
+            .stream()
+            .filter(report -> report.getTime() >= (System.currentTimeMillis() - timemillis))
+            .count())));
+
+
+        return builder.toString();
     }
 }
