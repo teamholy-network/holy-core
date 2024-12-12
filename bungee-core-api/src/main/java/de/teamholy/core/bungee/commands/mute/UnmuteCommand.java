@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.mute;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.mute.MuteProfile;
@@ -23,6 +24,7 @@ public class UnmuteCommand extends SenderCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
+        UUID author = BungeeUtil.parseAuthorUUID(sender);
         if (!BungeeUtil.hasPermission(sender, "teamholy.unmute")) {
             BungeeUtil.sendNoPermission(sender);
             return;
@@ -33,17 +35,15 @@ public class UnmuteCommand extends SenderCommand {
                 UUID uuid = BungeeUtil.parseTargetArgument(target);
 
                 if (uuid == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7Error while fetching UUID from §c" + target + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §c" + target + "§c!");
                     return;
                 }
-
-                UUID author = BungeeUtil.parseAuthorUUID(sender);
 
                 UUID finalUuid = uuid;
                 MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is isn't banned!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player {} is isn't banned!", "§e" + target + "§c"));
                     return;
                 }
 
@@ -68,15 +68,14 @@ public class UnmuteCommand extends SenderCommand {
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);
             } catch (NumberFormatException e) {
-                printUsage(sender);
+                printUsage(sender, author);
             }
         } else {
-            printUsage(sender);
+            printUsage(sender, author);
         }
     }
 
-    public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unmute (name)");
+    public void printUsage(CommandSender commandSender, UUID author) {
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unmute ("+BungeeTranslateAPI.translate(author,"name")+")");
     }
-
 }

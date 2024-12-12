@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.mute;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.mute.MuteProfile;
@@ -29,6 +30,7 @@ public class MuteCommand extends SenderCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
+        UUID author = BungeeUtil.parseAuthorUUID(sender);
         if (!BungeeUtil.hasPermission(sender, "teamholy.mute")) {
             BungeeUtil.sendNoPermission(sender);
             return;
@@ -48,7 +50,7 @@ public class MuteCommand extends SenderCommand {
                 if (uuid == null) {
                     UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(target);
                     if (nickUUID == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§7Error while fetching UUID from §c" + target + "§c!");
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §c" + target + "§c!");
                         return;
                     }
                     uuid = nickUUID;
@@ -59,17 +61,17 @@ public class MuteCommand extends SenderCommand {
 
                 Punish.MuteReason banReason = Punish.parseMuteReasonById(reasonId);
                 if (banReason == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cError while fetching reason with §eid " + reasonId + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"Error while fetching reason with id {}", "§e"+reasonId) + "§c!");
                     return;
                 }
 
                 if (!BungeeUtil.hasPermission(sender, "teamholy.mute.perma") && banReason.getDuration() == -1) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cYou don't have permission to use this mute-reason!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author,"You don't have permission to use this mute-reason!"));
                     return;
                 }
 
                 if (!BungeeUtil.hasPermission(sender, "*") && !BungeeCore.getAPI().getCloudManager().isPunishable(uuid)) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cYou don't have permissions to ban this player!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author,"You don't have permissions to ban this player!"));
                     return;
                 }
 
@@ -81,15 +83,11 @@ public class MuteCommand extends SenderCommand {
                     evidence = (chatLog != null) ? "https://teamholy.de/chatlog/" + chatLog.getChatLogId() : "No evidence";
                 }
 
-
-                UUID author = sender instanceof ProxiedPlayer ? BungeeUtil.parseAuthorUUID((ProxiedPlayer) sender) : UUID.fromString("f78a4d8d-d51b-4b39-98a3-230f2de0c670");
-
-
                 UUID finalUuid = uuid;
                 MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile != null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is already muted!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player {} is already muted!", "§e" + target + "§c"));
                     return;
                 }
 
@@ -140,20 +138,20 @@ public class MuteCommand extends SenderCommand {
 
                 BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);
             } catch (NumberFormatException e) {
-                printUsage(sender);
+                printUsage(sender, author);
             }
         } else {
-            printUsage(sender);
+            printUsage(sender, author);
         }
     }
 
-    public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7Reasons §8» ");
+    public void printUsage(CommandSender commandSender, UUID author) {
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7"+BungeeTranslateAPI.translate(author,"Reasons")+" §8» ");
         for (Punish.MuteReason reason : Punish.getMuteValues()) {
-            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : "Permanent";
+            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(author,"Permanent");
             commandSender.sendMessage(" §6" + reason.getEnglishText() + " §7- §c" + time + " §7- §c" + reason.getId());
         }
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/mute (name) (id)");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/mute ("+BungeeTranslateAPI.translate(author,"name")+") (id)");
     }
 
 }
