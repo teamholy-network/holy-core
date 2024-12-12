@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.link;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -20,30 +21,30 @@ public class LinkV2Command extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (strings.length == 0) {
-            commandSender.sendMessage("§6Web §8× §7 Visit §6teamholy.de/link §7to link your account and get free §ecoins!");
+            commandSender.sendMessage("§6Web §8× §7 "+ BungeeTranslateAPI.translatePlaceholder(player,"Visit {} to link your account and get free §eCoins!", "§6teamholy.de/link§7"));
             return;
         }
 
         String code = strings[0];
 
         if (code.length() != 39) {
-            commandSender.sendMessage("§cError: Your code is invalid");
+            commandSender.sendMessage("§c"+BungeeTranslateAPI.translate(player,"Error: Your code is invalid"));
             return;
         }
 
         sendAsyncHttpRequest("http://185.14.92.243:3004/holy/link/v2/verify/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd/" + player.getUniqueId().toString() + "/" + code).thenAccept(response -> {
             if (response == null) {
-                commandSender.sendMessage("§cError: An error occurred while processing your request");
+                commandSender.sendMessage("§c"+BungeeTranslateAPI.translate(player,"Error: An error occurred while processing your request"));
                 return;
             }
             String message = response.split("\"")[1];
 
             switch (message) {
                 case "ok" -> {
-                    commandSender.sendMessage("§6Web §8× §aYou have successfully linked your account!");
+                    commandSender.sendMessage("§6Web §8× §a"+BungeeTranslateAPI.translate(player,"You have successfully linked your account!"));
                 }
                 case "failed" -> {
-                    commandSender.sendMessage("§cError: Your code is invalid or something went wrong");
+                    commandSender.sendMessage("§c"+BungeeTranslateAPI.translate(player,"Error: Your code is invalid or something went wrong"));
                 }
             }
         });
