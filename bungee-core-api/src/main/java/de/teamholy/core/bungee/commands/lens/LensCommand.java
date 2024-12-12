@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.lens;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -36,12 +37,12 @@ public class LensCommand extends Command {
 
         switch (reason) {
             case "faultscore":
-                targetPlayer.sendMessage("§cGuardian §8× §7Your messages have been §cflagged §7by our system. Please avoid toxic behaviour!" +
+                targetPlayer.sendMessage("§cGuardian §8× §7"+ BungeeTranslateAPI.translatePlaceholder(targetPlayer, "Your messages have been {} by our system. Please avoid toxic behaviour!", "§c"+BungeeTranslateAPI.translate(targetPlayer,"flagged"+"§7")) +
                     " §8(§7" + multiply + "/" + max + "§8)");
-                targetPlayer.sendMessage("§cGuardian §8× §7Learn more about this on §6teamholy.de/guardian");
+                targetPlayer.sendMessage("§cGuardian §8× §7"+BungeeTranslateAPI.translatePlaceholder(targetPlayer,"Learn more about this on {}", "§6teamholy.de/guardian"));
                 break;
             case "punishmultiplier":
-                targetPlayer.sendMessage("§cGuardian §8× §7You have been §cpunished §7for your behavior " +
+                targetPlayer.sendMessage("§cGuardian §8× §7"+BungeeTranslateAPI.translatePlaceholder(targetPlayer,"You have been {} for your behavior ", "§c"+BungeeTranslateAPI.translate(targetPlayer,"punished")+"§7") +
                     "§8(§7x" + multiply + "§8)");
                 break;
         }
