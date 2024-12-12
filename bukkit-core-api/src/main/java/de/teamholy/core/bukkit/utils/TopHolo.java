@@ -1,6 +1,5 @@
 package de.teamholy.core.bukkit.utils;
 
-
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-/* copyright by Yassino */
 public class TopHolo {
 
     private Hologram hologram;
@@ -33,7 +31,7 @@ public class TopHolo {
     private static final String TOP_10_HEADER_FOOTER = "§8§m----------§f§lTOP 10§8§m----------";
     private static final String EMPTY_PLAYER_LINE = "§7-/-";
 
-    private final HashMap<StatsType, HashMap<Integer,TopPlayer>> top = new HashMap<>();
+    private final HashMap<StatsType, HashMap<Integer, TopPlayer>> top = new HashMap<>();
 
     public TopHolo(Location location, Gamemodes gamemode, ItemStack itemStack) {
         for (StatsType value : StatsType.values()) {
@@ -53,16 +51,13 @@ public class TopHolo {
                 cooldown = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(2);
                 player.playSound(player.getLocation(), Sound.CLICK, 1, 100);
 
-
-
                 switch (statsType) {
                     case DAILY -> statsType = StatsType.ALLTIME;
                     case MONTHLY -> statsType = StatsType.DAILY;
                     case ALLTIME -> statsType = StatsType.MONTHLY;
                 }
 
-
-                updateHologram(StatsType.ALLTIME);
+                updateHologram(statsType);
             });
         }
 
@@ -71,20 +66,19 @@ public class TopHolo {
                 top.put(value, refreshTop(value));
             }
 
-            Bukkit.getScheduler().runTask(BukkitCore.getInstance(),() -> updateHologram(StatsType.ALLTIME));
+            Bukkit.getScheduler().runTask(BukkitCore.getInstance(), () -> updateHologram(statsType));
         }, 10, 20 * 60 * 5);
     }
-
 
     private void updateHologram(StatsType statsType) {
         TextLine textLine = (TextLine) hologram.getLine(1);
         textLine.setText(TOP_10_HEADER_FOOTER);
         for (int i = 2; i <= 11; i++) {
-            TopPlayer topPlayer = top.get(statsType).get(i -1);
-            int value = (int) Math.round(topPlayer.value);
+            TopPlayer topPlayer = top.get(statsType).get(i - 1);
             textLine = (TextLine) hologram.getLine(i);
             if (topPlayer != null) {
-                textLine.setText("§7#§6" + topPlayer.rank + " §8︳ " + topPlayer.name + " §8» §a" + value + " §cTrophies §8× " + TrophieLeague.getEloRank(value).getName());
+                int value = (int) Math.round(topPlayer.value());
+                textLine.setText("§7#§6" + topPlayer.rank() + " §8︳ " + topPlayer.name() + " §8» §a" + value + " §cTrophies §8× " + TrophieLeague.getEloRank(value).getName());
             } else {
                 textLine.setText(EMPTY_PLAYER_LINE);
             }
@@ -93,22 +87,17 @@ public class TopHolo {
         TextLine lastLine = (TextLine) hologram.getLine(12);
         switch (statsType) {
             case DAILY -> {
-                this.statsType = StatsType.ALLTIME;
-                lastLine.setText("§c§lALLTIME §8︳ §7Monthly §8︳ §7Daily");
-            }
-            case MONTHLY -> {
-                this.statsType = StatsType.DAILY;
                 lastLine.setText("§7Alltime §8︳ §7Monthly §8︳ §a§lDAILY");
             }
-            case ALLTIME -> {
-                this.statsType = StatsType.MONTHLY;
+            case MONTHLY -> {
                 lastLine.setText("§7Alltime §8︳ §e§lMONTHLY §8︳ §7Daily");
+            }
+            case ALLTIME -> {
+                lastLine.setText("§c§lALLTIME §8︳ §7Monthly §8︳ §7Daily");
             }
         }
         ((TextLine) hologram.getLine(13)).setText(TOP_10_HEADER_FOOTER);
-
     }
-
 
     private HashMap<Integer, TopPlayer> refreshTop(StatsType statsType) {
         HashMap<Integer, TopPlayer> top = Maps.newHashMap();
@@ -116,11 +105,11 @@ public class TopHolo {
         scoredSortedSet.entryRangeReversed(0, 9).forEach((entry) -> {
             ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) entry;
             PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(scoredEntry.getValue(),
-                    () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(scoredEntry.getValue()));
+                () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(scoredEntry.getValue()));
 
             int rank = top.size() + 1;
 
-            top.put(rank, new TopPlayer(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(),scoredEntry.getScore(), rank));
+            top.put(rank, new TopPlayer(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), scoredEntry.getScore(), rank));
         });
 
         return top;
