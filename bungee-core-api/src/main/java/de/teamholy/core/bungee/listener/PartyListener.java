@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.Party;
 import net.md_5.bungee.api.ProxyServer;
@@ -52,7 +53,7 @@ public class PartyListener implements Listener {
 
         party.getPartyPlayers().forEach(all -> {
             ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(all);
-            proxiedPlayer.sendMessage("§5Party §8× §7The party is trying to join a §6" + player.getServer().getInfo().getName() + " §7server");
+            proxiedPlayer.sendMessage("§5Party §8× §7"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"The party is trying to join a {} §7server", "§6"+player.getServer().getInfo().getName()));
             proxiedPlayer.connect(player.getServer().getInfo());
         });
     }

@@ -8,6 +8,7 @@ import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ChatFilterManager;
 import de.teamholy.core.bungee.manager.ChatLogManager;
 import de.teamholy.core.bungee.manager.LensRedisManager;
+import de.teamholy.core.bungee.util.BanUtil;
 import de.teamholy.core.bungee.util.DiffMatch;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -68,7 +69,7 @@ public class ChatFilterListener implements Listener {
 
         for (String bannedWord : ChatFilterManager.FILTEREDWORDS.keySet()) {
 
-            if (message.startsWith("/") || proxiedPlayer.hasPermission("teamholy.team")) {
+            if (message.startsWith("/") && !BanUtil.isFilteredCommand(message) || proxiedPlayer.hasPermission("teamholy.team")) {
                 return;
             }
 

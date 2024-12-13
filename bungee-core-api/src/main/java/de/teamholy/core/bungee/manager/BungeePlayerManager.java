@@ -107,6 +107,7 @@ public class BungeePlayerManager {
         }
     }
 
+    @Deprecated
     public void notifyStaff(BaseComponent message) {
         ProxyServer.getInstance().getConsole().sendMessage(message);
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {

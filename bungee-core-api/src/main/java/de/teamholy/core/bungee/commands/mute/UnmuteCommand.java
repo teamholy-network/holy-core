@@ -56,7 +56,10 @@ public class UnmuteCommand extends SenderCommand {
                 BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
 
 
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage(sender.getName(), punishProfile));
+                //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage(sender.getName(), punishProfile));
+                BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                    staffmember.sendMessage(BanUtil.generateUnmuteMessage(staffmember, sender.getName(), punishProfile));
+                });
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
 

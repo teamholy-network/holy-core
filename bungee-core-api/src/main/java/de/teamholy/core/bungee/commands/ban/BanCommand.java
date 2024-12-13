@@ -122,7 +122,10 @@ public class BanCommand extends SenderCommand {
                 if (player != null && player.isConnected())
                     player.disconnect(BanUtil.generateBanScreen(punishProfile));
 
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(punishProfile));
+                //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(punishProfile));
+                for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                    staffNotifyPlayer.sendMessage(BanUtil.generateBanMessage(staffNotifyPlayer, punishProfile));
+                }
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
 

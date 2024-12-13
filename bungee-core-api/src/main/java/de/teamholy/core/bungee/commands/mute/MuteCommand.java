@@ -126,7 +126,10 @@ public class MuteCommand extends SenderCommand {
 
 
                 BungeeCore.getAPI().getMuteService().saveEntity(punishProfile, isOnline, true);
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateMuteMessage(punishProfile));
+                //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateMuteMessage(punishProfile));
+                for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                    staffNotifyPlayer.sendMessage(BanUtil.generateMuteMessage(staffNotifyPlayer, punishProfile));
+                }
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
 

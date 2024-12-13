@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -24,7 +25,7 @@ public class CommandListener implements Listener {
         if (!event.getMessage().startsWith("/")) return;
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getSender();
         if (COOLDOWNS.containsKey(proxiedPlayer.getUniqueId()) && COOLDOWNS.get(proxiedPlayer.getUniqueId()) > System.currentTimeMillis()) {
-            proxiedPlayer.sendMessage("§cDont spam commands!");
+            proxiedPlayer.sendMessage("§c"+ BungeeTranslateAPI.translate(proxiedPlayer,"Dont spam commands!"));
             event.setCancelled(true);
             return;
         }

@@ -105,7 +105,10 @@ public class CustomPunishCommand extends SenderCommand {
                     if (player != null && player.isConnected())
                         player.disconnect(BanUtil.generateBanScreen(punishProfile));
 
-                    BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateCustomBanMessage(punishProfile));
+                    //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateCustomBanMessage(punishProfile));
+                    for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                        staffNotifyPlayer.sendMessage(BanUtil.generateCustomBanMessage(staffNotifyPlayer, punishProfile));
+                    }
 
                     String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
 
@@ -147,7 +150,10 @@ public class CustomPunishCommand extends SenderCommand {
                     }
 
 
-                    BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateCustomMuteMessage(punishProfile));
+                    //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateCustomMuteMessage(punishProfile));
+                    for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                        staffNotifyPlayer.sendMessage(BanUtil.generateCustomMuteMessage(staffNotifyPlayer, punishProfile));
+                    }
 
                     String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
 

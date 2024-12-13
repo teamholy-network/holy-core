@@ -54,7 +54,10 @@ public class BanLoginListener implements Listener {
                 punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
                 bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
-                bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("console", punishProfile));
+                //bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("console", punishProfile));
+                for (ProxiedPlayer staffNotifyPlayer : bungeeCore.getBungeePlayerManager().getStaffNotifyPlayers()) {
+                    staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer,"console", punishProfile));
+                }
                 punishService.deleteEntity(punishProfile);
             }
         } else {
@@ -99,7 +102,10 @@ public class BanLoginListener implements Listener {
                     ProxiedPlayer player = BungeeCore.getInstance().getProxy().getPlayer(loginEvent.getConnection().getName());
                     if (player != null) player.disconnect(BanUtil.generateBanScreen(banProfile));
                 },2,TimeUnit.SECONDS);
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
+                //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
+                for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                    staffNotifyPlayer.sendMessage(BanUtil.generateBanMessage(staffNotifyPlayer, banProfile));
+                }
                 return true;
             }
 

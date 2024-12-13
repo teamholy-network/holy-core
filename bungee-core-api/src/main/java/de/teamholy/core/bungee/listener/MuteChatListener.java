@@ -28,7 +28,7 @@ public class MuteChatListener implements Listener {
                 String message = event.getMessage();
 
 
-                if (!message.startsWith("/")) {
+                if (!message.startsWith("/") && !BanUtil.isFilteredCommand(message)) {
 
                     MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(player.getUniqueId(),
                         () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
@@ -36,7 +36,7 @@ public class MuteChatListener implements Listener {
                     if (punishProfile != null) {
                         if (punishProfile.active()) {
                             event.setCancelled(true);
-                            player.sendMessage(BanUtil.generateMuteChatMessage(punishProfile));
+                            player.sendMessage(BanUtil.generateMuteChatMessage(player, punishProfile));
                         } else {
 
 
@@ -49,7 +49,11 @@ public class MuteChatListener implements Listener {
                             punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(), punishProfile);
 
                             BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, true, true);
-                            BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage("Console", punishProfile));
+                            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage("Console", punishProfile));
+                            BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                                staffmember.sendMessage(BanUtil.generateUnmuteMessage(staffmember, "Console", punishProfile));
+                            });
+
                             BungeeCore.getInstance().getCoreAPI().getMuteService().deleteEntity(punishProfile);
 
                         }
