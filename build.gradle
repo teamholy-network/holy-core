@@ -42,9 +42,10 @@ subprojects {
         }
     }
 
-    shadowJar {
-        relocate('de.skydb.translateapi.bindings', 'de.teamholy.core.translation')
-    }
+    // "ShadowJar = Shit" - Luca am 16.12.2024 um 23:45
+    //shadowJar {
+    //    relocate('de.skydb.translateapi.bindings', 'de.teamholy.core.translation')
+    //}
 
     dependencies {
         implementation 'de.skydb.translationapi:TranslateAPI-Bindings:0.0.1-SNAPSHOT'
