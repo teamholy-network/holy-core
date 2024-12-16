@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,7 +21,7 @@ public class LocationCommand implements CommandExecutor {
                     BukkitCore.getInstance().getLocationManager().addLocation(args[1],player.getLocation());
                 }
             } else {
-                player.sendMessage(BukkitCore.PREFIX + "/location set (name)");
+                player.sendMessage(BukkitCore.PREFIX + "/location set ("+ BukkitTranslateAPI.translate(player,"name") +")");
             }
         }
         return false;

@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -26,13 +27,13 @@ public class StopCommand implements CommandExecutor {
             @Override
             public void run() {
                 if (i[0] == 0) {
-                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.kickPlayer("§cServer restart"));
+                    Bukkit.getOnlinePlayers().forEach(player1 -> player1.kickPlayer("§c"+BukkitTranslateAPI.translate(player1,"Server restart")));
                     Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), Bukkit::shutdown, 20L);
                 }
 
                 Bukkit.getOnlinePlayers().forEach(player1 -> {
                     player1.sendMessage("");
-                    player1.sendMessage("§cServer restarts in §l" + i[0] + " §cseconds");
+                    player1.sendMessage("§c"+ BukkitTranslateAPI.translate(player1,"Server restarts in")+" §l" + i[0] + " §c"+BukkitTranslateAPI.translate(player1,"seconds"));
                     player1.sendMessage("");
                     player1.playSound(player1.getLocation(), Sound.NOTE_BASS, 20, 20);
                 });

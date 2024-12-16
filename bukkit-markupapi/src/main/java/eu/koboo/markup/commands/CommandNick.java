@@ -1,5 +1,6 @@
 package eu.koboo.markup.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerPreset;
 import org.bukkit.command.Command;
@@ -29,32 +30,32 @@ public class CommandNick implements CommandExecutor {
         }
         Player player = (Player) commandSender;
         if (!player.hasPermission("markupapi.nick")) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cYou don't have permission to do that!");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c" + BukkitTranslateAPI.translate(player,"You don't have permission to do that!"));
             return false;
         }
 
         if (!markupAPI.getPresetManager().isLoad()) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cThe nicksystem is currently disabled!");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c" + BukkitTranslateAPI.translate(player,"The nicksystem is currently disabled!"));
             return false;
         }
 
         if (strings.length != 0) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cUsage: §7/nick");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"Usage")+": §7/nick");
             return false;
         }
 
         if (cooldown.containsKey(player.getUniqueId()) && System.currentTimeMillis() < cooldown.get(player.getUniqueId())) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§cPlease wait!");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"Please wait!"));
             return false;
         }
 
         if (!markupAPI.getNickManager().hasNickName(player)) {
             PlayerPreset playerPreset = markupAPI.getPresetManager().getPlayerPreset();
             markupAPI.getNickManager().apply(player, playerPreset.getName(), playerPreset.getUuid(), MarkupAPI.getProperty(playerPreset.getValue(), playerPreset.getSignature()));
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§7You're now known as§8: §a" + playerPreset.getName());
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§7"+BukkitTranslateAPI.translate(player,"You're now known as")+"§8: §a" + playerPreset.getName());
         } else {
             markupAPI.getNickManager().resetPlayer(player,false);
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§7You're now unnicked!");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§7"+BukkitTranslateAPI.translate(player,"You're now unnicked!"));
         }
 
         cooldown.put(player.getUniqueId(),System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5));

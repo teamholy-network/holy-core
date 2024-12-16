@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.ban;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
@@ -38,14 +39,14 @@ public class BanCommand extends SenderCommand {
 
 
             try {
-
+                UUID author = BungeeUtil.parseAuthorUUID(sender);
 
                 UUID uuid = BungeeUtil.parseTargetArgument(target);
 
                 if (uuid == null) {
                     UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(target);
                     if (nickUUID == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§7Error while fetching UUID from §c" + target + "§c!");
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from ")+"§c" + target + "§c!");
                         return;
                     }
                     uuid = nickUUID;
@@ -56,17 +57,17 @@ public class BanCommand extends SenderCommand {
 
                 Punish.BanReason banReason = Punish.parseBanReasonById(reasonId);
                 if (banReason == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cError while fetching reason with §eid " + reasonId + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"Error while fetching reason with ")+"§eid " + reasonId + "§c!");
                     return;
                 }
 
                 if (!BungeeUtil.hasPermission(sender, "teamholy.ban.perma") && banReason.getDuration() == -1) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cYou don't have permission to use this ban-reason!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"You don't have permission to use this ban-reason!"));
                     return;
                 }
 
                 if (!BungeeUtil.hasPermission(sender, "*") && !BungeeCore.getAPI().getCloudManager().isPunishable(uuid)) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cYou don't have permissions to ban this player!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"You don't have permissions to ban this player!"));
                     return;
                 }
 
@@ -75,14 +76,11 @@ public class BanCommand extends SenderCommand {
                     evidence = args[2];
                 }
 
-
-                UUID author = BungeeUtil.parseAuthorUUID(sender);
-
                 UUID finalUuid = uuid;
                 BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile != null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is already banned!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"The player")+" §e" + target + "§c "+BungeeTranslateAPI.translate(author,"is already banned!"));
                     return;
                 }
 
@@ -124,7 +122,10 @@ public class BanCommand extends SenderCommand {
                 if (player != null && player.isConnected())
                     player.disconnect(BanUtil.generateBanScreen(punishProfile));
 
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(punishProfile));
+                //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(punishProfile));
+                for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                    staffNotifyPlayer.sendMessage(BanUtil.generateBanMessage(staffNotifyPlayer, punishProfile));
+                }
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
 
@@ -145,12 +146,13 @@ public class BanCommand extends SenderCommand {
     }
 
     public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7Reasons §8» ");
+        UUID author = BungeeUtil.parseAuthorUUID(commandSender);
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7"+BungeeTranslateAPI.translate(author,"Reasons")+" §8» ");
         for (Punish.BanReason reason : Punish.getBanValues()) {
-            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : "Permanent";
+            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(author,"Permanent");
             commandSender.sendMessage(" §6" + reason.getEnglishText() + " §7- §c" + time + " §7- §c" + reason.getId());
         }
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban (name) (id) [Evidence Link]");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban ("+BungeeTranslateAPI.translate(author,"name")+") (id) ["+BungeeTranslateAPI.translate(author,"Evidence Link")+"]");
     }
 
 }

@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.party;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.utility.PartyInviteAllowance;
 import de.teamholy.core.bungee.BungeeCore;
@@ -35,7 +36,7 @@ public class PartyCommand extends Command {
             Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
             if (party == null) {
-                player.sendMessage(prefix + "You are not in a party!");
+                player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not in a party!"));
                 return;
             }
 
@@ -48,9 +49,9 @@ public class PartyCommand extends Command {
             party.getPartyPlayers().forEach(all -> {
                 ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
                 if (partyHandler.isPartyLeader(player.getUniqueId())) {
-                    partyPlayer.sendMessage(prefix + "§c§lLEADER " + getColor(player.getUniqueId()) + player.getName() + " §8» §7" + sb);
+                    partyPlayer.sendMessage(prefix + "§c§l"+BungeeTranslateAPI.translate(player,"LEADER")+" " + getColor(player.getUniqueId()) + player.getName() + " §8» §7" + sb);
                 } else {
-                    partyPlayer.sendMessage(prefix + "§a§lMEMBER " + getColor(player.getUniqueId()) + player.getName() + " §8» §7" + sb);
+                    partyPlayer.sendMessage(prefix + "§a§l"+BungeeTranslateAPI.translate(player,"MEMBER")+" " + getColor(player.getUniqueId()) + player.getName() + " §8» §7" + sb);
                 }
             });
 
@@ -61,18 +62,18 @@ public class PartyCommand extends Command {
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + "You are not in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not in a party!"));
                     return;
                 }
 
                 player.sendMessage("§8§m-----------------------------");
                 player.sendMessage("              §f§lPARTYINFO         ");
-                player.sendMessage("§7Public §8» " + (party.isPublic() ? "§a✔" : "§c✘"));
-                player.sendMessage("§cLeader §8» §71/§c1");
+                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"Public")+" §8» " + (party.isPublic() ? "§a✔" : "§c✘"));
+                player.sendMessage("§c"+BungeeTranslateAPI.translate(player,"Leader")+" §8» §71/§c1");
                 ProxiedPlayer leader = ProxyServer.getInstance().getPlayer(party.getPartyPlayers().get(0));
                 player.sendMessage(" " + getColor(leader.getUniqueId()) + leader.getName());
                 player.sendMessage("");
-                player.sendMessage("§aMembers §8» §7" + (party.getPartyPlayers().size() - 1) + "§8/§c" + (party.getMaxSize() == -1 ? "-1" : (party.getMaxSize() - 1)));
+                player.sendMessage("§a"+BungeeTranslateAPI.translate(player,"Members")+" §8» §7" + (party.getPartyPlayers().size() - 1) + "§8/§c" + (party.getMaxSize() == -1 ? "-1" : (party.getMaxSize() - 1)));
                 for (int i = 1; i < party.getPartyPlayers().size(); i++) {
                     ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(party.getPartyPlayers().get(i));
                     player.sendMessage(" " + getColor(partyPlayer.getUniqueId()) + partyPlayer.getName());
@@ -84,7 +85,7 @@ public class PartyCommand extends Command {
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + "You are not in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not in a party!"));
                     return;
                 }
 
@@ -93,18 +94,18 @@ public class PartyCommand extends Command {
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + "You are not in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not in a party!"));
                     return;
                 }
 
 
                 if (!partyHandler.isPartyLeader(player.getUniqueId())) {
-                    player.sendMessage(prefix + "You are not the party leader!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not the party leader!"));
                     return;
                 }
 
                 if (!player.hasPermission("teamholy.party.public")) {
-                    player.sendMessage(prefix + "You dont have permission to toggle your party public!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You dont have permission to toggle your party public!"));
                     return;
                 }
 
@@ -112,13 +113,13 @@ public class PartyCommand extends Command {
                 if (party.isPublic()) {
                     for (UUID all : party.getPartyPlayers()) {
                         ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
-                        partyPlayer.sendMessage(prefix + "§aThe party is now public");
-                        partyPlayer.sendMessage(prefix + "§ausers can join with §8/§7party join (name)");
+                        partyPlayer.sendMessage(prefix + "§a"+BungeeTranslateAPI.translate(player,"The party is now public"));
+                        partyPlayer.sendMessage(prefix + "§a"+BungeeTranslateAPI.translate(player,"users can join with")+" §8/§7party join ("+BungeeTranslateAPI.translate(player,"name")+")");
                     }
                 } else {
                     for (UUID all : party.getPartyPlayers()) {
                         ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
-                        partyPlayer.sendMessage(prefix + "§cThe party is not public anymore");
+                        partyPlayer.sendMessage(prefix + "§c"+BungeeTranslateAPI.translate(player,"The party is not public anymore"));
                     }
                 }
 
@@ -126,11 +127,11 @@ public class PartyCommand extends Command {
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party != null) {
-                    player.sendMessage(prefix + "You are already in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are already in a party!"));
                     return;
                 }
 
-                player.sendMessage(prefix + "You created a party");
+                player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You created a party"));
                 int i = 4;
                 if (player.hasPermission("teamholy.party.premium")) {
                     i = 8;
@@ -150,29 +151,29 @@ public class PartyCommand extends Command {
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
 
                 if (target == null) {
-                    player.sendMessage(prefix + "The player is offline!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"The player is offline!"));
                     return;
                 }
 
                 if (player.getUniqueId().equals(target.getUniqueId())) {
-                    player.sendMessage(prefix + "You cannot interact with yourself!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You cannot interact with yourself!"));
                     return;
                 }
 
                 if (partyHandler.getPartyByPlayerUUID(target.getUniqueId()) != null) {
-                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7is already in a party!");
+                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + BungeeTranslateAPI.translate(player," §7is already in a party!"));
                     return;
                 }
 
                 if (!canInvite(target.getUniqueId(), player.getUniqueId())) {
-                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7toggled their party invites!");
+                    player.sendMessage(prefix + " §7"+BungeeTranslateAPI.translatePlaceholder(player,"{} toggled their party invites!", getColor(target.getUniqueId()) + target.getName()));
                     return;
                 }
 
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + "You created a party");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You created a party"));
                     int i = 4;
                     if (player.hasPermission("teamholy.party.premium")) {
                         i = 8;
@@ -186,12 +187,12 @@ public class PartyCommand extends Command {
                 }
 
                 if (!partyHandler.isPartyLeader(player.getUniqueId())) {
-                    player.sendMessage(prefix + "You are not the party leader!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not the party leader!"));
                     return;
                 }
 
                 if (party.getInvitedPlayers().contains(target.getUniqueId())) {
-                    player.sendMessage(prefix + "You already invited " + getColor(target.getUniqueId()) + target.getName() + "§7!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"You already invited {}§7!", getColor(target.getUniqueId()) + target.getName()));
                     return;
                 }
 
@@ -199,14 +200,14 @@ public class PartyCommand extends Command {
 
 
                 party.getInvitedPlayers().add(target.getUniqueId());
-                TextComponent message = new TextComponent("§a§lACCEPT");
+                TextComponent message = new TextComponent("§a§l"+BungeeTranslateAPI.translate(player,"ACCEPT"));
                 message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + player.getName()));
-                TextComponent message1 = new TextComponent("§c§lDENY");
+                TextComponent message1 = new TextComponent("§c§l"+BungeeTranslateAPI.translate(player,"DENY"));
                 message1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party deny " + player.getName()));
                 target.sendMessage("§8§m----------§f§lPARTY----------");
-                target.sendMessage("§7You got an partyinvite from " + getColor(player.getUniqueId()) + player.getName());
-                target.sendMessage(new ComponentBuilder("          ").append("§a§lACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + player.getName()))
-                    .append("       ").append("§c§lDENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party deny " + player.getName()))
+                target.sendMessage("§7"+BungeeTranslateAPI.translatePlaceholder(player,"You got an partyinvite from {}",getColor(player.getUniqueId()) + player.getName()));
+                target.sendMessage(new ComponentBuilder("          ").append("§a§l"+BungeeTranslateAPI.translate(player,"ACCEPT")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party accept " + player.getName()))
+                    .append("       ").append("§c§l"+BungeeTranslateAPI.translate(player,"Refuse")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party deny " + player.getName()))
                     .create());
                 target.sendMessage("§8§m-----------------------------");
 
@@ -214,58 +215,58 @@ public class PartyCommand extends Command {
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
 
                 if (target == null) {
-                    player.sendMessage(prefix + "The player is offline!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"The player is offline!"));
                     return;
                 }
 
                 if (player.getUniqueId().equals(target.getUniqueId())) {
-                    player.sendMessage(prefix + "You cannot interact with yourself!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You cannot interact with yourself!"));
                     return;
                 }
 
                 if (partyHandler.getPartyByPlayerUUID(player.getUniqueId()) != null) {
-                    player.sendMessage(prefix + "You are already in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are already in a party!"));
                     return;
                 }
 
                 Party party = partyHandler.getPartyByPlayerUUID(target.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7is not in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"{} §7is not in a party!", getColor(target.getUniqueId()) + target.getName()));
                     return;
                 }
 
                 if (party.getMaxSize() != -1 && party.getMaxSize() == party.getPartyPlayers().size()) {
-                    player.sendMessage(prefix + "The party is full!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"The party is full!"));
                     return;
                 }
 
                 if (party.isPublic()) {
-                    player.sendMessage(prefix + "You joined the party from " + getColor(target.getUniqueId()) + target.getName());
+                    player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"You joined the party from " + getColor(target.getUniqueId()) + target.getName()));
 
                     party.getInvitedPlayers().remove(player.getUniqueId());
                     String name = getColor(player.getUniqueId()) + player.getName();
                     party.getPartyPlayers().forEach(all -> {
                         ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
-                        partyPlayer.sendMessage("§5Party §8× " + name + " §7joined the party");
+                        partyPlayer.sendMessage("§5Party §8× " + BungeeTranslateAPI.translatePlaceholder(player,"{} §7joined the party", name));
                     });
                     party.getPartyPlayers().add(player.getUniqueId());
                     return;
                 }
 
                 if (!partyHandler.gotInvited(player, target.getUniqueId())) {
-                    player.sendMessage(prefix + "The player " + getColor(target.getUniqueId()) + target.getName() + " §7did not invite you!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"The player {} §7did not invite you!", getColor(target.getUniqueId()) + target.getName()));
                     return;
                 }
 
 
-                player.sendMessage(prefix + "You accepted the party invite from " + getColor(target.getUniqueId()) + target.getName());
+                player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"You accepted the party invite from {}", getColor(target.getUniqueId()) + target.getName()));
 
                 party.getInvitedPlayers().remove(player.getUniqueId());
                 String name = getColor(player.getUniqueId()) + player.getName();
                 party.getPartyPlayers().forEach(all -> {
                     ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
-                    partyPlayer.sendMessage("§5Party §8× " + name + " §7joined the party");
+                    partyPlayer.sendMessage("§5Party §8× " + BungeeTranslateAPI.translatePlaceholder(player,"{} §7joined the party", name));
                 });
                 party.getPartyPlayers().add(player.getUniqueId());
             } else if (args[0].equalsIgnoreCase("deny")) {
@@ -273,12 +274,12 @@ public class PartyCommand extends Command {
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
 
                 if (target == null) {
-                    player.sendMessage(prefix + "The player is offline!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"The player is offline!"));
                     return;
                 }
 
                 if (player.getUniqueId().equals(target.getUniqueId())) {
-                    player.sendMessage(prefix + "You cannot interact with yourself!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You cannot interact with yourself!"));
                     return;
                 }
 
@@ -287,44 +288,44 @@ public class PartyCommand extends Command {
                     return;
                 }
 
-                player.sendMessage(prefix + "You declined the party invite from " + getColor(target.getUniqueId()) + target.getName());
+                player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"You declined the party invite from {}", getColor(target.getUniqueId()) + target.getName()));
 
                 Party party = partyHandler.getPartyByPlayerUUID(target.getUniqueId());
                 party.getInvitedPlayers().remove(player.getUniqueId());
-                target.sendMessage(prefix + getColor(player.getUniqueId()) + player.getName() + " §7has declined your request");
+                target.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"{} §7has declined your request",getColor(player.getUniqueId()) + player.getName()));
             } else if (args[0].equalsIgnoreCase("kick")) {
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
 
                 if (target == null) {
-                    player.sendMessage(prefix + "The player is offline!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"The player is offline!"));
                     return;
                 }
 
                 if (player.getUniqueId().equals(target.getUniqueId())) {
-                    player.sendMessage(prefix + "You cannot interact with yourself!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You cannot interact with yourself!"));
                     return;
                 }
 
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + "You are not in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not in a party!"));
                     return;
                 }
 
                 if (!partyHandler.isPartyLeader(player.getUniqueId())) {
-                    player.sendMessage(prefix + "You are not the party leader!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not the party leader!"));
                     return;
                 }
 
                 if (!(partyHandler.getPartyByPlayerUUID(player.getUniqueId()) == partyHandler.getPartyByPlayerUUID(target.getUniqueId()))) {
-                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7is not in your party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "{} §7is not in your party!", getColor(target.getUniqueId()) + target.getName()));
                     return;
                 }
 
                 party.getPartyPlayers().forEach(all -> {
                     ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
-                    partyPlayer.sendMessage("§5Party §8× " + getColor(target.getUniqueId()) + target.getName() + " §7was kicked out of the party");
+                    partyPlayer.sendMessage("§5Party §8× " + BungeeTranslateAPI.translatePlaceholder(partyPlayer,"{} §7was kicked out of the party", getColor(target.getUniqueId()) + target.getName()));
                 });
                 party.getPartyPlayers().remove(target.getUniqueId());
             } else if (args[0].equalsIgnoreCase("removeinvite")) {
@@ -332,33 +333,33 @@ public class PartyCommand extends Command {
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
 
                 if (target == null) {
-                    player.sendMessage(prefix + "The player is offline!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"The player is offline!"));
                     return;
                 }
 
                 if (player.getUniqueId().equals(target.getUniqueId())) {
-                    player.sendMessage(prefix + "You cannot interact with yourself!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You cannot interact with yourself!"));
                     return;
                 }
 
                 Party party = partyHandler.getPartyByPlayerUUID(player.getUniqueId());
 
                 if (party == null) {
-                    player.sendMessage(prefix + "You are not in a party!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not in a party!"));
                     return;
                 }
 
                 if (!partyHandler.isPartyLeader(player.getUniqueId())) {
-                    player.sendMessage(prefix + "You are not the party leader!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"You are not the party leader!"));
                     return;
                 }
 
                 if (!party.getInvitedPlayers().contains(target.getUniqueId())) {
-                    player.sendMessage(prefix + getColor(target.getUniqueId()) + target.getName() + " §7is not invited!");
+                    player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"{} §7is not invited!", getColor(target.getUniqueId()) + target.getName()));
                     return;
                 }
 
-                player.sendMessage(prefix + "The invite of " + getColor(target.getUniqueId()) + target.getName() + " §7was removed");
+                player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"The invite of {} §7was removed", getColor(target.getUniqueId()) + target.getName()));
                 party.getInvitedPlayers().remove(target.getUniqueId());
             }
 
@@ -384,12 +385,12 @@ public class PartyCommand extends Command {
 
     private void sendHelp(ProxiedPlayer proxiedPlayer) {
         proxiedPlayer.sendMessage("§8§m----------§f§lPARTY§8§m-------------");
-        proxiedPlayer.sendMessage(prefix + "/party invite (player)");
-        proxiedPlayer.sendMessage(prefix + "/party accept§8/§7join (player)");
-        proxiedPlayer.sendMessage(prefix + "/party deny (player)");
-        proxiedPlayer.sendMessage(prefix + "/party kick (player)");
-        proxiedPlayer.sendMessage(prefix + "/party removeinvite (player)");
-        proxiedPlayer.sendMessage(prefix + "/party chat (message)");
+        proxiedPlayer.sendMessage(prefix + "/party invite ("+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"player")+")");
+        proxiedPlayer.sendMessage(prefix + "/party accept§8/§7join ("+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"player")+")");
+        proxiedPlayer.sendMessage(prefix + "/party deny ("+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"player")+")");
+        proxiedPlayer.sendMessage(prefix + "/party kick ("+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"player")+")");
+        proxiedPlayer.sendMessage(prefix + "/party removeinvite ("+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"player")+")");
+        proxiedPlayer.sendMessage(prefix + "/party chat ("+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"message")+")");
         proxiedPlayer.sendMessage(prefix + "/party togglepublic");
         proxiedPlayer.sendMessage(prefix + "/party leave");
         proxiedPlayer.sendMessage(prefix + "/party create");

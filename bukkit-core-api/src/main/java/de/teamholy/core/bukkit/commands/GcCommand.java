@@ -1,6 +1,7 @@
 package de.teamholy.core.bukkit.commands;
 
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ public class GcCommand implements CommandExecutor {
         if (!player.hasPermission("*"))
             return false;
         player.sendMessage("§7" + Runtime.getRuntime().freeMemory() / (1024 * 1024) + "§8 mb");
-        player.sendMessage("§7nach dem System.gc");
+        player.sendMessage("§7"+ BukkitTranslateAPI.translate(player,"nach dem System.gc"));
         Runtime.getRuntime().gc();
         player.sendMessage("§7" + Runtime.getRuntime().freeMemory() / (1024 * 1024) + "§8 mb");
         player.sendMessage("§7Max memory : " + Runtime.getRuntime().maxMemory() / (1024 * 1024) + "§8 mb");

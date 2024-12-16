@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.punish;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.commands.SenderCommand;
 import de.teamholy.core.bungee.util.BungeeUtil;
@@ -21,10 +22,10 @@ public class KickCommand extends SenderCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-
+        UUID author = BungeeUtil.parseAuthorUUID(sender);
 
         if (args.length == 0) {
-            sender.sendMessage(prefix + "/kick (name) <reason>");
+            sender.sendMessage(prefix + "/kick ("+ BungeeTranslateAPI.translate(author,"name")+") <"+BungeeTranslateAPI.translate(author,"reason")+">");
             return;
         }
 
@@ -34,7 +35,7 @@ public class KickCommand extends SenderCommand {
 
             UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(args[0]);
             if (nickUUID == null) {
-                sender.sendMessage(prefix + "This player is not online");
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"This player is not online"));
                 return;
             }
             target = ProxyServer.getInstance().getPlayer(nickUUID);
@@ -42,7 +43,7 @@ public class KickCommand extends SenderCommand {
         }
 
         if (target.hasPermission("teamholy.team") && !sender.hasPermission("*")) {
-            sender.sendMessage(prefix + "you cant kick a §cteammember§4!");
+            sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"you cant kick a §cteammember§4!"));
             return;
         }
 
@@ -58,12 +59,14 @@ public class KickCommand extends SenderCommand {
             reason = stringBuilder.toString();
         }
 
-        target.disconnect("§cYou have been kicked from the TeamHoly.DE network! \n§7Reason §8» §e" + reason);
+        target.disconnect("§c"+BungeeTranslateAPI.translatePlaceholder(target,"You have been kicked from the {} network!","TeamHoly.DE")+" \n§7"+BungeeTranslateAPI.translatePlaceholder(target,"Reason")+" §8» §e" + reason);
 
         String kicked = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
-        UUID author = BungeeUtil.parseAuthorUUID(sender);
         String name = BungeeCore.getAPI().getCloudManager().getColor(author) + BungeeCore.getAPI().getUuidManager().getName(author);
 
-        BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + name + " §7kicked " + kicked + " §7for §c" + reason);
+        //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + name + " §7kicked " + kicked + " §7for §c" + reason);
+        for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+            staffNotifyPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(staffNotifyPlayer,"{}§7 got kicked by {}§7 for §c{}", kicked, name, reason));
+        }
     }
 }

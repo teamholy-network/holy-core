@@ -3,6 +3,7 @@ package de.teamholy.core.bungee.commands;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.CloudPlayer;
 import de.dytanic.cloudnet.ext.bridge.player.ICloudPlayer;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.PublicBroadcastManager;
 import net.md_5.bungee.api.CommandSender;
@@ -28,7 +29,7 @@ public class BroadcastCommand extends Command {
             return;
 
         if (strings.length == 0) {
-            player.sendMessage("§6Broadcast §8× §7/broadcast (message)");
+            player.sendMessage("§6Broadcast §8× §7/broadcast ("+ BungeeTranslateAPI.translate(player,"message")+")");
             return;
         }
 

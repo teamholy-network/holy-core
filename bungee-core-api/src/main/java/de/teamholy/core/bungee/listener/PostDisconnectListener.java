@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
@@ -60,7 +61,7 @@ public class PostDisconnectListener implements Listener {
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
-                target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §coffline");
+                target.sendMessage("§6Friend §8× §7"+ BungeeTranslateAPI.translatePlaceholder(target,"Your friend {} is now §coffline",name+"§7"));
             }
         }
 
@@ -68,7 +69,7 @@ public class PostDisconnectListener implements Listener {
             if (report.getTarget().equals(event.getPlayer().getUniqueId())) {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(report.getViewer());
                 if (proxiedPlayer != null) {
-                    proxiedPlayer.sendMessage("§cThe player " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + " §cis now offline");
+                    proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"The player {} is now offline",BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())+"§c"));
                     report.setViewer(null);
                     report.setTargetOnline(false);
                     BungeeCore.getAPI().getReportManager().addReport(report);
@@ -81,7 +82,10 @@ public class PostDisconnectListener implements Listener {
         });
 
         if (player.hasPermission("teamholy.team")) {
-            BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7is now §coffline");
+            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7is now §coffline");
+            BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember,"{} is now §coffline", name+"§7"));
+            });
         }
 
 

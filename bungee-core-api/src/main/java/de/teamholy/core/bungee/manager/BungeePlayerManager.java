@@ -13,7 +13,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -58,6 +60,29 @@ public class BungeePlayerManager {
         }
     }
 
+    public Set<ProxiedPlayer> getClanMessagePlayers(Clan clan) {
+        Set<ProxiedPlayer> uuids = ConcurrentHashMap.newKeySet();
+        for (UUID member : clan.getMembers()) {
+            ProxiedPlayer player = ProxyServer.getInstance().getPlayer(member);
+            if (player != null && player.isConnected()) {
+                uuids.add(player);
+            }
+        }
+        return uuids;
+    }
+
+    public Set<ProxiedPlayer> getStaffNotifyPlayers() {
+        Set<ProxiedPlayer> uuids = ConcurrentHashMap.newKeySet();
+        for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
+            if (proxiedPlayer.hasPermission("teamholy.team")) {
+                StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(),
+                    () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
+                if (staffProfile.isNotify()) uuids.add(proxiedPlayer);
+            }
+        }
+        return uuids;
+    }
+
     public void notifyStaff(String message) {
         ProxyServer.getInstance().getConsole().sendMessage(message);
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {
@@ -82,6 +107,7 @@ public class BungeePlayerManager {
         }
     }
 
+    @Deprecated
     public void notifyStaff(BaseComponent message) {
         ProxyServer.getInstance().getConsole().sendMessage(message);
         for (ProxiedPlayer proxiedPlayer : ProxyServer.getInstance().getPlayers()) {

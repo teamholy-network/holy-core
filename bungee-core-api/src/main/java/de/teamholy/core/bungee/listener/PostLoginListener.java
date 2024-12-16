@@ -2,6 +2,7 @@ package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.game.GameProfile;
@@ -47,12 +48,12 @@ public class PostLoginListener implements Listener {
 
         proxiedPlayer.sendMessage("");
         proxiedPlayer.sendMessage("          §f§lWELCOME ON §6§lTEAMHOLY          ");
-        proxiedPlayer.sendMessage("        §7sponsored by §bIndex-Hosting.de      ");
+        proxiedPlayer.sendMessage("        §7"+ BungeeTranslateAPI.translate(proxiedPlayer,"sponsored by")+" §bIndex-Hosting.de      ");
         proxiedPlayer.sendMessage(" ");
         proxiedPlayer.sendMessage("§3Discord §8» §7https://discord.gg/teamholy");
         proxiedPlayer.sendMessage("§cStore §8» §7https://teamholy.de/shop");
         proxiedPlayer.sendMessage("§6Vote §8» §7https://teamholy.de/vote");
-        proxiedPlayer.sendMessage("§5Website §8» §7https://teamholy.de");
+        proxiedPlayer.sendMessage("§5"+BungeeTranslateAPI.translate(proxiedPlayer,"Website")+" §8» §7https://teamholy.de");
         proxiedPlayer.sendMessage("");
 
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
@@ -183,7 +184,7 @@ public class PostLoginListener implements Listener {
         // special rainbow clay perk
         if (!perkPlayerProfile.getOwnedPerks().contains(30) && playerProfile.getOnlineTime() > 288000000) {
             perkPlayerProfile.getOwnedPerks().add(30);
-            proxiedPlayer.sendMessage("§6Perk §8× §7You have unlocked the §4R§ca§6i§en§ab§2o§bw Clay Perk §7for playing §b80 hours");
+            proxiedPlayer.sendMessage("§6Perk §8× §7"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"You have unlocked the {} Clay Perk §7for playing §b80 hours","§4R§ca§6i§en§ab§2o§bw"));
             save = true;
         }
 
@@ -201,7 +202,10 @@ public class PostLoginListener implements Listener {
             }
 
             BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, updateStaffDB);
-            BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName() + " §7is now §aonline");
+            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName() + " §7is now §aonline");
+            BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} §7is now §aonline", BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName()));
+            });
         }
 
 
@@ -213,12 +217,12 @@ public class PostLoginListener implements Listener {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
                 i++;
-                target.sendMessage("§6Friend §8× §7Your friend " + name + " §7is now §aonline");
+                target.sendMessage("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(target,"Your friend {} is now §aonline",name+"§7"));
                 onlineFriends.append(BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()).append("§7, ");
             }
         }
 
-        proxiedPlayer.sendMessage("§6Friend §8× §7There " + (i <= 1 ? "is" : "are") + " currently " + (i == 0 ? "§cno §7friend" : "§a" + i + " §7friend" + (i >= 2 ? "s" : "")) + " online");
+        proxiedPlayer.sendMessage("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"There " + (i <= 1 ? "is" : "are") + " currently " + (i == 0 ? "§cno §7friend" : "{}") + " online", "§a"+String.valueOf(i)+" §7friend" + (i >= 2 ? "s" : "")));
 
         if (i > 0) {
             onlineFriends.setLength(onlineFriends.length() - 2);
@@ -229,9 +233,9 @@ public class PostLoginListener implements Listener {
         int sizeofRequests = friendProfile.getFriendReqeustsList().size();
 
         if (sizeofRequests == 1) {
-            proxiedPlayer.sendMessage(new ComponentBuilder("§6Friend §8× §7You currently have §a" + sizeofRequests + " §7open friend request").append(" §8(§a§lCLICK§8)").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend requests")).create());
+            proxiedPlayer.sendMessage(new ComponentBuilder("§6Friend §8× §7"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"You currently have {} open friend request","§a"+sizeofRequests+"§7")).append(" §8(§a§l"+BungeeTranslateAPI.translate(proxiedPlayer,"CLICK")+"§8)").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend requests")).create());
         } else if (sizeofRequests != 0) {
-            proxiedPlayer.sendMessage(new ComponentBuilder("§6Friend §8× §7You currently have §a" + sizeofRequests + " §7open friend requests").append(" §8(§a§lCLICK§8)").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend requests")).create());
+            proxiedPlayer.sendMessage(new ComponentBuilder("§6Friend §8× §7"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"You currently have {} open friend requests", "§a"+sizeofRequests+"§7")).append(" §8(§a§l"+BungeeTranslateAPI.translate(proxiedPlayer,"CLICK")+"§8)").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend requests")).create());
         }
 
 

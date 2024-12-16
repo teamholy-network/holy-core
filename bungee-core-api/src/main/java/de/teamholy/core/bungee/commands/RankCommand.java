@@ -5,11 +5,13 @@ import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.driver.permission.PermissionCheckResult;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.BungeeCore;
+import de.teamholy.core.bungee.util.BungeeUtil;
 import lombok.SneakyThrows;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -36,51 +38,53 @@ public class RankCommand extends Command {
 
     @SneakyThrows
     @Override
-    public void execute(CommandSender player, String[] args) {
-        if (player instanceof ProxiedPlayer proxiedPlayer) {
-            if (!player.hasPermission("teamholy.rang")) {
+    public void execute(CommandSender sender, String[] args) {
+        if (sender instanceof ProxiedPlayer proxiedPlayer) {
+            if (!sender.hasPermission("teamholy.rang")) {
                 sendRank(proxiedPlayer);
                 return;
             }
         }
 
+        UUID author = BungeeUtil.parseAuthorUUID(sender);
+
         if (args.length == 4) {
             UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
             if (uuid == null) {
-                player.sendMessage(prefix + "This player does not exist");
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "This player does not exist"));
                 return;
             }
 
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(args[2]);
             if (permissionGroup == null) {
-                player.sendMessage(prefix + "This group does not exist");
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"This group does not exist"));
                 return;
             }
 
-            if (!player.hasPermission("teamholy.rang." + args[2].toLowerCase())) {
-                player.sendMessage(prefix + "You cant give away this rank!");
+            if (!sender.hasPermission("teamholy.rang." + args[2].toLowerCase())) {
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"You cant give away this rank!"));
                 return;
             }
 
             IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
             if (permissionGroup.getGroups().contains(permissionGroup.getName())) {
-                player.sendMessage(prefix + "This player is already in the group");
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"This player is already in the group"));
                 return;
             }
 
-            if (permissionUser.hasPermission("teamholy.team") == PermissionCheckResult.ALLOWED && !player.hasPermission("*")) {
-                player.sendMessage(prefix + "You are not allowed to give this player a rank!");
+            if (permissionUser.hasPermission("teamholy.team") == PermissionCheckResult.ALLOWED && !sender.hasPermission("*")) {
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"You are not allowed to give this player a rank!"));
                 return;
             }
 
 
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
             if (target != null) {
-                target.sendMessage(prefix + " You now have the " + permissionGroup.getDisplay() + permissionGroup.getName() + " §7rank!");
+                target.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(target," You now have the {}§7 rank!",permissionGroup.getDisplay() + permissionGroup.getName()));
                 if (permissionGroup.isDefaultGroup() || args[3].equalsIgnoreCase("-1")) {
-                    target.sendMessage(prefix + "§8(§4Lifetime§8)");
+                    target.sendMessage(prefix + "§8(§4"+BungeeTranslateAPI.translate(target,"Lifetime")+"§8)");
                 } else {
-                    target.sendMessage(prefix + "§8(§c" + args[3] + " days§8)");
+                    target.sendMessage(prefix + "§8(§c" + args[3] + " "+BungeeTranslateAPI.translate(target,"days")+"§8)");
                 }
             }
             BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "rank_update", JsonDocument.newDocument("uuid", uuid));
@@ -92,21 +96,21 @@ public class RankCommand extends Command {
             if (permissionGroup.isDefaultGroup() || args[3].equalsIgnoreCase("-1")) {
                 if (args[0].equalsIgnoreCase("set")) permissionUser.getGroups().clear();
                 else if (!args[0].equalsIgnoreCase("add")) {
-                    sendHelp(player);
+                    sendHelp(sender);
                     return;
                 }
                 permissionUser.addGroup(permissionGroup.getName());
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
-                    .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " LIFETIME gegeben")
+                    .setDescription(sender.getName() + " hat " + args[1] + " den Rang " + args[2] + " LIFETIME gegeben")
                 );
-                player.sendMessage(prefix + "you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§4Lifetime§8)");
+                sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"you gave {} the rank {} ",args[1] , permissionGroup.getDisplay() + permissionGroup.getName()) + " §8(§4"+BungeeTranslateAPI.translate(author,"Lifetime")+"§8)");
             } else {
                 permissionUser.getGroups().clear();
                 permissionUser.addGroup(permissionGroup.getName(), Long.parseLong(args[3]), TimeUnit.DAYS);
                 discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(playerRank.getRed(), playerRank.getGreen(), playerRank.getBlue()))
-                    .setDescription(player.getName() + " hat " + args[1] + " den Rang " + args[2] + " für " + args[3] + " Tage gegeben")
+                    .setDescription(sender.getName() + " hat " + args[1] + " den Rang " + args[2] + " für " + args[3] + " Tage gegeben")
                 );
-                player.sendMessage(prefix + "you gave " + args[1] + " the rank " + permissionGroup.getDisplay() + permissionGroup.getName() + " §8(§c" + args[3] + " Days§8)");
+                sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"you gave {} the rank {} ",args[1] , permissionGroup.getDisplay() + permissionGroup.getName()) + " §8(§c" + args[3] + " "+BungeeTranslateAPI.translate(author,"Days")+"§8)");
             }
 
             CloudNetDriver.getInstance().getPermissionManagement().updateUser(permissionUser);
@@ -136,13 +140,14 @@ public class RankCommand extends Command {
             });
 
         } else {
-            sendHelp(player);
+            sendHelp(sender);
         }
     }
 
 
     private void sendHelp(CommandSender proxiedPlayer) {
-        proxiedPlayer.sendMessage(prefix + "You can only give these ranks:");
+        UUID author = BungeeUtil.parseAuthorUUID(proxiedPlayer);
+        proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(author,"You can only give these ranks")+":");
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<IPermissionGroup> permissionGroups = new ArrayList<>(CloudNetDriver.getInstance().getPermissionManagement().getGroups());
         permissionGroups.sort((o1, o2) -> Integer.compare(o2.getSortId(), o1.getSortId()));
@@ -152,7 +157,7 @@ public class RankCommand extends Command {
             }
         });
         proxiedPlayer.sendMessage(stringBuilder.toString());
-        proxiedPlayer.sendMessage(prefix + "/rank set§8/§7add (player) (rank) (time in days, Lifetime = -1)");
+        proxiedPlayer.sendMessage(prefix + "/rank set§8/§7add ("+BungeeTranslateAPI.translate(author,"player")+") ("+BungeeTranslateAPI.translate(author,"rank")+") ("+BungeeTranslateAPI.translate(author,"time in days")+", "+BungeeTranslateAPI.translate(author,"Lifetime")+" = -1)");
 
         if (proxiedPlayer instanceof ProxiedPlayer) {
             sendRank((ProxiedPlayer) proxiedPlayer);
@@ -161,7 +166,7 @@ public class RankCommand extends Command {
 
 
     private void sendRank(ProxiedPlayer proxiedPlayer) {
-
+        UUID author = BungeeUtil.parseAuthorUUID(proxiedPlayer);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         if (proxiedPlayer == null) {
             return;
@@ -169,9 +174,9 @@ public class RankCommand extends Command {
         CloudNetDriver.getInstance().getPermissionManagement().getUser(proxiedPlayer.getUniqueId()).getGroups().forEach(groupEntityData -> {
             IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(groupEntityData.getGroup());
             if (groupEntityData.getTimeOutMillis() == 0 || groupEntityData.getTimeOutMillis() == -1) {
-                proxiedPlayer.sendMessage(prefix + "You have the " + permissionGroup.getDisplay() + permissionGroup.getName() + " §7rank §8︳ §7End §8» §aPERMANENT");
+                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You have the {}§7 rank", permissionGroup.getDisplay() + permissionGroup.getName()) + "§8︳ §7"+BungeeTranslateAPI.translate(author,"End") + " §8» §a" + BungeeTranslateAPI.translate(author,"PERMANENT"));
             } else {
-                proxiedPlayer.sendMessage(prefix + "You have the " + permissionGroup.getDisplay() + permissionGroup.getName() + " §7rank §8︳ §7End §8» §e" + simpleDateFormat.format(groupEntityData.getTimeOutMillis()));
+                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You have the {}§7 rank", permissionGroup.getDisplay() + permissionGroup.getName()) + "§8︳ §7"+BungeeTranslateAPI.translate(author,"End") + " §8» §e" + simpleDateFormat.format(groupEntityData.getTimeOutMillis()));
             }
         });
     }

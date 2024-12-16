@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.punish;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
@@ -21,6 +22,7 @@ public class EvidenceCommand extends SenderCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
+        UUID author = BungeeUtil.parseAuthorUUID(sender);
         if (!BungeeUtil.hasPermission(sender, "teamholy.evidence")) {
             BungeeUtil.sendNoPermission(sender);
             return;
@@ -29,7 +31,7 @@ public class EvidenceCommand extends SenderCommand {
             String target = args[0];
             UUID uuid = BungeeUtil.parseTargetArgument(target);
             if (uuid == null) {
-                sender.sendMessage(Message.PUNISH_PREFIX + "§cError while fetching UUID from §e" + target + "§c!");
+                sender.sendMessage(Message.PUNISH_PREFIX + "§c"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §e" + target + "§c!");
                 return;
             }
             boolean isBan = args[1].equalsIgnoreCase("ban");
@@ -37,34 +39,34 @@ public class EvidenceCommand extends SenderCommand {
             if (isBan) {
                 BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                 if (banProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c isn't banned!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player §e{}§c isn't banned!",target));
                     return;
                 }
                 banProfile.setEvidence(args[2]);
                 BungeeCore.getAPI().getBanService().saveEntity(banProfile, false, true);
-                sender.sendMessage(Message.PUNISH_PREFIX + "§7You changed the ban-evidence of §e" + target + "§7!");
+                sender.sendMessage(Message.PUNISH_PREFIX + "§7"+BungeeTranslateAPI.translatePlaceholder(author,"You changed the bann-evidence of §e{}§7!",target));
 
             } else {
                 MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                 if (muteProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c isn't muted!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player §e{}§c isn't muted!",target));
                     return;
                 }
                 ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
                 boolean isOnline = player != null && player.isConnected();
                 muteProfile.setEvidence(args[2]);
                 BungeeCore.getAPI().getMuteService().saveEntity(muteProfile, isOnline, true);
-                sender.sendMessage(Message.PUNISH_PREFIX + "§7You changed the mute-evidence of §e" + target + "§7!");
+                sender.sendMessage(Message.PUNISH_PREFIX + "§7"+BungeeTranslateAPI.translatePlaceholder(author,"You changed the mute-evidence of §e{}§7!", target));
 
             }
         } else {
-            printUsage(sender);
+            printUsage(sender, author);
         }
     }
 
-    public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/evidence (name) (ban | mute) (evidence)");
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7evidence can be a screenshot or yt link!");
+    public void printUsage(CommandSender commandSender, UUID author) {
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/evidence ("+BungeeTranslateAPI.translate(author,"name")+") (ban | mute) ("+BungeeTranslateAPI.translate(author,"evidence")+")");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7"+BungeeTranslateAPI.translate(author,"evidence can be a screenshot or yt link!"));
     }
 
 }

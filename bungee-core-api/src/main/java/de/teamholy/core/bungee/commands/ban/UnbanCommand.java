@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.commands.ban;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
@@ -33,18 +34,19 @@ public class UnbanCommand extends SenderCommand {
             try {
                 UUID uuid = BungeeUtil.parseTargetArgument(target);
 
+                UUID author = BungeeUtil.parseAuthorUUID(sender);
+
                 if (uuid == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7Error while fetching UUID from §c" + target + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author,"Error while fetching UUID from") + " §c" + target + "§c!");
                     return;
                 }
 
-                UUID author = BungeeUtil.parseAuthorUUID(sender);
 
                 UUID finalUuid = uuid;
                 BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§cThe player §e" + target + "§c is isn't banned!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author,"§cThe player §e{}§c is isn't banned!", target));
                     return;
                 }
 
@@ -57,8 +59,17 @@ public class UnbanCommand extends SenderCommand {
                 BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
 
 
-                if (sender instanceof ProxiedPlayer player) BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
-                else BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
+                if (sender instanceof ProxiedPlayer player) {
+                   // BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
+                    for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                        staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), player.getUniqueId(), punishProfile));
+                    }
+                } else {
+                    //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
+                    for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                        staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), punishProfile));
+                    }
+                }
 
                 String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
 
@@ -78,7 +89,8 @@ public class UnbanCommand extends SenderCommand {
     }
 
     public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban (name)");
+        UUID author = BungeeUtil.parseAuthorUUID(commandSender);
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban ("+BungeeTranslateAPI.translate(author,"name")+")");
     }
 
 }

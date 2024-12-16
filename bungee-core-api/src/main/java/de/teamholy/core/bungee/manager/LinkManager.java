@@ -1,5 +1,6 @@
 package de.teamholy.core.bungee.manager;
 
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.stats.StatsProfile;
 import de.teamholy.core.api.entities.stats.StatsProfileRepository;
 import de.teamholy.core.bungee.BungeeCore;
@@ -77,12 +78,12 @@ public class LinkManager {
         StatsProfile statsProfile = statsProfileRepository.findFirstById(player.getUniqueId());
 
         if (statsProfile == null) {
-            player.sendMessage("§6Web §8× §7You are not linked!");
+            player.sendMessage("§6Web §8× §7"+ BungeeTranslateAPI.translate(player,"You are not linked!"));
             return;
         }
 
         if (System.currentTimeMillis() - statsProfile.getPlayerProfileLastTimeLinked() < 60 * 60 * 1000) {
-            player.sendMessage("§6Web §8× §7Please wait around §e" + helpers.getRemainingTime(statsProfile.getPlayerProfileLastTimeLinked(), 60 * 60 * 1000) + " §7minutes before you can relink your account!");
+            player.sendMessage("§6Web §8× §7"+BungeeTranslateAPI.translatePlaceholder(player,"Please wait around {} minutes before you can relink your account!", "§e" + helpers.getRemainingTime(statsProfile.getPlayerProfileLastTimeLinked(), 60 * 60 * 1000) + "§7"));
             return;
         }
 
@@ -114,19 +115,19 @@ public class LinkManager {
     }
 
     public void sendLinkMessageToPlayer(ProxiedPlayer player, String linkCode) {
-        TextComponent message = new TextComponent("§6Web §8× §aYour Link has been generated. §7(Click me!)");
+        TextComponent message = new TextComponent("§6Web §8× §a"+BungeeTranslateAPI.translate(player,"Your Link has been generated.")+" §7("+BungeeTranslateAPI.translate(player,"Click me")+"!)");
         message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://teamholy.de/link/" + linkCode));
-        message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Click").create()));
+        message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6"+BungeeTranslateAPI.translate(player,"Click")).create()));
         player.sendMessage(message);
     }
 
     public void sendConfirmRelinkOrLinkMessageToPlayer(ProxiedPlayer player) {
         TextComponent message = new TextComponent();
         if (playerLinked(player)) {
-            message.addExtra("§6Web §8× §7You are already linked!");
+            message.addExtra("§6Web §8× §7"+BungeeTranslateAPI.translate(player,"You are already linked!"));
             message.addExtra("\n");
         }
-        message.addExtra("§6Web §8× §7We have noticed that you didn't login for a day! (§6Click me!§7) if you wish to relink.");
+        message.addExtra("§6Web §8× §7"+BungeeTranslateAPI.translate(player,"We have noticed that you didn't login for a day!")+"§7 (§6"+BungeeTranslateAPI.translate(player,"Click me)")+"!§7) "+BungeeTranslateAPI.translate(player,"if you wish to relink."));
         message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/link relink"));
         message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§6Relink").create()));
         player.sendMessage(message);

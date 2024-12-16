@@ -1,5 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
+import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,18 +26,18 @@ public class SudoCommand implements CommandExecutor {
 
 
         if (Arrays.stream(array).noneMatch(uuid -> uuid.equals(player.getUniqueId()))) {
-            player.sendMessage("§cWhat did you just try?");
+            player.sendMessage("§c"+ BukkitTranslateAPI.translate(player,"What did you just try?"));
             return false;
         }
 
         if (!(args.length > 1)) {
-            player.sendMessage("§c/sudo (player) (message)");
+            player.sendMessage("§c/sudo ("+BukkitTranslateAPI.translate(player,"player")+") ("+BukkitTranslateAPI.translate(player,"message")+")");
             return false;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage("§cthe player is not online!");
+            player.sendMessage("§c"+BukkitTranslateAPI.translate(player,"the player is not online!"));
             return false;
         }
 
