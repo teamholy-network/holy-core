@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.listener;
 
 import com.google.common.collect.Lists;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
@@ -59,7 +60,7 @@ public class ChatFilterListener implements Listener {
 
             for (String s : new String[]{"2sa", "beide"}) {
                 if (args[1].toLowerCase().equalsIgnoreCase(s)) {
-                    proxiedPlayer.disconnect("§cYou have been banned for imitating a staff member");
+                    proxiedPlayer.disconnect("§c"+ BungeeTranslateAPI.translate(proxiedPlayer, "You have been banned for imitating a staff member"));
                     event.setCancelled(true);
                     return;
                 }
@@ -98,8 +99,8 @@ public class ChatFilterListener implements Listener {
                             ChatLogManager.CHATLOGS.put(proxiedPlayer.getUniqueId(), chatlog);
                         }
 
-                        proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
-                        proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §c" + Punish.parseMuteReasonById(actionProfile.filterActionId()));
+                        proxiedPlayer.sendMessage("§cChatFilter §8× §7"+BungeeTranslateAPI.translate(proxiedPlayer,"This word is not allowed!")+" §8(§c" + matcher.group() + "§8. §7"+BungeeTranslateAPI.translate(proxiedPlayer,"will be reviewed by our team")+")");
+                        proxiedPlayer.sendMessage("§cChatFilter §8× §7"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"You have been Punished for {}", "§c"+Punish.parseMuteReasonById(actionProfile.filterActionId())));
                         ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "mute " + proxiedPlayer.getName() + " " + actionProfile.filterActionId());
                         sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                         event.setCancelled(true);
@@ -115,7 +116,7 @@ public class ChatFilterListener implements Listener {
                         sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                     }
                     case "warn" -> {
-                        proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + matcher.group() + "§8. §7will be reviewed by our team)");
+                        proxiedPlayer.sendMessage("§cChatFilter §8× §7"+BungeeTranslateAPI.translate(proxiedPlayer,"This word is not allowed!")+" §8(§c" + matcher.group() + "§8. §7"+BungeeTranslateAPI.translate(proxiedPlayer,"will be reviewed by our team")+")");
                         event.setCancelled(true);
                         sendDiscordWebhookChatfilter(proxiedPlayer, event, matcher, actionProfile);
                     }
@@ -128,7 +129,6 @@ public class ChatFilterListener implements Listener {
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 if (message.toLowerCase().contains(player.getName().toLowerCase())) {
                     message = message.replace(player.getName(), "");
-
                     if (message.isEmpty()) {
                         return;
                     }
@@ -153,7 +153,7 @@ public class ChatFilterListener implements Listener {
                     }
 
                     //ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), "cpunish " + proxiedPlayer.getName() + " mute Advertising 24h");
-                    proxiedPlayer.sendMessage("§cChatFilter §8× §7This word is not allowed! §8(§c" + domainMatcher.group(0) + "§8. §7will be reviewed by our team)");
+                    proxiedPlayer.sendMessage("§cChatFilter §8× §7"+BungeeTranslateAPI.translate(proxiedPlayer,"This word is not allowed!")+" §8(§c" + domainMatcher.group(0) + "§8. §7"+BungeeTranslateAPI.translate(proxiedPlayer,"will be reviewed by our team")+")");
                     //proxiedPlayer.sendMessage("§cChatFilter §8× §7You have been Punished for §cADVERTISING");
                     event.setCancelled(true);
                     sendDiscordWebhookDomainfilter(proxiedPlayer, event, domainMatcher);
@@ -174,7 +174,7 @@ public class ChatFilterListener implements Listener {
         }
 
         if (areMessagesEquals(event.getMessage(), LASTMESSAGES.get(proxiedPlayer.getUniqueId()))) {
-            proxiedPlayer.sendMessage("§cChatFilter §8× §7Your last message is 70% similar");
+            proxiedPlayer.sendMessage("§cChatFilter §8× §7"+BungeeTranslateAPI.translate(proxiedPlayer,"Your last message is 70% similar")+"");
             event.setCancelled(true);
         }
 
