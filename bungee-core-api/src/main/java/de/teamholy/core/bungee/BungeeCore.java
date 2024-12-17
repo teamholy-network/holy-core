@@ -2,6 +2,7 @@ package de.teamholy.core.bungee;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
@@ -190,12 +191,25 @@ public class BungeeCore extends Plugin {
 
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
-        }, 30, 30, TimeUnit.MINUTES);
+            //publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                publicBroadcastManager.sendGeneral(player, "§7"+BungeeTranslateAPI.translatePlaceholder(player,"Did you know that you can do {} to get free {}?", "&6/link&7", "&ecoins&7"));
+            }
+        }, 10, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
-        }, 20, 20, TimeUnit.MINUTES);
+            //publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                publicBroadcastManager.sendGeneral(player, "§7"+BungeeTranslateAPI.translatePlaceholder(player,"You can change the language using {}", "&6/language&7"));
+            }
+        }, 20, 30, TimeUnit.MINUTES);
+
+        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+            //publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player,"Apply on the {} page to join the team", "§6teamholy.de/apply§7"));
+            }
+        }, 30, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());

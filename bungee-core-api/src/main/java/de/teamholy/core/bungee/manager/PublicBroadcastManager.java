@@ -31,7 +31,7 @@ public class PublicBroadcastManager {
                     break;
                 case LINK:
                     break;
-                case GENERAL:
+                case GENERAL: //Unused
                     sendGeneral(all, message.replace("&", "§"));
                     break;
             }
@@ -49,7 +49,7 @@ public class PublicBroadcastManager {
         receiver.sendMessage("§8§m-----------------------------------");
     }
 
-    private void sendGeneral(ProxiedPlayer receiver, String message) {
+    public void sendGeneral(ProxiedPlayer receiver, String message) {
         receiver.sendMessage("  ");
         receiver.sendMessage(helpers.centerMessage("§8[ §c!§8 ] §6BROADCAST"));
         receiver.sendMessage(helpers.centerMessage("§7" + message.replace("&", "§")));
