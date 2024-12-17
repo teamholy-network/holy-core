@@ -66,7 +66,7 @@ public class KickCommand extends SenderCommand {
 
         //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + name + " §7kicked " + kicked + " §7for §c" + reason);
         for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
-            staffNotifyPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(staffNotifyPlayer,"{}§7 got kicked by {}§7 for §c{}", kicked, name, reason));
+            staffNotifyPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(staffNotifyPlayer,"{} got kicked by {} for {}", kicked+"§7", name+"§7", "§c"+reason+"§7"));
         }
     }
 }
