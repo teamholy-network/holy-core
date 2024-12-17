@@ -12,9 +12,6 @@ import net.md_5.bungee.event.EventHandler;
 
 public class PlayerListListener implements Listener {
 
-    //private static final String HEADER_TEMPLATE = "\n§6§lTeamHoly.de§r§8 ┃ §f%online_players% §7players\n§7You are on §e%server%\n ";
-    //private static final String FOOTER_TEMPLATE = "\n    §7§oUse these commands for help:    \n§f/discord §8┃ §f/shop §8┃ §f/report\n\n§7§osponsored by §b§oIndex-Hosting.de";
-
     /**
      * Updates the player's tab header and footer with translated placeholders.
      */
