@@ -162,9 +162,15 @@ public class PlayerJoinQuitListener implements Listener {
                     Bukkit.getScheduler().runTaskLater(bukkitCore,() -> MarkupAPI.updateNameTag(player),4);
                 }
             });
-
-
         });
+
+
+        //Temporary Fix for Grim Bug
+        Bukkit.getScheduler().scheduleSyncDelayedTask(bukkitCore, () -> {
+            if (player.hasPermission("grim.verbose")) {
+                player.chat("/grim verbose");
+            }
+        },20);
     }
 
 
