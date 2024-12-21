@@ -47,7 +47,7 @@ public class PostLoginListener implements Listener {
         ProxiedPlayer proxiedPlayer = loginEvent.getPlayer();
 
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage("          §f§lWELCOME ON §6§lTEAMHOLY          ");
+        proxiedPlayer.sendMessage("          §f§l"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"WELCOME ON {}","§6§lTEAMHOLY")+"          ");
         proxiedPlayer.sendMessage("        §7"+ BungeeTranslateAPI.translate(proxiedPlayer,"sponsored by")+" §bIndex-Hosting.de      ");
         proxiedPlayer.sendMessage(" ");
         proxiedPlayer.sendMessage("§3Discord §8» §7https://discord.gg/teamholy");
@@ -222,7 +222,7 @@ public class PostLoginListener implements Listener {
             }
         }
 
-        proxiedPlayer.sendMessage("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"There " + (i <= 1 ? "is" : "are") + " currently " + (i == 0 ? "§cno §7friend" : "{}") + " online", "§a"+String.valueOf(i)+" §7friend" + (i >= 2 ? "s" : "")));
+        proxiedPlayer.sendMessage("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"There " + (i <= 1 ? "is" : "are") + " currently " + (i == 0 ? "§c"+BungeeTranslateAPI.translate(proxiedPlayer,"no §7friend") : "{}") + " online", "§a"+String.valueOf(i)+" §7"+BungeeTranslateAPI.translate(proxiedPlayer,"friend" + (i >= 2 ? "s" : ""))));
 
         if (i > 0) {
             onlineFriends.setLength(onlineFriends.length() - 2);
