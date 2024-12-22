@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.listener;
 
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -9,6 +10,8 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+
+import java.util.concurrent.TimeUnit;
 
 public class PlayerListListener implements Listener {
 
@@ -32,7 +35,7 @@ public class PlayerListListener implements Listener {
      */
     @EventHandler
     public void onPostLogin(PostLoginEvent event) {
-        ProxyServer.getInstance().getPlayers().forEach(this::updateTabList);
+        ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> ProxyServer.getInstance().getPlayers().forEach(this::updateTabList), 1, TimeUnit.SECONDS);
     }
 
     /**

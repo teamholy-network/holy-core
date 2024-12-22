@@ -107,8 +107,8 @@ public class FriendCommand extends Command {
                 if (targetPlayer != null) {
                     targetPlayer.sendMessage("§8§m-----------§f§lFRIEND§8§m------------");
                     targetPlayer.sendMessage("§7"+BungeeTranslateAPI.translatePlaceholder(targetPlayer,"You got an friend request from {}" , getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId())));
-                    targetPlayer.sendMessage(new ComponentBuilder("          ").append("§a§l"+BungeeTranslateAPI.translate(proxiedPlayer,"ACCEPT")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + proxiedPlayer.getName()))
-                        .append("       ").append("§c§l"+BungeeTranslateAPI.translate(proxiedPlayer,"DENY")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + proxiedPlayer.getName()))
+                    targetPlayer.sendMessage(new ComponentBuilder("          ").append("§a§l"+BungeeTranslateAPI.translate(targetPlayer,"ACCEPT")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + proxiedPlayer.getName()))
+                        .append("       ").append("§c§l"+BungeeTranslateAPI.translate(targetPlayer,"DENY")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + proxiedPlayer.getName()))
                         .create());
                     targetPlayer.sendMessage("§8§m-----------------------------");
                 }

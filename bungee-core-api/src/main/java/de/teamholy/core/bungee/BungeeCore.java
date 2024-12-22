@@ -208,7 +208,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             //publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player,"Apply on the {} page to join the team", "§6teamholy.de/apply§7"));
+                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player,"Apply on the {} §7page to join the team", "§6teamholy.de/apply"));
             }
         }, 30, 30, TimeUnit.MINUTES);
 
