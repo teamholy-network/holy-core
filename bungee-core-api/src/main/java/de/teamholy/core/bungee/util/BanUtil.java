@@ -10,6 +10,7 @@ import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -69,9 +70,14 @@ public class BanUtil {
     }
 
     public boolean isFilteredCommand(String message) {
+        message = message.toLowerCase(Locale.ROOT);
         return message.startsWith("/r") ||
             message.startsWith("/msg") ||
             message.startsWith("/party chat") ||
+            message.startsWith("/cc") ||
+            message.startsWith("/pc") ||
+            message.startsWith("/pchat") ||
+            message.startsWith("/teaming chat") ||
             message.startsWith("/clan chat");
     }
 
