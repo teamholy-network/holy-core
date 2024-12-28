@@ -11,6 +11,7 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.Locale;
 import java.util.UUID;
 
 /* copyright by Yassino */
@@ -28,7 +29,7 @@ public class MuteChatListener implements Listener {
                 String message = event.getMessage();
 
 
-                if (!message.startsWith("/") && !BanUtil.isFilteredCommand(message)) {
+                if (!message.startsWith("/") && !BanUtil.isFilteredCommand(message.toLowerCase(Locale.ROOT))) {
 
                     MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(player.getUniqueId(),
                         () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));

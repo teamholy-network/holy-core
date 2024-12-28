@@ -72,6 +72,10 @@ public class BanUtil {
         return message.startsWith("/r") ||
             message.startsWith("/msg") ||
             message.startsWith("/party chat") ||
+            message.startsWith("/cc") ||
+            message.startsWith("/pc") ||
+            message.startsWith("/pchat") ||
+            message.startsWith("/teaming chat") ||
             message.startsWith("/clan chat");
     }
 
