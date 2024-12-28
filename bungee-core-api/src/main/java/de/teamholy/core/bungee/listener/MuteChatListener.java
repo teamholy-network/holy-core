@@ -28,7 +28,7 @@ public class MuteChatListener implements Listener {
                 String message = event.getMessage();
 
 
-                if (!message.startsWith("/") && !BanUtil.isFilteredCommand(message)) {
+                if (!message.startsWith("/") || BanUtil.isFilteredCommand(message)) {
 
                     MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(player.getUniqueId(),
                         () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(player.getUniqueId()));
