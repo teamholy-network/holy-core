@@ -1,6 +1,5 @@
 package de.teamholy.core.api.manager;
 
-import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -4,19 +4,15 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
-import de.dytanic.cloudnet.driver.service.ServiceEnvironmentType;
-import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
-import de.dytanic.cloudnet.driver.service.ServiceLifeCycle;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.api.utility.Punish;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -35,19 +31,27 @@ public class CloudManager {
     IPlayerManager playerManager;
 
     public String getColor(UUID uuid) {
-        if (uuid == Punish.getConsoleUuid()) return "§4§l";
-        IPermissionUser iPermissionUser = null;
+        CompletableFuture<String> colorFuture = new CompletableFuture<>();
+
+        if (uuid.equals(Punish.getConsoleUuid())) {
+            return "§4§l";
+        }
+
+        coreAPI.getPlayerService().getEntityAsync(uuid, () -> coreAPI.getPlayerService().getRepository().findFirstById(uuid), profile -> {
+            if (profile == null) {
+                colorFuture.complete(PlayerRank.PLAYER.getColorCode());
+            } else {
+                PlayerRank playerRank = PlayerRank.valueOf(profile.getRank());
+                colorFuture.complete(playerRank.getColorCode());
+            }
+        });
+
         try {
-            iPermissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUserAsync(uuid).get();
+            return colorFuture.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            return PlayerRank.PLAYER.getColorCode();
         }
-
-
-        if (iPermissionUser != null) {
-            return CloudNetDriver.getInstance().getPermissionManagement().getHighestPermissionGroup(iPermissionUser).getDisplay();
-        }
-        return "§c";
     }
 
     public void announceClanUpdate(UUID uuid) {
@@ -109,8 +113,6 @@ public class CloudManager {
         }
         return null;
     }
-
-
 
 
 }

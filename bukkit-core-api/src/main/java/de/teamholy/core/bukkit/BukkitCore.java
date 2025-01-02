@@ -170,6 +170,10 @@ public class BukkitCore extends JavaPlugin {
             return PlayerRank.PLAYER.getColorCode();
         }
 
+        if (playerCacheManager.getCachedPlayers().containsKey(uuid)) {
+            return playerCacheManager.getCachedPlayers().get(uuid).getRank().getColorCode();
+        }
+
         return coreAPI.getCloudManager().getColor(uuid);
     }
 }
