@@ -7,7 +7,7 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    compileOnly("io.github.waterfallmc:waterfall-api:1.18-R0.1-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
 
     implementation(project(':holy-core-api'))
     implementation(project(':bungee-core-api'))

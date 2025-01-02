@@ -37,6 +37,9 @@ subprojects {
             url('https://jitpack.io/')
         }
         maven {
+            url('https://repo.glaremasters.me/repository/public/')
+        }
+        maven {
             name('skydb-repo')
             url('https://repository.skydb.de/repo')
         }
