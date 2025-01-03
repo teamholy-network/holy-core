@@ -37,7 +37,7 @@ public class UnbanCommand extends SenderCommand {
                 UUID author = BungeeUtil.parseAuthorUUID(sender);
 
                 if (uuid == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author,"Error while fetching UUID from") + " §c" + target + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
                     return;
                 }
 
@@ -46,7 +46,7 @@ public class UnbanCommand extends SenderCommand {
                 BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author,"§cThe player §e{}§c is isn't banned!", target));
+                    sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author, "§cThe player §e{}§c is isn't banned!", target));
                     return;
                 }
 
@@ -60,7 +60,7 @@ public class UnbanCommand extends SenderCommand {
 
 
                 if (sender instanceof ProxiedPlayer player) {
-                   // BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
+                    // BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
                     for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
                         staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), player.getUniqueId(), punishProfile));
                     }
@@ -90,7 +90,7 @@ public class UnbanCommand extends SenderCommand {
 
     public void printUsage(CommandSender commandSender) {
         UUID author = BungeeUtil.parseAuthorUUID(commandSender);
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban ("+BungeeTranslateAPI.translate(author,"name")+")");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban (" + BungeeTranslateAPI.translate(author, "name") + ")");
     }
 
 }

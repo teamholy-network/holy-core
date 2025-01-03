@@ -10,6 +10,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class LinkCommand extends Command {
 
     LinkManager linkManager;
+
     public LinkCommand(String name) {
         super(name);
         linkManager = BungeeCore.getInstance().getLinkManager();
@@ -37,7 +38,7 @@ public class LinkCommand extends Command {
 
 
         if (linkManager.playerLinked(player)) {
-            player.sendMessage("§6Web §8× §7"+ BungeeTranslateAPI.translate(player,"You are already linked!"));
+            player.sendMessage("§6Web §8× §7" + BungeeTranslateAPI.translate(player, "You are already linked!"));
             return;
         }
 
@@ -45,13 +46,11 @@ public class LinkCommand extends Command {
         String linkCode = linkManager.getPlayerLinkCode(player);
 
         if (linkCode == null || linkCode.isEmpty()) {
-            player.sendMessage("§c"+BungeeTranslateAPI.translate(player,"Error: Your code could not be generated or is emtpy. Please open a ticket on our discord"));
+            player.sendMessage("§c" + BungeeTranslateAPI.translate(player, "Error: Your code could not be generated or is emtpy. Please open a ticket on our discord"));
             return;
         }
 
         linkManager.sendLinkMessageToPlayer(player, linkCode);
-
-
 
 
     }

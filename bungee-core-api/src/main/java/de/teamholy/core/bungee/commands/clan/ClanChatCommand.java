@@ -20,13 +20,13 @@ public class ClanChatCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (strings.length == 0) {
-            player.sendMessage(Message.CLAN_PREFIX + "/cc ("+ BungeeTranslateAPI.translate(player,"message")+")");
+            player.sendMessage(Message.CLAN_PREFIX + "/cc (" + BungeeTranslateAPI.translate(player, "message") + ")");
             return;
         }
 
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
             return;
         }
 

@@ -46,7 +46,7 @@ public class BanCommand extends SenderCommand {
                 if (uuid == null) {
                     UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(target);
                     if (nickUUID == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from ")+"§c" + target + "§c!");
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from ") + "§c" + target + "§c!");
                         return;
                     }
                     uuid = nickUUID;
@@ -57,17 +57,17 @@ public class BanCommand extends SenderCommand {
 
                 Punish.BanReason banReason = Punish.parseBanReasonById(reasonId);
                 if (banReason == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"Error while fetching reason with ")+"§eid " + reasonId + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "Error while fetching reason with ") + "§eid " + reasonId + "§c!");
                     return;
                 }
 
                 if (!BungeeUtil.hasPermission(sender, "teamholy.ban.perma") && banReason.getDuration() == -1) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"You don't have permission to use this ban-reason!"));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "You don't have permission to use this ban-reason!"));
                     return;
                 }
 
                 if (!BungeeUtil.hasPermission(sender, "*") && !BungeeCore.getAPI().getCloudManager().isPunishable(uuid)) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"You don't have permissions to ban this player!"));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "You don't have permissions to ban this player!"));
                     return;
                 }
 
@@ -80,7 +80,7 @@ public class BanCommand extends SenderCommand {
                 BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile != null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"The player")+" §e" + target + "§c "+BungeeTranslateAPI.translate(author,"is already banned!"));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "The player") + " §e" + target + "§c " + BungeeTranslateAPI.translate(author, "is already banned!"));
                     return;
                 }
 
@@ -147,12 +147,12 @@ public class BanCommand extends SenderCommand {
 
     public void printUsage(CommandSender commandSender) {
         UUID author = BungeeUtil.parseAuthorUUID(commandSender);
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7"+BungeeTranslateAPI.translate(author,"Reasons")+" §8» ");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Reasons") + " §8» ");
         for (Punish.BanReason reason : Punish.getBanValues()) {
-            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(author,"Permanent");
+            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(author, "Permanent");
             commandSender.sendMessage(" §6" + reason.getEnglishText() + " §7- §c" + time + " §7- §c" + reason.getId());
         }
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban ("+BungeeTranslateAPI.translate(author,"name")+") (id) ["+BungeeTranslateAPI.translate(author,"Evidence Link")+"]");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban (" + BungeeTranslateAPI.translate(author, "name") + ") (id) [" + BungeeTranslateAPI.translate(author, "Evidence Link") + "]");
     }
 
 }

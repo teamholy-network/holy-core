@@ -21,7 +21,8 @@ public class ChatFilterManager {
         chatFilterRepository.findAll().forEach(chatFilter -> FILTEREDWORDS.put(chatFilter.getWord(), new FilterActionProfile(chatFilter.getFilterAction(), chatFilter.getFilterActionId())));
     }
 
-    public record FilterActionProfile(String filterAction, Integer filterActionId) {}
+    public record FilterActionProfile(String filterAction, Integer filterActionId) {
+    }
 
 }
 

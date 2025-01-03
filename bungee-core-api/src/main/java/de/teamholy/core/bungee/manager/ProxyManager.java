@@ -93,8 +93,6 @@ public class ProxyManager {
     }
 
 
-
-
     public interface ContainsProxyCallback {
         void onResult(boolean isProxy, String countryName, String org);
     }

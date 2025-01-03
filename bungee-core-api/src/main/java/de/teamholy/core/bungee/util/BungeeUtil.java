@@ -25,7 +25,7 @@ public class BungeeUtil {
 
     public void sendNoPermission(CommandSender sender) {
         if ((sender instanceof ProxiedPlayer)) {
-            sender.sendMessage(Message.PREFIX + "§c"+BungeeTranslateAPI.translate((ProxiedPlayer) sender,"You don't have permission to do this."));
+            sender.sendMessage(Message.PREFIX + "§c" + BungeeTranslateAPI.translate((ProxiedPlayer) sender, "You don't have permission to do this."));
         } else {
             sender.sendMessage(Message.PREFIX + "§cYou don't have permission to do this.");
         }

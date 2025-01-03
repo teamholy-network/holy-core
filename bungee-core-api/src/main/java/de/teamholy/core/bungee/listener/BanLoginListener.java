@@ -56,7 +56,7 @@ public class BanLoginListener implements Listener {
                 bungeeCore.getCoreAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
                 //bungeeCore.getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage("console", punishProfile));
                 for (ProxiedPlayer staffNotifyPlayer : bungeeCore.getBungeePlayerManager().getStaffNotifyPlayers()) {
-                    staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer,"console", punishProfile));
+                    staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, "console", punishProfile));
                 }
                 punishService.deleteEntity(punishProfile);
             }
@@ -98,10 +98,10 @@ public class BanLoginListener implements Listener {
 
                 bungeeCore.getCoreAPI().getBanService().saveEntity(banProfile, true, true);
 
-                BungeeCore.getInstance().getProxy().getScheduler().schedule(BungeeCore.getInstance(),() -> {
+                BungeeCore.getInstance().getProxy().getScheduler().schedule(BungeeCore.getInstance(), () -> {
                     ProxiedPlayer player = BungeeCore.getInstance().getProxy().getPlayer(loginEvent.getConnection().getName());
                     if (player != null) player.disconnect(BanUtil.generateBanScreen(banProfile));
-                },2,TimeUnit.SECONDS);
+                }, 2, TimeUnit.SECONDS);
                 //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateBanMessage(banProfile));
                 for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
                     staffNotifyPlayer.sendMessage(BanUtil.generateBanMessage(staffNotifyPlayer, banProfile));

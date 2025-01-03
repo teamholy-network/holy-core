@@ -48,7 +48,7 @@ public class ReportStaffCommand extends Command {
                 }
 
                 if (report == null) {
-                    player.sendMessage(TextComponent.fromLegacyText(prefix + BungeeTranslateAPI.translate(player,"You dont edit any report!")));
+                    player.sendMessage(TextComponent.fromLegacyText(prefix + BungeeTranslateAPI.translate(player, "You dont edit any report!")));
                     return;
                 }
 

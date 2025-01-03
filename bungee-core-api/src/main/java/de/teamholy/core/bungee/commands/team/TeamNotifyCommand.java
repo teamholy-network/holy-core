@@ -31,13 +31,13 @@ public class TeamNotifyCommand extends Command {
         if (staffProfile.isNotify()) {
             //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §ain");
             BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
-                staffmember.sendMessage("§cTeam §8× "+ BungeeTranslateAPI.translatePlaceholder(staffmember,"{}§7 has logged in", name));
+                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember, "{}§7 has logged in", name));
             });
         } else {
-            player.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(player,"{}§7 has logged out", name));
+            player.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(player, "{}§7 has logged out", name));
             //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §cout");
             BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
-                staffmember.sendMessage("§cTeam §8× "+ BungeeTranslateAPI.translatePlaceholder(staffmember,"{}§7 has logged out", name));
+                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember, "{}§7 has logged out", name));
             });
         }
 

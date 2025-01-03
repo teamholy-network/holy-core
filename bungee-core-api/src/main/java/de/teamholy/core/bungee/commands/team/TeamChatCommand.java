@@ -23,7 +23,7 @@ public class TeamChatCommand extends Command {
         StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(player.getUniqueId()));
 
         if (!staffProfile.isNotify()) {
-            player.sendMessage("§c"+ BungeeTranslateAPI.translate(player,"You are not logged in!")+" /notify");
+            player.sendMessage("§c" + BungeeTranslateAPI.translate(player, "You are not logged in!") + " /notify");
             return;
         }
 
@@ -31,7 +31,7 @@ public class TeamChatCommand extends Command {
             return;
 
         if (strings.length == 0) {
-            player.sendMessage("§cTeamchat §8× §7/teamchat ("+BungeeTranslateAPI.translate(player,"message")+")");
+            player.sendMessage("§cTeamchat §8× §7/teamchat (" + BungeeTranslateAPI.translate(player, "message") + ")");
             return;
         }
 

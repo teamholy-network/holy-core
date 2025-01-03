@@ -35,12 +35,12 @@ public class AdminChatCommand extends Command {
         }
 
         if (!staffProfile.isNotify()) {
-            player.sendMessage("§c"+ BungeeTranslateAPI.translate(player,"You are not logged in!")+" /notify");
+            player.sendMessage("§c" + BungeeTranslateAPI.translate(player, "You are not logged in!") + " /notify");
             return;
         }
 
         if (args.length == 0) {
-            player.sendMessage("§f§kKLK§r §4§lADMINCHAT §f§kKLK §8× §7/adminchat ("+BungeeTranslateAPI.translate(player,"message")+")");
+            player.sendMessage("§f§kKLK§r §4§lADMINCHAT §f§kKLK §8× §7/adminchat (" + BungeeTranslateAPI.translate(player, "message") + ")");
             return;
         }
 

@@ -35,7 +35,7 @@ public class UnmuteCommand extends SenderCommand {
                 UUID uuid = BungeeUtil.parseTargetArgument(target);
 
                 if (uuid == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §c" + target + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
                     return;
                 }
 
@@ -43,7 +43,7 @@ public class UnmuteCommand extends SenderCommand {
                 MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
 
                 if (punishProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player {} is isn't banned!", "§e" + target + "§c"));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(author, "The player {} is isn't banned!", "§e" + target + "§c"));
                     return;
                 }
 
@@ -79,6 +79,6 @@ public class UnmuteCommand extends SenderCommand {
     }
 
     public void printUsage(CommandSender commandSender, UUID author) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unmute ("+BungeeTranslateAPI.translate(author,"name")+")");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unmute (" + BungeeTranslateAPI.translate(author, "name") + ")");
     }
 }

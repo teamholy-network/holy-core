@@ -27,13 +27,13 @@ public class JumpCommand extends Command {
 
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
             if (target == null) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"This player isn't online"));
+                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "This player isn't online"));
                 return;
             }
 
             player.connect(target.getServer().getInfo());
 
-            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"You jumped to {}" , BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()));
+            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "You jumped to {}", BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()));
             BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "report", JsonDocument.newDocument("targetUuid", target.getUniqueId())
                 .append("jumperUuid", player.getUniqueId()));
         } else {

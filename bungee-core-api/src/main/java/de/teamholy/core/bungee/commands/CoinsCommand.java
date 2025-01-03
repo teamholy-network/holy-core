@@ -35,10 +35,10 @@ public class CoinsCommand extends SenderCommand {
 
 
         if (args.length == 0) {
-            sender.sendMessage(prefix + "/coins add ("+ BungeeTranslateAPI.translate(author,"name")+") ("+BungeeTranslateAPI.translate(author,"amount")+")");
-            sender.sendMessage(prefix + "/coins set ("+BungeeTranslateAPI.translate(author,"name")+") ("+BungeeTranslateAPI.translate(author,"amount")+")");
-            sender.sendMessage(prefix + "/coins remove ("+BungeeTranslateAPI.translate(author,"name")+") ("+BungeeTranslateAPI.translate(author,"amount")+")");
-            sender.sendMessage(prefix + "/coins ("+BungeeTranslateAPI.translate(author,"name")+")");
+            sender.sendMessage(prefix + "/coins add (" + BungeeTranslateAPI.translate(author, "name") + ") (" + BungeeTranslateAPI.translate(author, "amount") + ")");
+            sender.sendMessage(prefix + "/coins set (" + BungeeTranslateAPI.translate(author, "name") + ") (" + BungeeTranslateAPI.translate(author, "amount") + ")");
+            sender.sendMessage(prefix + "/coins remove (" + BungeeTranslateAPI.translate(author, "name") + ") (" + BungeeTranslateAPI.translate(author, "amount") + ")");
+            sender.sendMessage(prefix + "/coins (" + BungeeTranslateAPI.translate(author, "name") + ")");
             sendCoins(sender, "");
         } else if (args.length == 1) {
             sendCoins(sender, args[0]);
@@ -46,7 +46,7 @@ public class CoinsCommand extends SenderCommand {
 
             UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
             if (uuid == null) {
-                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"Player not found"));
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "Player not found"));
                 return;
             }
 
@@ -54,7 +54,7 @@ public class CoinsCommand extends SenderCommand {
             try {
                 coinsArg = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author,"Amount is not a number!"));
+                sender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "Amount is not a number!"));
                 return;
             }
 
@@ -67,33 +67,33 @@ public class CoinsCommand extends SenderCommand {
 
                     if (receiver != null) {
                         receiver.sendMessage(" ");
-                        receiver.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(receiver,"You received §6{} Coins§7!", String.valueOf(coinsArg)));
+                        receiver.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(receiver, "You received §6{} Coins§7!", String.valueOf(coinsArg)));
                         receiver.sendMessage(" ");
                     }
 
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You added §6{} Coins§7 to {}", String.valueOf(coinsArg), BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1]));
+                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author, "You added §6{} Coins§7 to {}", String.valueOf(coinsArg), BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1]));
                 }
                 case "set" -> {
                     setCoins(playerProfile, coinsArg);
 
                     if (receiver != null) {
                         receiver.sendMessage(" ");
-                        receiver.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(receiver,"Your Coins have been set to §6{} Coins§7!", String.valueOf(coinsArg)));
+                        receiver.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(receiver, "Your Coins have been set to §6{} Coins§7!", String.valueOf(coinsArg)));
                         receiver.sendMessage(" ");
                     }
 
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You set {} Coins to §6{}", BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1], String.valueOf(coinsArg)));
+                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author, "You set {} Coins to §6{}", BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1], String.valueOf(coinsArg)));
                 }
                 case "remove" -> {
                     removeCoins(playerProfile, coinsArg);
 
                     if (receiver != null) {
                         receiver.sendMessage(" ");
-                        receiver.sendMessage(prefix + "§6 " + coinsArg + BungeeTranslateAPI.translate(receiver,"Coins §7have been removed from your account!"));
+                        receiver.sendMessage(prefix + "§6 " + coinsArg + BungeeTranslateAPI.translate(receiver, "Coins §7have been removed from your account!"));
                         receiver.sendMessage(" ");
                     }
 
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You removed §6{} Coins§7 from {}§7's account!", String.valueOf(coinsArg), BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1]));
+                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author, "You removed §6{} Coins§7 from {}§7's account!", String.valueOf(coinsArg), BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1]));
                 }
             }
 

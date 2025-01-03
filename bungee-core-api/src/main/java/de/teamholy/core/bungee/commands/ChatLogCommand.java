@@ -24,19 +24,19 @@ public class ChatLogCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
         if (args.length == 0) {
-            sender.sendMessage("§cChatlog §8× §7"+ BungeeTranslateAPI.translate(player,"Please specify a player!")+" §8(§7/chatlog <"+BungeeTranslateAPI.translate(player,"Player")+">§8)");
+            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Please specify a player!") + " §8(§7/chatlog <" + BungeeTranslateAPI.translate(player, "Player") + ">§8)");
             return;
         }
 
         if (args[0].equalsIgnoreCase(player.getName())) {
-            sender.sendMessage("§cChatlog §8× §7"+BungeeTranslateAPI.translate(player,"Own chatlog is not allowed!"));
+            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Own chatlog is not allowed!"));
             return;
         }
 
         ProxiedPlayer chatlogPlayer = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (chatlogPlayer == null) {
-            sender.sendMessage("§cChatlog §8× §7"+BungeeTranslateAPI.translate(player,"Player not found!"));
+            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Player not found!"));
             return;
         }
 
@@ -44,7 +44,7 @@ public class ChatLogCommand extends Command {
         chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(player.getUniqueId(), chatlogPlayer);
 
         if (chatLog == null) {
-            sender.sendMessage("§cChatlog §8× §7"+BungeeTranslateAPI.translate(player,"Chatlog failed to create!"));
+            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Chatlog failed to create!"));
             return;
         }
 
