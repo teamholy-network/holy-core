@@ -93,8 +93,8 @@ public class ReportCommand extends Command {
 
             boolean finalIsNicked = isNicked;
 
-            String reported = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
-            String reporter = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
+            String reported = BungeeCore.getInstance().getPlayerColor(target.getUniqueId()) + target.getName();
+            String reporter = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
 
             player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "You've reported {} for {}", reported + "§7", "§e" + report.getReason()));
 

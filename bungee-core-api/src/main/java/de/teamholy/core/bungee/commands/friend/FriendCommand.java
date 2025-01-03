@@ -234,7 +234,7 @@ public class FriendCommand extends Command {
     }
 
     private static String getColor(UUID uuid) {
-        return BungeeCore.getAPI().getCloudManager().getColor(uuid);
+        return BungeeCore.getInstance().getPlayerColor(uuid);
     }
 
     private static String getName(UUID uuid) {
@@ -281,8 +281,8 @@ public class FriendCommand extends Command {
         ProxiedPlayer senderPlayer = ProxyServer.getInstance().getPlayer(sender);
         ProxiedPlayer getterPlayer = ProxyServer.getInstance().getPlayer(getter);
 
-        senderPlayer.sendMessage(MSGPREFIX + BungeeCore.getAPI().getCloudManager().getColor(sender) + senderPlayer.getName() + " §7» " + BungeeCore.getAPI().getCloudManager().getColor(getterPlayer.getUniqueId()) + getterPlayer.getName() + " §8» §a" + message);
-        getterPlayer.sendMessage(MSGPREFIX + BungeeCore.getAPI().getCloudManager().getColor(sender) + senderPlayer.getName() + " §7» " + BungeeCore.getAPI().getCloudManager().getColor(getterPlayer.getUniqueId()) + getterPlayer.getName() + " §8» §a" + message);
+        senderPlayer.sendMessage(MSGPREFIX + BungeeCore.getInstance().getPlayerColor(sender) + senderPlayer.getName() + " §7» " + BungeeCore.getInstance().getPlayerColor(getterPlayer.getUniqueId()) + getterPlayer.getName() + " §8» §a" + message);
+        getterPlayer.sendMessage(MSGPREFIX + BungeeCore.getInstance().getPlayerColor(sender) + senderPlayer.getName() + " §7» " + BungeeCore.getInstance().getPlayerColor(getterPlayer.getUniqueId()) + getterPlayer.getName() + " §8» §a" + message);
 
         LASTREPLYS.put(sender, getter);
         LASTREPLYS.put(getter, sender);

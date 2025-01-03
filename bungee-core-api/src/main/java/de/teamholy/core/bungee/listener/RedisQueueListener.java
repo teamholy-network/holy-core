@@ -81,7 +81,7 @@ public class RedisQueueListener {
 
                                 ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer -> {
                                     proxiedPlayer.sendMessage(" ");
-                                    TextComponent message = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8[&c&l!&8] " + BungeeCore.getAPI().getCloudManager().getColor(targetPlayer.getUniqueId()) + targetPlayer.getName() + " &alinked &7his account with our website &7and received &e500 &7Coins! &7Get your &ecoins&7 by &alinking &7your profile with "));
+                                    TextComponent message = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8[&c&l!&8] " + BungeeCore.getInstance().getPlayerColor(targetPlayer.getUniqueId()) + targetPlayer.getName() + " &alinked &7his account with our website &7and received &e500 &7Coins! &7Get your &ecoins&7 by &alinking &7your profile with "));
                                     TextComponent linkMessage = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&6/link&7!"));
                                     linkMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/link"));
                                     linkMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GOLD + "/link").create()));

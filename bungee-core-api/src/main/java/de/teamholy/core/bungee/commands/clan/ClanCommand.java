@@ -52,21 +52,21 @@ public class ClanCommand extends SenderCommand {
                 } else if (args[0].equalsIgnoreCase("togglejoin")) {
                     onToggleJoin(player);
                 } else if (args[0].equalsIgnoreCase("promote")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote ("+ BungeeTranslateAPI.translate(player,"name")+")");
                 } else if (args[0].equalsIgnoreCase("demote")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote ("+BungeeTranslateAPI.translate(player,"name")+")");
                 } else if (args[0].equalsIgnoreCase("invite")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite ("+BungeeTranslateAPI.translate(player,"name")+")");
                 } else if (args[0].equalsIgnoreCase("accept")) {
                     player.sendMessage(Message.CLAN_PREFIX + "§7/clan accept (tag)");
                 } else if (args[0].equalsIgnoreCase("kick")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick ("+BungeeTranslateAPI.translate(player,"name")+")");
                 } else if (args[0].equalsIgnoreCase("create")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (" + BungeeTranslateAPI.translate(player, "name") + ") (tag)");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
                 } else if (args[0].equalsIgnoreCase("rename")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (" + BungeeTranslateAPI.translate(player, "name") + ") (tag)");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
                 } else if (args[0].equalsIgnoreCase("chat")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat (" + BungeeTranslateAPI.translate(player, "message") + ")");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat ("+BungeeTranslateAPI.translate(player,"message")+")");
                 } else if (args[0].equalsIgnoreCase("join")) {
                     player.sendMessage(Message.CLAN_PREFIX + "§7/clan join (tag)");
                 } else {
@@ -82,12 +82,12 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e" + target + "§c!");
+                        sender.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"Error while fetching UUID from")+" §e" + target + "§c!");
                         return;
                     }
                     ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(uuid);
                     if (targetPlayer == null || !targetPlayer.isConnected()) {
-                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(uuid) + target + "§c " + BungeeTranslateAPI.translate(player, "has to be online to get promoted!"));
+                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target + "§c "+BungeeTranslateAPI.translate(player,"has to be online to get promoted!"));
                         return;
                     }
                     onPromote(player, uuid);
@@ -95,24 +95,24 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e" + target + "§c!");
+                        sender.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"Error while fetching UUID from")+" §e" + target + "§c!");
                         return;
                     }
 
                     ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid, () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
                     if (clanProfile != null) {
                         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
-                        player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player, "Clan") + "§8: §6" + clan.getName());
+                        player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player,"Clan")+"§8: §6" + clan.getName());
                         player.sendMessage(Message.CLAN_PREFIX + "Tag§8: §6" + clan.getColor() + clan.getTag());
-                        player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player, "Clan Rank") + "§8: §6" + clanProfile.getClanRank());
+                        player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player,"Clan Rank")+"§8: §6" + clanProfile.getClanRank());
                     } else {
-                        player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player, "The player is not in a clan!"));
+                        player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player,"The player is not in a clan!"));
                     }
                 } else if (args[0].equalsIgnoreCase("demote")) {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e" + target + "§c!");
+                        sender.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"Error while fetching UUID from")+" §e" + target + "§c!");
                         return;
                     }
 
@@ -121,13 +121,13 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e" + target + "§c!");
+                        sender.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"Error while fetching UUID from")+" §e" + target + "§c!");
                         return;
                     }
 
                     ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(uuid);
                     if (targetPlayer == null || !targetPlayer.isConnected()) {
-                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(uuid) + target + "§c " + BungeeTranslateAPI.translate(player, "has to be online to get invited!"));
+                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target + "§c "+BungeeTranslateAPI.translate(player,"has to be online to get invited!"));
                         return;
                     }
                     onInvite(player, uuid);
@@ -138,7 +138,7 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e" + target + "§c!");
+                        sender.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player,"Error while fetching UUID from") + " §e" + target + "§c!");
                         return;
                     }
 
@@ -147,9 +147,9 @@ public class ClanCommand extends SenderCommand {
                     String tag = args[1];
                     onInfo(player, tag);
                 } else if (args[0].equalsIgnoreCase("create")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (" + BungeeTranslateAPI.translate(player, "name") + ") (tag)");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan create ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
                 } else if (args[0].equalsIgnoreCase("rename")) {
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (" + BungeeTranslateAPI.translate(player, "name") + ") (tag)");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
                 } else if (args[0].equalsIgnoreCase("chat")) {
                     onClanChat(player, args);
                 } else if (args[0].equalsIgnoreCase("color")) {
@@ -176,7 +176,7 @@ public class ClanCommand extends SenderCommand {
                         String name = args[1];
                         onCreate(player, tag, name);
                     } else {
-                        player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You need §6Premium §7to create a clan!") + " (§chttps://shop.teamholy.de§7)");
+                        player.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"You need §6Premium §7to create a clan!")+" (§chttps://shop.teamholy.de§7)");
                     }
                 } else if (args[0].equalsIgnoreCase("rename")) {
                     String tag = args[2];
@@ -199,21 +199,21 @@ public class ClanCommand extends SenderCommand {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(),
             () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile != null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You already have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You already have a clan!"));
             return;
         }
         if (!BungeeCore.getAPI().getClanManager().existsClanTag(tag)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "This clan does not exists!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"This clan does not exists!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanByTag(tag);
         if (!clan.isOpenClan()) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "This clan is not open."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"This clan is not open."));
             return;
         }
 
         if (clan.getMembers().size() >= MAX_CLAN_MEMBERS) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The clan reached the limit of " + MAX_CLAN_MEMBERS + " members!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The clan reached the limit of " + MAX_CLAN_MEMBERS + " members!"));
             return;
         }
         clanProfile = new ClanPlayerProfile();
@@ -224,9 +224,9 @@ public class ClanCommand extends SenderCommand {
         clan.getMembers().add(player.getUniqueId());
         BungeeCore.getAPI().getClanManager().updateClan(clan);
 
-        //.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 joined the clan.");
+        //.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§7 joined the clan.");
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 " + BungeeTranslateAPI.translate(clanmember, "joined the clan."));
+            clanmember.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§7 "+BungeeTranslateAPI.translate(clanmember, "joined the clan."));
         });
         ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(player.getUniqueId()), 2, TimeUnit.SECONDS);
     }
@@ -234,11 +234,11 @@ public class ClanCommand extends SenderCommand {
     private void onToggleJoin(ProxiedPlayer player) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (clanProfile.getClanRank() != ClanRank.LEADER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have permissions to togglejoin the clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have permissions to togglejoin the clan!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
@@ -247,25 +247,25 @@ public class ClanCommand extends SenderCommand {
         if (clan.isOpenClan()) {
             //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"Your clan is now open for everyone!"));
             BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-                clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "Your clan is now open for everyone!"));
+                clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"Your clan is now open for everyone!"));
             });
         } else {
             //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"Your clan is now closed!"));
             BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-                clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "Your clan is now closed!"));
+                clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"Your clan is now closed!"));
             });
         }
     }
 
     public void onColor(ProxiedPlayer player, String color) {
         if (!player.hasPermission("teamholy.clan.color")) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have permission to colorize your clan."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have permission to colorize your clan."));
             return;
         }
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
         if (color.length() > 4) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can only use 2 color codes with '&' symbol!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can only use 2 color codes with '&' symbol!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
@@ -273,8 +273,9 @@ public class ClanCommand extends SenderCommand {
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"Your clan got the color")+": " + clan.getColor() + clan.getName());
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "Your clan got the color") + ": " + clan.getColor() + clan.getName());
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"Your clan got the color")+": " + clan.getColor() + clan.getName());
         });
+
 
 
         ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(player.getUniqueId()), 2, TimeUnit.SECONDS);
@@ -283,28 +284,28 @@ public class ClanCommand extends SenderCommand {
     public void onDelete(ProxiedPlayer player) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (clanProfile.getClanRank() != ClanRank.LEADER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You must be a leader to delete the clan."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You must be a leader to delete the clan."));
             return;
         }
-        player.sendMessage(Message.CLAN_PREFIX + "§6" + BungeeTranslateAPI.translate(player, "Clans"));
-        player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "Are you sure to delete the clan?"));
-        TextComponent main = new TextComponent(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "Click here") + ": ");
-        main.addExtra(new ChatAction().text("§4§l" + BungeeTranslateAPI.translate(player, "Delete")).execute("clan delete confirm").hover("§7" + BungeeTranslateAPI.translate(player, "Delete the clans and kick all members")).component());
+        player.sendMessage(Message.CLAN_PREFIX + "§6"+BungeeTranslateAPI.translate(player,"Clans"));
+        player.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"Are you sure to delete the clan?"));
+        TextComponent main = new TextComponent(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"Click here")+": ");
+        main.addExtra(new ChatAction().text("§4§l"+BungeeTranslateAPI.translate(player,"Delete")).execute("clan delete confirm").hover("§7"+BungeeTranslateAPI.translate(player,"Delete the clans and kick all members")).component());
         player.sendMessage(main);
     }
 
     public void onDeleteConfirm(ProxiedPlayer player) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (clanProfile.getClanRank() != ClanRank.LEADER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c+" + BungeeTranslateAPI.translate(player, "You must be a leader to delete the clan."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c+"+BungeeTranslateAPI.translate(player,"You must be a leader to delete the clan."));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
@@ -320,7 +321,7 @@ public class ClanCommand extends SenderCommand {
         }
         //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"Your clan has been deleted!"));
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "Your clan has been deleted!"));
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"Your clan has been deleted!"));
         });
 
         BungeeCore.getAPI().getClanPlayerService().deleteEntity(clanProfile);
@@ -330,30 +331,30 @@ public class ClanCommand extends SenderCommand {
     public void onLeave(ProxiedPlayer player) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
         if (clan.getMembers().size() == 1 && clanProfile.getClanRank() == ClanRank.LEADER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Since you are the only leader, you must delete the clan or appoint someone as a leader to leave it."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"Since you are the only leader, you must delete the clan or appoint someone as a leader to leave it."));
             return;
         }
         clan.getMembers().remove(player.getUniqueId());
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         BungeeCore.getAPI().getClanPlayerService().deleteEntity(clanProfile);
-        player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You have successfully left the clan!"));
+        player.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"You have successfully left the clan!"));
 
         ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(player.getUniqueId()), 2, TimeUnit.SECONDS);
-        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 "+BungeeTranslateAPI.translate(player,"has left the clan!"));
+        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§7 "+BungeeTranslateAPI.translate(player,"has left the clan!"));
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "The player") + " " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 " + BungeeTranslateAPI.translate(clanmember, "has left the clan!"));
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"The player") + " " + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§7 "+BungeeTranslateAPI.translate(clanmember,"has left the clan!"));
         });
     }
 
     public void onInfo(ProxiedPlayer player) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player, "§cYou don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(player,"§cYou don't have a clan!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
@@ -366,26 +367,26 @@ public class ClanCommand extends SenderCommand {
                 player.sendMessage(Message.CLAN_LINE_TOP);
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan info");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan info (tag)");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan userinfo (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan userinfo ("+BungeeTranslateAPI.translate(player,"name")+")");
                 if (player.hasPermission("teamholy.clan.color"))
-                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan color (" + BungeeTranslateAPI.translate(player, "color") + ")");
+                    player.sendMessage(Message.CLAN_PREFIX + "§7/clan color ("+BungeeTranslateAPI.translate(player,"color")+")");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan delete");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan accept (tag)");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan join (tag)");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename (" + BungeeTranslateAPI.translate(player, "name") + ") (tag)");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat (" + BungeeTranslateAPI.translate(player, "message") + ")");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan rename ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan chat ("+BungeeTranslateAPI.translate(player,"message")+")");
                 player.sendMessage(Message.CLAN_LINE_DOWN);
                 break;
             default:
                 player.sendMessage(Message.CLAN_LINE_TOP);
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan help 1");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan help 2");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick (" + BungeeTranslateAPI.translate(player, "name") + ")");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan kick ("+BungeeTranslateAPI.translate(player,"name")+")");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan invite ("+BungeeTranslateAPI.translate(player,"name")+")");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan leave");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan create (" + BungeeTranslateAPI.translate(player, "name") + ") (tag)");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote (" + BungeeTranslateAPI.translate(player, "name") + ")");
-                player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote (" + BungeeTranslateAPI.translate(player, "name") + ")");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan create ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan promote ("+BungeeTranslateAPI.translate(player,"name")+")");
+                player.sendMessage(Message.CLAN_PREFIX + "§7/clan demote ("+BungeeTranslateAPI.translate(player,"name")+")");
                 player.sendMessage(Message.CLAN_PREFIX + "§7/clan togglejoin");
                 player.sendMessage(Message.CLAN_LINE_DOWN);
                 break;
@@ -399,29 +400,29 @@ public class ClanCommand extends SenderCommand {
         // MOD and MEMBER can't promote
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (player.getUniqueId().equals(toPromote)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can't promote yourself!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can't promote yourself!"));
             return;
         }
         if (clanProfile.getClanRank() == ClanRank.MEMBER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to promote others!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to promote others!"));
             return;
         }
         ClanPlayerProfile promoteProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(toPromote, () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(toPromote));
 
         if (promoteProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is not in your clan!"));
             return;
         }
         if (!promoteProfile.getClanId().equals(clanProfile.getClanId())) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is not in your clan!"));
             return;
         }
         if (promoteProfile.getClanRank() == ClanRank.LEADER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is already a") + " " + promoteProfile.getClanRank().getFancy() + "§c!");
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is already a")+" " + promoteProfile.getClanRank().getFancy() + "§c!");
             return;
         }
         if (clanProfile.getClanRank() == ClanRank.LEADER) {
@@ -435,13 +436,13 @@ public class ClanCommand extends SenderCommand {
 
             Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
 
-            //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getAPI().getCloudManager().getColor(toPromote) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) + "§7 was promoted to " + promote.getFancy() + "§7!");
+            //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getInstance().getPlayerColor(toPromote) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) + "§7 was promoted to " + promote.getFancy() + "§7!");
             BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-                clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "The player") + " " + BungeeCore.getAPI().getCloudManager().getColor(toPromote) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) + "§7 " + BungeeTranslateAPI.translatePlaceholder(clanmember, "was promoted to {}", promote.getFancy()) + "§7!");
+                clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"The player")+" " + BungeeCore.getInstance().getPlayerColor(toPromote) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) + "§7 "+BungeeTranslateAPI.translatePlaceholder(clanmember,"was promoted to {}", promote.getFancy()) + "§7!");
             });
 
         } else {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to promote this player!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to promote this player!"));
         }
     }
 
@@ -451,24 +452,24 @@ public class ClanCommand extends SenderCommand {
         // MOD and MEMBER can't demote
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (player.getUniqueId().equals(toDemote)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can't demote yourself!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can't demote yourself!"));
             return;
         }
         ClanPlayerProfile demoteProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(toDemote, () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(toDemote));
         if (demoteProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is not in your clan!"));
             return;
         }
         if (!demoteProfile.getClanId().equals(clanProfile.getClanId())) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is not in your clan!"));
             return;
         }
         if (demoteProfile.getClanRank() == ClanRank.MEMBER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can only kick this member."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can only kick this member."));
             return;
         }
         if (clanProfile.getClanRank() == ClanRank.LEADER) {
@@ -483,12 +484,12 @@ public class ClanCommand extends SenderCommand {
 
             Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
 
-            //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getAPI().getCloudManager().getColor(toDemote) + BungeeCore.getAPI().getUuidManager().getName(demoteProfile.getPlayerId()) + "§7 was demoted to " + demote.getFancy() + "§7!");
+            //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getInstance().getPlayerColor(toDemote) + BungeeCore.getAPI().getUuidManager().getName(demoteProfile.getPlayerId()) + "§7 was demoted to " + demote.getFancy() + "§7!");
             BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-                clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "The player") + " " + BungeeCore.getAPI().getCloudManager().getColor(toDemote) + BungeeCore.getAPI().getUuidManager().getName(demoteProfile.getPlayerId()) + "§7 " + BungeeTranslateAPI.translatePlaceholder(clanmember, "was demoted to {}", demote.getFancy()) + "§7!");
+                clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"The player")+" " + BungeeCore.getInstance().getPlayerColor(toDemote) + BungeeCore.getAPI().getUuidManager().getName(demoteProfile.getPlayerId()) + "§7 "+BungeeTranslateAPI.translatePlaceholder(clanmember,"was demoted to {}", demote.getFancy()) + "§7!");
             });
         } else {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to demote others!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to demote others!"));
         }
     }
 
@@ -496,43 +497,43 @@ public class ClanCommand extends SenderCommand {
         // LEADER and MOD can invite
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (player.getUniqueId().equals(toInvite)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can't invite yourself!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can't invite yourself!"));
             return;
         }
         if (clanProfile.getClanRank() == ClanRank.MEMBER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to invite others!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to invite others!"));
             return;
         }
         ClanPlayerProfile inviteProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(toInvite, () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(toInvite));
         if (inviteProfile != null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player already has a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player already has a clan!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
         if (clan == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "A weird error occured.. Please contact an administrator!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"A weird error occured.. Please contact an administrator!"));
             return;
         }
         if (clan.getMembers().size() >= MAX_CLAN_MEMBERS) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(player, "The clan reached the limit of {} members!", String.valueOf(MAX_CLAN_MEMBERS)));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(player,"The clan reached the limit of {} members!", String.valueOf(MAX_CLAN_MEMBERS)));
             return;
         }
         if (clan.getRequestsTo().contains(toInvite)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is already invited!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is already invited!"));
             return;
         }
         final UUID clanId = clan.getClanId();
         clan.getRequestsTo().add(toInvite);
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         ProxiedPlayer invitePlayer = ProxyServer.getInstance().getPlayer(toInvite);
-        invitePlayer.sendMessage(Message.CLAN_PREFIX + "§6" + BungeeTranslateAPI.translate(player, "Clan"));
-        invitePlayer.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You have been invited to the") + " §6" + clan.getTag() + "§7 " + BungeeTranslateAPI.translate(player, "Clan") + ".");
+        invitePlayer.sendMessage(Message.CLAN_PREFIX + "§6"+BungeeTranslateAPI.translate(player,"Clan"));
+        invitePlayer.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"You have been invited to the")+" §6" + clan.getTag() + "§7 "+BungeeTranslateAPI.translate(player,"Clan")+".");
         TextComponent main = new TextComponent(Message.CLAN_PREFIX + "§7Click here§8: ");
-        main.addExtra(new ChatAction().text("§a§l" + BungeeTranslateAPI.translate(player, "Accept")).execute("clan accept " + clan.getTag()).hover("§7" + BungeeTranslateAPI.translate(player, "Accept clan-invite")).component());
+        main.addExtra(new ChatAction().text("§a§l"+BungeeTranslateAPI.translate(player,"Accept")).execute("clan accept " + clan.getTag()).hover("§7"+BungeeTranslateAPI.translate(player,"Accept clan-invite")).component());
         invitePlayer.sendMessage(main);
         ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
             Clan cleanClan = BungeeCore.getAPI().getClanManager().getClanById(clanId);
@@ -541,9 +542,9 @@ public class ClanCommand extends SenderCommand {
                 BungeeCore.getAPI().getClanManager().updateClan(cleanClan);
             }
         }, 2, TimeUnit.MINUTES);
-        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getAPI().getCloudManager().getColor(toInvite) + invitePlayer.getName() + "§7 has been invited to your clan!");
+        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getInstance().getPlayerColor(toInvite) + invitePlayer.getName() + "§7 has been invited to your clan!");
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "The player") + " " + BungeeCore.getAPI().getCloudManager().getColor(toInvite) + invitePlayer.getName() + "§7 " + BungeeTranslateAPI.translate(clanmember, "has been invited to your clan!"));
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"The player")+" " + BungeeCore.getInstance().getPlayerColor(toInvite) + invitePlayer.getName() + "§7 " + BungeeTranslateAPI.translate(clanmember,"has been invited to your clan!"));
         });
 
     }
@@ -551,23 +552,23 @@ public class ClanCommand extends SenderCommand {
     public void onAccept(ProxiedPlayer player, String tag) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile != null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You already have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You already have a clan!"));
             return;
         }
         if (!BungeeCore.getAPI().getClanManager().existsClanTag(tag)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "This clan does not exists!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"This clan does not exists!"));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanByTag(tag);
         if (!clan.getRequestsTo().contains(player.getUniqueId())) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "This clan did not invite you."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"This clan did not invite you."));
             return;
         }
-        player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You have accepted the invite from §6" + clan.getTag()));
+        player.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"You have accepted the invite from §6" + clan.getTag()));
 
-        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 has accepted the clan-invite!");
+        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§7 has accepted the clan-invite!");
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "The player") + " " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§7 " + BungeeTranslateAPI.translate(clanmember, "has accepted the clan-invite!"));
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"The player")+" " + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§7 "+ BungeeTranslateAPI.translate(clanmember,"has accepted the clan-invite!"));
         });
 
         clan.getRequestsTo().remove(player.getUniqueId());
@@ -591,32 +592,32 @@ public class ClanCommand extends SenderCommand {
         // MOD can kick MEMBER
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         if (player.getUniqueId().equals(toKick)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can't kick yourself!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can't kick yourself!"));
             return;
         }
         if (clanProfile.getClanRank() == ClanRank.MEMBER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to kick others!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to kick others!"));
             return;
         }
         ClanPlayerProfile kickProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(toKick, () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(toKick));
         if (kickProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is not in your clan!"));
             return;
         }
         if (!kickProfile.getClanId().equals(clanProfile.getClanId())) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The player is not in your clan!"));
             return;
         }
         if (kickProfile.getClanRank() != ClanRank.MEMBER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can't kick this member."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You can't kick this member."));
             return;
         }
         if (kickProfile.getClanRank() == ClanRank.MOD && clanProfile.getClanRank() == ClanRank.MOD) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to kick this player!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to kick this player!"));
             return;
         }
 
@@ -625,22 +626,22 @@ public class ClanCommand extends SenderCommand {
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         BungeeCore.getAPI().getClanPlayerService().deleteEntity(kickProfile);
 
-        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getAPI().getCloudManager().getColor(toKick) + BungeeCore.getAPI().getUuidManager().getName(kickProfile.getPlayerId()) + "§7 has been kicked by §6" + player.getName() + "§7!");
+        //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7The player " + BungeeCore.getInstance().getPlayerColor(toKick) + BungeeCore.getAPI().getUuidManager().getName(kickProfile.getPlayerId()) + "§7 has been kicked by §6" + player.getName() + "§7!");
 
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "The player") + " " + BungeeCore.getAPI().getCloudManager().getColor(toKick) + BungeeCore.getAPI().getUuidManager().getName(kickProfile.getPlayerId()) + "§7 " + BungeeTranslateAPI.translatePlaceholder(clanmember, "has been kicked by §6{}", player.getName()) + "§7!");
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"The player")+" " + BungeeCore.getInstance().getPlayerColor(toKick) + BungeeCore.getAPI().getUuidManager().getName(kickProfile.getPlayerId()) + "§7 "+ BungeeTranslateAPI.translatePlaceholder(clanmember,"has been kicked by §6{}", player.getName()) + "§7!");
         });
 
         ProxiedPlayer kickPlayer = ProxyServer.getInstance().getPlayer(toKick);
         if (kickPlayer != null && kickPlayer.isConnected()) {
-            kickPlayer.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(kickPlayer, "You have been kicked from the clan."));
+            kickPlayer.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(kickPlayer,"You have been kicked from the clan."));
             ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(player.getUniqueId()), 2, TimeUnit.SECONDS);
         }
     }
 
     public void onInfo(ProxiedPlayer player, String tag) {
         if (!BungeeCore.getAPI().getClanManager().existsClanTag(tag)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "This clan does not exist."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player, "This clan does not exist."));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanByTag(tag);
@@ -650,36 +651,36 @@ public class ClanCommand extends SenderCommand {
     public void onCreate(ProxiedPlayer player, String tag, String name) {
         // Tag conditions
         if (!pattern.matcher(tag).matches()) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag may only contain the characters a-z A-Z and 0-9."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag may only contain the characters a-z A-Z and 0-9."));
             return;
         }
         if (tag.length() > 5) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag can be only 5 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag can be only 5 characters long."));
             return;
         }
         if (tag.length() < 3) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag must be at least 3 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag must be at least 3 characters long."));
             return;
         }
         if (BungeeCore.getAPI().getClanManager().existsClanTag(tag)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag already exists."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag already exists."));
             return;
         }
         // Name conditions
         if (!pattern.matcher(name).matches()) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name may only contain the characters a-z A-Z and 0-9."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name may only contain the characters a-z A-Z and 0-9."));
             return;
         }
         if (name.length() > 16) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name can be only 16 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name can be only 16 characters long."));
             return;
         }
         if (name.length() < 3) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name must be at least 3 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name must be at least 3 characters long."));
             return;
         }
         if (BungeeCore.getAPI().getClanManager().existsClanName(name)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name already exists."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name already exists."));
             return;
         }
 
@@ -687,7 +688,7 @@ public class ClanCommand extends SenderCommand {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
         if (clanProfile != null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are already in a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are already in a clan!"));
             return;
         }
 
@@ -698,7 +699,7 @@ public class ClanCommand extends SenderCommand {
         clanProfile.setClanRank(ClanRank.LEADER);
         BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile, true, true);
 
-        player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translatePlaceholder(player, "You have created the §6{}§7 clan!", name));
+        player.sendMessage(Message.CLAN_PREFIX + "§7"+ BungeeTranslateAPI.translatePlaceholder(player,"You have created the §6{}§7 clan!", name));
 
         ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(player.getUniqueId()), 2, TimeUnit.SECONDS);
     }
@@ -706,53 +707,53 @@ public class ClanCommand extends SenderCommand {
     public void onRename(ProxiedPlayer player, String tag, String name) {
         // Tag conditions
         if (!pattern.matcher(tag).matches()) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag may only contain the characters a-z A-Z and 0-9."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag may only contain the characters a-z A-Z and 0-9."));
             return;
         }
         if (tag.length() > 5) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag can be only 5 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag can be only 5 characters long."));
             return;
         }
         if (tag.length() < 3) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag must be at least 3 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag must be at least 3 characters long."));
             return;
         }
         // Name conditions
         if (!pattern.matcher(name).matches()) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name may only contain the characters a-z A-Z and 0-9."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name may only contain the characters a-z A-Z and 0-9."));
             return;
         }
         if (name.length() > 16) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name can be only 16 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name can be only 16 characters long."));
             return;
         }
         if (name.length() < 3) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name must be at least 3 characters long."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name must be at least 3 characters long."));
             return;
         }
 
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
 
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not in a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not in a clan!"));
             return;
         }
         if (clanProfile.getClanRank() != ClanRank.LEADER) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You are not allowed to rename the clan."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"You are not allowed to rename the clan."));
             return;
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
         if (clan.getTag().equalsIgnoreCase(tag) && clan.getName().equalsIgnoreCase(name)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "Please choose other name or tag!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"Please choose other name or tag!"));
             return;
         }
 
         if (!clan.getName().equalsIgnoreCase(name) && BungeeCore.getAPI().getClanManager().existsClanName(name)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The name already exists."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The name already exists."));
             return;
         }
         if (!clan.getTag().equalsIgnoreCase(tag) && BungeeCore.getAPI().getClanManager().existsClanTag(tag)) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "The tag already exists."));
+            player.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(player,"The tag already exists."));
             return;
         }
 
@@ -761,7 +762,7 @@ public class ClanCommand extends SenderCommand {
         BungeeCore.getAPI().getClanManager().updateClan(clan);
         //BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7Your clan has been renamed!");
         BungeeCore.getInstance().getBungeePlayerManager().getClanMessagePlayers(clan).forEach(clanmember -> {
-            clanmember.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(clanmember, "Your clan has been renamed!"));
+            clanmember.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(clanmember,"Your clan has been renamed!"));
         });
 
         ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> {
@@ -784,16 +785,16 @@ public class ClanCommand extends SenderCommand {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         proxiedPlayer.sendMessage(Message.CLAN_LINE_TOP);
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage("§7" + BungeeTranslateAPI.translate(proxiedPlayer, "Creation date") + "§8: §a" + simpleDateFormat.format(new Date(clan.getCreationDate())));
-        proxiedPlayer.sendMessage("§7" + BungeeTranslateAPI.translate(proxiedPlayer, "Member") + "§8: §6" + clan.getMembers().size() + "§7/" + MAX_CLAN_MEMBERS);
-        proxiedPlayer.sendMessage("§7" + BungeeTranslateAPI.translate(proxiedPlayer, "Name") + "§8: " + clan.getColor() + clan.getName());
+        proxiedPlayer.sendMessage("§7"+BungeeTranslateAPI.translate(proxiedPlayer,"Creation date")+"§8: §a" + simpleDateFormat.format(new Date(clan.getCreationDate())));
+        proxiedPlayer.sendMessage("§7"+BungeeTranslateAPI.translate(proxiedPlayer,"Member")+"§8: §6" + clan.getMembers().size() + "§7/" + MAX_CLAN_MEMBERS);
+        proxiedPlayer.sendMessage("§7"+BungeeTranslateAPI.translate(proxiedPlayer,"Name")+"§8: " + clan.getColor() + clan.getName());
         proxiedPlayer.sendMessage("§7Tag§8: " + clan.getColor() + clan.getTag());
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage("§4" + BungeeTranslateAPI.translate(proxiedPlayer, "Leader") + " §8» ");
+        proxiedPlayer.sendMessage("§4"+BungeeTranslateAPI.translate(proxiedPlayer,"Leader")+" §8» ");
         StringBuilder leaders = new StringBuilder();
         for (ClanPlayerProfile profile : clanMemberList) {
             if (profile.getClanRank() == ClanRank.LEADER) {
-                leaders.append(BungeeCore.getAPI().getCloudManager().getColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId())).append("§7, ");
+                leaders.append(BungeeCore.getInstance().getPlayerColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId())).append("§7, ");
             }
         }
         proxiedPlayer.sendMessage(leaders.toString());
@@ -802,16 +803,16 @@ public class ClanCommand extends SenderCommand {
         StringBuilder mods = new StringBuilder();
         for (ClanPlayerProfile profile : clanMemberList) {
             if (profile.getClanRank() == ClanRank.MOD) {
-                mods.append(BungeeCore.getAPI().getCloudManager().getColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId())).append("§7, ");
+                mods.append(BungeeCore.getInstance().getPlayerColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId())).append("§7, ");
             }
         }
         proxiedPlayer.sendMessage(mods.toString());
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage("§a" + BungeeTranslateAPI.translate(proxiedPlayer, "Member") + " §8» ");
+        proxiedPlayer.sendMessage("§a"+BungeeTranslateAPI.translate(proxiedPlayer,"Member")+" §8» ");
         StringBuilder members = new StringBuilder();
         for (ClanPlayerProfile profile : clanMemberList) {
             if (profile.getClanRank() == ClanRank.MEMBER) {
-                members.append(BungeeCore.getAPI().getCloudManager().getColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId()))
+                members.append(BungeeCore.getInstance().getPlayerColor(profile.getPlayerId())).append(BungeeCore.getAPI().getUuidManager().getName(profile.getPlayerId()))
                     .append("§7, ");
             }
         }
@@ -823,7 +824,7 @@ public class ClanCommand extends SenderCommand {
     public void onClanChat(ProxiedPlayer player, String[] args) {
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(player,"You don't have a clan!"));
             return;
         }
         StringBuilder message = new StringBuilder();
@@ -831,7 +832,7 @@ public class ClanCommand extends SenderCommand {
             message.append(args[i]).append(" ");
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
-        BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + ClanRank.parsePrefix(clanProfile.getClanRank()) + "§l" + clanProfile.getClanRank().getFancy() + " " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§8 » §7" + message);
+        BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + ClanRank.parsePrefix(clanProfile.getClanRank()) + "§l" + clanProfile.getClanRank().getFancy() + " " + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§8 » §7" + message);
     }
 
 }

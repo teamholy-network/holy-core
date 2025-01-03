@@ -30,59 +30,61 @@ public class UnbanCommand extends SenderCommand {
             return;
         }
         if (args.length == 1) {
-            String target = args[0];
-            try {
-                UUID uuid = BungeeUtil.parseTargetArgument(target);
+            BungeeCore.getInstance().getExecutorService().execute(() -> {
+                String target = args[0];
+                try {
+                    UUID uuid = BungeeUtil.parseTargetArgument(target);
 
-                UUID author = BungeeUtil.parseAuthorUUID(sender);
+                    UUID author = BungeeUtil.parseAuthorUUID(sender);
 
-                if (uuid == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
-                    return;
-                }
-
-
-                UUID finalUuid = uuid;
-                BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
-
-                if (punishProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author, "§cThe player §e{}§c is isn't banned!", target));
-                    return;
-                }
-
-                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid, () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(finalUuid));
-
-
-                BungeeCore.getAPI().getBanService().deleteEntity(punishProfile);
-                punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
-
-                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
-
-
-                if (sender instanceof ProxiedPlayer player) {
-                    // BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
-                    for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
-                        staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), player.getUniqueId(), punishProfile));
+                    if (uuid == null) {
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
+                        return;
                     }
-                } else {
-                    //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
-                    for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
-                        staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), punishProfile));
+
+
+                    UUID finalUuid = uuid;
+                    BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
+
+                    if (punishProfile == null) {
+                        sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author, "§cThe player §e{}§c is isn't banned!", target));
+                        return;
                     }
+
+                    PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid, () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(finalUuid));
+
+
+                    BungeeCore.getAPI().getBanService().deleteEntity(punishProfile);
+                    punishHistoryProfile.getBanProfileMap().put(UUID.randomUUID().toString(), punishProfile);
+
+                    BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
+
+
+                    if (sender instanceof ProxiedPlayer player) {
+                        // BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), player.getUniqueId(), punishProfile));
+                        for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                            staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), player.getUniqueId(), punishProfile));
+                        }
+                    } else {
+                        //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnbanMessage(sender.getName(), punishProfile));
+                        for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {
+                            staffNotifyPlayer.sendMessage(BanUtil.generateUnbanMessage(staffNotifyPlayer, sender.getName(), punishProfile));
+                        }
+                    }
+
+                    String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
+
+                    DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
+                    discordWebhook.setUsername("UNBAN");
+                    discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.GREEN)
+                        .setDescription(authorName + " has unbanned " + target + ".")
+                    );
+
+                    discordWebhook.execute();
+                } catch (NumberFormatException e) {
+                    printUsage(sender);
                 }
-
-                String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
-
-                DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
-                discordWebhook.setUsername("UNBAN");
-                discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.GREEN)
-                    .setDescription(authorName + " has unbanned " + target + ".")
-                );
-
-                BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);
-            } catch (NumberFormatException e) {
-                printUsage(sender);
-            }
+            });
         } else {
             printUsage(sender);
         }

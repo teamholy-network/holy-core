@@ -61,8 +61,8 @@ public class KickCommand extends SenderCommand {
 
         target.disconnect("§c" + BungeeTranslateAPI.translatePlaceholder(target, "You have been kicked from the {} network!", "TeamHoly.DE") + " \n§7" + BungeeTranslateAPI.translatePlaceholder(target, "Reason") + " §8» §e" + reason);
 
-        String kicked = BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName();
-        String name = BungeeCore.getAPI().getCloudManager().getColor(author) + BungeeCore.getAPI().getUuidManager().getName(author);
+        String kicked = BungeeCore.getInstance().getPlayerColor(target.getUniqueId()) + target.getName();
+        String name = BungeeCore.getInstance().getPlayerColor(author) + BungeeCore.getAPI().getUuidManager().getName(author);
 
         //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + name + " §7kicked " + kicked + " §7for §c" + reason);
         for (ProxiedPlayer staffNotifyPlayer : BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers()) {

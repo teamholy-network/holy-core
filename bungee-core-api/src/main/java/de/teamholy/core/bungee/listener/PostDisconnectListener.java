@@ -54,14 +54,14 @@ public class PostDisconnectListener implements Listener {
         FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(player.getUniqueId(),
             () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(player.getUniqueId()));
 
-        String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
+        String name = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
 
         BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(), null, "offline", null);
         FriendCommand.LASTREPLYS.remove(event.getPlayer().getUniqueId());
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
-                target.sendMessage("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(target, "Your friend {} is now §coffline", name + "§7"));
+                target.sendMessage("§6Friend §8× §7"+ BungeeTranslateAPI.translatePlaceholder(target,"Your friend {} is now §coffline",name+"§7"));
             }
         }
 
@@ -69,7 +69,7 @@ public class PostDisconnectListener implements Listener {
             if (report.getTarget().equals(event.getPlayer().getUniqueId())) {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(report.getViewer());
                 if (proxiedPlayer != null) {
-                    proxiedPlayer.sendMessage("§c" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} is now offline", BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + "§c"));
+                    proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"The player {} is now offline",BungeeCore.getInstance().getPlayerColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())+"§c"));
                     report.setViewer(null);
                     report.setTargetOnline(false);
                     BungeeCore.getAPI().getReportManager().addReport(report);
@@ -84,9 +84,10 @@ public class PostDisconnectListener implements Listener {
         if (player.hasPermission("teamholy.team")) {
             //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7is now §coffline");
             BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
-                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} is now §coffline", name + "§7"));
+                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember,"{} is now §coffline", name+"§7"));
             });
         }
+
 
 
         BungeeCore.getAPI().getStaffService().getRedisCache().updateEntryExpiration(player.getUniqueId(), 15, TimeUnit.MINUTES, 0, TimeUnit.MINUTES);

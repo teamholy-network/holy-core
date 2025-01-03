@@ -75,7 +75,7 @@ public class StatsCommand extends SenderCommand {
     private void sendStats(ProxiedPlayer player, UUID uuid, Gamemodes gamemodes, StatsType statsType) {
 
         String name = BungeeCore.getAPI().getUuidManager().getName(uuid);
-        String nameColor = BungeeCore.getAPI().getCloudManager().getColor(uuid) + name;
+        String nameColor = BungeeCore.getInstance().getPlayerColor(uuid) + name;
         GameProfile gameProfile = BungeeCore.getAPI().getGameService().getEntity(uuid, () -> BungeeCore.getAPI().getGameService().getRepository().findFirstById(uuid));
         if (!gameProfile.exists(gamemodes.toString())) {
             player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "This player doesn't have any stats in") + " §" + gamemodes.getColor() + gamemodes.toString().toUpperCase(Locale.ROOT));
@@ -133,7 +133,7 @@ public class StatsCommand extends SenderCommand {
     private void sendStatsHelp(ProxiedPlayer player, UUID uuid) {
 
         String name = BungeeCore.getAPI().getUuidManager().getName(uuid);
-        String nameColor = BungeeCore.getAPI().getCloudManager().getColor(uuid) + name;
+        String nameColor = BungeeCore.getInstance().getPlayerColor(uuid) + name;
 
         player.sendMessage("");
         player.sendMessage("          §f§l" + BungeeTranslateAPI.translate(player, "STATS") + "         ");

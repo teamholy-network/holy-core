@@ -41,10 +41,10 @@ public class PublicBroadcastManager {
     private void sendJoinMe(ProxiedPlayer receiver, ProxiedPlayer sender) {
 
         receiver.sendMessage("§8§m-------------§f§lJOINME§8§m----------------");
-        receiver.sendMessage("     " + BungeeTranslateAPI.translatePlaceholder(receiver, "{} §7is playing on §d{}", BungeeCore.getAPI().getCloudManager().getColor(sender.getUniqueId()) + sender.getName(), sender.getServer().getInfo().getName()));
-        TextComponent joinMeMessage = new TextComponent("                     §a" + BungeeTranslateAPI.translate(receiver, "Join Server") + "           ");
+        receiver.sendMessage("     " + BungeeTranslateAPI.translatePlaceholder(receiver,"{} §7is playing on §d{}",BungeeCore.getInstance().getPlayerColor(sender.getUniqueId()) + sender.getName(), sender.getServer().getInfo().getName()));
+        TextComponent joinMeMessage = new TextComponent("                     §a"+ BungeeTranslateAPI.translate(receiver,"Join Server")+"           ");
         joinMeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme " + sender.getName()));
-        joinMeMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Play with " + BungeeCore.getAPI().getCloudManager().getColor(sender.getUniqueId()) + sender.getName())));
+        joinMeMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Play with " + BungeeCore.getInstance().getPlayerColor(sender.getUniqueId()) + sender.getName())));
         receiver.sendMessage(joinMeMessage);
         receiver.sendMessage("§8§m-----------------------------------");
     }
