@@ -36,7 +36,7 @@ public class ChatFilterListener implements Listener {
     private Set<String> domains = new HashSet<>();
     private final Pattern domainPattern = Pattern.compile("([a-zA-Z0-9-]+)[.,;⦁!@#$%^&*()_+=|<>?{}\\[\\]\\-]([a-zA-Z0-9-]+)");
 
-    private final String[] bypassedDomains = {"teamholy.de", "teamholy.net"};
+    private final String[] bypassedDomains = {"teamholy.de", "teamholy.net", "teamholy.top"};
 
     DiffMatch diffMatch = new DiffMatch();
 
@@ -59,7 +59,7 @@ public class ChatFilterListener implements Listener {
             if (args.length < 2) return;
 
             for (String s : new String[]{"2sa", "beide"}) {
-                if (args[1].toLowerCase().equalsIgnoreCase(s)) {
+                if (args[1].toLowerCase(Locale.ROOT).equalsIgnoreCase(s)) {
                     proxiedPlayer.disconnect("§c"+ BungeeTranslateAPI.translate(proxiedPlayer, "You have been banned for imitating a staff member"));
                     event.setCancelled(true);
                     return;

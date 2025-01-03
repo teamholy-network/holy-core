@@ -361,9 +361,13 @@ public class NickManager implements Listener {
      */
     private WrapperPlayServerPlayerInfo createPlayerInfo(Player player, UUID uuid, String name, Property textures, EnumWrappers.PlayerInfoAction action) {
         WrappedGameProfile profile = new WrappedGameProfile(uuid, name);
-        WrappedSignedProperty signedProperty = new WrappedSignedProperty("textures", textures.getValue(), textures.getSignature());
-        profile.getProperties().removeAll("textures");
-        profile.getProperties().put("textures", signedProperty);
+        if (textures != null) {
+            WrappedSignedProperty signedProperty = new WrappedSignedProperty("textures", textures.getValue(), textures.getSignature());
+            profile.getProperties().removeAll("textures");
+            profile.getProperties().put("textures", signedProperty);
+        } else {
+            profile.getProperties().removeAll("textures");
+        }
 
         PlayerInfoData playerInfoData = new PlayerInfoData(profile, ((CraftPlayer) player).getHandle().playerConnection.player.ping, EnumWrappers.NativeGameMode.fromBukkit(player.getGameMode()), WrappedChatComponent.fromText(player.getDisplayName()));
 
