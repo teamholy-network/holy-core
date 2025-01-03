@@ -1,9 +1,9 @@
 dependencies {
     implementation("eu.koboo:en2do:$en2doVersion")
     implementation("org.redisson:redisson:$redissonVersion")
-    implementation 'redis.clients:jedis:5.0.1'
+    implementation('redis.clients:jedis:5.0.1')
     implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    implementation 'com.github.bivashy.NanoLimboPlugin:api:1.0.6'
+    implementation('com.github.bivashy.NanoLimboPlugin:api:1.0.6')
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
