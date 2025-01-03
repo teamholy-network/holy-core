@@ -57,7 +57,7 @@ public class PartyChatCommand extends Command {
 
 
     private String getColor(UUID uuid) {
-        return BungeeCore.getAPI().getCloudManager().getColor(uuid);
+        return BungeeCore.getInstance().getPlayerColor(uuid);
     }
 
 }

@@ -80,7 +80,7 @@ public class GiveawayCommand extends Command implements Listener {
             if (event.getMessage().equalsIgnoreCase(String.valueOf(winnerNumber))) {
                 chat = false;
                 ProxyServer.getInstance().getPlayers().forEach(players -> {
-                    players.sendMessage(prefix + "§6§l"+BungeeTranslateAPI.translatePlaceholder(players,"The Player {} §6§lhas won!", BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName()));
+                    players.sendMessage(prefix + "§6§l"+BungeeTranslateAPI.translatePlaceholder(players,"The Player {} §6§lhas won!", BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName()));
                     players.sendMessage(prefix + "§6§l"+BungeeTranslateAPI.translate(players,"Number")+"§l§8: §c§l" + winnerNumber);
                     players.sendMessage(prefix + "§7§l"+BungeeTranslateAPI.translate(players,"The chat is enabled in 10 seconds!"));
                 });

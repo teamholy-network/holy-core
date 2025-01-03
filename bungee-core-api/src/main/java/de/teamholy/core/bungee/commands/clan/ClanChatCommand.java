@@ -35,6 +35,6 @@ public class ClanChatCommand extends Command {
             message.append(strings[i]).append(" ");
         }
         Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanProfile.getClanId());
-        BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + ClanRank.parsePrefix(clanProfile.getClanRank()) + "§l" + clanProfile.getClanRank().getFancy() + " " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + "§8 » §7" + message);
+        BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + ClanRank.parsePrefix(clanProfile.getClanRank()) + "§l" + clanProfile.getClanRank().getFancy() + " " + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + "§8 » §7" + message);
     }
 }

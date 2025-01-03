@@ -71,7 +71,7 @@ public class CoinsCommand extends SenderCommand {
                         receiver.sendMessage(" ");
                     }
 
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You added §6{} Coins§7 to {}", String.valueOf(coinsArg), BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1]));
+                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You added §6{} Coins§7 to {}", String.valueOf(coinsArg), BungeeCore.getInstance().getPlayerColor(uuid) + args[1]));
                 }
                 case "set" -> {
                     setCoins(playerProfile, coinsArg);
@@ -82,7 +82,7 @@ public class CoinsCommand extends SenderCommand {
                         receiver.sendMessage(" ");
                     }
 
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You set {} Coins to §6{}", BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1], String.valueOf(coinsArg)));
+                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You set {} Coins to §6{}", BungeeCore.getInstance().getPlayerColor(uuid) + args[1], String.valueOf(coinsArg)));
                 }
                 case "remove" -> {
                     removeCoins(playerProfile, coinsArg);
@@ -93,7 +93,7 @@ public class CoinsCommand extends SenderCommand {
                         receiver.sendMessage(" ");
                     }
 
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You removed §6{} Coins§7 from {}§7's account!", String.valueOf(coinsArg), BungeeCore.getAPI().getCloudManager().getColor(uuid) + args[1]));
+                    sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"You removed §6{} Coins§7 from {}§7's account!", String.valueOf(coinsArg), BungeeCore.getInstance().getPlayerColor(uuid) + args[1]));
                 }
             }
 
@@ -126,7 +126,7 @@ public class CoinsCommand extends SenderCommand {
             return;
         }
 
-        sender.sendMessage(prefix + BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName() + " §7has §e" + playerProfile.getCoins() + " §6coins");
+        sender.sendMessage(prefix + BungeeCore.getInstance().getPlayerColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName() + " §7has §e" + playerProfile.getCoins() + " §6coins");
     }
 
     private void addCoins(PlayerProfile player, int coins) {

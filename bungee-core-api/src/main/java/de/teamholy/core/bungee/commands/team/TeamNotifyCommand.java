@@ -27,7 +27,7 @@ public class TeamNotifyCommand extends Command {
         BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
 
 
-        String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
+        String name = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
         if (staffProfile.isNotify()) {
             //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + name + " §7has logged §ain");
             BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {

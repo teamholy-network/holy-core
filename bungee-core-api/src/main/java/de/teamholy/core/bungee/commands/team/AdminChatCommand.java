@@ -49,7 +49,7 @@ public class AdminChatCommand extends Command {
             stringBuilder.append(args[a] + " ");
         }
 
-        BungeeCore.getInstance().getBungeePlayerManager().notifyAdmin("§f§kKLK§r §4§lADMINCHAT §f§kKLK§r §8× " + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §8» §7" + stringBuilder.toString().replace("&", "§"));
+        BungeeCore.getInstance().getBungeePlayerManager().notifyAdmin("§f§kKLK§r §4§lADMINCHAT §f§kKLK§r §8× " + BungeeCore.getInstance().getPlayergetColor(player.getUniqueId()) + player.getName() + " §8» §7" + stringBuilder.toString().replace("&", "§"));
 
 
     }

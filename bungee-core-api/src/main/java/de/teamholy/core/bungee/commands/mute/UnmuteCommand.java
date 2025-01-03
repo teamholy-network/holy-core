@@ -32,44 +32,51 @@ public class UnmuteCommand extends SenderCommand {
         if (args.length == 1) {
             String target = args[0];
             try {
-                UUID uuid = BungeeUtil.parseTargetArgument(target);
-
-                if (uuid == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §c" + target + "§c!");
-                    return;
-                }
-
-                UUID finalUuid = uuid;
-                MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
-
-                if (punishProfile == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player {} is isn't banned!", "§e" + target + "§c"));
-                    return;
-                }
-
-                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid, () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(finalUuid));
 
 
-                BungeeCore.getAPI().getMuteService().deleteEntity(punishProfile);
-                punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(), punishProfile);
+                BungeeCore.getInstance().getExecutorService().execute(() -> {
 
-                BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
+                    UUID uuid = BungeeUtil.parseTargetArgument(target);
+
+                    if (uuid == null) {
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7"+ BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §c" + target + "§c!");
+                        return;
+                    }
+
+                    UUID finalUuid = uuid;
+                    MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
+
+                    if (punishProfile == null) {
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§c"+BungeeTranslateAPI.translatePlaceholder(author,"The player {} is isn't banned!", "§e" + target + "§c"));
+                        return;
+                    }
+
+                    PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid, () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(finalUuid));
 
 
-                //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage(sender.getName(), punishProfile));
-                BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
-                    staffmember.sendMessage(BanUtil.generateUnmuteMessage(staffmember, sender.getName(), punishProfile));
+                    BungeeCore.getAPI().getMuteService().deleteEntity(punishProfile);
+                    punishHistoryProfile.getMuteProfileMap().put(UUID.randomUUID().toString(), punishProfile);
+
+                    BungeeCore.getAPI().getPunishHistoryService().saveEntity(punishHistoryProfile, false, true);
+
+
+                    //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(BanUtil.generateUnmuteMessage(sender.getName(), punishProfile));
+                    BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
+                        staffmember.sendMessage(BanUtil.generateUnmuteMessage(staffmember, sender.getName(), punishProfile));
+                    });
+
+                    String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
+
+                    DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
+                    discordWebhook.setUsername("UNMUTE");
+                    discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.GREEN)
+                        .setDescription(authorName + " has unmuted " + target + ".")
+                    );
+
+                    discordWebhook.execute();
+
                 });
 
-                String authorName = BungeeCore.getAPI().getUuidManager().getName(author);
-
-                DiscordWebhook discordWebhook = new DiscordWebhook(DiscordWebhookLink.BAN_URL);
-                discordWebhook.setUsername("UNMUTE");
-                discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(Color.GREEN)
-                    .setDescription(authorName + " has unmuted " + target + ".")
-                );
-
-                BungeeCore.getAPI().getExecutor().execute(discordWebhook::execute);
             } catch (NumberFormatException e) {
                 printUsage(sender, author);
             }

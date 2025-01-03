@@ -32,7 +32,7 @@ public class DeletePlayerCommand extends Command {
             }
 
 
-            proxiedPlayer.sendMessage("§a"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"Bist du sicher das du die daten von {} §clöschen willst?", BungeeCore.getAPI().getCloudManager().getColor(uuid) + name));
+            proxiedPlayer.sendMessage("§a"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"Bist du sicher das du die daten von {} §clöschen willst?", BungeeCore.getInstance().getPlayerColor(uuid) + name));
             proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translate(proxiedPlayer,"Wenn ja dann schreib")+" /resetcringe " + name + " confirm");
         } else if (args.length == 2 && args[1].equalsIgnoreCase("confirm")) {
             String name = args[0];
