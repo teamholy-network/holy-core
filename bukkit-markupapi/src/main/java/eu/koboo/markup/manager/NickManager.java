@@ -85,10 +85,12 @@ public class NickManager implements Listener {
         PlayerMeta playerMeta = playerMetaMap.get(player.getUniqueId());
         if (playerMeta == null) {
             Property realTextures = null;
-            for (Property prop : profile.getProperties().get("textures")) {
-                if (prop.getName().equalsIgnoreCase("textures")) {
-                    realTextures = prop;
-                    break;
+            if (profile != null) {
+                for (Property prop : profile.getProperties().get("textures")) {
+                    if (prop.getName().equalsIgnoreCase("textures")) {
+                        realTextures = prop;
+                        break;
+                    }
                 }
             }
             UUID nickUUID = optionalUUID == null ? UUID.randomUUID() : optionalUUID;
@@ -441,9 +443,9 @@ public class NickManager implements Listener {
         try {
             Method getHandle = player.getClass().getMethod("getHandle");
             Object entityPlayer = getHandle.invoke(player);
-            Field profileField = entityPlayer.getClass().getDeclaredField("gameProfile");
-            profileField.setAccessible(true);
-            return (GameProfile) profileField.get(entityPlayer);
+            Method getProfile  = entityPlayer.getClass().getMethod("getProfile");
+            getProfile.setAccessible(true);
+            return (GameProfile) getProfile.invoke(entityPlayer);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

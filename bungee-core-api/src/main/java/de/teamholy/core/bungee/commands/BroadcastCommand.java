@@ -29,7 +29,7 @@ public class BroadcastCommand extends Command {
             return;
 
         if (strings.length == 0) {
-            player.sendMessage("§6Broadcast §8× §7/broadcast ("+ BungeeTranslateAPI.translate(player,"message")+")");
+            player.sendMessage("§6Broadcast §8× §7/broadcast (" + BungeeTranslateAPI.translate(player, "message") + ")");
             return;
         }
 

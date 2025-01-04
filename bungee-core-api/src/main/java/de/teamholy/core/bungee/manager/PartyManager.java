@@ -30,7 +30,7 @@ public class PartyManager {
                 parties.remove(proxiedPlayer.getUniqueId());
             } else {
                 party.getPartyPlayers().remove(proxiedPlayer.getUniqueId());
-                String name = BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
+                String name = BungeeCore.getInstance().getPlayerColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
                 party.getPartyPlayers().forEach(all -> {
                     ProxiedPlayer player = ProxyServer.getInstance().getPlayer(all);
                     player.sendMessage("§5Party §8× " + name + " §7has left the party");

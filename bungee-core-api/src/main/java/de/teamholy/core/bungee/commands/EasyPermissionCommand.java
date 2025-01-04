@@ -77,7 +77,7 @@ public class EasyPermissionCommand extends Command {
                     }
                 });
 
-                commandSender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author,"Removed the permission §e{} §7from §c{} §7groups!", permission, String.valueOf(i.get())));
+                commandSender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author, "Removed the permission §e{} §7from §c{} §7groups!", permission, String.valueOf(i.get())));
             }
         }
     }
@@ -85,8 +85,8 @@ public class EasyPermissionCommand extends Command {
 
     private void sendHelp(CommandSender commandSender) {
         UUID author = BungeeUtil.parseAuthorUUID(commandSender);
-        commandSender.sendMessage(prefix + "/easyperms addpermission ("+BungeeTranslateAPI.translatePlaceholder(author,"group")+") ("+BungeeTranslateAPI.translatePlaceholder(author,"permission")+")");
-        commandSender.sendMessage(prefix + "/easyperms removepermission ("+BungeeTranslateAPI.translatePlaceholder(author,"group")+") ("+BungeeTranslateAPI.translatePlaceholder(author,"permission")+")");
+        commandSender.sendMessage(prefix + "/easyperms addpermission (" + BungeeTranslateAPI.translatePlaceholder(author, "group") + ") (" + BungeeTranslateAPI.translatePlaceholder(author, "permission") + ")");
+        commandSender.sendMessage(prefix + "/easyperms removepermission (" + BungeeTranslateAPI.translatePlaceholder(author, "group") + ") (" + BungeeTranslateAPI.translatePlaceholder(author, "permission") + ")");
         commandSender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "Easyperms wenn du eine permission vergibst oder entfernst wird sie für alle darüber auch!"));
     }
 }

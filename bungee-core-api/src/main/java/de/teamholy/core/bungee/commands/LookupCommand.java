@@ -97,7 +97,7 @@ public class LookupCommand extends SenderCommand {
                 player.sendMessage(Message.LINE);
                 player.sendMessage("");
                 TextComponent nameComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Name")+" §8» ");
-                nameComp.addExtra(new ChatAction().text(BungeeCore.getAPI().getCloudManager().getColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy uuid")).component());
+                nameComp.addExtra(new ChatAction().text(BungeeCore.getInstance().getPlayerColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy uuid")).component());
                 player.sendMessage(nameComp);
 
                 TextComponent cracked = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Premium Account")+" §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName()) ? "§c"+BungeeTranslateAPI.translate(player,"no") : "§a"+BungeeTranslateAPI.translate(player,"yes")));
@@ -254,7 +254,7 @@ public class LookupCommand extends SenderCommand {
                                     for (BanProfile banProfile : punishHistoryProfile.getBanProfileMap().values()) {
                                         String date = BungeeUtil.parseDate(banProfile.getCreateDate());
                                         String reason = banProfile.getReason();
-                                        String author = BungeeCore.getAPI().getCloudManager().getColor(banProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
+                                        String author = BungeeCore.getInstance().getPlayerColor(banProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
                                         String evidence = banProfile.getEvidence();
                                         TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8┃§7 " + reason + " §8┃§7 " + author + " §8┃§7 ");
                                         punishComp.addExtra(new ChatAction().text(evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence").hover("Copy evidence: " + evidence).suggest(evidence).component());
@@ -277,7 +277,7 @@ public class LookupCommand extends SenderCommand {
                                     for (MuteProfile muteProfile : punishHistoryProfile.getMuteProfileMap().values()) {
                                         String date = BungeeUtil.parseDate(muteProfile.getCreateDate());
                                         String reason = muteProfile.getReason();
-                                        String author = BungeeCore.getAPI().getCloudManager().getColor(muteProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
+                                        String author = BungeeCore.getInstance().getPlayerColor(muteProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
                                         String evidence = muteProfile.getEvidence();
                                         TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8┃§7 " + reason + " §8┃§7 " + author + " §8┃§7 ");
                                         punishComp.addExtra(new ChatAction().text(evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence").hover("Copy evidence: " + evidence).suggest(evidence).component());
@@ -303,7 +303,7 @@ public class LookupCommand extends SenderCommand {
                                 player.sendMessage("§7Accounts of §6" + targetName);
                                 for (PlayerProfile profile : profileList) {
                                     if (!profile.getPlayerName().equalsIgnoreCase(targetName)) {
-                                        String prefix = BungeeCore.getAPI().getCloudManager().getColor(profile.getPlayerId());
+                                        String prefix = BungeeCore.getInstance().getPlayerColor(profile.getPlayerId());
                                         TextComponent comp = new ChatAction().text(" §8- " + prefix + profile.getPlayerName()).hover("§7Click to lookup").execute("lookup " + profile.getPlayerName()).component();
                                         player.sendMessage(comp);
                                     }

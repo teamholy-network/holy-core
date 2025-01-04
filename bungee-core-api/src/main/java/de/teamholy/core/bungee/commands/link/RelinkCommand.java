@@ -13,6 +13,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class RelinkCommand extends Command {
 
     LinkManager linkManager;
+
     public RelinkCommand(String name) {
         super(name);
         linkManager = BungeeCore.getInstance().getLinkManager();

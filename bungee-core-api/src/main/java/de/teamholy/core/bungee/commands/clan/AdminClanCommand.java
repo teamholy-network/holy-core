@@ -87,7 +87,7 @@ public class AdminClanCommand extends SenderCommand {
                     }
                     ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(uuid);
                     if (targetPlayer == null || !targetPlayer.isConnected()) {
-                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(uuid) + target + "§c "+BungeeTranslateAPI.translate(author, "has to be online to get promoted!"));
+                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target + "§c "+BungeeTranslateAPI.translate(author, "has to be online to get promoted!"));
                         return;
                     }
 
@@ -116,7 +116,7 @@ public class AdminClanCommand extends SenderCommand {
                     sender.sendMessage(Message.CLAN_PREFIX + BungeeTranslateAPI.translate(author,"The player was promoted to") + promote.getFancy());
 
                     BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + "§7"+BungeeTranslateAPI.translate(author,"The player")+" " +
-                        BungeeCore.getAPI().getCloudManager().getColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) +
+                        BungeeCore.getInstance().getPlayerColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(promoteProfile.getPlayerId()) +
                         "§7 "+BungeeTranslateAPI.translatePlaceholder(author,"was promoted to {}" , promote.getFancy()) + "§7!");
                 } else {
                     printUsage(sender);
@@ -177,7 +177,7 @@ public class AdminClanCommand extends SenderCommand {
                     BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile, true, true);
                     clan.getMembers().add(uuid);
                     BungeeCore.getAPI().getClanManager().updateClan(clan);
-                    BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getAPI().getCloudManager().getColor(uuid) + "§7 "+BungeeTranslateAPI.translate(author,"joined the clan."));
+                    BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + "§7 "+BungeeTranslateAPI.translate(author,"joined the clan."));
                     ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(finalUuid1), 2, TimeUnit.SECONDS);
                 } else printUsage(sender);
             } else printUsage(sender);

@@ -18,8 +18,8 @@ public class YoutuberCommand extends Command {
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
-        player.sendMessage("     §7"+ BungeeTranslateAPI.translate(player,"Join our discord to apply"));
-        TextComponent message = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Bewerben")+" §8» §a§l*"+BungeeTranslateAPI.translate(player,"Click")+"*");
+        player.sendMessage("     §7" + BungeeTranslateAPI.translate(player, "Join our discord to apply"));
+        TextComponent message = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Bewerben") + " §8» §a§l*" + BungeeTranslateAPI.translate(player, "Click") + "*");
         message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "dc.teamholy.de"));
         player.sendMessage(message);
     }

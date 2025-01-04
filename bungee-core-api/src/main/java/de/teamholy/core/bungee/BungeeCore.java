@@ -6,6 +6,7 @@ import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
+import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
@@ -44,6 +45,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -78,6 +80,8 @@ public class BungeeCore extends Plugin {
 
     LensRedisManager lensRedisManager;
 
+    PlayerColorCacheManager playerColorCacheManager;
+
     public BungeeCore() {
         instance = this;
     }
@@ -96,6 +100,7 @@ public class BungeeCore extends Plugin {
         linkManager = new LinkManager();
         proxyManager = new ProxyManager(this.coreAPI);
         lensRedisManager = new LensRedisManager(this.coreAPI);
+        playerColorCacheManager = new PlayerColorCacheManager();
 
         new LoginListener();
         new BanLoginListener(this);
@@ -194,21 +199,21 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             //publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7"+BungeeTranslateAPI.translatePlaceholder(player,"Did you know that you can do {} to get free {}?", "&6/link&7", "&ecoins&7"));
+                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player, "Did you know that you can do {} to get free {}?", "&6/link&7", "&ecoins&7"));
             }
         }, 10, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             //publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7"+BungeeTranslateAPI.translatePlaceholder(player,"You can change the language using {}", "&6/language&7"));
+                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player, "You can change the language using {}", "&6/language&7"));
             }
         }, 20, 30, TimeUnit.MINUTES);
 
         ProxyServer.getInstance().getScheduler().schedule(this, () -> {
             //publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
             for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player,"Apply on the {} §7page to join the team", "§6teamholy.de/apply"));
+                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player, "Apply on the {} §7page to join the team", "§6teamholy.de/apply"));
             }
         }, 30, 30, TimeUnit.MINUTES);
 
@@ -217,12 +222,19 @@ public class BungeeCore extends Plugin {
             coreAPI.getMetricsManager().saveMetric(document);
         }, 0, 2, TimeUnit.SECONDS);
 
-        //System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,1) + "------------------------------");
-        //System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,2) + "------------------------------");
-        //System.out.println(coreAPI.getRankingManager().getUUIDFromRank(Gamemodes.SGFFA, StatsType.ALLTIME,0) + "------------------------------");
-
     }
 
+    public String getPlayerColor(UUID uuid) {
+
+        if (playerColorCacheManager.contains(uuid)) {
+            return playerColorCacheManager.get(uuid);
+        } else {
+            String color = coreAPI.getCloudManager().getColor(uuid);
+            playerColorCacheManager.put(uuid, color);
+            return color;
+        }
+
+    }
 
     @Override
     public void onDisable() {

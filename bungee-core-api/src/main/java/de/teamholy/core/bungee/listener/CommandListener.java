@@ -25,7 +25,7 @@ public class CommandListener implements Listener {
         if (!event.getMessage().startsWith("/")) return;
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) event.getSender();
         if (COOLDOWNS.containsKey(proxiedPlayer.getUniqueId()) && COOLDOWNS.get(proxiedPlayer.getUniqueId()) > System.currentTimeMillis()) {
-            proxiedPlayer.sendMessage("§c"+ BungeeTranslateAPI.translate(proxiedPlayer,"Dont spam commands!"));
+            proxiedPlayer.sendMessage("§c" + BungeeTranslateAPI.translate(proxiedPlayer, "Dont spam commands!"));
             event.setCancelled(true);
             return;
         }
