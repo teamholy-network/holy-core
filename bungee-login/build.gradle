@@ -1,16 +1,12 @@
 dependencies {
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation 'redis.clients:jedis:5.0.1'
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    implementation 'com.github.bivashy.NanoLimboPlugin:api:1.0.6'
-
+    compileOnly("eu.koboo:en2do:$en2doVersion")
+    compileOnly("org.redisson:redisson:$redissonVersion")
+    compileOnly 'redis.clients:jedis:5.0.1'
+    compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    compileOnly 'com.github.bivashy.NanoLimboPlugin:api:1.0.6'
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
-
-    implementation(project(':holy-core-api'))
-    implementation(project(':bungee-core-api'))
-
-
+    compileOnly(project(':holy-core-api'))
+    compileOnly(project(':bungee-core-api'))
 }
