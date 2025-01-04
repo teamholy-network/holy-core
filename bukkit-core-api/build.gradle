@@ -13,6 +13,8 @@ dependencies {
     compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
     implementation('com.fasterxml.jackson.core:jackson-core:2.15.2')
 
+    implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
+
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))
 }

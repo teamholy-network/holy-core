@@ -8,5 +8,6 @@ dependencies {
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
 
+    implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
     implementation(project(':holy-core-api'))
 }

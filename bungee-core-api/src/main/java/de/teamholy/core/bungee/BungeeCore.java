@@ -3,6 +3,7 @@ package de.teamholy.core.bungee;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.skydb.updater.BungeeUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
@@ -88,6 +89,8 @@ public class BungeeCore extends Plugin {
 
     @Override
     public void onEnable() {
+        new BungeeUpdaterAPI(this,"37fb5019-214b-4bfe-8854-b3f819354f9a", "YjNmODE5MzU0Zjlh").setHibernat(true).setOnlyempty(true).setNightupdates(true);
+
         coreAPI = new CoreAPI();
 
         bungeePlayerManager = new BungeePlayerManager(this.coreAPI);

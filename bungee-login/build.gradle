@@ -3,12 +3,11 @@ dependencies {
     compileOnly("org.redisson:redisson:$redissonVersion")
     compileOnly('redis.clients:jedis:5.0.1')
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    compileOnly('com.github.bivashy.NanoLimboPlugin:api:1.0.11')
+    //compileOnly('com.github.bivashy.NanoLimboPlugin:api:1.0.11')
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly(project(':holy-core-api'))
     compileOnly(project(':bungee-core-api'))
-
-
+    implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
 }
