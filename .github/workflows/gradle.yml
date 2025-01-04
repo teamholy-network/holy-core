@@ -50,7 +50,7 @@ jobs:
               
               curl -X POST "$UPLOAD_URL" \
                 -F "file=@$JAR_FILE"
-              echo "Uploaded: $JAR_FILE successfully."
+              echo "Uploaded $JAR_FILE successfully."
             else
               echo "Error: $JAR_FILE not found."
               exit 1
