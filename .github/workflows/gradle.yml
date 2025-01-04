@@ -1,0 +1,58 @@
+name: Build and Upload Gradle Shadow JAR
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout des Repositories
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Setze Java-Version
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # Passe die Java-Version an, falls nötig
+
+      # Gradle-Wrapper verwenden und Shadow JAR bauen
+      - name: Build JAR with Gradle ShadowJar
+        run: ./gradlew clean shadowJar
+
+      # Verifizieren, dass die JAR-Dateien erstellt wurden
+      - name: Verify JAR files
+        run: ls -l output/*.jar
+
+      # Hochladen der JAR-Dateien auf die angegebene URL
+      - name: Upload JARs to HTTP Server
+        run: |
+          declare -A UPLOAD_DETAILS
+
+          # UUID und Upload-Key für jede Datei
+          UPLOAD_DETAILS["output/bukkit-markupapi-2.7.1-all.jar"]="b63b7279-ecbd-40f2-bb43-913ba545abc7:woi6fOEnh8dBQlzJiesJrD"
+          UPLOAD_DETAILS["output/bungee-core-api-2.7.1-all.jar"]="37fb5019-214b-4bfe-8854-b3f819354f9a:HLMFbff3QZ85E4iBqy1PLq"
+          UPLOAD_DETAILS["output/bungee-login-2.7.1-all.jar"]="9f58dc68-29b8-4f53-ab69-4d51bcabd801:jQAz9caU0h1jo0fCAXGv7h"
+          UPLOAD_DETAILS["output/bukkit-core-api-2.7.1-all.jar"]="7a889448-314d-4446-9d51-b06f28ca20af:vMKtwq6OAo5Qj3oSC8hEhr"
+
+          for JAR_FILE in "${!UPLOAD_DETAILS[@]}"; do
+            if [ -f "$JAR_FILE" ]; then
+              UUID_KEY=${UPLOAD_DETAILS[$JAR_FILE]}
+              UUID=${UUID_KEY%%:*}
+              UPLOAD_KEY=${UUID_KEY##*:}
+
+              UPLOAD_URL="http://updaterapi.skydb.de/uploadupdate?uuid=$UUID&uploadkey=$UPLOAD_KEY"
+              
+              curl -X POST "$UPLOAD_URL" \
+                -F "file=@$JAR_FILE"
+              echo "Uploaded $JAR_FILE successfully."
+            else
+              echo "Error: $JAR_FILE not found."
+              exit 1
+            fi
+          done
