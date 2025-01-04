@@ -21,7 +21,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'  # Passe die Java-Version an, falls nötig
 
-      # Gradle-Wrapper verwenden und Shadow JAR bauen
+      # Gradle-Wrapper ausführbar machen und Shadow JAR bauen
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x ./gradlew
+
       - name: Build JAR with Gradle ShadowJar
         run: ./gradlew clean shadowJar
 
