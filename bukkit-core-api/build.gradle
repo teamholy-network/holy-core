@@ -14,6 +14,9 @@ dependencies {
     implementation('com.fasterxml.jackson.core:jackson-core:2.15.2')
 
     implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
+    shadowJar {
+        relocate('de.skydb.updater', 'de.teamholy.core.bukkit.updater')
+    }
 
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))

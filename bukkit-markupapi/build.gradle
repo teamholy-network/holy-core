@@ -8,4 +8,7 @@ dependencies {
     compileOnly("eu.koboo:en2do:$en2doVersion")
 
     implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
+    shadowJar {
+        relocate('de.skydb.updater', 'eu.koboo.markup.updater')
+    }
 }

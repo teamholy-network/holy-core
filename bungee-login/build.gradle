@@ -10,4 +10,7 @@ dependencies {
     compileOnly(project(':holy-core-api'))
     compileOnly(project(':bungee-core-api'))
     implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
+    shadowJar {
+        relocate('de.skydb.updater', 'de.teamholy.bungee.login.updater')
+    }
 }

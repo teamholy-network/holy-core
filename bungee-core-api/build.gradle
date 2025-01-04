@@ -9,5 +9,9 @@ dependencies {
     compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
 
     implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
+    shadowJar {
+        relocate('de.skydb.updater', 'de.teamholy.core.bungee.updater')
+    }
+
     implementation(project(':holy-core-api'))
 }
