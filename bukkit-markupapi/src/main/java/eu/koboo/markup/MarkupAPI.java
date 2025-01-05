@@ -20,12 +20,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class MarkupAPI extends JavaPlugin {
 
@@ -35,13 +34,6 @@ public class MarkupAPI extends JavaPlugin {
      * to display a visually distinct identifier next to nicknames.
      */
     public static final String NICK_PREFIX = "§dN§5ick §8× §7";
-
-    /**
-     * A logger used for logging messages and debugging information within the MarkupAPI class.
-     * It uses LoggerFactory to obtain a logger specific to the MarkupAPI class, which allows
-     * for controlled logging following the conventions and levels available in the logging framework.
-     */
-    private static final Logger logger = LoggerFactory.getLogger(MarkupAPI.class);
 
     /**
      * A static instance of the MarkupAPI class used to access various methods related to
@@ -221,7 +213,7 @@ public class MarkupAPI extends JavaPlugin {
         try {
             nickProfilesRepository = coreAPI.getMongoManager().create(NickProfilesRepository.class);
         } catch (Exception e) {
-            logger.error("Failed to initialize NickProfilesRepository", e);
+            getLogger().log(Level.ALL, "Failed to initialize NickProfilesRepository", e);
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -235,7 +227,7 @@ public class MarkupAPI extends JavaPlugin {
         registerCommands();
         initializePacketListeners();
 
-        logger.info("MarkupAPI started successfully.");
+        getLogger().info("MarkupAPI started successfully.");
     }
 
     /**
@@ -265,7 +257,7 @@ public class MarkupAPI extends JavaPlugin {
             }
         });
 
-        logger.info("MarkupAPI has been disabled.");
+        getLogger().info("MarkupAPI has been disabled.");
     }
 
     /**

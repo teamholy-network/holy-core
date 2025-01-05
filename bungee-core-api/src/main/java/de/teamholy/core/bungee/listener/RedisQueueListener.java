@@ -25,9 +25,11 @@ import java.util.List;
 
 public class RedisQueueListener {
 
-    Jedis jedis; /* TODO: 10.08.2021 Anstatt Jedis, RedissonManager benutzen.
+    Jedis jedis;
+    /* TODO: 10.08.2021 Anstatt Jedis, RedissonManager benutzen.
      * Kann ich grad nicht machen, weil ich irgendein hurensohn error bekomme
-     * Also halts maul bitte */
+     * Also halts maul bitte
+     */
 
     ChatFilterManager chatFilterManager;
     CoinManager coinManager;

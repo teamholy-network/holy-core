@@ -66,8 +66,6 @@ subprojects {
     }
 
     dependencies {
-        implementation("de.skydb.translationapi:TranslateAPI-Bindings:$translationBindingsVersion")
-
         // Eliminate some boilerplate
         compileOnly("org.projectlombok:lombok:$lombokVersion")
         annotationProcessor("org.projectlombok:lombok:$lombokVersion")

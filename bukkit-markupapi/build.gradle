@@ -1,14 +1,14 @@
 dependencies {
-    compileOnly('org.slf4j:slf4j-api:2.0.9')
+    compileOnly(project(':holy-core-api'))
+
     compileOnly('org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT')
     compileOnly('net.md-5:bungeecord-chat:1.8-SNAPSHOT')
     compileOnly('com.github.azbh111:craftbukkit-1.8.8:R')
-    compileOnly('com.comphenix.protocol:ProtocolLib:5.3.0')
-    compileOnly(project(':holy-core-api'))
-    compileOnly("eu.koboo:en2do:$en2doVersion")
+    compileOnly("com.comphenix.protocol:ProtocolLib:$protocolLibVersion")
 
     implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
-    shadowJar {
-        relocate('de.skydb.updater', 'eu.koboo.markup.updater')
-    }
+}
+
+shadowJar {
+    relocate('de.skydb.updater', 'eu.koboo.markup.updater')
 }

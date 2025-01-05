@@ -1,23 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
+    api('com.fasterxml.jackson.core:jackson-core:2.15.2')
+    api(project(':holy-core-api'))
+
+    api('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
+
+    compileOnly(project(':bukkit-markupapi'))
+
     compileOnly("org.spigotmc:spigot:$spigotVersion")
     compileOnly("org.spigotmc:spigot-api:$spigotVersion")
 
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    compileOnly('com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9')
 
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
-    implementation('com.fasterxml.jackson.core:jackson-core:2.15.2')
+    compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:$holographicDisplaysVersion")
+    compileOnly("com.comphenix.protocol:ProtocolLib:$protocolLibVersion")
+}
 
-    implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
-    shadowJar {
-        relocate('de.skydb.updater', 'de.teamholy.core.bukkit.updater')
-    }
-
-    implementation(project(':holy-core-api'))
-    compileOnly(project(':bukkit-markupapi'))
+shadowJar {
+    relocate('de.skydb.updater', 'de.teamholy.core.bukkit.updater')
 }

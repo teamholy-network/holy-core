@@ -1,11 +1,10 @@
 dependencies {
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-
-    compileOnly ("de.dytanic.cloudnet:cloudnet:$cloudnetVersion")
-    compileOnly ("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
-    compileOnly ("de.dytanic.cloudnet:cloudnet-driver:$cloudnetVersion")
-
+//    implementation("eu.koboo:en2do:$en2doVersion")
+//    implementation("org.redisson:redisson:$redissonVersion")
+//    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
     implementation(project(':holy-core-api'))
+
+    compileOnly("de.dytanic.cloudnet:cloudnet:$cloudnetVersion")
+    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
+    compileOnly("de.dytanic.cloudnet:cloudnet-driver:$cloudnetVersion")
 }
