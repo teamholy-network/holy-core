@@ -3,10 +3,15 @@ dependencies {
     implementation("org.redisson:redisson:$redissonVersion")
     implementation 'redis.clients:jedis:5.0.1'
     implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    implementation 'com.rabbitmq:amqp-client:5.21.0'
+    implementation('com.rabbitmq:amqp-client:5.21.0')
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
+
+    implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
+    shadowJar {
+        relocate('de.skydb.updater', 'de.teamholy.core.bungee.updater')
+    }
 
     implementation(project(':holy-core-api'))
 }

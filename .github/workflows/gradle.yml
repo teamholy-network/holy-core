@@ -1,0 +1,65 @@
+name: Build and Upload Gradle Shadow JAR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout des Repositories
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Setze Java-Version
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # Passe die Java-Version an, falls nötig
+
+      # Gradle-Wrapper ausführbar machen und Shadow JAR bauen
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x ./gradlew
+
+      - name: Build JAR with Gradle ShadowJar
+        run: ./gradlew clean shadowJar
+
+      # Verifizieren, dass die JAR-Dateien erstellt wurden
+      - name: Verify JAR files
+        run: ls -l output/*.jar
+
+      # Hochladen der JAR-Dateien auf die angegebene URL
+      - name: Upload JARs to HTTP Server
+        env:
+          UPLOAD_DETAIL_MARKUPAPI: ${{ secrets.UPLOAD_DETAIL_MARKUPAPI }}
+          UPLOAD_DETAIL_BUNGEE_CORE_API: ${{ secrets.UPLOAD_DETAIL_BUNGEE_CORE_API }}
+          UPLOAD_DETAIL_BUNGEE_LOGIN: ${{ secrets.UPLOAD_DETAIL_BUNGEE_LOGIN }}
+          UPLOAD_DETAIL_BUKKIT_CORE_API: ${{ secrets.UPLOAD_DETAIL_BUKKIT_CORE_API }}
+        run: |
+          declare -A UPLOAD_DETAILS
+
+          UPLOAD_DETAILS["output/bukkit-markupapi-2.7.1-all.jar"]=$UPLOAD_DETAIL_MARKUPAPI
+          UPLOAD_DETAILS["output/bungee-core-api-2.7.1-all.jar"]=$UPLOAD_DETAIL_BUNGEE_CORE_API
+          UPLOAD_DETAILS["output/bungee-login-2.7.1-all.jar"]=$UPLOAD_DETAIL_BUNGEE_LOGIN
+          UPLOAD_DETAILS["output/bukkit-core-api-2.7.1-all.jar"]=$UPLOAD_DETAIL_BUKKIT_CORE_API
+
+          for JAR_FILE in "${!UPLOAD_DETAILS[@]}"; do
+            if [ -f "$JAR_FILE" ]; then
+              UUID_KEY=${UPLOAD_DETAILS[$JAR_FILE]}
+              UUID=${UUID_KEY%%:*}
+              UPLOAD_KEY=${UUID_KEY##*:}
+
+              UPLOAD_URL="http://updaterapi.skydb.de/uploadupdate?uuid=$UUID&uploadkey=$UPLOAD_KEY"
+              
+              curl -X POST "$UPLOAD_URL" \
+                -F "file=@$JAR_FILE"
+              echo "Uploaded $JAR_FILE successfully."
+            else
+              echo "Error: $JAR_FILE not found."
+              exit 1
+            fi
+          done

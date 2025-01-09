@@ -149,6 +149,10 @@ public class EventListener implements Listener {
                 event.getConnection().setOnlineMode(false);
                 profile.setPremium(false);
                 return;
+            } else if (hostname.contains("eagle")) {
+                event.getConnection().setOnlineMode(false);
+                profile.setPremium(false);
+                return;
             } else if (hostname.contains("bedrock")) {
                 event.getConnection().setOnlineMode(false);
                 profile.setBedrock(true);
