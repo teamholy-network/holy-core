@@ -1,3 +1,6 @@
+To make the version a variable for `bungee-login-2.7.1-all.jar`, you can add a variable for the version at the top of your workflow file and use it in the `UPLOAD_DETAILS` dictionary. Here is the modified workflow file:
+
+```yaml
 name: Build and Upload Gradle Shadow JAR
 
 on:
@@ -34,14 +37,16 @@ jobs:
 
       # Hochladen der JAR-Dateien auf die angegebene URL
       - name: Upload JARs to HTTP Server
+        env:
+          VERSION: 2.7.2
         run: |
           declare -A UPLOAD_DETAILS
 
           # UUID und Upload-Key für jede Datei
-          UPLOAD_DETAILS["output/bukkit-markupapi-2.7.1-all.jar"]="b63b7279-ecbd-40f2-bb43-913ba545abc7:woi6fOEnh8dBQlzJiesJrD"
-          UPLOAD_DETAILS["output/bungee-core-api-2.7.1-all.jar"]="37fb5019-214b-4bfe-8854-b3f819354f9a:HLMFbff3QZ85E4iBqy1PLq"
-          UPLOAD_DETAILS["output/bungee-login-2.7.1-all.jar"]="9f58dc68-29b8-4f53-ab69-4d51bcabd801:jQAz9caU0h1jo0fCAXGv7h"
-          UPLOAD_DETAILS["output/bukkit-core-api-2.7.1-all.jar"]="7a889448-314d-4446-9d51-b06f28ca20af:vMKtwq6OAo5Qj3oSC8hEhr"
+          UPLOAD_DETAILS["output/bukkit-markupapi-${VERSION}-all.jar"]="b63b7279-ecbd-40f2-bb43-913ba545abc7:woi6fOEnh8dBQlzJiesJrD"
+          UPLOAD_DETAILS["output/bungee-core-api-${VERSION}-all.jar"]="37fb5019-214b-4bfe-8854-b3f819354f9a:HLMFbff3QZ85E4iBqy1PLq"
+          UPLOAD_DETAILS["output/bungee-login-${VERSION}-all.jar"]="9f58dc68-29b8-4f53-ab69-4d51bcabd801:jQAz9caU0h1jo0fCAXGv7h"
+          UPLOAD_DETAILS["output/bukkit-core-api-${VERSION}-all.jar"]="7a889448-314d-4446-9d51-b06f28ca20af:vMKtwq6OAo5Qj3oSC8hEhr"
 
           for JAR_FILE in "${!UPLOAD_DETAILS[@]}"; do
             if [ -f "$JAR_FILE" ]; then
@@ -59,3 +64,4 @@ jobs:
               exit 1
             fi
           done
+```
