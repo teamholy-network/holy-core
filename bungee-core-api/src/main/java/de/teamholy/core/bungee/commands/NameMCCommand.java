@@ -18,7 +18,7 @@ public class NameMCCommand extends Command {
         UUID author = BungeeUtil.parseAuthorUUID(commandSender);
         commandSender.sendMessage("§8§m---------§6§lVOTE§8§m---------");
         commandSender.sendMessage("§7Link§8: §fteamholy.de/vote");
-        commandSender.sendMessage("§7"+ BungeeTranslateAPI.translate(author,"Claim your rewards on the website"));
+        commandSender.sendMessage("§7" + BungeeTranslateAPI.translate(author, "Claim your rewards on the website"));
         commandSender.sendMessage("§8§m-------------------------");
     }
 }

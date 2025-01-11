@@ -8,18 +8,16 @@ dependencies {
 
     compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    compileOnly 'com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9'
+    compileOnly('com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9')
 
     compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+    implementation('com.fasterxml.jackson.core:jackson-core:2.15.2')
 
+    implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
+    shadowJar {
+        relocate('de.skydb.updater', 'de.teamholy.core.bukkit.updater')
+    }
 
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))
-}
-
-repositories {
-    mavenLocal();
-    maven { url "https://repo.dmulloy2.net/repository/public/" }
-    maven { url "https://repo.codemc.io/repository/maven-public/" }
 }

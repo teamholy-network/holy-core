@@ -54,7 +54,7 @@ public class PostDisconnectListener implements Listener {
         FriendProfile friendProfile = BungeeCore.getAPI().getFriendService().getEntity(player.getUniqueId(),
             () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(player.getUniqueId()));
 
-        String name = BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName();
+        String name = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
 
         BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(player.getUniqueId(), null, "offline", null);
         FriendCommand.LASTREPLYS.remove(event.getPlayer().getUniqueId());
@@ -69,7 +69,7 @@ public class PostDisconnectListener implements Listener {
             if (report.getTarget().equals(event.getPlayer().getUniqueId())) {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(report.getViewer());
                 if (proxiedPlayer != null) {
-                    proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"The player {} is now offline",BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())+"§c"));
+                    proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"The player {} is now offline",BungeeCore.getInstance().getPlayerColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())+"§c"));
                     report.setViewer(null);
                     report.setTargetOnline(false);
                     BungeeCore.getAPI().getReportManager().addReport(report);

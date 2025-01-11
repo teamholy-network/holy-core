@@ -37,12 +37,12 @@ public class LensCommand extends Command {
 
         switch (reason) {
             case "faultscore":
-                targetPlayer.sendMessage("§cGuardian §8× §7"+ BungeeTranslateAPI.translatePlaceholder(targetPlayer, "Your messages have been {} by our system. Please avoid toxic behaviour!", "§c"+BungeeTranslateAPI.translate(targetPlayer,"flagged"+"§7")) +
+                targetPlayer.sendMessage("§cGuardian §8× §7" + BungeeTranslateAPI.translatePlaceholder(targetPlayer, "Your messages have been {} by our system. Please avoid toxic behaviour!", "§c" + BungeeTranslateAPI.translate(targetPlayer, "flagged" + "§7")) +
                     " §8(§7" + multiply + "/" + max + "§8)");
-                targetPlayer.sendMessage("§cGuardian §8× §7"+BungeeTranslateAPI.translatePlaceholder(targetPlayer,"Learn more about this on {}", "§6teamholy.de/guardian"));
+                targetPlayer.sendMessage("§cGuardian §8× §7" + BungeeTranslateAPI.translatePlaceholder(targetPlayer, "Learn more about this on {}", "§6teamholy.de/guardian"));
                 break;
             case "punishmultiplier":
-                targetPlayer.sendMessage("§cGuardian §8× §7"+BungeeTranslateAPI.translatePlaceholder(targetPlayer,"You have been {} for your behavior ", "§c"+BungeeTranslateAPI.translate(targetPlayer,"punished")+"§7") +
+                targetPlayer.sendMessage("§cGuardian §8× §7" + BungeeTranslateAPI.translatePlaceholder(targetPlayer, "You have been {} for your behavior ", "§c" + BungeeTranslateAPI.translate(targetPlayer, "punished") + "§7") +
                     "§8(§7x" + multiply + "§8)");
                 break;
         }

@@ -7,6 +7,7 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
+import de.skydb.updater.BukkitUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.manager.MetricsManager;
 import de.teamholy.core.api.utility.PlayerRank;
@@ -80,6 +81,8 @@ public class BukkitCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        new BukkitUpdaterAPI(this,"7a889448-314d-4446-9d51-b06f28ca20af", "YjA2ZjI4Y2EyMGFm").setHibernat(true).setOnlyempty(true).setOnlyrestart(true);
+
         coreAPI = new CoreAPI();
         protocolManager = ProtocolLibrary.getProtocolManager();
         metricsManager = new MetricsManager(this.coreAPI);

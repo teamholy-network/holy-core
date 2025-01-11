@@ -33,9 +33,9 @@ public class NickListCommand extends Command {
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         if (onlineNickMap.isEmpty()) {
-            sender.sendMessage("§c"+ BungeeTranslateAPI.translate(author, "There are currently no nicked players"));
+            sender.sendMessage("§c" + BungeeTranslateAPI.translate(author, "There are currently no nicked players"));
         } else {
-            sender.sendMessage(BungeeTranslateAPI.translatePlaceholder(author,"§7There are currently §e{} nicked §7users", String.valueOf(onlineNickMap.size())));
+            sender.sendMessage(BungeeTranslateAPI.translatePlaceholder(author, "§7There are currently §e{} nicked §7users", String.valueOf(onlineNickMap.size())));
             sender.sendMessage("");
             onlineNickMap.forEach((uuid, s) -> {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(uuid);

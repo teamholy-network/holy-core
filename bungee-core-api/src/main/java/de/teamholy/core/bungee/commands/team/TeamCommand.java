@@ -33,18 +33,18 @@ public class TeamCommand extends Command {
 
                 StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
-                String name = BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
+                String name = BungeeCore.getInstance().getPlayerColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
                 TextComponent message = new TextComponent(prefix + name + " §8(§a" + proxiedPlayer.getServer().getInfo().getName() + "§8)");
                 String notify = " §8» §a✔";
                 if (!staffProfile.isNotify()) notify = " §8» §c✘";
 
-                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7"+ BungeeTranslateAPI.translate(player,"Notify status of")+" " + name + notify)));
+                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7" + BungeeTranslateAPI.translate(player, "Notify status of") + " " + name + notify)));
 
                 player.sendMessage(message);
                 i++;
             }
         }
-        player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"Online team members")+" §8(§b" + i + "§8)");
+        player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Online team members") + " §8(§b" + i + "§8)");
     }
 
 }

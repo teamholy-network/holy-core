@@ -55,7 +55,6 @@ public class PostLoginListener implements Listener {
         proxiedPlayer.sendMessage("§6Vote §8» §7https://teamholy.de/vote");
         proxiedPlayer.sendMessage("§5"+BungeeTranslateAPI.translate(proxiedPlayer,"Website")+" §8» §7https://teamholy.de");
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage("§c" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "Warning! §7The real §cstaff §7and §4admins §7are the one with the white {} §crank", "§f§lStaff§7") + "");
 
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
@@ -203,23 +202,23 @@ public class PostLoginListener implements Listener {
             }
 
             BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, updateStaffDB);
-            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName() + " §7is now §aonline");
+            //BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("§cTeam §8× " + BungeeCore.getInstance().getPlayerColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName() + " §7is now §aonline");
             BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffmember -> {
-                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} §7is now §aonline", BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName()));
+                staffmember.sendMessage("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} §7is now §aonline", BungeeCore.getInstance().getPlayerColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName()));
             });
         }
 
 
         int i = 0;
         StringBuilder onlineFriends = new StringBuilder();
-        String name = BungeeCore.getAPI().getCloudManager().getColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
+        String name = BungeeCore.getInstance().getPlayerColor(proxiedPlayer.getUniqueId()) + proxiedPlayer.getName();
         BungeeCore.getAPI().getFriendManager().sendFriendUpdateData(proxiedPlayer.getUniqueId(), null, "online", null);
         for (UUID uuid : friendProfile.getFriendList()) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
             if (target != null) {
                 i++;
                 target.sendMessage("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(target,"Your friend {} is now §aonline",name+"§7"));
-                onlineFriends.append(BungeeCore.getAPI().getCloudManager().getColor(target.getUniqueId()) + target.getName()).append("§7, ");
+                onlineFriends.append(BungeeCore.getInstance().getPlayerColor(target.getUniqueId()) + target.getName()).append("§7, ");
             }
         }
 

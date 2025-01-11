@@ -34,7 +34,7 @@ public class TokensCommand extends Command {
 
                 proxiedPlayer.sendMessage("§8§m-------------§f§lTOKENS§8§m---------------");
                 proxiedPlayer.sendMessage("§dJoinme Tokens §8» §e" +
-                    (proxiedPlayer.hasPermission("teamholy.joinme") ? "§a§l"+ BungeeTranslateAPI.translate(proxiedPlayer,"UNLIMITED")+" §8(§e" + playerProfile.getJoinMeTokens() + "§8)"
+                    (proxiedPlayer.hasPermission("teamholy.joinme") ? "§a§l" + BungeeTranslateAPI.translate(proxiedPlayer, "UNLIMITED") + " §8(§e" + playerProfile.getJoinMeTokens() + "§8)"
                         : playerProfile.getJoinMeTokens()));
                 proxiedPlayer.sendMessage("§cStatsreset Tokens §8» §e" + playerProfile.getStatsResetTokens());
                 proxiedPlayer.sendMessage("§8§m----------------------------------");
@@ -42,8 +42,8 @@ public class TokensCommand extends Command {
             }
 
             if (args.length != 4) {
-                commandSender.sendMessage(Message.PREFIX + "/tokens joinme ("+BungeeTranslateAPI.translate(proxiedPlayer,"player")+") add ("+BungeeTranslateAPI.translate(proxiedPlayer,"amount")+")");
-                commandSender.sendMessage(Message.PREFIX + "/tokens statsreset ("+BungeeTranslateAPI.translate(proxiedPlayer,"player")+") add ("+BungeeTranslateAPI.translate(proxiedPlayer,"amount")+")");
+                commandSender.sendMessage(Message.PREFIX + "/tokens joinme (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ") add (" + BungeeTranslateAPI.translate(proxiedPlayer, "amount") + ")");
+                commandSender.sendMessage(Message.PREFIX + "/tokens statsreset (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ") add (" + BungeeTranslateAPI.translate(proxiedPlayer, "amount") + ")");
             } else {
 
                 String type;
@@ -53,13 +53,13 @@ public class TokensCommand extends Command {
                 } else if (args[0].toLowerCase(Locale.ROOT).equals("statsreset")) {
                     type = "statsresetTokens";
                 } else {
-                    commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translate(proxiedPlayer,"This is not a valid argument") + " (joinme/statsreset)!");
+                    commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translate(proxiedPlayer, "This is not a valid argument") + " (joinme/statsreset)!");
                     return;
                 }
 
                 UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
                 if (uuid == null) {
-                    commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translate(proxiedPlayer,"This is not a valid player!"));
+                    commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translate(proxiedPlayer, "This is not a valid player!"));
                     return;
                 }
 
@@ -76,19 +76,19 @@ public class TokensCommand extends Command {
                             playerProfile.setStatsResetTokens(playerProfile.getStatsResetTokens() + number);
                         }
                         BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, ProxyServer.getInstance().getPlayer(uuid) != null, true);
-                        commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"Added player {} {} {}",args[1], String.valueOf(number), type.replace("Tokens", "") + " tokens")+"!");
+                        commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "Added player {} {} {}", args[1], String.valueOf(number), type.replace("Tokens", "") + " tokens") + "!");
 
                         ProxiedPlayer proxiedPlayer1 = ProxyServer.getInstance().getPlayer(uuid);
                         if (proxiedPlayer1 != null) {
                             if (type.equalsIgnoreCase("statsresetTokens")) {
-                                proxiedPlayer1.sendMessage("§f§lWhoooosh! §7"+BungeeTranslateAPI.translate(proxiedPlayer1,"You received")+" §a" + number + " §7statsreset " + (number == 1 ? "token" : "tokens"));
+                                proxiedPlayer1.sendMessage("§f§lWhoooosh! §7" + BungeeTranslateAPI.translate(proxiedPlayer1, "You received") + " §a" + number + " §7statsreset " + (number == 1 ? "token" : "tokens"));
                             } else {
-                                proxiedPlayer1.sendMessage("§f§lWhoooosh! §7"+BungeeTranslateAPI.translate(proxiedPlayer1,"You received")+" §a" + number + " §7joinme " + (number == 1 ? "token" : "tokens"));
+                                proxiedPlayer1.sendMessage("§f§lWhoooosh! §7" + BungeeTranslateAPI.translate(proxiedPlayer1, "You received") + " §a" + number + " §7joinme " + (number == 1 ? "token" : "tokens"));
                             }
                         }
 
                     } catch (NumberFormatException e) {
-                        commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translate(proxiedPlayer,"This is not a valid number!"));
+                        commandSender.sendMessage(Message.PREFIX + BungeeTranslateAPI.translate(proxiedPlayer, "This is not a valid number!"));
                     }
                 }
             }

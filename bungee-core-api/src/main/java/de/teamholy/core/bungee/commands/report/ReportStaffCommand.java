@@ -48,7 +48,7 @@ public class ReportStaffCommand extends Command {
                 }
 
                 if (report == null) {
-                    player.sendMessage(TextComponent.fromLegacyText(prefix + BungeeTranslateAPI.translate(player,"You dont edit any report!")));
+                    player.sendMessage(TextComponent.fromLegacyText(prefix + BungeeTranslateAPI.translate(player, "You dont edit any report!")));
                     return;
                 }
 
@@ -61,7 +61,7 @@ public class ReportStaffCommand extends Command {
 
                 player.sendMessage(TextComponent.fromLegacyText(prefix +
                     "You finished the report of "
-                    + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget())
+                    + BungeeCore.getInstance().getPlayerColor(report.getTarget())
                     + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()) + "§7!"));
 
                 reportHandler.removeReport(report.getTarget());
@@ -72,7 +72,7 @@ public class ReportStaffCommand extends Command {
                     if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
                         player.sendMessage(TextComponent.fromLegacyText(prefix +
                             "You already took over the report of "
-                            + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget())
+                            + BungeeCore.getInstance().getPlayerColor(report.getTarget())
                             + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())));
                         return;
                     } else if (report.getViewer() == null) {
@@ -93,7 +93,7 @@ public class ReportStaffCommand extends Command {
 
 
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("");
-                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + BungeeCore.getAPI().getCloudManager().getColor(player.getUniqueId()) + player.getName() + " §7cleared the §4§lreports§7!");
+                BungeeCore.getInstance().getBungeePlayerManager().notifyStaff(prefix + BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName() + " §7cleared the §4§lreports§7!");
                 BungeeCore.getInstance().getBungeePlayerManager().notifyStaff("");
             } else {
                 sendHelp(player);
@@ -120,7 +120,7 @@ public class ReportStaffCommand extends Command {
                 }
 
                 reportHandler.removeReport(uuid);
-                player.sendMessage(prefix + "Deleted report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
+                player.sendMessage(prefix + "Deleted report of " + BungeeCore.getInstance().getPlayerColor(uuid) + name);
 
             } else {
                 sendHelp(player);
@@ -150,7 +150,7 @@ public class ReportStaffCommand extends Command {
 
         for (Report report : reportHandler.getAllReports().values()) {
             if (report.getViewer() != null && report.getViewer().equals(player.getUniqueId())) {
-                player.sendMessage(prefix + "You already took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
+                player.sendMessage(prefix + "You already took over the report of " + BungeeCore.getInstance().getPlayerColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget()));
                 return;
             }
         }
@@ -158,20 +158,20 @@ public class ReportStaffCommand extends Command {
         Report report = reportHandler.getReport(uuid);
 
         if (report.getViewer() != null) {
-            player.sendMessage(prefix + "The report was already took over from " + BungeeCore.getAPI().getCloudManager().getColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()));
+            player.sendMessage(prefix + "The report was already took over from " + BungeeCore.getInstance().getPlayerColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()));
             return;
         }
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
 
         report.setViewer(player.getUniqueId());
         report.setViewerSince(System.currentTimeMillis());
-        player.sendMessage(prefix + "You took over the report of " + BungeeCore.getAPI().getCloudManager().getColor(uuid) + name);
+        player.sendMessage(prefix + "You took over the report of " + BungeeCore.getInstance().getPlayerColor(uuid) + name);
         BungeeCore.getAPI().getCloudManager().sendCloudMessage("command", "command", JsonDocument.newDocument("uuid", player.getUniqueId()).append("command", "jump " + name));
         reportHandler.addReport(report);
 
         ProxiedPlayer reporter = ProxyServer.getInstance().getPlayer(report.getSender());
         if (reporter != null) {
-            reporter.sendMessage(TextComponent.fromLegacyText(prefix + "Your report of " + BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + target.getName() + " §7is now being processed"));
+            reporter.sendMessage(TextComponent.fromLegacyText(prefix + "Your report of " + BungeeCore.getInstance().getPlayerColor(report.getTarget()) + target.getName() + " §7is now being processed"));
         }
     }
 
@@ -188,7 +188,7 @@ public class ReportStaffCommand extends Command {
         player.sendMessage(prefix + "Active reports §8(§e" + reportMap.size() + "§8)");
         for (Report report : reportMap.values()) {
             ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(report.getTarget());
-            String name = BungeeCore.getAPI().getCloudManager().getColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget());
+            String name = BungeeCore.getInstance().getPlayerColor(report.getTarget()) + BungeeCore.getAPI().getUuidManager().getName(report.getTarget());
             if (proxiedPlayer == null) {
                 player.sendMessage(prefix + name + " §8- §e" + report.getReason() + " §8(§cOffline§8)");
             } else {
@@ -198,7 +198,7 @@ public class ReportStaffCommand extends Command {
                     message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/reports accept " + BungeeCore.getAPI().getUuidManager().getName(report.getTarget())));
                     message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Accept the report of " + name)));
                 } else {
-                    message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(BungeeCore.getAPI().getCloudManager().getColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()) + " §7already took over the report")));
+                    message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(BungeeCore.getInstance().getPlayerColor(report.getViewer()) + BungeeCore.getAPI().getUuidManager().getName(report.getViewer()) + " §7already took over the report")));
                 }
 
                 player.sendMessage(message);
