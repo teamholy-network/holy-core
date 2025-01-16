@@ -2,6 +2,7 @@ package de.teamholy.core.bungee;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
+import de.dytanic.cloudnet.ext.bridge.node.CloudNetBridgeModule;
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.skydb.updater.BungeeUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
@@ -137,6 +138,7 @@ public class BungeeCore extends Plugin {
 
 
         new ChatFilterListener(this);
+        CloudNetDriver.getInstance().getEventManager().registerListener(new CloudRankUpdateListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatLogListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
         ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
