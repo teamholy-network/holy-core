@@ -185,7 +185,7 @@ public class NPCEntry extends Reflection {
                     removeTablist(player);
                     teleport(location, player);
                 }
-            }.runTaskLater(BukkitCore.getInstance(), 2);
+            }.runTaskLater(BukkitCore.getInstance(), 8);
         }
     }
 
@@ -229,7 +229,7 @@ public class NPCEntry extends Reflection {
                     updateEquipment(player);
                     updateHeldItem(player);
                 }
-            }.runTaskLater(BukkitCore.getInstance(), 2);
+            }.runTaskLater(BukkitCore.getInstance(), 8);
         }
     }
 
