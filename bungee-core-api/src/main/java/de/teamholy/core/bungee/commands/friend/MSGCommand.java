@@ -37,7 +37,7 @@ public class MSGCommand extends Command {
         }
 
         if (!BungeeCore.getAPI().getFriendManager().isFriend(player.getUniqueId(), target) && !player.hasPermission("teamholy.team")) {
-            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "You are not friends with {}", getColor(target) + getName(target)));
+            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "You are not friends with {}", getColor(target) + getName(target) + "§7"));
             return;
         }
 
