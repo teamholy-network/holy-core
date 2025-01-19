@@ -163,14 +163,6 @@ public class PlayerJoinQuitListener implements Listener {
                 }
             });
         });
-
-
-        //Temporary Fix for Grim Bug
-        Bukkit.getScheduler().scheduleSyncDelayedTask(bukkitCore, () -> {
-            if (player.hasPermission("grim.verbose")) {
-                player.chat("/grim verbose");
-            }
-        },20);
     }
 
 
