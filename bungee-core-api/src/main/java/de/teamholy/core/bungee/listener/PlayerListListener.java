@@ -24,7 +24,7 @@ public class PlayerListListener implements Listener {
 
 
         String HEADER_TEMPLATE = "\n§6§lTeamHoly.de§r§8 ┃ §f" + onlineCount + " §7" + BungeeTranslateAPI.translate(player, "players") + "\n§7" + BungeeTranslateAPI.translatePlaceholder(player, "You are on {}", "§e" + server) + "\n ";
-        String FOOTER_TEMPLATE = "\n    §7§o" + BungeeTranslateAPI.translate(player, "Use these commands for help:") + "    \n§f/discord §8┃ §f/shop §8┃ §f/report\n\n§7§o" + BungeeTranslateAPI.translatePlaceholder(player, "sponsored by {}", "§b§oIndex-Hosting.de");
+        String FOOTER_TEMPLATE = "\n    §7§o" + BungeeTranslateAPI.translate(player, "Use these commands for help:") + "    \n§f/discord §8┃ §f/shop §8┃ §f/report\n\n§7§o"; /* +BungeeTranslateAPI.translatePlaceholder(player, "sponsored by {}", "§b§oIndex-Hosting.de")*/
 
         // Set the header and footer
         player.setTabHeader(TextComponent.fromLegacyText(HEADER_TEMPLATE), TextComponent.fromLegacyText(FOOTER_TEMPLATE));

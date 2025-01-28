@@ -48,7 +48,7 @@ public class PostLoginListener implements Listener {
 
         proxiedPlayer.sendMessage("");
         proxiedPlayer.sendMessage("          §f§l"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"WELCOME ON {}","§6§lTEAMHOLY")+"          ");
-        proxiedPlayer.sendMessage("        §7"+ BungeeTranslateAPI.translate(proxiedPlayer,"sponsored by")+" §bIndex-Hosting.de      ");
+        //proxiedPlayer.sendMessage("        §7"+ BungeeTranslateAPI.translate(proxiedPlayer,"sponsored by")+" §bIndex-Hosting.de      ");
         proxiedPlayer.sendMessage(" ");
         proxiedPlayer.sendMessage("§3Discord §8» §7https://discord.gg/teamholy");
         proxiedPlayer.sendMessage("§cStore §8» §7https://shop.teamholy.de/");
