@@ -58,7 +58,8 @@ public class Punish {
         ADVERTISING(10, "Advertising", -1L),
         PROVOCATION(11, "Provocation", TimeUnit.DAYS.toMillis(7)),
         BAD_CLAN(12, "Malicious Clan", TimeUnit.DAYS.toMillis(7)),
-        STATS_BOOSTING(13, "Stats Boosting", TimeUnit.DAYS.toMillis(14));
+        STATS_BOOSTING(13, "Stats Boosting", TimeUnit.DAYS.toMillis(14)),
+        AUTO_CLICKER(14, "AutoClicker", TimeUnit.DAYS.toMillis(14));
 
         int id;
         String englishText;
