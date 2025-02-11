@@ -1,4 +1,4 @@
-package de.teamholy.login.filter;
+package de.teamholy.bungee.login.filter;
 
 public class NameFilter {
 	public static char[] allowedcharacters = { '_' };

@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.teamholy.bungee.login.BungeeLogin;
 import de.teamholy.bungee.login.api.TaskAPI;
+import de.teamholy.bungee.login.filter.NameFilter;
 import de.teamholy.bungee.login.manager.BotManager;
 import de.teamholy.bungee.login.manager.CaptchaManager;
 import de.teamholy.bungee.login.model.CrackedProfiles;
@@ -18,7 +19,6 @@ import de.teamholy.bungee.login.repositories.PlayerConnectRepository;
 import de.teamholy.bungee.login.util.UUIDUtility;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
-import de.teamholy.login.filter.NameFilter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
