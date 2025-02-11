@@ -10,7 +10,7 @@ dependencies {
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly('com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9')
 
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
+    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
     implementation('com.fasterxml.jackson.core:jackson-core:2.15.2')
 
     implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
