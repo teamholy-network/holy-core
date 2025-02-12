@@ -72,7 +72,7 @@ public class TeamManager implements Listener {
             packet.setTeamSuffix(displaySuffix);
         }
         packet.setFriendlyFire((byte) 0);
-        packet.setNameTagVisibility("ALWAYS");
+        packet.setNameTagVisibility("always");
         packet.setColor(0);
         packet.setPlayers(playerList);
         player.setPlayerListName(prefix + player.getName() + suffix);
