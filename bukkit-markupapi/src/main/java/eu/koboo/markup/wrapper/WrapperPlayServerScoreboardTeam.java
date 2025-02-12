@@ -5,6 +5,7 @@ import com.comphenix.protocol.events.PacketContainer;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.SCOREBOARD_TEAM;
@@ -71,7 +72,7 @@ public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
     }
 
     public void setNameTagVisibility(String value) {
-        handle.getStrings().write(4, value);
+        handle.getStrings().write(4, value.toLowerCase(Locale.ROOT));
     }
 
     public int getColor() {
