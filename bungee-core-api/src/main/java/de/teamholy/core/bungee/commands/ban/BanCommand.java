@@ -164,7 +164,7 @@ public class BanCommand extends SenderCommand {
             String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(author,"Permanent");
             commandSender.sendMessage(" §6" + reason.getEnglishText() + " §7- §c" + time + " §7- §c" + reason.getId());
         }
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban ("+BungeeTranslateAPI.translate(author,"name")+") (id) ["+BungeeTranslateAPI.translate(author,"Evidence Link")+"]");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/ban ["+BungeeTranslateAPI.translate(author,"name")+"] [id]");
     }
 
 }
