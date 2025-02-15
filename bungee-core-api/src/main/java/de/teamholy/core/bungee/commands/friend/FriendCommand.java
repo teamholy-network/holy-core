@@ -264,15 +264,15 @@ public class FriendCommand extends Command {
     }
 
     private void sendHelp(ProxiedPlayer proxiedPlayer) {
-        proxiedPlayer.sendMessage("§8§m----------§f§lFRIEND§8§m-------------");
-        proxiedPlayer.sendMessage(prefix + "/friend add (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/friend remove (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/friend accept (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/friend deny (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/friend jump (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/friend list");
-        proxiedPlayer.sendMessage(prefix + "/friend requests");
-        proxiedPlayer.sendMessage(prefix + "/msg (" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + ")");
+        proxiedPlayer.sendMessage("§8------ §eTeamHoly.de §8------");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend add [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend remove [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend accept [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend deny [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend jump [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend list");
+        proxiedPlayer.sendMessage(" §7§l• §f/friend requests");
+        proxiedPlayer.sendMessage(" §7§l• §f/msg [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
         proxiedPlayer.sendMessage("§8§m-----------------------------");
     }
 
