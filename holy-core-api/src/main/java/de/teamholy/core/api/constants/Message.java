@@ -6,7 +6,7 @@ public class Message {
 
     public static final String PREFIX = "§6Teamholy §8× §7";
     public static final String CLAN_PREFIX = "§6Clan §8× §7";
-    public static final String PUNISH_PREFIX = "§cPunish §8× §7";
+    public static final String PUNISH_PREFIX = "§cBans §8× §7";
     public static final String LOOKUP_PREFIX = "§5LookUp §8× §7";
     public static final String PET_PREFIX = "§dPets §8× §7";
     public static final String STAFF_INFO_PREFIX = "§2Staff §8× §7";

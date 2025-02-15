@@ -47,19 +47,16 @@ public class Punish {
     public enum BanReason implements PunishReason {
 
         HACKING(1, "Client Modifications", TimeUnit.DAYS.toMillis(30)),
-        BUG_USING(2, "Bug-Using", TimeUnit.DAYS.toMillis(15)),
-        TROLLING(3, "Trolling", TimeUnit.DAYS.toMillis(7)),
-        BAD_SKIN(4, "Malicious Skin", TimeUnit.DAYS.toMillis(7)),
-        BAD_NAME(5, "Malicious Name", TimeUnit.DAYS.toMillis(90)),
-        TEAMING(6, "Teaming", TimeUnit.DAYS.toMillis(30)),
-        BAN_BYPASS(7, "Ban Bypassing", -1L),
-        HOUSE_BAN(8, "Houseban", -1L),
-        RACISM(9, "Racism", -1L),
-        ADVERTISING(10, "Advertising", -1L),
-        PROVOCATION(11, "Provocation", TimeUnit.DAYS.toMillis(7)),
-        BAD_CLAN(12, "Malicious Clan", TimeUnit.DAYS.toMillis(7)),
-        STATS_BOOSTING(13, "Stats Boosting", TimeUnit.DAYS.toMillis(14)),
-        AUTO_CLICKER(14, "AutoClicker", TimeUnit.DAYS.toMillis(14));
+        AUTO_CLICKER(2, "AutoClicker", TimeUnit.DAYS.toMillis(14)),
+        BUG_USING(3, "Bug-Using", TimeUnit.DAYS.toMillis(15)),
+        TROLLING(4, "Trolling", TimeUnit.DAYS.toMillis(7)),
+        TEAMING(5, "Teaming", TimeUnit.DAYS.toMillis(30)),
+        STATS_BOOSTING(6, "Stats Boosting", TimeUnit.DAYS.toMillis(14)),
+        BAD_SKIN(7, "Malicious Skin", TimeUnit.DAYS.toMillis(7)),
+        BAD_NAME(8, "Malicious Name", TimeUnit.DAYS.toMillis(90)),
+        BAD_CLAN(9, "Malicious Clan", TimeUnit.DAYS.toMillis(7)),
+        BAN_BYPASS(10, "Ban Bypassing", -1L),
+        HOUSE_BAN(11, "Houseban", -1L);
 
         int id;
         String englishText;
@@ -94,13 +91,11 @@ public class Punish {
 
     public enum MuteReason implements PunishReason {
 
-        //TEST(0,"Test", TimeUnit.MINUTES.toMillis(5)),
-        ADVERTISING(1, "Advertising", TimeUnit.DAYS.toMillis(30)),
+        INSULT(1, "Insulting", TimeUnit.DAYS.toMillis(7)),
         RACISM(2, "Racism", -1L),
-        INSULT(3, "Insulting", TimeUnit.DAYS.toMillis(7)),
-        SPAM(4, "Spamming", TimeUnit.DAYS.toMillis(1)),
-        PROVOCATION(5, "Provocation", TimeUnit.DAYS.toMillis(3)),
-        CHOICEOFWORDS(6, "Choice of Words", TimeUnit.DAYS.toMillis(7));
+        SPAM(3, "Spamming", TimeUnit.DAYS.toMillis(1)),
+        PROVOCATION(4, "Provocation", TimeUnit.DAYS.toMillis(3)),
+        ADVERTISING(5, "Advertising", TimeUnit.DAYS.toMillis(30));
 
 
         int id;
