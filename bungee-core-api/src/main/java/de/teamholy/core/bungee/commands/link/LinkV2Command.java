@@ -4,6 +4,8 @@ import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +23,16 @@ public class LinkV2Command extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (strings.length == 0) {
-            commandSender.sendMessage("§6Web §8× §7 " + BungeeTranslateAPI.translatePlaceholder(player, "Visit {} to link your account and get free §eCoins!", "§6teamholy.de/link§7"));
+            TextComponent header = new TextComponent("§6/link\n");
+            TextComponent separator = new TextComponent("§8------ §aTeamHoly.de §8------\n");
+            TextComponent clickable = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Besuchen Sie unsere Webseite. -> teamholy.de/link") + "\n");
+            clickable.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://teamholy.de/link"));
+            TextComponent footer = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Dort könnten Sie ihr Konto verknüpfen und kostenlose Coins erhalten!"));
+            
+            header.addExtra(separator);
+            header.addExtra(clickable);
+            header.addExtra(footer);
+            commandSender.sendMessage(header);
             return;
         }
 

@@ -91,11 +91,13 @@ public class Punish {
 
     public enum MuteReason implements PunishReason {
 
-        INSULT(1, "Insulting", TimeUnit.DAYS.toMillis(7)),
+        //TEST(0,"Test", TimeUnit.MINUTES.toMillis(5)),
+        ADVERTISING(1, "Advertising", TimeUnit.DAYS.toMillis(30)),
         RACISM(2, "Racism", -1L),
-        SPAM(3, "Spamming", TimeUnit.DAYS.toMillis(1)),
-        PROVOCATION(4, "Provocation", TimeUnit.DAYS.toMillis(3)),
-        ADVERTISING(5, "Advertising", TimeUnit.DAYS.toMillis(30));
+        INSULT(3, "Insulting", TimeUnit.DAYS.toMillis(7)),
+        SPAM(4, "Spamming", TimeUnit.DAYS.toMillis(1)),
+        PROVOCATION(5, "Provocation", TimeUnit.DAYS.toMillis(3)),
+        CHOICEOFWORDS(6, "Choice of Words", TimeUnit.DAYS.toMillis(7));
 
 
         int id;

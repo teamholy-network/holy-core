@@ -384,18 +384,16 @@ public class PartyCommand extends Command {
 
 
     private void sendHelp(ProxiedPlayer proxiedPlayer) {
-        proxiedPlayer.sendMessage("§8§m----------§f§lPARTY§8§m-------------");
-        proxiedPlayer.sendMessage(prefix + "/party invite (" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/party accept§8/§7join (" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/party deny (" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/party kick (" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/party removeinvite (" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "player") + ")");
-        proxiedPlayer.sendMessage(prefix + "/party chat (" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "message") + ")");
-        proxiedPlayer.sendMessage(prefix + "/party togglepublic");
-        proxiedPlayer.sendMessage(prefix + "/party leave");
-        proxiedPlayer.sendMessage(prefix + "/party create");
-        proxiedPlayer.sendMessage(prefix + "/party list§8/§7info");
-        proxiedPlayer.sendMessage("§8§m-----------------------------");
-
+        proxiedPlayer.sendMessage("§8------ §eTeamHoly.de §8------");
+        proxiedPlayer.sendMessage(" §7§l• §f/party chat [" + BungeeTranslateAPI.translate(proxiedPlayer, "message") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/party list/info");
+        proxiedPlayer.sendMessage(" §7§l• §f/party leave");
+        proxiedPlayer.sendMessage(" §7§l• §f/party togglepublic");
+        proxiedPlayer.sendMessage(" §7§l• §f/party create");
+        proxiedPlayer.sendMessage(" §7§l• §f/party invite [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/party accept/join [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/party deny [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/party kick [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
+        proxiedPlayer.sendMessage(" §7§l• §f/party removeinvite [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
     }
 }

@@ -31,6 +31,7 @@ import de.teamholy.core.bungee.commands.punish.KickCommand;
 import de.teamholy.core.bungee.commands.punish.PunishReduceCommand;
 import de.teamholy.core.bungee.commands.report.ReportCommand;
 import de.teamholy.core.bungee.commands.report.ReportStaffCommand;
+import de.teamholy.core.bungee.commands.shop.ShopCommand;
 import de.teamholy.core.bungee.commands.staff.StaffInfoCommand;
 import de.teamholy.core.bungee.commands.team.AdminChatCommand;
 import de.teamholy.core.bungee.commands.team.TeamChatCommand;
@@ -166,7 +167,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new JumpCommand("jump"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new GiveawayCommand("giveaway"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new YoutuberCommand("Youtube", "", "yt", "premium+", "p+"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HelpCommand("help", "", "hile", "dc", "shop", "?", "discord", "apply", "forum"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HelpCommand("help", "", "hile", "dc", "?", "discord", "apply", "forum"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
@@ -178,6 +179,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkV2Command("link"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ShopCommand("shop"));
 
 
         chatFilterManager.loadFilteredWords();

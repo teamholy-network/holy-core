@@ -44,7 +44,7 @@ public class EvidenceCommand extends SenderCommand {
                 }
                 banProfile.setEvidence(args[2]);
                 BungeeCore.getAPI().getBanService().saveEntity(banProfile, false, true);
-                sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translatePlaceholder(author, "You changed the bann-evidence of §e{}§7!", target));
+                sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translatePlaceholder(author, "You changed the ban-evidence of §e{}§7!", target));
 
             } else {
                 MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
