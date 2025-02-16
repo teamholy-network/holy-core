@@ -364,34 +364,40 @@ public class ClanCommand extends SenderCommand {
         public void onHelp(ProxiedPlayer player, int number) {
         switch (number) {
             case 2:
-            player.sendMessage(Message.CLAN_LINE_TOP);
-            player.sendMessage( " §7§l• §f/clan info");
-            player.sendMessage( " §7§l• §f/clan info (tag)");
-            player.sendMessage(" §7§l• §f/clan userinfo ("+BungeeTranslateAPI.translate(player,"name")+")");
-            if (player.hasPermission("teamholy.clan.color"))
-                player.sendMessage( " §7§l• §f/clan color ("+BungeeTranslateAPI.translate(player,"color")+")");
-            player.sendMessage(" §7§l• §f/clan delete");
-            player.sendMessage(" §7§l• §f/clan accept (tag)");
-            player.sendMessage(" §7§l• §f/clan join (tag)");
-            player.sendMessage(" §7§l• §f/clan rename ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
-            player.sendMessage(" §7§l• §f/clan chat ("+BungeeTranslateAPI.translate(player,"message")+")");
-            player.sendMessage(Message.CLAN_LINE_DOWN);
-            break;
+                player.sendMessage(Message.TOPLINE);
+                player.sendMessage("   " + Message.HELP_TITLE_CLAN + " §8- §7" + BungeeTranslateAPI.translate(player, "Page") + " §62/2");
+                player.sendMessage("");
+                player.sendMessage(Message.HELP_BULLET + "/clan info");
+                player.sendMessage(Message.HELP_BULLET + "/clan info (tag)");
+                player.sendMessage(Message.HELP_BULLET + "/clan userinfo (" + BungeeTranslateAPI.translate(player,"name") + ")");
+                if (player.hasPermission("teamholy.clan.color"))
+                    player.sendMessage(Message.HELP_BULLET + "/clan color (" + BungeeTranslateAPI.translate(player,"color") + ")");
+                player.sendMessage(Message.HELP_BULLET + "/clan delete");
+                player.sendMessage(Message.HELP_BULLET + "/clan accept (tag)");
+                player.sendMessage(Message.HELP_BULLET + "/clan join (tag)");
+                player.sendMessage(Message.HELP_BULLET + "/clan rename (" + BungeeTranslateAPI.translate(player,"name") + ") (tag)");
+                player.sendMessage(Message.HELP_BULLET + "/clan chat (" + BungeeTranslateAPI.translate(player,"message") + ")");
+                player.sendMessage("");
+                player.sendMessage(Message.LINE_DOWN);
+                break;
             default:
-            player.sendMessage(Message.CLAN_LINE_TOP);
-            player.sendMessage(" §7§l• §f/clan help 1");
-            player.sendMessage(" §7§l• §f/clan help 2");
-            player.sendMessage(" §7§l• §f/clan kick ("+BungeeTranslateAPI.translate(player,"name")+")");
-            player.sendMessage(" §7§l• §f/clan invite ("+BungeeTranslateAPI.translate(player,"name")+")");
-            player.sendMessage(" §7§l• §f/clan leave");
-            player.sendMessage(" §7§l• §f/clan create ("+BungeeTranslateAPI.translate(player,"name")+") (tag)");
-            player.sendMessage(" §7§l• §f/clan promote ("+BungeeTranslateAPI.translate(player,"name")+")");
-            player.sendMessage(" §7§l• §f/clan demote ("+BungeeTranslateAPI.translate(player,"name")+")");
-            player.sendMessage(" §7/clan togglejoin");
-            player.sendMessage(Message.CLAN_LINE_DOWN);
-            break;
+                player.sendMessage(Message.TOPLINE);
+                player.sendMessage("   " + Message.HELP_TITLE_CLAN + " §8- §7" + BungeeTranslateAPI.translate(player, "Page") + " §61/2");
+                player.sendMessage("");
+                player.sendMessage(Message.HELP_BULLET + "/clan help 1");
+                player.sendMessage(Message.HELP_BULLET + "/clan help 2");
+                player.sendMessage(Message.HELP_BULLET + "/clan kick (" + BungeeTranslateAPI.translate(player,"name") + ")");
+                player.sendMessage(Message.HELP_BULLET + "/clan invite (" + BungeeTranslateAPI.translate(player,"name") + ")");
+                player.sendMessage(Message.HELP_BULLET + "/clan leave");
+                player.sendMessage(Message.HELP_BULLET + "/clan create (" + BungeeTranslateAPI.translate(player,"name") + ") (tag)");
+                player.sendMessage(Message.HELP_BULLET + "/clan promote (" + BungeeTranslateAPI.translate(player,"name") + ")");
+                player.sendMessage(Message.HELP_BULLET + "/clan demote (" + BungeeTranslateAPI.translate(player,"name") + ")");
+                player.sendMessage(Message.HELP_BULLET + "/clan togglejoin");
+                player.sendMessage("");
+                player.sendMessage(Message.LINE_DOWN);
+                break;
         }
-        }
+    }
 
         public void onPromote(ProxiedPlayer player, UUID toPromote) {
         // LEADER can promote all
@@ -783,7 +789,7 @@ public class ClanCommand extends SenderCommand {
             }
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        proxiedPlayer.sendMessage(Message.CLAN_LINE_TOP);
+        proxiedPlayer.sendMessage(Message.TOPLINE);
         proxiedPlayer.sendMessage("");
         proxiedPlayer.sendMessage("§7"+BungeeTranslateAPI.translate(proxiedPlayer,"Creation date")+"§8: §a" + simpleDateFormat.format(new Date(clan.getCreationDate())));
         proxiedPlayer.sendMessage("§7"+BungeeTranslateAPI.translate(proxiedPlayer,"Member")+"§8: §6" + clan.getMembers().size() + "§7/" + MAX_CLAN_MEMBERS);
@@ -818,7 +824,7 @@ public class ClanCommand extends SenderCommand {
         }
         proxiedPlayer.sendMessage(members.toString());
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage(Message.CLAN_LINE_DOWN);
+        proxiedPlayer.sendMessage(Message.LINE_DOWN);
     }
 
     public void onClanChat(ProxiedPlayer player, String[] args) {

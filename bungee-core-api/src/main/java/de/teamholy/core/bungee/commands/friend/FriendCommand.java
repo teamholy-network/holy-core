@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.commands.friend;
 
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -264,16 +265,19 @@ public class FriendCommand extends Command {
     }
 
     private void sendHelp(ProxiedPlayer proxiedPlayer) {
-        proxiedPlayer.sendMessage("§8------ §eTeamHoly.de §8------");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend add [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend remove [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend accept [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend deny [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend jump [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend list");
-        proxiedPlayer.sendMessage(" §7§l• §f/friend requests");
-        proxiedPlayer.sendMessage(" §7§l• §f/msg [" + BungeeTranslateAPI.translate(proxiedPlayer, "player") + "]");
-        proxiedPlayer.sendMessage("§8§m-----------------------------");
+        proxiedPlayer.sendMessage(Message.TOPLINE);
+        proxiedPlayer.sendMessage("   " + Message.HELP_TITLE_FRIEND);
+        proxiedPlayer.sendMessage("");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend add (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend remove (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend accept (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend deny (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend jump (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend list");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend requests");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/msg (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ") (" + BungeeTranslateAPI.translate(proxiedPlayer,"message") + ")");
+        proxiedPlayer.sendMessage("");
+        proxiedPlayer.sendMessage(Message.LINE_DOWN);
     }
 
 

@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.commands.party;
 
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.utility.PartyInviteAllowance;
 import de.teamholy.core.bungee.BungeeCore;
@@ -384,16 +385,15 @@ public class PartyCommand extends Command {
 
 
     private void sendHelp(ProxiedPlayer proxiedPlayer) {
-        proxiedPlayer.sendMessage("§8------ §eTeamHoly.de §8------");
-        proxiedPlayer.sendMessage(" §7§l• §f/party chat [" + BungeeTranslateAPI.translate(proxiedPlayer, "message") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/party list/info");
-        proxiedPlayer.sendMessage(" §7§l• §f/party leave");
-        proxiedPlayer.sendMessage(" §7§l• §f/party togglepublic");
-        proxiedPlayer.sendMessage(" §7§l• §f/party create");
-        proxiedPlayer.sendMessage(" §7§l• §f/party invite [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/party accept/join [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/party deny [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/party kick [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
-        proxiedPlayer.sendMessage(" §7§l• §f/party removeinvite [" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + "]");
+        proxiedPlayer.sendMessage(Message.TOPLINE);
+        proxiedPlayer.sendMessage("   " + Message.HELP_TITLE_PARTY);
+        proxiedPlayer.sendMessage("");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/party create");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/party invite (" + BungeeTranslateAPI.translate(proxiedPlayer,"player") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/party join (" + BungeeTranslateAPI.translate(proxiedPlayer,"player") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/party leave");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/party chat (" + BungeeTranslateAPI.translate(proxiedPlayer,"message") + ")");
+        proxiedPlayer.sendMessage("");
+        proxiedPlayer.sendMessage(Message.LINE_DOWN);
     }
 }
