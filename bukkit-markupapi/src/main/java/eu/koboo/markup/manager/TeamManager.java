@@ -14,12 +14,9 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TeamManager implements Listener {
 
-    private final ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private final MarkupAPI markupAPI;
 
     public TeamManager(MarkupAPI markupAPI) {

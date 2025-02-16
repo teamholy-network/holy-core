@@ -9,7 +9,6 @@ import de.teamholy.core.command.HealthServiceCommand;
 import de.teamholy.core.event.CloudMessageEvent;
 import de.teamholy.core.ping.HealthService;
 import de.teamholy.core.task.HealthTask;
-import eu.koboo.en2do.Credentials;
 import lombok.Getter;
 
 import java.util.concurrent.ExecutorService;
@@ -52,7 +51,7 @@ public class CloudModuleCore extends NodeCloudNetModule {
         MONTHLY = getConfig().getBoolean("monthly");
 
         saveConfig();
-        service = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        service = Executors.newSingleThreadScheduledExecutor();
 
 
         sortManager = new RankingSortManager();

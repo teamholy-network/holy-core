@@ -3,7 +3,6 @@ package de.teamholy.core.task;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.ping.HealthService;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

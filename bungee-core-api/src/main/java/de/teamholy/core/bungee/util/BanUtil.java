@@ -92,7 +92,7 @@ public class BanUtil {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append(Message.LINE)
+        builder.append(Message.LINE_DOWN)
             .append("\n\n")
             .append("§cYou're banned!\n\n")
             .append("§7Reason§8: §c")
@@ -110,7 +110,7 @@ public class BanUtil {
 
         builder.append("§7You can make an unban appeal by opening a ticket on §ehttps://dc.teamholy.de/\n")
             .append("\n")
-            .append(Message.LINE)
+            .append(Message.LINE_DOWN)
             .append("\n");
 
         return builder.toString();

@@ -4,8 +4,6 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.dytanic.cloudnet.wrapper.Wrapper;
 import de.skydb.updater.BukkitUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
@@ -20,8 +18,6 @@ import de.teamholy.core.bukkit.perks.*;
 import de.teamholy.core.bukkit.perks.listener.UsePerkListener;
 import de.teamholy.core.bukkit.report.ReportBukkitManager;
 import de.teamholy.core.bukkit.task.BukkitHealthTask;
-import de.teamholy.core.bukkit.utils.Inventory;
-import de.teamholy.core.bukkit.utils.ItemBuilder;
 import eu.koboo.markup.MarkupAPI;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,7 +25,6 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
@@ -37,7 +32,8 @@ import org.bukkit.entity.Monster;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
@@ -77,7 +73,7 @@ public class BukkitCore extends JavaPlugin {
         instance = this;
     }
 
-    final ScheduledThreadPoolExecutor executorService = new ScheduledThreadPoolExecutor(1);
+    final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void onEnable() {

@@ -16,7 +16,6 @@ import de.teamholy.core.api.entities.skin.SkinService;
 import de.teamholy.core.api.entities.staff.StaffService;
 import de.teamholy.core.api.entities.stats.StatsProfileService;
 import de.teamholy.core.api.manager.*;
-import de.teamholy.core.api.rabbit.Rabbit;
 import eu.koboo.en2do.Credentials;
 import eu.koboo.en2do.MongoManager;
 import lombok.AccessLevel;
@@ -106,7 +105,7 @@ public class CoreAPI {
         this.friendManager = new FriendManager(this);
         this.rankingManager = new RankingManager(this);
         this.metricsManager = new MetricsManager(this);
-        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        this.executor = Executors.newCachedThreadPool();
         System.out.println("loading core API ---------------");
     }
 
@@ -152,7 +151,7 @@ public class CoreAPI {
         this.friendManager = new FriendManager(this);
         this.rankingManager = new RankingManager(this);
         this.metricsManager = new MetricsManager(this);
-        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        this.executor = Executors.newCachedThreadPool();
 
     }
 

@@ -94,7 +94,7 @@ public class LookupCommand extends SenderCommand {
 
 
 
-                player.sendMessage(Message.LINE);
+                player.sendMessage(Message.LINE_DOWN);
                 player.sendMessage("");
                 TextComponent nameComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Name")+" §8» ");
                 nameComp.addExtra(new ChatAction().text(BungeeCore.getInstance().getPlayerColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy uuid")).component());
@@ -202,7 +202,7 @@ public class LookupCommand extends SenderCommand {
                 }
                 player.sendMessage(muteHistoryComp);
                 player.sendMessage("");
-                player.sendMessage(Message.LINE);
+                player.sendMessage(Message.LINE_DOWN);
             } else if (args.length >= 2) {
                 try {
                     int num = Integer.parseInt(args[0]);
@@ -248,7 +248,7 @@ public class LookupCommand extends SenderCommand {
                                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
                                     () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
                                 if (punishHistoryProfile.getBanProfileMap().size() > 0) {
-                                    player.sendMessage(Message.LINE);
+                                    player.sendMessage(Message.LINE_DOWN);
                                     player.sendMessage("");
                                     player.sendMessage("§7BanHistory of §6" + targetName);
                                     for (BanProfile banProfile : punishHistoryProfile.getBanProfileMap().values()) {
@@ -263,7 +263,7 @@ public class LookupCommand extends SenderCommand {
                                     player.sendMessage("");
                                     player.sendMessage(new ChatAction().text("  §6§lLOOKUP").hover("§7Click back to lookup").execute("lookup " + targetName).component());
                                     player.sendMessage("");
-                                    player.sendMessage(Message.LINE);
+                                    player.sendMessage(Message.LINE_DOWN);
                                 } else {
                                     player.sendMessage(Message.LOOKUP_PREFIX + "§cNo history found about §e" + targetName + "§c!");
                                 }
@@ -271,7 +271,7 @@ public class LookupCommand extends SenderCommand {
                                 PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
                                     () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
                                 if (punishHistoryProfile.getMuteProfileMap().size() > 0) {
-                                    player.sendMessage(Message.LINE);
+                                    player.sendMessage(Message.LINE_DOWN);
                                     player.sendMessage("");
                                     player.sendMessage("§7MuteHistory of §6" + targetName);
                                     for (MuteProfile muteProfile : punishHistoryProfile.getMuteProfileMap().values()) {
@@ -286,7 +286,7 @@ public class LookupCommand extends SenderCommand {
                                     player.sendMessage("");
                                     player.sendMessage(new ChatAction().text("  §6§lLOOKUP").hover("§7Click back to lookup").execute("lookup " + targetName).component());
                                     player.sendMessage("");
-                                    player.sendMessage(Message.LINE);
+                                    player.sendMessage(Message.LINE_DOWN);
                                 } else {
                                     player.sendMessage(Message.LOOKUP_PREFIX + "§cNo history found about §e" + targetName + "§c!");
                                 }
@@ -298,7 +298,7 @@ public class LookupCommand extends SenderCommand {
                             List<PlayerProfile> profileList = BungeeCore.getAPI().getPlayerService().getRepository().findManyByIp(playerProfile.getIp());
                             int size = profileList.isEmpty() ? 0 : profileList.size() - 1;
                             if (size != 0) {
-                                player.sendMessage(Message.LINE);
+                                player.sendMessage(Message.LINE_DOWN);
                                 player.sendMessage("");
                                 player.sendMessage("§7Accounts of §6" + targetName);
                                 for (PlayerProfile profile : profileList) {
@@ -309,14 +309,14 @@ public class LookupCommand extends SenderCommand {
                                     }
                                 }
                                 player.sendMessage("");
-                                player.sendMessage(Message.LINE);
+                                player.sendMessage(Message.LINE_DOWN);
                             } else {
                                 player.sendMessage(Message.LOOKUP_PREFIX + "§cNo more accounts found of §e" + targetName + "§c!");
                             }
                             break;
 
                         case 4:
-                            player.sendMessage(Message.LINE);
+                            player.sendMessage(Message.LINE_DOWN);
                             player.sendMessage("");
                             player.sendMessage("§7Ranks of §6" + targetName);
                             player.sendMessage("");
@@ -330,7 +330,7 @@ public class LookupCommand extends SenderCommand {
                                 }
                             }
                             player.sendMessage("");
-                            player.sendMessage(Message.LINE);
+                            player.sendMessage(Message.LINE_DOWN);
                             break;
                         default:
                             printUsage(sender);
@@ -350,7 +350,7 @@ public class LookupCommand extends SenderCommand {
     }
 
     public void printPunish(ProxiedPlayer player, String name, String type, String author, String reason, String until, String evidence) {
-        player.sendMessage(Message.LINE);
+        player.sendMessage(Message.LINE_DOWN);
         player.sendMessage("");
         player.sendMessage("§7" + type + " of §6" + name);
         player.sendMessage("§7Author: §6" + author);
@@ -360,7 +360,7 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage("");
         player.sendMessage(new ChatAction().text("  §6§lLOOKUP").hover("§7Click back to lookup").execute("lookup " + name).component());
         player.sendMessage("");
-        player.sendMessage(Message.LINE);
+        player.sendMessage(Message.LINE_DOWN);
     }
 
 }

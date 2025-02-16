@@ -36,7 +36,7 @@ public class PresetManager {
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
         }
-        this.service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this.service = Executors.newCachedThreadPool();
         reloadPresets();
     }
 
