@@ -2,13 +2,11 @@ package de.teamholy.core.bungee;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.ext.bridge.node.CloudNetBridgeModule;
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.skydb.updater.BungeeUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
-import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.commands.*;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
