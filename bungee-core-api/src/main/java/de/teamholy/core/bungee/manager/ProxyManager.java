@@ -20,12 +20,14 @@ public class ProxyManager {
     private final RListAsync<String> proxyCollection;
 
     public final String kickMessage;
+    public final String kickMessageProfileExists;
 
 
     public ProxyManager(CoreAPI coreAPI) {
         this.coreAPI = coreAPI;
         this.proxyCollection = coreAPI.getRedissonManager().getRedissonClient().getList("proxy_collection");
-        this.kickMessage = createKickMessage();
+        this.kickMessage = createKickMessage(403);
+        this.kickMessageProfileExists = createKickMessage(409);
     }
 
     public void addProxy(String proxy) {
@@ -105,8 +107,8 @@ public class ProxyManager {
         void onResult(String asn);
     }
 
-    public String createKickMessage() {
-        return "§cYou got kicked from the network! §7[§cError: 403§7]\n\n§7If nothing is wrong with your connection, please just open a ticket on our Discord.";
+    public String createKickMessage(int code) {
+        return "§cYou got kicked from the network! §7[§cError: " + code + "§7]\n\n§7If nothing is wrong with your connection, please open a ticket on our Discord.";
     }
 
 
@@ -133,6 +135,31 @@ public class ProxyManager {
                 }
 
             );
+
+        });
+    }
+
+    public void sendDuplicateWarning(ProxiedPlayer proxiedPlayer) {
+
+        coreAPI.getExecutor().execute(() -> {
+
+            DiscordWebhook webhook = new DiscordWebhook("https://discord.com/api/webhooks/1071587864330125372/hvtEqts6aBI7wTWq5DUp13QiWD9byAU-XGEN8hJTsAv1PyEl4tITwSO9kxgADkcMsCC6");
+            webhook.setAvatarUrl("https://i.imgur.com/k3mtKpE.png");
+            webhook.setUsername("ProxyFilter");
+            webhook.addEmbed(
+                new DiscordWebhook.EmbedObject()
+                    .setTitle("Proxyfilter")
+                    .setDescription("User " + proxiedPlayer.getName() + " (" + proxiedPlayer.getUniqueId().toString() + ") tried to join with a new uuid but the same name")
+                    .addField("Name", proxiedPlayer.getName(), true)
+                    .addField("UUID", proxiedPlayer.getUniqueId().toString(), true)
+                    .setThumbnail("https://minotar.net/helm/" + proxiedPlayer.getUniqueId().toString() + "/100.png")
+                    .setColor(Color.orange)
+                    .setFooter("TeamHolyDE", "https://i.imgur.com/0w7sO7f.png")
+
+            );
+
+            webhook.execute();
+
 
         });
     }
