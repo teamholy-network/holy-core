@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.commands;
 
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
 import de.teamholy.core.api.utility.TrophieLeague;
@@ -136,7 +137,7 @@ public class StatsCommand extends SenderCommand {
         String nameColor = BungeeCore.getInstance().getPlayerColor(uuid) + name;
 
         player.sendMessage("");
-        player.sendMessage("§8§m---------§r §6§lTeamHoly.de §8§m---------");
+        player.sendMessage(Message.TOPLINE);
         player.sendMessage("");
         player.sendMessage("  §c" + BungeeTranslateAPI.translatePlaceholder(player, "click to show stats of {}§c", nameColor));
         player.sendMessage("");

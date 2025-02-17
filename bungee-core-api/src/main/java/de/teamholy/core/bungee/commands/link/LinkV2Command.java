@@ -6,6 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import de.teamholy.core.api.constants.Message;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,20 +20,22 @@ public class LinkV2Command extends Command {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (strings.length == 0) {
-            TextComponent header = new TextComponent("§6/link\n");
-            TextComponent separator = new TextComponent("§8------ §aTeamHoly.de §8------\n");
-            TextComponent clickable = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Besuchen Sie unsere Webseite. -> teamholy.de/link") + "\n");
+            // Updated to use help command design with Message.TOPLINE and Message.HELP_BULLET symbols
+            TextComponent main = new TextComponent(Message.TOPLINE);
+            TextComponent separator = new TextComponent("\n");
+            main.addExtra(separator);
+
+            TextComponent clickable = new TextComponent(Message.HELP_BULLET + BungeeTranslateAPI.translate(player, "Besuchen Sie unsere Webseite. -> teamholy.de/link") + "\n");
             clickable.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://teamholy.de/link"));
-            TextComponent footer = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Dort könnten Sie ihr Konto verknüpfen und kostenlose Coins erhalten!"));
-            
-            header.addExtra(separator);
-            header.addExtra(clickable);
-            header.addExtra(footer);
-            commandSender.sendMessage(header);
+            main.addExtra(clickable);
+
+            TextComponent footer = new TextComponent(Message.HELP_BULLET + BungeeTranslateAPI.translate(player, "Dort könnten Sie ihr Konto verknüpfen und kostenlose Coins erhalten!"));
+            main.addExtra(footer);
+
+            commandSender.sendMessage(main);
             return;
         }
 
@@ -51,16 +54,10 @@ public class LinkV2Command extends Command {
             String message = response.split("\"")[1];
 
             switch (message) {
-                case "ok" -> {
-                    commandSender.sendMessage("§6Web §8× §a" + BungeeTranslateAPI.translate(player, "You have successfully linked your account!"));
-                }
-                case "failed" -> {
-                    commandSender.sendMessage("§c" + BungeeTranslateAPI.translate(player, "Error: Your code is invalid or something went wrong"));
-                }
+                case "ok" -> commandSender.sendMessage("§6Web §8× §a" + BungeeTranslateAPI.translate(player, "You have successfully linked your account!"));
+                case "failed" -> commandSender.sendMessage("§c" + BungeeTranslateAPI.translate(player, "Error: Your code is invalid or something went wrong"));
             }
         });
-
-
     }
 
     private CompletableFuture<String> sendAsyncHttpRequest(String url) {
