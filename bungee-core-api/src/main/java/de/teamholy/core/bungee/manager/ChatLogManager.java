@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
-import de.teamholy.core.bungee.listener.ChatLogListener;
 import de.teamholy.core.bungee.model.ChatLog;
 import de.teamholy.core.bungee.repositories.ChatLogRepository;
 import lombok.Getter;

@@ -25,13 +25,6 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 
 import java.util.List;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
-
-import java.util.List;
-
 public class WrapperPlayServerPlayerInfo extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.PLAYER_INFO;
 

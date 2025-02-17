@@ -25,8 +25,6 @@ import com.google.common.base.Objects;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
-
 @Getter
 public abstract class AbstractPacket {
     // The packet we will be modifying

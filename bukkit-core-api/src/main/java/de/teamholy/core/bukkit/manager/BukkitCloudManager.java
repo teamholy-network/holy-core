@@ -3,7 +3,6 @@ package de.teamholy.core.bukkit.manager;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
-import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.event.CloudChannelListenEvent;
 import lombok.Getter;
