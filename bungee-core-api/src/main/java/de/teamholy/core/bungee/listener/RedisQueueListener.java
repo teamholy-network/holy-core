@@ -5,6 +5,7 @@
 package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
+import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.teamholy.core.api.manager.CloudManager;
 import de.teamholy.core.api.manager.CoinManager;
 import de.teamholy.core.api.utility.DiscordWebhook;
@@ -89,6 +90,7 @@ public class RedisQueueListener {
                                     proxiedPlayer.sendMessage(message);
                                     proxiedPlayer.sendMessage(" ");
                                 });
+                                sendDiscordWebhook(msg);
 
                             }
                             case "updateCustomBanner" -> {
@@ -99,6 +101,14 @@ public class RedisQueueListener {
 
                                 cloudManager.sendCloudMessage("bukkit", "banner", command);
                                 sendDiscordWebhook("Update Custom Banner for " + target);
+                            }
+                            case "bypassjoinfilter" -> {
+                                String target = args[1];
+                                CloudNetDriver.getInstance().getPermissionManagement().getUsers(target).forEach(iPermissionUser -> {
+                                    iPermissionUser.addPermission("teamholy.joinfilter.bypass");
+                                    CloudNetDriver.getInstance().getPermissionManagement().updateUser(iPermissionUser);
+                                });
+                                sendDiscordWebhook(msg);
                             }
                             default -> {
                                 ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
