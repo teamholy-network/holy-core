@@ -1,4 +1,4 @@
-name: Build and Upload Gradle Shadow JAR
+name: Build, Publish and Upload Gradle Shadow JAR
 
 on:
   push:
@@ -22,6 +22,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'  # Passe die Java-Version an, falls nötig
 
+      - name: Configure Gradle properties
+        run: |
+                  echo "HolyRepoUser=${{ secrets.HolyRepoUser }}" >> gradle.properties
+                  echo "HolyRepoPass=${{ secrets.HolyRepoPass }}" >> gradle.properties
+
       # Gradle-Wrapper ausführbar machen und Shadow JAR bauen
       - name: Make Gradle Wrapper Executable
         run: chmod +x ./gradlew
@@ -32,6 +37,9 @@ jobs:
       # Verifizieren, dass die JAR-Dateien erstellt wurden
       - name: Verify JAR files
         run: ls -l output/*.jar
+
+      - name: Publish JAR files
+        run: ./gradlew publish
 
       # Hochladen der JAR-Dateien auf die angegebene URL
       - name: Upload JARs to HTTP Server
