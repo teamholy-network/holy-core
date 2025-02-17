@@ -1,19 +1,14 @@
 package de.teamholy.core.task;
 
 import com.google.common.collect.Lists;
-import de.dytanic.cloudnet.CloudNet;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.RankingSortManager;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
-import de.teamholy.core.api.entities.player.PlayerProfile;
-import de.teamholy.core.api.entities.skin.SkinProfile;
 import de.teamholy.core.api.utility.Gamemodes;
-import de.teamholy.core.api.utility.PlayerRank;
 import eu.koboo.en2do.repository.methods.fields.FieldUpdate;
 import eu.koboo.en2do.repository.methods.fields.UpdateBatch;
 import org.redisson.api.RMapCache;
@@ -25,10 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
 import static jodd.util.StringUtil.repeat;
-import static jodd.util.StringUtil.uncapitalize;
 
 /* copyright by Yassino */
 public class StatsResetTask implements Runnable {

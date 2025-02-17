@@ -2,7 +2,6 @@ package de.teamholy.core.bukkit.utils;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import de.teamholy.core.bukkit.BukkitCore;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

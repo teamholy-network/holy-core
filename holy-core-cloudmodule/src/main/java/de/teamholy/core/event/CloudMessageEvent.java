@@ -7,8 +7,6 @@ import de.dytanic.cloudnet.driver.event.events.service.CloudServiceStopEvent;
 import de.dytanic.cloudnet.driver.event.events.service.CloudServiceUnregisterEvent;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
 import de.dytanic.cloudnet.event.service.CloudServicePostStopEvent;
-import de.dytanic.cloudnet.ext.bridge.bukkit.event.BukkitCloudServiceUnregisterEvent;
-import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.ping.HealthStatus;
 import de.teamholy.core.ping.HealthService;
 

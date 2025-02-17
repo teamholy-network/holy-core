@@ -1,6 +1,5 @@
 package de.teamholy.core.bukkit.event;
 
-import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

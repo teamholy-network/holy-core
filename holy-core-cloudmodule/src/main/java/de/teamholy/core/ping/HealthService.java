@@ -1,24 +1,16 @@
 package de.teamholy.core.ping;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.service.ServiceEnvironmentType;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
 import de.dytanic.cloudnet.driver.service.ServiceLifeCycle;
 import de.teamholy.core.CloudModuleCore;
 import de.teamholy.core.api.utility.DiscordWebhook;
-import de.teamholy.core.api.paste.PasteService;
 import lombok.Getter;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 /**
  * Copyright (c) charon, All Rights Reserved

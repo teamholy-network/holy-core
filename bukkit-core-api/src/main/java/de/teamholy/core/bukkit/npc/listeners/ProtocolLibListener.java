@@ -1,11 +1,8 @@
 package de.teamholy.core.bukkit.npc.listeners;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListeningWhitelist;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.events.PacketListener;
-
 import de.teamholy.core.bukkit.BukkitCore;
 import de.teamholy.core.bukkit.manager.PlayerCacheManager;
 import de.teamholy.core.bukkit.npc.event.PlayerInteractAtNPCEvent;
