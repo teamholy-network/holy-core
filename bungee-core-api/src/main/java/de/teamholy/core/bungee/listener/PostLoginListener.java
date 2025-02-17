@@ -65,7 +65,7 @@ public class PostLoginListener implements Listener {
         }
 
         if (playerProfile == null) {
-            playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId());
+            playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
         }
 
 
