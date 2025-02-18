@@ -13,6 +13,7 @@ import de.teamholy.core.bungee.commands.ban.UnbanCommand;
 import de.teamholy.core.bungee.commands.clan.AdminClanCommand;
 import de.teamholy.core.bungee.commands.clan.ClanChatCommand;
 import de.teamholy.core.bungee.commands.clan.ClanCommand;
+import de.teamholy.core.bungee.commands.discord.DiscordCommand;
 import de.teamholy.core.bungee.commands.friend.FriendCommand;
 import de.teamholy.core.bungee.commands.friend.FriendListCommand;
 import de.teamholy.core.bungee.commands.friend.MSGCommand;
@@ -35,6 +36,7 @@ import de.teamholy.core.bungee.commands.team.AdminChatCommand;
 import de.teamholy.core.bungee.commands.team.TeamChatCommand;
 import de.teamholy.core.bungee.commands.team.TeamCommand;
 import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
+import de.teamholy.core.bungee.commands.website.WebsiteCommand;
 import de.teamholy.core.bungee.listener.*;
 import de.teamholy.core.bungee.manager.*;
 import de.teamholy.core.bungee.util.Helpers;
@@ -178,6 +180,8 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkV2Command("link"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ShopCommand("shop"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new WebsiteCommand("website"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new DiscordCommand("discord"));
 
 
         chatFilterManager.loadFilteredWords();

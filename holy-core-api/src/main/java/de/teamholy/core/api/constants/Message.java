@@ -10,7 +10,7 @@ public class Message {
     public static final String PET_PREFIX = "§dPets §8× §7";
     public static final String STAFF_INFO_PREFIX = "§2Staff §8× §7";
     public static final String LINE_DOWN = "§8§m-------------------------";
-    public static final String TOPLINE = "§8§m------- §f§lTeam§6§lHoly §8§m-------";
+    public static final String TOPLINE = "§8§m-------§f §f§lTeam§6§lHoly§f §8§m-------";
     
     // Help message constants
     public static final String HELP_BULLET = " §7§l• §f";
