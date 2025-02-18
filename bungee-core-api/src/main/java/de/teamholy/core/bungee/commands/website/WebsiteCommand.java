@@ -8,7 +8,7 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class WebsiteCommand extends Command {
     public WebsiteCommand(String name) {
-        super(name, "", "web", "site");
+        super(name, "", "web", "site", "forum");
     }
 
     @Override

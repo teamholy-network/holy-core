@@ -8,6 +8,7 @@ import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
 import de.teamholy.core.bungee.commands.*;
+import de.teamholy.core.bungee.commands.apply.ApplyCommand;
 import de.teamholy.core.bungee.commands.ban.BanCommand;
 import de.teamholy.core.bungee.commands.ban.UnbanCommand;
 import de.teamholy.core.bungee.commands.clan.AdminClanCommand;
@@ -167,7 +168,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new JumpCommand("jump"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new GiveawayCommand("giveaway"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new YoutuberCommand("Youtube", "", "yt", "premium+", "p+"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HelpCommand("help", "", "hile", "dc", "?", "discord", "apply", "forum"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HelpCommand("help", "", "hile", "?" , "hilfe"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
@@ -182,6 +183,7 @@ public class BungeeCore extends Plugin {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new ShopCommand("shop"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new WebsiteCommand("website"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new DiscordCommand("discord"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ApplyCommand("apply"));
 
 
         chatFilterManager.loadFilteredWords();

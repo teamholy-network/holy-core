@@ -72,6 +72,11 @@ public class HelpCommand extends Command {
         shop.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
         main.addExtra(shop);
 
+        TextComponent apply = new TextComponent(Message.HELP_BULLET + "/apply\n");
+        apply.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/apply"));
+        apply.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
+        main.addExtra(apply);
+
         sender.sendMessage(main);
     }
 }
