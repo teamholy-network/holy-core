@@ -38,8 +38,6 @@ public class MuteChatListener implements Listener {
                             event.setCancelled(true);
                             player.sendMessage(BanUtil.generateMuteChatMessage(player, punishProfile));
                         } else {
-
-
                             PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(player.getUniqueId()));
                             if (punishHistoryProfile == null)
                                 punishHistoryProfile = new PunishHistoryProfile();
@@ -55,7 +53,6 @@ public class MuteChatListener implements Listener {
                             });
 
                             BungeeCore.getInstance().getCoreAPI().getMuteService().deleteEntity(punishProfile);
-
                         }
                     }
                 }

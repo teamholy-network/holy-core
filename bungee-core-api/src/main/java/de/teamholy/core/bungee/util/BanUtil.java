@@ -71,12 +71,12 @@ public class BanUtil {
 
     public boolean isFilteredCommand(String message) {
         message = message.toLowerCase(Locale.ROOT);
-        return message.startsWith("/r") ||
-            message.startsWith("/msg") ||
+        return message.startsWith("/r ") ||
+            message.startsWith("/msg ") ||
             message.startsWith("/party chat") ||
-            message.startsWith("/cc") ||
-            message.startsWith("/pc") ||
-            message.startsWith("/pchat") ||
+            message.startsWith("/cc ") ||
+            message.startsWith("/pc ") ||
+            message.startsWith("/pchat ") ||
             message.startsWith("/teaming chat") ||
             message.startsWith("/clan chat");
     }
