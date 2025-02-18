@@ -79,10 +79,18 @@ public class NickManager implements Listener {
      * @param nickTextures The textures property to apply with the nickname. If null, no texture changes are made.
      */
     public void apply(Player player, String nickName, UUID optionalUUID, Property nickTextures) {
+        
 
         GameProfile profile = getGameProfile(player);
 
         PlayerMeta playerMeta = playerMetaMap.get(player.getUniqueId());
+        
+        PlayerPreNickEvent playerPreNickEvent = new PlayerPreNickEvent(player, playerMeta);
+        Bukkit.getPluginManager().callEvent(playerPreNickEvent);
+        if (playerPreNickEvent.isCancelled()) {
+            return;
+        }
+        
         if (playerMeta == null) {
             Property realTextures = null;
             if (profile != null) {
@@ -98,12 +106,6 @@ public class NickManager implements Listener {
             playerMetaMap.put(player.getUniqueId(), playerMeta);
         } else {
             playerMeta.updateMeta(nickName, nickTextures, UUID.randomUUID());
-        }
-
-        PlayerPreNickEvent playerPreNickEvent = new PlayerPreNickEvent(player, playerMeta);
-        Bukkit.getPluginManager().callEvent(playerPreNickEvent);
-        if (playerPreNickEvent.isCancelled()) {
-            return;
         }
 
         if (nickTextures != null) {
