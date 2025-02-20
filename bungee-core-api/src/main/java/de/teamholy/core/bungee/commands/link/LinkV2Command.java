@@ -28,7 +28,7 @@ public class LinkV2Command extends Command {
             TextComponent separator = new TextComponent("\n");
             main.addExtra(separator);
 
-            TextComponent clickable = new TextComponent(Message.HELP_BULLET + BungeeTranslateAPI.translate(player, "Besuchen Sie unsere Webseite. -> teamholy.de/link") + "\n");
+            TextComponent clickable = new TextComponent(Message.HELP_BULLET + BungeeTranslateAPI.translate(player, "Besuchen Sie unsere Webseite.") + " -> teamholy.de/link"+ "\n");
             clickable.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://teamholy.de/link"));
             main.addExtra(clickable);
 
