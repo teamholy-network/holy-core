@@ -475,8 +475,7 @@ public class ClanCommand extends SenderCommand {
                 player.sendMessage("");
 
                 // Add clickable previous page button
-                TextComponent prevPage = new TextComponent(
-                        Message.HELP_BULLET + BungeeTranslateAPI.translate(player, "Previous Page"));
+                TextComponent prevPage = new TextComponent("  " + BungeeTranslateAPI.translate(player, "§6§lPrevious §f§fPage"));
                 prevPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/clan help 1"));
                 prevPage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
                 player.sendMessage(prevPage);
@@ -506,8 +505,7 @@ public class ClanCommand extends SenderCommand {
                 player.sendMessage("");
 
                 // Add clickable next page button
-                TextComponent nextPage = new TextComponent(
-                        Message.HELP_BULLET + BungeeTranslateAPI.translate(player, "Next Page"));
+                TextComponent nextPage = new TextComponent("  "+BungeeTranslateAPI.translate(player, "§6§lNext §f§fPage"));
                 nextPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/clan help 2"));
                 nextPage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText));
                 player.sendMessage(nextPage);
