@@ -49,9 +49,9 @@ public class Punish {
         HACKING(1, "Client Modifications", TimeUnit.DAYS.toMillis(30)),
         AUTO_CLICKER(2, "AutoClicker", TimeUnit.DAYS.toMillis(14)),
         BUG_USING(3, "Bug-Using", TimeUnit.DAYS.toMillis(15)),
-        TROLLING(4, "Trolling", TimeUnit.DAYS.toMillis(7)),
-        TEAMING(5, "Teaming", TimeUnit.DAYS.toMillis(30)),
-        STATS_BOOSTING(6, "Stats Boosting", TimeUnit.DAYS.toMillis(14)),
+        TROLLING(4, "Trolling", TimeUnit.DAYS.toMillis(3)), // changed from 7 to 3 days
+        TEAMING(5, "Teaming", TimeUnit.DAYS.toMillis(7)), // changed from 30 to 7 days
+        STATS_BOOSTING(6, "Stats Boosting", TimeUnit.DAYS.toMillis(7)), // changed from 14 to 7 days
         BAD_SKIN(7, "Malicious Skin", TimeUnit.DAYS.toMillis(7)),
         BAD_NAME(8, "Malicious Name", TimeUnit.DAYS.toMillis(90)),
         BAD_CLAN(9, "Malicious Clan", TimeUnit.DAYS.toMillis(7)),
