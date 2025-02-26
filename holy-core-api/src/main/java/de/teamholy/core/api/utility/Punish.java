@@ -47,7 +47,7 @@ public class Punish {
     public enum BanReason implements PunishReason {
 
         HACKING(1, "Client Modifications", TimeUnit.DAYS.toMillis(30)),
-        AUTO_CLICKER(2, "AutoClicker", TimeUnit.DAYS.toMillis(14)),
+        AUTO_CLICKER(2, "AutoClicker", TimeUnit.DAYS.toMillis(7)),
         BUG_USING(3, "Bug-Using", TimeUnit.DAYS.toMillis(15)),
         TROLLING(4, "Trolling", TimeUnit.DAYS.toMillis(3)), // changed from 7 to 3 days
         TEAMING(5, "Teaming", TimeUnit.DAYS.toMillis(7)), // changed from 30 to 7 days
