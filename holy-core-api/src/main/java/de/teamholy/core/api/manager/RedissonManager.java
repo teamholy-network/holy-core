@@ -30,7 +30,7 @@ public class RedissonManager {
         config.useSingleServer().setAddress("redis://127.0.0.1:6379").setPassword(plugin.getConfig().getRedisPassword());
         config.useSingleServer().setRetryAttempts(3);
         config.useSingleServer().setTimeout(10000);
-        config.useSingleServer().setConnectionPoolSize(500);
+        config.useSingleServer().setConnectionPoolSize(128);
         config.useSingleServer().setRetryInterval(2000);
 
         redissonClient = Redisson.create(config);

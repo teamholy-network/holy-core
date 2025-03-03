@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum Gamemodes {
-
     MLGRUSH("6", "trophies", List.of(
         new StatKey("kills",0),
         new StatKey("deaths",0),

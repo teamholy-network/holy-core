@@ -15,7 +15,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 
-@SuppressWarnings("unused")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DiscordWebhook {
 
