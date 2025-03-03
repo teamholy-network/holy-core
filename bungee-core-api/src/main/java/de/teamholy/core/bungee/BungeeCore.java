@@ -52,7 +52,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-
+// test
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 public class BungeeCore extends Plugin {
