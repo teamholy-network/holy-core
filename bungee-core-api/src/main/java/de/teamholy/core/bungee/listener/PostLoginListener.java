@@ -59,7 +59,7 @@ public class PostLoginListener implements Listener {
         proxiedPlayer.sendMessage("§5" + BungeeTranslateAPI.translate(proxiedPlayer, "Website") + " §8» §7https://teamholy.de");
         proxiedPlayer.sendMessage("");
 
-        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(proxiedPlayer.getName());
+       /* PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(proxiedPlayer.getName());
 
         if (playerProfile != null && !playerProfile.getPlayerId().equals(proxiedPlayer.getUniqueId())) {
             proxyManager.sendDuplicateWarning(proxiedPlayer);
@@ -78,7 +78,9 @@ public class PostLoginListener implements Listener {
 
         if (playerProfile == null) {
             playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
-        }
+        }  */
+
+        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(proxiedPlayer.getUniqueId()));
 
 
         FriendProfile friendProfile;
