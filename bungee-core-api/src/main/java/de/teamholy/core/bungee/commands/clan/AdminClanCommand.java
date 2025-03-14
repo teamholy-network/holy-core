@@ -85,12 +85,6 @@ public class AdminClanCommand extends SenderCommand {
                         sender.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"Error while fetching UUID from")+" §e" + target + "§c!");
                         return;
                     }
-                    ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(uuid);
-                    if (targetPlayer == null || !targetPlayer.isConnected()) {
-                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target + "§c "+BungeeTranslateAPI.translate(author, "has to be online to get promoted!"));
-                        return;
-                    }
-
 
                     ClanPlayerProfile promoteProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
                         () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
@@ -103,7 +97,6 @@ public class AdminClanCommand extends SenderCommand {
                         sender.sendMessage(Message.CLAN_PREFIX + "§c"+BungeeTranslateAPI.translate(author,"The player is already a")+" " + promoteProfile.getClanRank().getFancy() + "§c!");
                         return;
                     }
-
 
                     ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(uuid);
                     boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
