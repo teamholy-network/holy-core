@@ -7,6 +7,7 @@ import de.teamholy.core.api.entities.punishhistory.PunishHistoryProfile;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BanUtil;
+import de.teamholy.core.bungee.util.BungeeUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.ProxyServer;
@@ -15,10 +16,12 @@ import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
 
 /* copyright by Yassino */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,6 +49,12 @@ public class BanLoginListener implements Listener {
         if (punishProfile != null) {
             if (punishProfile.active()) {
                 loginEvent.setCancelled(true);
+
+                // here because not everyone got a web link id since the update
+                if (punishProfile.getWebLinkId() == null) {
+                    BanUtil.addBanWebLinkIdToProfile(punishProfile);
+                }
+
                 loginEvent.setCancelReason(BanUtil.generateBanScreen(punishProfile));
             } else {
                 PunishHistoryProfile punishHistoryProfile = bungeeCore.getCoreAPI().getPunishHistoryService().getEntity(uuid, () -> bungeeCore.getCoreAPI().getPunishHistoryService().getRepository().findFirstById(uuid));

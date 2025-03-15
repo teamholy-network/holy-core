@@ -21,6 +21,7 @@ public class BanProfile {
     long createDate;
     long duration;
     String evidence;
+    String webLinkId;
 
     public long getValidUntilDate() {
         return createDate + duration;

@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class LinkManager {
 
@@ -104,6 +105,10 @@ public class LinkManager {
 
     public boolean playerLinked(ProxiedPlayer player) {
         return statsProfileRepository.findFirstById(player.getUniqueId()).isPlayerProfileLinked();
+    }
+
+    public boolean uuidLinked(UUID uuid) {
+        return statsProfileRepository.findFirstById(uuid).isPlayerProfileLinked();
     }
 
     public String getPlayerLinkCode(ProxiedPlayer player) {
