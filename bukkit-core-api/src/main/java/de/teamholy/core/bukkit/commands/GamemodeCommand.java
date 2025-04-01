@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 /* copyright by Yassino */
 public class GamemodeCommand implements CommandExecutor {
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         Player player = (Player) commandSender;
