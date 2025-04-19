@@ -11,6 +11,7 @@ import lombok.Getter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.lang.reflect.Type;
+import java.security.SecureRandom;
 import java.util.*;
 
 public class ChatLogManager {
@@ -18,6 +19,8 @@ public class ChatLogManager {
     private ChatLogRepository chatLogRepository;
 
     public static final Map<UUID, LinkedList<Message>> CHATLOGS = new HashMap<>();
+    private static final SecureRandom RND = new SecureRandom();
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int max = 50;
     private final Gson gson = new Gson();
 
@@ -42,11 +45,15 @@ public class ChatLogManager {
         String chatlogString = getChatLogToString(chatlogPlayer.getUniqueId());
 
 
-        String randomKey = generateRandomKey();
+        String id;
+        do {
+            id = generateRandomKey();
+        } while (chatLogRepository.existsById(id));
+
         List<Message> chatLogMessages = new Gson().fromJson(chatlogString, typeOfSrc);
 
         ChatLog chatLog = new ChatLog();
-        chatLog.setChatLogId(randomKey);
+        chatLog.setChatLogId(id);
         chatLog.setChatLogCreated(System.currentTimeMillis());
         chatLog.setLoggedPlayerName(chatlogPlayer.getName());
         chatLog.setLoggedPlayerUUID(chatlogPlayer.getUniqueId());
@@ -82,26 +89,11 @@ public class ChatLogManager {
     }
 
     private String generateRandomKey() {
-        Random random = new Random();
-        String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < 2; i++) {
-            int character = random.nextInt(ALPHA_NUMERIC_STRING.length());
-            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        StringBuilder sb = new StringBuilder(5);
+        for (int i = 0; i < 5; i++) {
+            sb.append(CHARS.charAt(RND.nextInt(CHARS.length())));
         }
-
-        builder.insert(0, "h");
-        builder.insert(3, "oly");
-
-        for (int i = 0; i < 4; i++) {
-            int character = random.nextInt(ALPHA_NUMERIC_STRING.length());
-            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
-        }
-
-        builder.append("chatlog");
-
-        return builder.toString();
+        return sb.toString();
     }
 
 
