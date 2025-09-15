@@ -8,6 +8,9 @@ dependencies {
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
     compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
 
+    // Add trove4j to provide gnu.trove.map.TObjectIntMap and related classes
+    implementation 'net.sf.trove4j:trove4j:3.0.3'
+
     implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
     shadowJar {
         relocate('de.skydb.updater', 'de.teamholy.core.bungee.updater')
