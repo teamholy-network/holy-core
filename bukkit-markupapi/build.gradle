@@ -1,7 +1,7 @@
 dependencies {
     compileOnly('org.slf4j:slf4j-api:2.0.9')
     compileOnly('org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT')
-    compileOnly('net.md-5:bungeecord-chat:1.8-SNAPSHOT')
+    compileOnly('net.md-5:bungeecord-chat:1.20-R0.2')
     compileOnly('com.github.azbh111:craftbukkit-1.8.8:R')
     compileOnly('com.comphenix.protocol:ProtocolLib:5.3.0')
     compileOnly(project(':holy-core-api'))

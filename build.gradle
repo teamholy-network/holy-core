@@ -31,12 +31,20 @@ subprojects {
                 includeGroup 'eu.cloudnetservice'
             }
         }
-
+        maven {
+            name = 'mvnrepository';
+            url = uri('https://mvn.lumine.io/repository/maven-public/');
+            content {
+                includeGroup 'org.spigotmc'
+                includeGroup 'com.comphenix'
+                includeGroup 'com.mojang'
+            }
+        }
         maven {
             name = 'spigot-repo'
             url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
             content {
-                includeGroup 'org.spigotmc'
+                includeGroup 'org.spigotmc:spigot-api'
             }
         }
         maven {
@@ -91,6 +99,7 @@ subprojects {
                 includeGroupByRegex '.*'
             }
         }
+
     }
 
     shadowJar {
