@@ -1,6 +1,5 @@
 dependencies {
     compileOnly("org.spigotmc:spigot-1.8.8:dev:dev@jar")
-    compileOnly("org.spigotmc:spigot-api:$spigotVersion")
 
     implementation("eu.koboo:en2do:$en2doVersion")
     implementation("org.redisson:redisson:$redissonVersion")
