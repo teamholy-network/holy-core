@@ -41,10 +41,11 @@ subprojects {
         }
 
         maven {
-            name = 'mvnrepository';
+            name = 'carmrepository';
             url = uri('https://repo.carm.cc/repository/maven-public/');
             content {
-                includeGroup 'com.comphenix'
+                includeGroup 'com.comphenix.protocol';
+                includeGroup 'com.mojang';
             }
         }
         maven {
@@ -67,7 +68,6 @@ subprojects {
             url = uri('https://repo.dmulloy2.net/repository/public/')
             content {
                 includeGroup 'com.comphenix';
-                includeGroup 'com.comphenix.protocol';
             }
         }
         maven {
