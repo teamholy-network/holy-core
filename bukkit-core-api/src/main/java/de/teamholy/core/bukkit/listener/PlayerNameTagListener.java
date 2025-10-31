@@ -11,16 +11,27 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class PlayerNameTagListener implements Listener {
 
-    private BukkitCore bukkitCore;
+    private final BukkitCore bukkitCore;
 
-    private static final UUID NoahLTR_UUID = UUID.fromString("1cfcd3b8-10ff-40a8-b3f9-c61628b5d098");
-    private static final UUID WeiblichZwoelf_UUID = UUID.fromString("60d97170-3d03-4562-918d-7ff7a493b68e");
-    private static final UUID JavaExceptionDE_UUID = UUID.fromString("ce397ef0-7973-4ce5-a3b1-3bd6e7fc9970");
-    private static final UUID angeklxgter_UUID = UUID.fromString("7504c806-b491-4303-b6df-9746d4e7b34e");
+    private static final UUID NOAHLTR_UUID = UUID.fromString("1cfcd3b8-10ff-40a8-b3f9-c61628b5d098");
+    private static final UUID WEIBLICHZWOELF_UUID = UUID.fromString("60d97170-3d03-4562-918d-7ff7a493b68e");
+    private static final UUID JAVAEXCEPTIONDE_UUID = UUID.fromString("ce397ef0-7973-4ce5-a3b1-3bd6e7fc9970");
+    private static final UUID ANGEKLXGTER_UUID = UUID.fromString("7504c806-b491-4303-b6df-9746d4e7b34e");
+
+    private static final UUID GREGORR_UUID = UUID.fromString("eecc3c44-eaaf-48fe-af23-3af762578446");
+    private static final UUID YASSINO_UUID = UUID.fromString("fa44c187-80dd-4171-bb5a-2e694c4c8b4f");
+    private static final UUID KOBOO_UUID = UUID.fromString("2ce67956-7211-4fec-a7ad-b24f2e355b61");
+
+    private static final Set<UUID> CAT_PREFIX = new HashSet<>(Arrays.asList(
+        NOAHLTR_UUID, WEIBLICHZWOELF_UUID, JAVAEXCEPTIONDE_UUID, ANGEKLXGTER_UUID
+    ));
 
     public PlayerNameTagListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
@@ -29,63 +40,49 @@ public class PlayerNameTagListener implements Listener {
 
     @EventHandler
     public void onNameTag(PlayerNameTagEvent event) {
-
         if (!bukkitCore.isTabPrefix()) return;
 
         Player player = event.getPlayer();
-        PlayerCacheManager.CachedBukkitPlayer playerCache = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
-        if (playerCache == null) return;
+        UUID uuid = player.getUniqueId();
 
-        PlayerRank playerRank = playerCache.getRank();
+        PlayerCacheManager.CachedBukkitPlayer cache = bukkitCore.getPlayerCacheManager()
+            .getCachedPlayers()
+            .get(uuid);
+        if (cache == null) return;
 
-        if (playerRank == null) return;
+        PlayerRank rank = cache.getRank();
+        if (rank == null) return;
 
-        // Get default values from HolyPlayer
-        int sortId = playerRank.getSortId();
-        String prefix = playerRank.getTabPrefix();
+        int sortId = rank.getSortId();
+        String prefix = rank.getTabPrefix();
         String suffix = "";
 
-        // Get PlayerProfiles
-        Clan clan = playerCache.getClan();
-
-        // Check and add clan-tag as suffix if exists
+        Clan clan = cache.getClan();
         if (clan != null) {
             suffix = " §8[" + clan.getColor() + clan.getTag() + "§8]";
         }
 
-        if (player.getName().equalsIgnoreCase("Gregorr")) {
-            suffix = suffix + " §a☃";
-            event.setDisplaySuffix(" §c╭ᑎ╮");
-        } else if (player.getName().equalsIgnoreCase("Yassino")) {
-            suffix = suffix + " §2♫";
-            event.setDisplaySuffix(" §2♫");
-        }
-
-        // Fake PLAYER rank if we got a nicked player
         if (MarkupAPI.isNicked(player)) {
-            sortId = PlayerRank.PLAYER.getSortId();
-            prefix = PlayerRank.PLAYER.getTabPrefix();
-            suffix = "";
+            event.setSortId(PlayerRank.PLAYER.getSortId());
+            event.setPrefix(PlayerRank.PLAYER.getTabPrefix());
+            event.setSuffix("");
+            return;
         }
 
-        if (player.getName().equalsIgnoreCase("Koboo")) {
+        if (CAT_PREFIX.contains(uuid)) {
+            prefix = "§8[§5ᓚᘏᗢ§8] " + rank.getColorCode();
+        } else if (uuid.equals(KOBOO_UUID)) {
             prefix = "§8[§5Koboo§8] §7";
         }
 
-        UUID uuid = player.getUniqueId();
-
-        if (uuid.equals(NoahLTR_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
-        } else if (uuid.equals(WeiblichZwoelf_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
-        } else if (uuid.equals(JavaExceptionDE_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
-        } else if (uuid.equals(angeklxgter_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
+        if (uuid.equals(GREGORR_UUID)) {
+            suffix += " §a☃";
+            event.setDisplaySuffix(" §c╭ᑎ╮");
+        } else if (uuid.equals(YASSINO_UUID)) {
+            suffix += " §2♫";
+            event.setDisplaySuffix(" §2♫");
         }
 
-
-        // Set the values into the event
         event.setSortId(sortId);
         event.setPrefix(prefix);
         event.setSuffix(suffix);
