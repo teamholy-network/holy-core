@@ -23,14 +23,15 @@ subprojects {
         mavenCentral()
 
         maven {
-            name = 'cloudnet-repo'
-            url = uri('https://repo.cloudnetservice.eu/repository/releases/')
+            name = 'cloudnet-releases'
+            url = uri('https://repo.cloudnetservice.eu/releases/')
+            metadataSources { gradleMetadata(); mavenPom(); artifact() }
             content {
                 includeGroup 'de.dytanic.cloudnet'
                 includeGroup 'eu.cloudnetservice'
-                includeGroupByRegex 'eu\\.cloudnetservice(\\..+)?'
             }
         }
+
         maven {
             name = 'spigot-repo'
             url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
@@ -43,15 +44,53 @@ subprojects {
             url = uri('https://papermc.io/repo/repository/maven-public/')
             content {
                 includeGroup 'io.papermc.paper'
+                includeGroup 'com.destroystokyo.paper'
             }
         }
-
-        maven { name = 'sonatype-repo'; url = uri('https://oss.sonatype.org/content/repositories/snapshots') }
-        maven { name = 'dmulloy2-repo'; url = uri('https://repo.dmulloy2.net/repository/public/') }
-        maven { name = 'jitpack-repo'; url = uri('https://jitpack.io/') }
-        maven { name = 'codemc-repo'; url = uri('https://repo.codemc.io/repository/maven-public/') }
-        maven { name = 'glaremaster-repo'; url = uri('https://repo.glaremasters.me/repository/public/') }
-        maven { name = 'skydb-repo'; url = uri('https://repository.skydb.de/repo') }
+        maven {
+            name = 'dmulloy2-repo'
+            url = uri('https://repo.dmulloy2.net/repository/public/')
+            content {
+                includeGroup 'com.comphenix';
+                includeGroup 'com.comphenix.protocol'
+            }
+        }
+        maven {
+            name = 'jitpack-repo';
+            url = uri('https://jitpack.io/');
+            content {
+                includeGroupByRegex 'com\\.github\\..+'
+            }
+        }
+        maven {
+            name = 'codemc-repo';
+            url = uri('https://repo.codemc.io/repository/maven-public/');
+            content {
+                includeGroup 'com.gmail.filoghost.holographicdisplays'
+            }
+        }
+        maven {
+            name = 'glaremaster-repo';
+            url = uri('https://repo.glaremasters.me/repository/public/');
+            content {
+                includeGroupByRegex 'me\\.glaremasters(\\..+)?'
+            }
+        }
+        maven {
+            name = 'skydb-repo';
+            url = uri('https://repository.skydb.de/repo');
+            content {
+                includeGroup 'de.skydb.updater';
+                includeGroup 'de.skydb.translationapi'
+            }
+        }
+        maven {
+            name = 'sonatype-repo';
+            url = uri('https://oss.sonatype.org/content/repositories/snapshots');
+            content {
+                includeGroupByRegex '.*'
+            }
+        }
     }
 
     shadowJar {
