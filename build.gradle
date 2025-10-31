@@ -2,8 +2,8 @@ import java.text.SimpleDateFormat
 
 plugins {
     id 'java'
-    id('com.gradleup.shadow') version('8.3.5')
-    id('net.kyori.blossom') version('1.2.0')
+    id 'com.gradleup.shadow' version '8.3.5'
+    id 'net.kyori.blossom' version '1.2.0'
 }
 
 def HolyRepoUser = project.findProperty("HolyRepoUser")
@@ -21,56 +21,47 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+
         maven {
-            name('paper-repo')
-            url('https://papermc.io/repo/repository/maven-public/')
+            name = 'cloudnet-repo'
+            url = uri('https://repo.cloudnetservice.eu/repository/releases/')
+            content {
+                includeGroup 'de.dytanic.cloudnet'
+                includeGroup 'eu.cloudnetservice'
+                includeGroupByRegex 'eu\\.cloudnetservice(\\..+)?'
+            }
         }
         maven {
-            name('cloudnet-repo')
-            url 'https://repo.cloudnetservice.eu/repository/releases/'
+            name = 'spigot-repo'
+            url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
+            content {
+                includeGroup 'org.spigotmc'
+            }
         }
         maven {
-            name('spigot-repo')
-            url('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
+            name = 'paper-repo'
+            url = uri('https://papermc.io/repo/repository/maven-public/')
+            content {
+                includeGroup 'io.papermc.paper'
+            }
         }
-        maven {
-            name('sonatype-repo')
-            url('https://oss.sonatype.org/content/repositories/snapshots')
-        }
-        maven {
-            name('dmulloy2-repo')
-            url('https://repo.dmulloy2.net/repository/public/')
-        }
-        maven {
-            name('jitpack-repo')
-            url('https://jitpack.io/')
-        }
-        maven {
-            name('codemc-repo')
-            url('https://repo.codemc.io/repository/maven-public/')
-        }
-        maven {
-            name('glaremaster-repo')
-            url('https://repo.glaremasters.me/repository/public/')
-        }
-        maven {
-            name('skydb-repo')
-            url('https://repository.skydb.de/repo')
-        }
+
+        maven { name = 'sonatype-repo'; url = uri('https://oss.sonatype.org/content/repositories/snapshots') }
+        maven { name = 'dmulloy2-repo'; url = uri('https://repo.dmulloy2.net/repository/public/') }
+        maven { name = 'jitpack-repo'; url = uri('https://jitpack.io/') }
+        maven { name = 'codemc-repo'; url = uri('https://repo.codemc.io/repository/maven-public/') }
+        maven { name = 'glaremaster-repo'; url = uri('https://repo.glaremasters.me/repository/public/') }
+        maven { name = 'skydb-repo'; url = uri('https://repository.skydb.de/repo') }
     }
 
-    // You need to set the project sdk to java 21.
-    // gradle compiles the project to java 17 anyway.
     shadowJar {
-        relocate('de.skydb.translateapi.bindings', 'de.teamholy.core.translation')
+        relocate 'de.skydb.translateapi.bindings', 'de.teamholy.core.translation'
     }
 
     dependencies {
-        implementation("de.skydb.translationapi:TranslateAPI-Bindings:$translationBindingsVersion")
-
-        // Eliminate some boilerplate
-        compileOnly("org.projectlombok:lombok:$lombokVersion")
-        annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+        implementation "de.skydb.translationapi:TranslateAPI-Bindings:$translationBindingsVersion"
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     }
 
     compileJava.options.encoding = 'UTF-8'
@@ -84,38 +75,34 @@ subprojects {
         toolchain.languageVersion.set(JavaLanguageVersion.of(17))
     }
 
-    // Move all plugins to one "output/" directory in the project directory
     tasks.register('movePlugin', Copy) {
-        var outputDir = rootProject.projectDir.getAbsolutePath() + "/output/"
-        var targetName = project.name + "-$projectVersion-all.jar"
-        // Delete previous build jar
+        def outputDir = rootProject.projectDir.getAbsolutePath() + "/output/"
+        def targetName = project.name + "-$projectVersion-all.jar"
         delete(outputDir + targetName)
-
-        // Copy current build jar
         from('build/libs/')
         into(outputDir)
-
         include(targetName)
     }
-    shadowJar.finalizedBy(movePlugin)
+    tasks.named('shadowJar').configure {
+        finalizedBy 'movePlugin'
+    }
 
     blossom {
-        replaceToken('PROJECT_TIME_FORMAT', new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()))
-        replaceToken('PROJECT_TIME_MILLIS', String.valueOf(System.currentTimeMillis()))
-        replaceToken('PROJECT_COMMIT', 'git rev-parse --verify --short HEAD'.execute().text.trim())
-        replaceToken('PROJECT_COMMIT_COUNT', 'git rev-list --count HEAD'.execute().text.trim())
-        replaceToken('PROJECT_BRANCH', 'git rev-parse --abbrev-ref HEAD'.execute().text.trim())
-        replaceToken('PROJECT_SEC_OF_DAY', Calendar.getInstance().getTime().toLocalTime().toSecondOfDay())
-        replaceToken('PROJECT_OS', "${System.properties['os.name']}/${System.properties['os.arch']}")
-        replaceToken('PROJECT_GRADLE', "$gradle.gradleVersion")
-        replaceToken('PROJECT_VERSION', "$projectVersion")
+        replaceToken 'PROJECT_TIME_FORMAT', new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date())
+        replaceToken 'PROJECT_TIME_MILLIS', String.valueOf(System.currentTimeMillis())
+        replaceToken 'PROJECT_COMMIT', 'git rev-parse --verify --short HEAD'.execute().text.trim()
+        replaceToken 'PROJECT_COMMIT_COUNT', 'git rev-list --count HEAD'.execute().text.trim()
+        replaceToken 'PROJECT_BRANCH', 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+        replaceToken 'PROJECT_SEC_OF_DAY', Calendar.getInstance().getTime().toLocalTime().toSecondOfDay()
+        replaceToken 'PROJECT_OS', "${System.properties['os.name']}/${System.properties['os.arch']}"
+        replaceToken 'PROJECT_GRADLE', "$gradle.gradleVersion"
+        replaceToken 'PROJECT_VERSION', "$projectVersion"
     }
 
     publishing {
         publications {
             normalJar(MavenPublication) {
                 from components.java
-
                 groupId = project.group
                 artifactId = project.name
                 version = project.version
