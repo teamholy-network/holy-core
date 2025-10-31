@@ -11,9 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.UUID;
+
 public class PlayerNameTagListener implements Listener {
 
     private BukkitCore bukkitCore;
+
+    private static final UUID NoahLTR_UUID = UUID.fromString("1cfcd3b8-10ff-40a8-b3f9-c61628b5d098");
+    private static final UUID WeiblichZwoelf_UUID = UUID.fromString("60d97170-3d03-4562-918d-7ff7a493b68e");
+    private static final UUID JavaExceptionDE_UUID = UUID.fromString("ce397ef0-7973-4ce5-a3b1-3bd6e7fc9970");
+    private static final UUID angeklxgter_UUID = UUID.fromString("7504c806-b491-4303-b6df-9746d4e7b34e");
 
     public PlayerNameTagListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
@@ -28,7 +35,7 @@ public class PlayerNameTagListener implements Listener {
         Player player = event.getPlayer();
         PlayerCacheManager.CachedBukkitPlayer playerCache = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
         if (playerCache == null) return;
-        
+
         PlayerRank playerRank = playerCache.getRank();
 
         if (playerRank == null) return;
@@ -61,8 +68,20 @@ public class PlayerNameTagListener implements Listener {
             suffix = "";
         }
 
-        if(player.getName().equalsIgnoreCase("Koboo")) {
+        if (player.getName().equalsIgnoreCase("Koboo")) {
             prefix = "§8[§5Koboo§8] §7";
+        }
+
+        UUID uuid = player.getUniqueId();
+
+        if (uuid.equals(NoahLTR_UUID)) {
+            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+        } else if (uuid.equals(WeiblichZwoelf_UUID)) {
+            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+        } else if (uuid.equals(JavaExceptionDE_UUID)) {
+            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+        } else if (uuid.equals(angeklxgter_UUID)) {
+            prefix = "§8[§5ᓚᘏᗢ§8] §7";
         }
 
 
