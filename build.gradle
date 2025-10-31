@@ -37,7 +37,14 @@ subprojects {
             content {
                 includeGroup 'org.spigotmc'
                 includeGroup 'com.comphenix'
-                includeGroup 'com.mojang'
+            }
+        }
+
+        maven {
+            name = 'mvnrepository';
+            url = uri('https://repo.carm.cc/repository/maven-public/');
+            content {
+                includeGroup 'com.comphenix'
             }
         }
         maven {
