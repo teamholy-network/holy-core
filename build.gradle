@@ -44,7 +44,7 @@ subprojects {
             name = 'spigot-repo'
             url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots')
             content {
-                includeGroup 'org.spigotmc:spigot-api'
+                includeGroup 'org.spigotmc'
             }
         }
         maven {
@@ -60,7 +60,7 @@ subprojects {
             url = uri('https://repo.dmulloy2.net/repository/public/')
             content {
                 includeGroup 'com.comphenix';
-                includeGroup 'com.comphenix.protocol'
+                includeGroup 'com.comphenix.protocol';
             }
         }
         maven {
