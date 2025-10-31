@@ -75,13 +75,13 @@ public class PlayerNameTagListener implements Listener {
         UUID uuid = player.getUniqueId();
 
         if (uuid.equals(NoahLTR_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
         } else if (uuid.equals(WeiblichZwoelf_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
         } else if (uuid.equals(JavaExceptionDE_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
         } else if (uuid.equals(angeklxgter_UUID)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] §7";
+            prefix = "§8[§5ᓚᘏᗢ§8] " + playerRank.getColorCode();
         }
 
 
