@@ -70,7 +70,7 @@ public class PlayerNameTagListener implements Listener {
         }
 
         if (CAT_PREFIX.contains(uuid)) {
-            prefix = "§8[§5ᓚᘏᗢ§8] " + rank.getColorCode();
+            prefix = "§8[§5§lᓚᘏᗢ§8] " + rank.getColorCode();
         } else if (uuid.equals(KOBOO_UUID)) {
             prefix = "§8[§5Koboo§8] §7";
         }
