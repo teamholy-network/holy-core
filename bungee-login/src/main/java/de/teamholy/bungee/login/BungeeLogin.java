@@ -1,6 +1,5 @@
 package de.teamholy.bungee.login;
 
-import de.skydb.updater.BungeeUpdaterAPI;
 import de.teamholy.bungee.login.commands.*;
 import de.teamholy.bungee.login.listener.EventListener;
 import de.teamholy.bungee.login.manager.BotManager;
@@ -48,8 +47,6 @@ public class BungeeLogin extends Plugin {
 
     @Override
     public void onEnable() {
-        new BungeeUpdaterAPI(this,"9f58dc68-29b8-4f53-ab69-4d51bcabd801", "NGQ1MWJjYWJkODAx").setHibernat(true).setOnlyempty(true).setNightupdates(true);
-
         instance = this;
 
         manger = BungeeCore.getAPI().getMongoManager();

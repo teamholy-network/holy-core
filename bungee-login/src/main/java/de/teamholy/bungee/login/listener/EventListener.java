@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -75,9 +76,54 @@ public class EventListener implements Listener {
             BaseComponent[] text = TextComponent.fromLegacyText("Invalid Name");
             event.setCancelReason(text);
             event.getConnection().disconnect(text);
+            return;
         }
 
+        PendingConnection conn = event.getConnection();
+        CrackedProfiles profile = getCrackedProfile(conn);
+        String hostname = getHostname(conn).toLowerCase(Locale.ROOT);
+        iphostname.put(conn.getAddress().getAddress().getHostAddress(), hostname);
 
+        boolean forcePremium = false;
+        boolean forceCracked = false;
+
+        if (hostname.contains("premium")) {
+            forcePremium = true;
+        } else if (hostname.contains("cracked") || hostname.contains("eagle")) {
+            forceCracked = true;
+        } else if (hostname.contains("bedrock")) {
+            forceCracked = true;
+            profile.setBedrock(true);
+        }
+
+        if (forcePremium) {
+            conn.setOnlineMode(true);
+            profile.setPremium(true);
+        } else if (forceCracked) {
+            conn.setOnlineMode(false);
+            profile.setPremium(false);
+        } else {
+            if (conn.isOnlineMode()) {
+                conn.setOnlineMode(true);
+            } else {
+                conn.setOnlineMode(profile.isPremium());
+            }
+        }
+    }
+
+    private String getHostname(PendingConnection conn) {
+        return Optional.ofNullable(conn.getVirtualHost())
+                .map(InetSocketAddress::getHostName)
+                .orElse("");
+    }
+
+    @EventHandler
+    public void onHandshake(PlayerHandshakeEvent event) {
+        if (event.getHandshake().getRequestedProtocol() == 2) {
+            CrackedProfiles profile = getCrackedProfile(event.getConnection());
+            String hostname = event.getHandshake().getHost().toLowerCase(Locale.ROOT);
+            iphostname.put(event.getConnection().getAddress().getAddress().getHostAddress(), hostname);
+        }
     }
 
     @EventHandler
@@ -133,43 +179,6 @@ public class EventListener implements Listener {
             }
         }
         return false;
-    }
-
-    @EventHandler
-    public void onLogin(PlayerHandshakeEvent event) {
-        if (event.getHandshake().getRequestedProtocol() == 2) {
-            String hostname = event.getHandshake().getHost().toLowerCase(Locale.ROOT);
-            CrackedProfiles profile = getCrackedProfile(event.getConnection());
-            iphostname.put(event.getConnection().getAddress().getAddress().getHostAddress(), hostname);
-            if (hostname.contains("premium")) {
-                event.getConnection().setOnlineMode(true);
-                profile.setPremium(true);
-                return;
-            } else if (hostname.contains("cracked")) {
-                event.getConnection().setOnlineMode(false);
-                profile.setPremium(false);
-                return;
-            } else if (hostname.contains("eagle")) {
-                event.getConnection().setOnlineMode(false);
-                profile.setPremium(false);
-                return;
-            } else if (hostname.contains("bedrock")) {
-                event.getConnection().setOnlineMode(false);
-                profile.setBedrock(true);
-                return;
-            }
-            if (event.getConnection().isOnlineMode()) {
-                event.getConnection().setOnlineMode(true);
-                System.out.println("Online Mode");
-            } else {
-                event.getConnection().setOnlineMode(profile.isPremium());
-                System.out.println("Offline Mode - " + profile.isPremium());
-            }
-            if (profile.isPremium()) {
-                profile.setPremium(false);
-            }
-
-        }
     }
 
     @EventHandler
@@ -311,3 +320,4 @@ public class EventListener implements Listener {
 
     }
 }
+
