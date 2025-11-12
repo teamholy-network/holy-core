@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CrackedProfiles {
-    boolean premium = true;
-    boolean bedrock = true;
+    boolean premium = false;
+    boolean bedrock = false;
     String name = "";
     String ip;
     long time = System.currentTimeMillis();
