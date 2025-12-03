@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
@@ -57,10 +58,28 @@ public enum PlayerRank {
     PREMIUM("Premium", "§6Premium §8┃ §6", "§6Premium §8┃ §6", "§6", 8700,
         204, 102, 0),
     PLAYER("Player", "§7", "§7", "§7", 9000, 80, 80, 80);
+
     String name;
     String chatPrefix;
     String tabPrefix;
     String colorCode;
     int sortId;
     int red, green, blue;
+
+    public static PlayerRank fromString(String rankName) {
+        if (rankName == null || rankName.isEmpty()) {
+            return PLAYER;
+        }
+
+        try {
+            return valueOf(rankName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            for (PlayerRank rank : values()) {
+                if (rank.name.equalsIgnoreCase(rankName) || rank.name().equalsIgnoreCase(rankName)) {
+                    return rank;
+                }
+            }
+            return PLAYER;
+        }
+    }
 }

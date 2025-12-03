@@ -16,6 +16,8 @@ import lombok.experimental.FieldDefaults;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Getter
@@ -41,7 +43,7 @@ public class CloudManager {
             if (profile == null) {
                 colorFuture.complete(PlayerRank.PLAYER.getColorCode());
             } else {
-                PlayerRank playerRank = PlayerRank.valueOf(profile.getRank());
+                PlayerRank playerRank = PlayerRank.fromString(profile.getRank());
                 colorFuture.complete(playerRank.getColorCode());
             }
         });
@@ -49,7 +51,7 @@ public class CloudManager {
         try {
             return colorFuture.get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            Logger.getLogger(CloudManager.class.getName()).log(Level.SEVERE, "Error getting player color", e);
             return PlayerRank.PLAYER.getColorCode();
         }
     }

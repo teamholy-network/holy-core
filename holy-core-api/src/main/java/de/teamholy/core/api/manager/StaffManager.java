@@ -1,6 +1,7 @@
 package de.teamholy.core.api.manager;
 
 import de.teamholy.core.api.CoreAPI;
+import de.teamholy.core.api.entities.staff.StaffProfile;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,7 +15,8 @@ public class StaffManager {
     CoreAPI coreAPI;
 
     public boolean canNotify(UUID uuid) {
-        return coreAPI.getStaffService().getRedisCache().get(uuid).isNotify();
+        StaffProfile profile = coreAPI.getStaffService().getRedisCache().get(uuid);
+        return profile != null && profile.isNotify();
     }
 
     public boolean exists(UUID uuid) {

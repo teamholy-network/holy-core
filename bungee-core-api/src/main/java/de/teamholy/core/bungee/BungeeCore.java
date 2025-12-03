@@ -285,9 +285,6 @@ public class BungeeCore extends Plugin {
         startMetricsTask();
     }
 
-    /**
-     * Starts the online time update task.
-     */
     private void startOnlineTimeUpdateTask() {
         ProxyServer.getInstance().getScheduler().schedule(
             this,

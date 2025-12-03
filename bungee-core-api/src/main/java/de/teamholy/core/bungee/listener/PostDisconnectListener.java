@@ -45,7 +45,8 @@ public class PostDisconnectListener implements Listener {
     public void onQuit(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        updatePlayerProfile(player);
+        updatePlayerProfileImmediate(player);
+
         handleClanProfile(player);
         handleFriendNotifications(player);
         handleReportUpdates(player);
@@ -55,7 +56,7 @@ public class PostDisconnectListener implements Listener {
         BungeeCore.getAPI().getNickManager().removeNick(player.getUniqueId());
     }
 
-    private void updatePlayerProfile(ProxiedPlayer player) {
+    private void updatePlayerProfileImmediate(ProxiedPlayer player) {
         PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(
             player.getUniqueId(),
             () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId())
@@ -63,7 +64,11 @@ public class PostDisconnectListener implements Listener {
 
         if (playerProfile != null) {
             playerProfile.setOnline(false);
-            BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, false, true);
+            BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, false);
+
+            BungeeCore.getAPI().getExecutor().execute(() -> {
+                BungeeCore.getAPI().getPlayerService().getRepository().save(playerProfile);
+            });
         }
     }
 

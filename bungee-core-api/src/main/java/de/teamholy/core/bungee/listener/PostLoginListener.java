@@ -144,6 +144,15 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         PlayerProfile playerProfile = loadOrCreatePlayerProfile(player, ipAddress);
         boolean isNewPlayer = playerProfile.getFirstJoin() == playerProfile.getLastJoin();
 
+        if (!isNewPlayer) {
+            if (playerProfile.isOnline()) {
+                player.disconnect(new TextComponent("§cYou are already connected to this proxy!\n§7Please wait a moment and try again."));
+                return;
+            }
+            playerProfile.setOnline(true);
+            playerProfile.setLastJoin(System.currentTimeMillis());
+        }
+
         FriendProfile friendProfile = loadOrCreateFriendProfile(player.getUniqueId(), isNewPlayer);
         PunishHistoryProfile punishHistoryProfile = loadOrCreatePunishHistoryProfile(player.getUniqueId(), isNewPlayer);
         GameProfile gameProfile = loadOrCreateGameProfile(player.getUniqueId(), isNewPlayer);
@@ -197,8 +206,6 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
 
     private void updateExistingPlayerProfile(ProxiedPlayer player, PlayerProfile profile, String ipAddress) {
         BungeeCore.getAPI().getExecutor().execute(() -> {
-            profile.setOnline(true);
-            profile.setLastJoin(System.currentTimeMillis());
 
             if (!profile.getPlayerName().equalsIgnoreCase(player.getName())) {
                 profile.setPlayerName(player.getName());
@@ -230,8 +237,11 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
                 .getName()
                 .toUpperCase(Locale.ROOT);
 
-            if (!group.equalsIgnoreCase(profile.getRank())) {
-                profile.setRank(group);
+            PlayerRank playerRank = PlayerRank.fromString(group);
+            String normalizedRank = playerRank.name();
+
+            if (!normalizedRank.equalsIgnoreCase(profile.getRank())) {
+                profile.setRank(normalizedRank);
             }
         }
     }
