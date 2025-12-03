@@ -18,6 +18,9 @@ import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import de.teamholy.core.bungee.util.ChatAction;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -26,341 +29,638 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
 
-/* copyright by Yassino */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class LookupCommand extends SenderCommand {
 
+    private static final String PERMISSION_LOOKUP = "teamholy.check";
+    private static final String PERMISSION_LOOKUP_ADMIN = "teamholy.check.admin";
+    private static final String DEFAULT_COUNTRY = "§cNo country found";
+
     public LookupCommand() {
-        super(new String[]{"lookup", "check", "info"}, "teamholy.check");
+        super(new String[]{"lookup", "check", "info"}, PERMISSION_LOOKUP);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage("Lookup doesnt allowed for you, sry..");
+        if (!(sender instanceof ProxiedPlayer player)) {
+            sender.sendMessage(new TextComponent("Lookup doesn't allowed for you, sry.."));
             return;
         }
-        ProxiedPlayer player = (ProxiedPlayer) sender;
-        if (!BungeeUtil.hasPermission(player, "teamholy.check")) {
+
+        if (!BungeeUtil.hasPermission(player, PERMISSION_LOOKUP)) {
             BungeeUtil.sendNoPermission(player);
             return;
         }
+
         BungeeCore.getAPI().getExecutor().execute(() -> {
-            if (args.length == 1) {
-                String target = args[0];
-                UUID uuid = BungeeUtil.parseTargetArgument(target);
-                if (uuid == null) {
-                    player.sendMessage(Message.LOOKUP_PREFIX + "§c"+ BungeeTranslateAPI.translate(player,"Error while fetching Data about")+" §e" + target + "§c!");
-                    return;
-                }
-
-                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,
-                    () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
-                ClanPlayerProfile clanPlayerProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
-                    () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
-                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,
-                    () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
-                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,
-                    () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
-                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-                    () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
-
-
-                Scanner scanner = null;
-                String country = "§c"+BungeeTranslateAPI.translate(player,"No country found");
-
-                try {
-                    scanner = new Scanner(new URL( RESTBASE + "holy/vpn/check/" + playerProfile.getIp() + "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream());
-                    String response = scanner.useDelimiter("\\A").next();
-                    JSONObject jsonResponse = new JSONObject(response);
-
-
-                    if (!jsonResponse.isEmpty() || !jsonResponse.isNull("country")) {
-                        country = jsonResponse.getString("countryname");
-                    }
-
-                } catch (IOException ignored) {
-
-                } finally {
-                    if (scanner != null) {
-                        scanner.close();
-                    }
-                }
-
-
-
-                player.sendMessage(Message.LINE_DOWN);
-                player.sendMessage("");
-                TextComponent nameComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Name")+" §8» ");
-                nameComp.addExtra(new ChatAction().text(BungeeCore.getInstance().getPlayerColor(playerProfile.getPlayerId()) + playerProfile.getPlayerName()).suggest(uuid.toString()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy uuid")).component());
-                player.sendMessage(nameComp);
-
-                TextComponent cracked = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Premium Account")+" §8» " + (UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName()) ? "§c"+BungeeTranslateAPI.translate(player,"no") : "§a"+BungeeTranslateAPI.translate(player,"yes")));
-                player.sendMessage(cracked);
-
-                TextComponent onlineComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Status")+" §8» ");
-                if (playerProfile.isOnline()) {
-                    onlineComp.addExtra(new ChatAction().text("§a"+BungeeTranslateAPI.translate(player,"Online")+" §8(§7" + playerProfile.getServerName() + "§8)").execute("server " + playerProfile.getServerName()).hover("§7"+BungeeTranslateAPI.translatePlaceholder(player,"Click to jump on {}", playerProfile.getServerName())).component());
+            try {
+                if (args.length == 1) {
+                    handleBasicLookup(player, args[0]);
+                } else if (args.length >= 2) {
+                    handleAdvancedLookup(player, args);
                 } else {
-                    onlineComp.addExtra(new TextComponent("§cOffline"));
-                }
-                player.sendMessage(onlineComp);
-
-                TextComponent onlinetimeComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Onlinetime")+" §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(), TimeUnit.MILLISECONDS));
-                player.sendMessage(onlinetimeComp);
-
-                TextComponent coins = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Coins")+" §8» §6" + BungeeCore.getAPI().getCoinManager().formatInteger(playerProfile.getCoins()));
-                player.sendMessage(coins);
-
-                TextComponent tokens = new TextComponent("§7Tokens §8» §6");
-                tokens.addExtra(new ChatAction().text("§a" + playerProfile.getJoinMeTokens() + " JT").hover("§a" + playerProfile.getJoinMeTokens() + " Joinme Tokens").component());
-                tokens.addExtra(" §8┃ ");
-                tokens.addExtra(new ChatAction().text("§c" + playerProfile.getStatsResetTokens() + " ST").hover("§c" + playerProfile.getStatsResetTokens() + " Statsreset Tokens").component());
-                player.sendMessage(tokens);
-
-                if (player.hasPermission("teamholy.check.admin")) {
-                    TextComponent ipComp = new TextComponent("§7IP §8» ");
-                    ipComp.addExtra(new ChatAction().text("§6" + playerProfile.getIp()).suggest(playerProfile.getIp()).hover("§7"+BungeeTranslateAPI.translate(player,"Click to copy IP")).component());
-                    player.sendMessage(ipComp);
-                }
-
-                TextComponent countryComp = new TextComponent("§7"+BungeeTranslateAPI.translate(player,"Country")+" §8» §6" + country);
-                player.sendMessage(countryComp);
-
-
-                TextComponent accComp = new TextComponent("§7Accounts §8» ");
-                List<PlayerProfile> profileList = BungeeCore.getAPI().getPlayerService().getRepository().findManyByIp(playerProfile.getIp());
-                int size = profileList.isEmpty() ? 0 : profileList.size() - 1;
-                accComp.addExtra(new ChatAction().text("§6" + size + " alt(s)").hover("§7"+BungeeTranslateAPI.translate(player,"Click to show account list")).execute("lookup 3 " + playerProfile.getPlayerId()).component());
-                player.sendMessage(accComp);
-                player.sendMessage("");
-
-                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"First Join")+" §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin()));
-                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"Last Join")+" §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin()));
-                player.sendMessage("§7"+BungeeTranslateAPI.translate(player,"Registered since")+" §8» §6" + TimeUtil.beautifyTime(playerProfile.getLastJoin() - playerProfile.getFirstJoin(), TimeUnit.MILLISECONDS, true));
-
-                player.sendMessage("");
-
-
-                IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(playerProfile.getPlayerId());
-                IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(PlayerRank.valueOf(playerProfile.getRank()).getName());
-                long rankTime = 0;
-
-                for (PermissionUserGroupInfo group : permissionUser.getGroups()) {
-                    if (group.getGroup().equalsIgnoreCase(permissionGroup.getName()))
-                        rankTime = group.getTimeOutMillis();
-                }
-
-                TextComponent rankComp = new TextComponent("§7Highest Rank §8» ");
-                if (rankTime == 0 || rankTime == -1) {
-                    rankComp.addExtra(new ChatAction().text(permissionGroup.getDisplay() + permissionGroup.getName() + " §8┃ §aLifetime").hover("§7Click to show all ranks").execute("lookup 4 " + uuid)
-                        .component());
-                } else {
-                    rankComp.addExtra(new ChatAction().text(permissionGroup.getDisplay() + permissionGroup.getName() + " §8┃ §e" + BungeeUtil.parseDate(rankTime)).hover("§7Click to show all ranks").execute("lookup 4 " + uuid)
-                        .component());
-                }
-                player.sendMessage(rankComp);
-
-                TextComponent clanComp = new TextComponent("§7Clan §8» ");
-                if (clanPlayerProfile != null) {
-                    Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanPlayerProfile.getClanId());
-                    clanComp.addExtra(new ChatAction().text("§6" + clan.getName() + " §8┃ " + clanPlayerProfile.getClanRank().getFancy()).execute("clan info " + clan.getTag()).hover("§7Click to show clan info").component());
-                } else {
-                    clanComp.addExtra(new ChatAction().text("§7No clan").component());
-                }
-                player.sendMessage(clanComp);
-
-                player.sendMessage("");
-                TextComponent punishComp = new TextComponent("§7Punish §8» ");
-                if (banProfile != null) {
-                    punishComp.addExtra(new ChatAction().text("§4Banned").execute("lookup 1 " + uuid + " ban").hover("§7Click to show ban").component());
-                } else if (muteProfile != null) {
-                    punishComp.addExtra(new ChatAction().text("§cMuted").execute("lookup 1 " + uuid + " mute").hover("§7Click to show mute").component());
-                } else {
-                    punishComp.addExtra(new ChatAction().text("§7No Punish").component());
-                }
-                player.sendMessage(punishComp);
-
-                TextComponent banHistoryComp = new TextComponent("§7BanHistory §8» ");
-                if (punishHistoryProfile.getBanProfileMap().size() > 0) {
-                    banHistoryComp.addExtra(new ChatAction().text("§4" + punishHistoryProfile.getBanProfileMap().size() + " Ban(s)").execute("lookup 2 " + uuid + " ban").hover("§7Click to show BanHistory").component());
-                } else {
-                    banHistoryComp.addExtra(new TextComponent("§aNo BanHistory"));
-                }
-                player.sendMessage(banHistoryComp);
-
-                TextComponent muteHistoryComp = new TextComponent("§7MuteHistory §8» ");
-                if (punishHistoryProfile.getMuteProfileMap().size() > 0) {
-                    muteHistoryComp.addExtra(new ChatAction().text("§c" + punishHistoryProfile.getMuteProfileMap().size() + " Mute(s)").execute("lookup 2 " + uuid + " mute").hover("§7Click to show MuteHistory").component());
-                } else {
-                    muteHistoryComp.addExtra(new TextComponent("§aNo MuteHistory"));
-                }
-                player.sendMessage(muteHistoryComp);
-                player.sendMessage("");
-                player.sendMessage(Message.LINE_DOWN);
-            } else if (args.length >= 2) {
-                try {
-                    int num = Integer.parseInt(args[0]);
-
-                    UUID uuid = BungeeUtil.parseTargetArgument(args[1]);
-                    if (uuid == null) {
-                        player.sendMessage(Message.LOOKUP_PREFIX + "§cError while fetching UUID from §e" + args[1] + "§c!");
-                        return;
-                    }
-                    String targetName = BungeeCore.getAPI().getUuidManager().getName(uuid);
-
-                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(uuid,
-                        () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
-
-                    switch (num) {
-                        case 1:
-                            if (args[2].equalsIgnoreCase("ban")) {
-                                BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid,
-                                    () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
-                                if (banProfile != null) {
-                                    String author = BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
-                                    String until = BungeeUtil.parseDate(banProfile.getValidUntilDate()) + " §7(" + TimeUtil.beautifyTime(banProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
-                                    printPunish(player, BungeeCore.getAPI().getUuidManager().getName(banProfile.getPlayerId()), "Ban", author, banProfile.getReason(), until, banProfile.getEvidence());
-                                } else {
-                                    player.sendMessage(Message.LOOKUP_PREFIX + "§cThe player §e" + targetName + "§c isn't banned!");
-                                }
-                            } else if (args[2].equalsIgnoreCase("mute")) {
-                                MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid,
-                                    () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
-                                if (muteProfile != null) {
-                                    String author = BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
-                                    String until = BungeeUtil.parseDate(muteProfile.getValidUntilDate()) + " §7(" + TimeUtil.beautifyTime(muteProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
-                                    printPunish(player, BungeeCore.getAPI().getUuidManager().getName(muteProfile.getPlayerId()), "Ban", author, muteProfile.getReason(), until, muteProfile.getEvidence());
-                                } else {
-                                    player.sendMessage(Message.LOOKUP_PREFIX + "§cThe player §e" + targetName + "§c isn't muted!");
-                                }
-                            } else {
-                                printUsage(sender);
-                            }
-                            break;
-                        case 2:
-                            if (args[2].equalsIgnoreCase("ban")) {
-                                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-                                    () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
-                                if (punishHistoryProfile.getBanProfileMap().size() > 0) {
-                                    player.sendMessage(Message.LINE_DOWN);
-                                    player.sendMessage("");
-                                    player.sendMessage("§7BanHistory of §6" + targetName);
-                                    for (BanProfile banProfile : punishHistoryProfile.getBanProfileMap().values()) {
-                                        String date = BungeeUtil.parseDate(banProfile.getCreateDate());
-                                        String reason = banProfile.getReason();
-                                        String author = BungeeCore.getInstance().getPlayerColor(banProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
-                                        String evidence = banProfile.getEvidence();
-                                        TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8┃§7 " + reason + " §8┃§7 " + author + " §8┃§7 ");
-                                        punishComp.addExtra(new ChatAction().text(evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence").hover("Copy evidence: " + evidence).suggest(evidence).component());
-                                        player.sendMessage(punishComp);
-                                    }
-                                    player.sendMessage("");
-                                    player.sendMessage(new ChatAction().text("  §6§lLOOKUP").hover("§7Click back to lookup").execute("lookup " + targetName).component());
-                                    player.sendMessage("");
-                                    player.sendMessage(Message.LINE_DOWN);
-                                } else {
-                                    player.sendMessage(Message.LOOKUP_PREFIX + "§cNo history found about §e" + targetName + "§c!");
-                                }
-                            } else if (args[2].equalsIgnoreCase("mute")) {
-                                PunishHistoryProfile punishHistoryProfile = BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-                                    () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
-                                if (punishHistoryProfile.getMuteProfileMap().size() > 0) {
-                                    player.sendMessage(Message.LINE_DOWN);
-                                    player.sendMessage("");
-                                    player.sendMessage("§7MuteHistory of §6" + targetName);
-                                    for (MuteProfile muteProfile : punishHistoryProfile.getMuteProfileMap().values()) {
-                                        String date = BungeeUtil.parseDate(muteProfile.getCreateDate());
-                                        String reason = muteProfile.getReason();
-                                        String author = BungeeCore.getInstance().getPlayerColor(muteProfile.getAuthorId()) + BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
-                                        String evidence = muteProfile.getEvidence();
-                                        TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8┃§7 " + reason + " §8┃§7 " + author + " §8┃§7 ");
-                                        punishComp.addExtra(new ChatAction().text(evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence").hover("Copy evidence: " + evidence).suggest(evidence).component());
-                                        player.sendMessage(punishComp);
-                                    }
-                                    player.sendMessage("");
-                                    player.sendMessage(new ChatAction().text("  §6§lLOOKUP").hover("§7Click back to lookup").execute("lookup " + targetName).component());
-                                    player.sendMessage("");
-                                    player.sendMessage(Message.LINE_DOWN);
-                                } else {
-                                    player.sendMessage(Message.LOOKUP_PREFIX + "§cNo history found about §e" + targetName + "§c!");
-                                }
-                            } else {
-                                printUsage(sender);
-                            }
-                            break;
-                        case 3:
-                            List<PlayerProfile> profileList = BungeeCore.getAPI().getPlayerService().getRepository().findManyByIp(playerProfile.getIp());
-                            int size = profileList.isEmpty() ? 0 : profileList.size() - 1;
-                            if (size != 0) {
-                                player.sendMessage(Message.LINE_DOWN);
-                                player.sendMessage("");
-                                player.sendMessage("§7Accounts of §6" + targetName);
-                                for (PlayerProfile profile : profileList) {
-                                    if (!profile.getPlayerName().equalsIgnoreCase(targetName)) {
-                                        String prefix = BungeeCore.getInstance().getPlayerColor(profile.getPlayerId());
-                                        TextComponent comp = new ChatAction().text(" §8- " + prefix + profile.getPlayerName()).hover("§7Click to lookup").execute("lookup " + profile.getPlayerName()).component();
-                                        player.sendMessage(comp);
-                                    }
-                                }
-                                player.sendMessage("");
-                                player.sendMessage(Message.LINE_DOWN);
-                            } else {
-                                player.sendMessage(Message.LOOKUP_PREFIX + "§cNo more accounts found of §e" + targetName + "§c!");
-                            }
-                            break;
-
-                        case 4:
-                            player.sendMessage(Message.LINE_DOWN);
-                            player.sendMessage("");
-                            player.sendMessage("§7Ranks of §6" + targetName);
-                            player.sendMessage("");
-                            IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(playerProfile.getPlayerId());
-                            for (PermissionUserGroupInfo group : permissionUser.getGroups()) {
-                                IPermissionGroup permissionGroup = CloudNetDriver.getInstance().getPermissionManagement().getGroup(group.getGroup());
-                                if (group.getTimeOutMillis() == 0 || group.getTimeOutMillis() == -1) {
-                                    player.sendMessage(" §8- " + permissionGroup.getDisplay() + permissionGroup.getName() + permissionGroup.getDisplay() + " §8┃ §aLifetime");
-                                } else {
-                                    player.sendMessage(" §8- " + permissionGroup.getDisplay() + permissionGroup.getName() + permissionGroup.getDisplay() + " §8┃ §e" + BungeeUtil.parseDate(group.getTimeOutMillis()));
-                                }
-                            }
-                            player.sendMessage("");
-                            player.sendMessage(Message.LINE_DOWN);
-                            break;
-                        default:
-                            printUsage(sender);
-                            break;
-                    }
-                } catch (NumberFormatException e) {
                     printUsage(sender);
                 }
-            } else {
-                printUsage(sender);
+            } catch (Exception e) {
+                log.error("Error executing lookup command for player {}", player.getName(), e);
+                player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cEin Fehler ist aufgetreten."));
             }
         });
     }
 
+    private void handleBasicLookup(ProxiedPlayer player, String target) {
+        UUID uuid = BungeeUtil.parseTargetArgument(target);
+        if (uuid == null) {
+            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§c" +
+                BungeeTranslateAPI.translate(player, "Error while fetching Data about") + " §e" + target + "§c!"));
+            return;
+        }
+
+        PlayerProfile playerProfile = loadPlayerProfile(uuid);
+        if (playerProfile == null) {
+            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cSpieler nicht gefunden!"));
+            return;
+        }
+
+        ClanPlayerProfile clanPlayerProfile = loadClanPlayerProfile(uuid);
+        BanProfile banProfile = loadBanProfile(uuid);
+        MuteProfile muteProfile = loadMuteProfile(uuid);
+        PunishHistoryProfile punishHistoryProfile = loadPunishHistoryProfile(uuid);
+
+        String country = fetchCountryInfo(player, playerProfile.getIp());
+
+        displayPlayerInfo(player, playerProfile, clanPlayerProfile, banProfile, muteProfile,
+            punishHistoryProfile, country);
+    }
+
+    private void handleAdvancedLookup(ProxiedPlayer player, String[] args) {
+        try {
+            int subCommand = Integer.parseInt(args[0]);
+            UUID uuid = BungeeUtil.parseTargetArgument(args[1]);
+
+            if (uuid == null) {
+                player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cError while fetching UUID from §e" +
+                    args[1] + "§c!"));
+                return;
+            }
+
+            String targetName = BungeeCore.getAPI().getUuidManager().getName(uuid);
+            PlayerProfile playerProfile = loadPlayerProfile(uuid);
+
+            if (playerProfile == null) {
+                player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cSpieler nicht gefunden!"));
+                return;
+            }
+
+            switch (subCommand) {
+                case 1 -> handlePunishLookup(player, uuid, targetName, args);
+                case 2 -> handleHistoryLookup(player, uuid, targetName, args);
+                case 3 -> handleAlternateAccounts(player, playerProfile, targetName);
+                case 4 -> handleRankHistory(player, playerProfile, targetName);
+                default -> printUsage(player);
+            }
+        } catch (NumberFormatException e) {
+            printUsage(player);
+        }
+    }
+
+    private void handlePunishLookup(ProxiedPlayer player, UUID uuid, String targetName, String[] args) {
+        if (args.length < 3) {
+            printUsage(player);
+            return;
+        }
+
+        String punishType = args[2].toLowerCase();
+
+        if (punishType.equals("ban")) {
+            Optional<BanProfile> banProfile = Optional.ofNullable(loadBanProfile(uuid));
+
+            banProfile.ifPresentOrElse(
+                profile -> displayPunishmentDetails(player, profile, targetName, "Ban"),
+                () -> player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cThe player §e" +
+                    targetName + "§c isn't banned!"))
+            );
+        } else if (punishType.equals("mute")) {
+            Optional<MuteProfile> muteProfile = Optional.ofNullable(loadMuteProfile(uuid));
+
+            muteProfile.ifPresentOrElse(
+                profile -> displayPunishmentDetails(player, profile, targetName, "Mute"),
+                () -> player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cThe player §e" +
+                    targetName + "§c isn't muted!"))
+            );
+        } else {
+            printUsage(player);
+        }
+    }
+
+    private void handleHistoryLookup(ProxiedPlayer player, UUID uuid, String targetName, String[] args) {
+        if (args.length < 3) {
+            printUsage(player);
+            return;
+        }
+
+        PunishHistoryProfile historyProfile = loadPunishHistoryProfile(uuid);
+        String historyType = args[2].toLowerCase();
+
+        if (historyType.equals("ban")) {
+            displayBanHistory(player, historyProfile, targetName);
+        } else if (historyType.equals("mute")) {
+            displayMuteHistory(player, historyProfile, targetName);
+        } else {
+            printUsage(player);
+        }
+    }
+
+    private void handleAlternateAccounts(ProxiedPlayer player, PlayerProfile playerProfile, String targetName) {
+        List<PlayerProfile> alternateAccounts = BungeeCore.getAPI().getPlayerService()
+            .getRepository().findManyByIp(playerProfile.getIp());
+
+        int altCount = Math.max(0, alternateAccounts.size() - 1);
+
+        if (altCount == 0) {
+            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cNo more accounts found of §e" +
+                targetName + "§c!"));
+            return;
+        }
+
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent("§7Accounts of §6" + targetName));
+
+        alternateAccounts.stream()
+            .filter(profile -> !profile.getPlayerName().equalsIgnoreCase(targetName))
+            .forEach(profile -> {
+                String prefix = BungeeCore.getInstance().getPlayerColor(profile.getPlayerId());
+                TextComponent comp = new ChatAction()
+                    .text(" §8- " + prefix + profile.getPlayerName())
+                    .hover("§7Click to lookup")
+                    .execute("lookup " + profile.getPlayerName())
+                    .component();
+                player.sendMessage(comp);
+            });
+
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+    }
+
+    private void handleRankHistory(ProxiedPlayer player, PlayerProfile playerProfile, String targetName) {
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent("§7Ranks of §6" + targetName));
+        player.sendMessage(new TextComponent(""));
+
+        IPermissionUser permissionUser = CloudNetDriver.getInstance()
+            .getPermissionManagement()
+            .getUser(playerProfile.getPlayerId());
+
+        if (permissionUser == null) {
+            player.sendMessage(new TextComponent("§cKeine Rank-Informationen verfügbar."));
+            player.sendMessage(new TextComponent(""));
+            player.sendMessage(new TextComponent(Message.LINE_DOWN));
+            return;
+        }
+
+        permissionUser.getGroups().forEach(group -> {
+            IPermissionGroup permissionGroup = CloudNetDriver.getInstance()
+                .getPermissionManagement()
+                .getGroup(group.getGroup());
+
+            if (permissionGroup != null) {
+                String timeInfo = formatRankTime(group.getTimeOutMillis());
+                player.sendMessage(new TextComponent(" §8- " + permissionGroup.getDisplay() +
+                    permissionGroup.getName() + permissionGroup.getDisplay() + " §8┃ " + timeInfo));
+            }
+        });
+
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+    }
+
+    private void displayPlayerInfo(ProxiedPlayer player, PlayerProfile playerProfile,
+                                   ClanPlayerProfile clanPlayerProfile, BanProfile banProfile,
+                                   MuteProfile muteProfile, PunishHistoryProfile punishHistoryProfile,
+                                   String country) {
+
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(new TextComponent(""));
+
+        displayNameAndUUID(player, playerProfile);
+
+        displayPremiumStatus(player, playerProfile);
+
+        displayOnlineStatus(player, playerProfile);
+
+        displayPlaytimeAndCurrency(player, playerProfile);
+
+        if (player.hasPermission(PERMISSION_LOOKUP_ADMIN)) {
+            displayIPInfo(player, playerProfile, country);
+        } else {
+            displayCountryInfo(player, country);
+        }
+
+        displayAlternateAccountsInfo(player, playerProfile);
+
+        player.sendMessage(new TextComponent(""));
+
+        displayJoinInfo(player, playerProfile);
+
+        player.sendMessage(new TextComponent(""));
+
+        displayRankInfo(player, playerProfile);
+
+        displayClanInfo(player, clanPlayerProfile);
+
+        player.sendMessage(new TextComponent(""));
+
+        displayPunishmentInfo(player, playerProfile.getPlayerId(), banProfile, muteProfile, punishHistoryProfile);
+
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+    }
+
+    private void displayNameAndUUID(ProxiedPlayer player, PlayerProfile playerProfile) {
+        TextComponent nameComp = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Name") + " §8» ");
+        nameComp.addExtra(new ChatAction()
+            .text(BungeeCore.getInstance().getPlayerColor(playerProfile.getPlayerId()) +
+                playerProfile.getPlayerName())
+            .suggest(playerProfile.getPlayerId().toString())
+            .hover("§7" + BungeeTranslateAPI.translate(player, "Click to copy uuid"))
+            .component());
+        player.sendMessage(nameComp);
+    }
+
+    private void displayPremiumStatus(ProxiedPlayer player, PlayerProfile playerProfile) {
+        boolean isPremium = !UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName());
+        String status = isPremium
+            ? "§a" + BungeeTranslateAPI.translate(player, "yes")
+            : "§c" + BungeeTranslateAPI.translate(player, "no");
+
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Premium Account") +
+            " §8» " + status));
+    }
+
+    private void displayOnlineStatus(ProxiedPlayer player, PlayerProfile playerProfile) {
+        TextComponent onlineComp = new TextComponent("§7" +
+            BungeeTranslateAPI.translate(player, "Status") + " §8» ");
+
+        if (playerProfile.isOnline()) {
+            onlineComp.addExtra(new ChatAction()
+                .text("§a" + BungeeTranslateAPI.translate(player, "Online") + " §8(§7" +
+                    playerProfile.getServerName() + "§8)")
+                .execute("server " + playerProfile.getServerName())
+                .hover("§7" + BungeeTranslateAPI.translatePlaceholder(player, "Click to jump on {}",
+                    playerProfile.getServerName()))
+                .component());
+        } else {
+            onlineComp.addExtra(new TextComponent("§cOffline"));
+        }
+
+        player.sendMessage(onlineComp);
+    }
+
+    private void displayPlaytimeAndCurrency(ProxiedPlayer player, PlayerProfile playerProfile) {
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Onlinetime") +
+            " §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(), TimeUnit.MILLISECONDS)));
+
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Coins") +
+            " §8» §6" + BungeeCore.getAPI().getCoinManager().formatInteger(playerProfile.getCoins())));
+
+        TextComponent tokens = new TextComponent("§7Tokens §8» §6");
+        tokens.addExtra(new ChatAction()
+            .text("§a" + playerProfile.getJoinMeTokens() + " JT")
+            .hover("§a" + playerProfile.getJoinMeTokens() + " Joinme Tokens")
+            .component());
+        tokens.addExtra(" §8┃ ");
+        tokens.addExtra(new ChatAction()
+            .text("§c" + playerProfile.getStatsResetTokens() + " ST")
+            .hover("§c" + playerProfile.getStatsResetTokens() + " Statsreset Tokens")
+            .component());
+        player.sendMessage(tokens);
+    }
+
+    private void displayIPInfo(ProxiedPlayer player, PlayerProfile playerProfile, String country) {
+        TextComponent ipComp = new TextComponent("§7IP §8» ");
+        ipComp.addExtra(new ChatAction()
+            .text("§6" + playerProfile.getIp())
+            .suggest(playerProfile.getIp())
+            .hover("§7" + BungeeTranslateAPI.translate(player, "Click to copy IP"))
+            .component());
+        player.sendMessage(ipComp);
+        displayCountryInfo(player, country);
+    }
+
+    private void displayCountryInfo(ProxiedPlayer player, String country) {
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Country") +
+            " §8» §6" + country));
+    }
+
+    private void displayAlternateAccountsInfo(ProxiedPlayer player, PlayerProfile playerProfile) {
+        TextComponent accComp = new TextComponent("§7Accounts §8» ");
+        List<PlayerProfile> profileList = BungeeCore.getAPI().getPlayerService()
+            .getRepository().findManyByIp(playerProfile.getIp());
+        int size = Math.max(0, profileList.size() - 1);
+
+        accComp.addExtra(new ChatAction()
+            .text("§6" + size + " alt(s)")
+            .hover("§7" + BungeeTranslateAPI.translate(player, "Click to show account list"))
+            .execute("lookup 3 " + playerProfile.getPlayerId())
+            .component());
+        player.sendMessage(accComp);
+    }
+
+    private void displayJoinInfo(ProxiedPlayer player, PlayerProfile playerProfile) {
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "First Join") +
+            " §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin())));
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Last Join") +
+            " §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin())));
+
+        long registeredTime = playerProfile.getLastJoin() - playerProfile.getFirstJoin();
+        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Registered since") +
+            " §8» §6" + TimeUtil.beautifyTime(registeredTime, TimeUnit.MILLISECONDS, true)));
+    }
+
+    private void displayRankInfo(ProxiedPlayer player, PlayerProfile playerProfile) {
+        IPermissionUser permissionUser = CloudNetDriver.getInstance()
+            .getPermissionManagement()
+            .getUser(playerProfile.getPlayerId());
+
+        if (permissionUser == null) {
+            player.sendMessage(new TextComponent("§7Highest Rank §8» §cUnbekannt"));
+            return;
+        }
+
+        IPermissionGroup permissionGroup = CloudNetDriver.getInstance()
+            .getPermissionManagement()
+            .getGroup(PlayerRank.valueOf(playerProfile.getRank()).getName());
+
+        long rankTime = getRankExpirationTime(permissionUser, permissionGroup);
+
+        TextComponent rankComp = new TextComponent("§7Highest Rank §8» ");
+        String timeInfo = formatRankTime(rankTime);
+
+        rankComp.addExtra(new ChatAction()
+            .text(permissionGroup.getDisplay() + permissionGroup.getName() + " §8┃ " + timeInfo)
+            .hover("§7Click to show all ranks")
+            .execute("lookup 4 " + playerProfile.getPlayerId())
+            .component());
+
+        player.sendMessage(rankComp);
+    }
+
+    private void displayClanInfo(ProxiedPlayer player, ClanPlayerProfile clanPlayerProfile) {
+        TextComponent clanComp = new TextComponent("§7Clan §8» ");
+
+        if (clanPlayerProfile != null) {
+            Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanPlayerProfile.getClanId());
+            if (clan != null) {
+                clanComp.addExtra(new ChatAction()
+                    .text("§6" + clan.getName() + " §8┃ " + clanPlayerProfile.getClanRank().getFancy())
+                    .execute("clan info " + clan.getTag())
+                    .hover("§7Click to show clan info")
+                    .component());
+            } else {
+                clanComp.addExtra(new ChatAction().text("§7No clan").component());
+            }
+        } else {
+            clanComp.addExtra(new ChatAction().text("§7No clan").component());
+        }
+
+        player.sendMessage(clanComp);
+    }
+
+    private void displayPunishmentInfo(ProxiedPlayer player, UUID uuid, BanProfile banProfile,
+                                       MuteProfile muteProfile, PunishHistoryProfile punishHistoryProfile) {
+        TextComponent punishComp = new TextComponent("§7Punish §8» ");
+
+        if (banProfile != null) {
+            punishComp.addExtra(new ChatAction()
+                .text("§4Banned")
+                .execute("lookup 1 " + uuid + " ban")
+                .hover("§7Click to show ban")
+                .component());
+        } else if (muteProfile != null) {
+            punishComp.addExtra(new ChatAction()
+                .text("§cMuted")
+                .execute("lookup 1 " + uuid + " mute")
+                .hover("§7Click to show mute")
+                .component());
+        } else {
+            punishComp.addExtra(new ChatAction().text("§7No Punish").component());
+        }
+        player.sendMessage(punishComp);
+
+        displayPunishmentHistory(player, uuid, punishHistoryProfile.getBanProfileMap().size(), "Ban", "ban");
+
+        displayPunishmentHistory(player, uuid, punishHistoryProfile.getMuteProfileMap().size(), "Mute", "mute");
+    }
+
+    private void displayPunishmentHistory(ProxiedPlayer player, UUID uuid, int count,
+                                          String typeName, String typeCommand) {
+        TextComponent historyComp = new TextComponent("§7" + typeName + "History §8» ");
+
+        if (count > 0) {
+            String color = typeName.equals("Ban") ? "§4" : "§c";
+            historyComp.addExtra(new ChatAction()
+                .text(color + count + " " + typeName + "(s)")
+                .execute("lookup 2 " + uuid + " " + typeCommand)
+                .hover("§7Click to show " + typeName + "History")
+                .component());
+        } else {
+            historyComp.addExtra(new TextComponent("§aNo " + typeName + "History"));
+        }
+
+        player.sendMessage(historyComp);
+    }
+
+    private void displayBanHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile, String targetName) {
+        if (historyProfile.getBanProfileMap().isEmpty()) {
+            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
+                targetName + "§c!"));
+            return;
+        }
+
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent("§7BanHistory of §6" + targetName));
+
+        historyProfile.getBanProfileMap().values().forEach(banProfile ->
+            displayHistoryEntry(player, banProfile)
+        );
+
+        displayBackButton(player, targetName);
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+    }
+
+    private void displayMuteHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile, String targetName) {
+        if (historyProfile.getMuteProfileMap().isEmpty()) {
+            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
+                targetName + "§c!"));
+            return;
+        }
+
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent("§7MuteHistory of §6" + targetName));
+
+        historyProfile.getMuteProfileMap().values().forEach(muteProfile ->
+            displayHistoryEntry(player, muteProfile)
+        );
+
+        displayBackButton(player, targetName);
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+    }
+
+    private void displayHistoryEntry(ProxiedPlayer player, Object profile) {
+        String date, reason, evidence;
+        UUID authorId;
+
+        if (profile instanceof BanProfile banProfile) {
+            date = BungeeUtil.parseDate(banProfile.getCreateDate());
+            reason = banProfile.getReason();
+            authorId = banProfile.getAuthorId();
+            evidence = banProfile.getEvidence();
+        } else if (profile instanceof MuteProfile muteProfile) {
+            date = BungeeUtil.parseDate(muteProfile.getCreateDate());
+            reason = muteProfile.getReason();
+            authorId = muteProfile.getAuthorId();
+            evidence = muteProfile.getEvidence();
+        } else {
+            return;
+        }
+
+        String author = BungeeCore.getInstance().getPlayerColor(authorId) +
+            BungeeCore.getAPI().getUuidManager().getName(authorId);
+
+        TextComponent punishComp = new TextComponent(" §8» §7" + date + " §8┃§7 " + reason +
+            " §8┃§7 " + author + " §8┃§7 ");
+
+        String evidenceText = evidence.equalsIgnoreCase("No evidence") ? evidence : "Show Evidence";
+        punishComp.addExtra(new ChatAction()
+            .text(evidenceText)
+            .hover("Copy evidence: " + evidence)
+            .suggest(evidence)
+            .component());
+
+        player.sendMessage(punishComp);
+    }
+
+    private void displayPunishmentDetails(ProxiedPlayer player, Object profile, String targetName, String type) {
+        String author, reason, evidence, until;
+
+        if (profile instanceof BanProfile banProfile) {
+            author = BungeeCore.getAPI().getUuidManager().getName(banProfile.getAuthorId());
+            reason = banProfile.getReason();
+            evidence = banProfile.getEvidence();
+            until = BungeeUtil.parseDate(banProfile.getValidUntilDate()) + " §7(" +
+                TimeUtil.beautifyTime(banProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
+        } else if (profile instanceof MuteProfile muteProfile) {
+            author = BungeeCore.getAPI().getUuidManager().getName(muteProfile.getAuthorId());
+            reason = muteProfile.getReason();
+            evidence = muteProfile.getEvidence();
+            until = BungeeUtil.parseDate(muteProfile.getValidUntilDate()) + " §7(" +
+                TimeUtil.beautifyTime(muteProfile.getDuration(), TimeUnit.MILLISECONDS) + ")";
+        } else {
+            return;
+        }
+
+        printPunish(player, targetName, type, author, reason, until, evidence);
+    }
+
+    private void displayBackButton(ProxiedPlayer player, String targetName) {
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new ChatAction()
+            .text("  §6§lLOOKUP")
+            .hover("§7Click back to lookup")
+            .execute("lookup " + targetName)
+            .component());
+        player.sendMessage(new TextComponent(""));
+    }
+
+    private PlayerProfile loadPlayerProfile(UUID uuid) {
+        return BungeeCore.getAPI().getPlayerService().getEntity(uuid,
+            () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
+    }
+
+    private ClanPlayerProfile loadClanPlayerProfile(UUID uuid) {
+        return BungeeCore.getAPI().getClanPlayerService().getEntity(uuid,
+            () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(uuid));
+    }
+
+    private BanProfile loadBanProfile(UUID uuid) {
+        return BungeeCore.getAPI().getBanService().getEntity(uuid,
+            () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
+    }
+
+    private MuteProfile loadMuteProfile(UUID uuid) {
+        return BungeeCore.getAPI().getMuteService().getEntity(uuid,
+            () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
+    }
+
+    private PunishHistoryProfile loadPunishHistoryProfile(UUID uuid) {
+        return BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
+            () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+    }
+
+    private String fetchCountryInfo(ProxiedPlayer player, String ip) {
+        try (Scanner scanner = new Scanner(new URL(RESTBASE + "holy/vpn/check/" + ip +
+            "/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd").openStream())) {
+
+            String response = scanner.useDelimiter("\\A").next();
+            JSONObject jsonResponse = new JSONObject(response);
+
+            if (!jsonResponse.isEmpty() && !jsonResponse.isNull("countryname")) {
+                return jsonResponse.getString("countryname");
+            }
+        } catch (IOException e) {
+            log.warn("Failed to fetch country info for IP: {}", ip, e);
+        }
+
+        return "§c" + BungeeTranslateAPI.translate(player, DEFAULT_COUNTRY);
+    }
+
+    private long getRankExpirationTime(IPermissionUser permissionUser, IPermissionGroup permissionGroup) {
+        return permissionUser.getGroups().stream()
+            .filter(group -> group.getGroup().equalsIgnoreCase(permissionGroup.getName()))
+            .findFirst()
+            .map(PermissionUserGroupInfo::getTimeOutMillis)
+            .orElse(0L);
+    }
+
+    private String formatRankTime(long timeMillis) {
+        if (timeMillis == 0 || timeMillis == -1) {
+            return "§aLifetime";
+        }
+        return "§e" + BungeeUtil.parseDate(timeMillis);
+    }
+
     public void printUsage(CommandSender commandSender) {
-        commandSender.sendMessage(Message.LOOKUP_PREFIX + "§7/lookup (name)");
+        commandSender.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§7/lookup (name)"));
     }
 
-    public void printPunish(ProxiedPlayer player, String name, String type, String author, String reason, String until, String evidence) {
-        player.sendMessage(Message.LINE_DOWN);
-        player.sendMessage("");
-        player.sendMessage("§7" + type + " of §6" + name);
-        player.sendMessage("§7Author: §6" + author);
-        player.sendMessage("§7Reason: §6" + reason);
-        player.sendMessage("§7Until: §6" + until);
-        player.sendMessage("§7Evidence: §6" + evidence);
-        player.sendMessage("");
-        player.sendMessage(new ChatAction().text("  §6§lLOOKUP").hover("§7Click back to lookup").execute("lookup " + name).component());
-        player.sendMessage("");
-        player.sendMessage(Message.LINE_DOWN);
+    public void printPunish(ProxiedPlayer player, String name, String type, String author,
+                            String reason, String until, String evidence) {
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent("§7" + type + " of §6" + name));
+        player.sendMessage(new TextComponent("§7Author: §6" + author));
+        player.sendMessage(new TextComponent("§7Reason: §6" + reason));
+        player.sendMessage(new TextComponent("§7Until: §6" + until));
+        player.sendMessage(new TextComponent("§7Evidence: §6" + evidence));
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new ChatAction()
+            .text("  §6§lLOOKUP")
+            .hover("§7Click back to lookup")
+            .execute("lookup " + name)
+            .component());
+        player.sendMessage(new TextComponent(""));
+        player.sendMessage(new TextComponent(Message.LINE_DOWN));
     }
-
 }

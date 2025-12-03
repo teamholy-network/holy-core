@@ -3,7 +3,6 @@ package de.teamholy.core.bungee;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
-import de.skydb.updater.BungeeUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
@@ -48,42 +47,78 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
-
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-// test
+/**
+ * Represents the main plugin class for BungeeCore, extending the functionality
+ * for a BungeeProxy server. This class is responsible for initializing the core
+ * components, managing command registration, and setting up listeners and scheduled tasks.
+ * It serves as the entry point of the plugin and handles global operations such as player
+ * management, chat filtering, party management, public broadcasting, metric collection, and more.
+ *
+ * The plugin integrates various functionalities and utilities necessary for managing
+ * a BungeeProxy, simplifying operations such as punishment management, clan commands,
+ * staff tools, utility commands, and informational commands.
+ *
+ * Key Features:
+ * - Initializes and manages multiple managers for specific server operations.
+ * - Registers various listeners to handle server events.
+ * - Provides a wide range of commands tailored for players, staff, and utility tasks.
+ * - Manages scheduled tasks for operations like broadcasting and metric updates.
+ * - Offers integration with Redis for advanced messaging and caching mechanisms.
+ * - Supports additional functionality, including online time tracking, chat logging, cloud communication, and filtered word management.
+ *
+ * Thread Safety:
+ * This class is not guaranteed to be thread-safe. Ensure proper synchronization if the plugin
+ * interacts with external threads or APIs outside the main thread.
+ *
+ * Usage Guidelines:
+ * - This class should not be instantiated manually. It is initialized by the BungeeCord plugin framework.
+ * - Ensure any external configurations (e.g., Redis settings) are properly set up before running the server.
+ * - Modify the plugin responsibly to maintain stability and compatibility with other plugins.
+ *
+ * Dependencies:
+ * - Requires compatibility with the BungeeCord API.
+ *
+ * Constants:
+ * - Several static constants are defined for task intervals and delays to manage plugin scheduling.
+ * - `RESTBASE` defines the base URL for REST interactions.
+ *
+ * Initialization:
+ * - The `onEnable` method initializes all managers, registers listeners and commands, and starts required tasks.
+ * - Relies on helper methods to organize the setup process for better modularity and maintainability.
+ *
+ * Note:
+ * - This javadoc outlines the intended use case and features of this class. For specific details about each
+ *   method or feature, refer to dedicated method documentation.
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 public class BungeeCore extends Plugin {
 
+    private static final long ONLINETIME_UPDATE_INTERVAL = 1;
+    private static final long BROADCAST_FIRST_DELAY = 10;
+    private static final long BROADCAST_INTERVAL = 30;
+    private static final long METRICS_INTERVAL = 2;
+
     @Getter
     private static BungeeCore instance;
 
-    public static String RESTBASE = "http://185.14.92.243:3004/"; //quickfix, removed later
+    public static String RESTBASE = "http://185.14.92.243:3004/";
 
-    @Getter
     CoreAPI coreAPI;
-
     BungeePlayerManager bungeePlayerManager;
     PartyManager partyManager;
-
     ChatLogManager chatLogManager;
     ChatFilterManager chatFilterManager;
     PublicBroadcastManager publicBroadcastManager;
-
     MetricsManager metricsManager;
-
     Helpers helpers;
-
     LinkManager linkManager;
-
     RedisQueueListener redisQueueListener;
-
     ProxyManager proxyManager;
-
     LensRedisManager lensRedisManager;
-
     PlayerColorCacheManager playerColorCacheManager;
 
     public BungeeCore() {
@@ -92,165 +127,280 @@ public class BungeeCore extends Plugin {
 
     @Override
     public void onEnable() {
-        new BungeeUpdaterAPI(this,"37fb5019-214b-4bfe-8854-b3f819354f9a", "YjNmODE5MzU0Zjlh").setHibernat(true).setOnlyempty(true).setNightupdates(true);
+        initializeManagers();
+        registerListeners();
+        registerCommands();
+        startScheduledTasks();
 
+        getLogger().info("BungeeCore successfully enabled!");
+    }
+
+    private void initializeManagers() {
         coreAPI = new CoreAPI();
-
-        bungeePlayerManager = new BungeePlayerManager(this.coreAPI);
+        bungeePlayerManager = new BungeePlayerManager(coreAPI);
         partyManager = new PartyManager();
         chatLogManager = new ChatLogManager();
         publicBroadcastManager = new PublicBroadcastManager();
         chatFilterManager = new ChatFilterManager();
-        metricsManager = new MetricsManager(this.coreAPI);
+        metricsManager = new MetricsManager(coreAPI);
         helpers = new Helpers();
         linkManager = new LinkManager();
-        proxyManager = new ProxyManager(this.coreAPI);
-        lensRedisManager = new LensRedisManager(this.coreAPI);
+        proxyManager = new ProxyManager(coreAPI);
+        lensRedisManager = new LensRedisManager(coreAPI);
         playerColorCacheManager = new PlayerColorCacheManager();
 
+        if (!isTestProxy()) {
+            initializeRedisListener();
+        }
+
+        chatFilterManager.loadFilteredWords();
+    }
+
+    private boolean isTestProxy() {
+        return ProxyServer.getInstance().getName().startsWith("TestProxy");
+    }
+
+    private void initializeRedisListener() {
+        redisQueueListener = new RedisQueueListener(
+            "127.0.0.1",
+            6379,
+            coreAPI.getConfig().getRedisPassword()
+        );
+        redisQueueListener.init();
+    }
+
+    private void registerListeners() {
         new LoginListener();
         new BanLoginListener(this);
         new MuteChatListener();
         new ServerConnectedListener();
-        new PostLoginListener(this.proxyManager);
+        new PostLoginListener(proxyManager);
         new PostDisconnectListener();
         new PartyListener();
-        //new RabbitQueueListener(this);
+        new ChatFilterListener(this);
+        new CloudMessageListener(coreAPI);
 
-        if (!ProxyServer.getInstance().getName().startsWith("TestProxy")) {
-            redisQueueListener = new RedisQueueListener("127.0.0.1", 6379, coreAPI.getConfig().getRedisPassword());
-            redisQueueListener.init(); // Glaub so ist besser habs davor im constructor gemacht
-        }
+        CloudNetDriver.getInstance().getEventManager().registerListener(new CloudRankUpdateListener());
 
+        ProxyServer proxy = ProxyServer.getInstance();
+        proxy.getPluginManager().registerListener(this, new ChatLogListener());
+        proxy.getPluginManager().registerListener(this, new CommandListener());
+        proxy.getPluginManager().registerListener(this, new MaxIPListener());
+        proxy.getPluginManager().registerListener(this, new PlayerListListener());
+    }
+
+    private void registerCommands() {
+        registerPunishmentCommands();
+        registerClanCommands();
+        registerFriendCommands();
+        registerPartyCommands();
+        registerStaffCommands();
+        registerUtilityCommands();
+        registerInformationCommands();
+    }
+
+    private void registerPunishmentCommands() {
         new BanCommand();
         new UnbanCommand();
-        new PunishReduceCommand();
-        new EvidenceCommand();
         new MuteCommand();
         new UnmuteCommand();
-        new LookupCommand();
-        new AdminClanCommand();
-        new ClanCommand();
-        new CoinsCommand(this.coreAPI);
         new CustomPunishCommand();
-        new CloudMessageListener(this.coreAPI);
-
-        new StatsCommand(new String[]{"stats", "mstats", "astats", "dstats"}, null);
+        new PunishReduceCommand();
+        new EvidenceCommand();
         new KickCommand(new String[]{"kick", "kim"}, "teamholy.kick");
+        new LookupCommand();
+    }
 
+    private void registerClanCommands() {
+        new ClanCommand();
+        new AdminClanCommand();
+        registerCommand(new ClanChatCommand("cc", "cchat", "clanc"));
+    }
 
-        new ChatFilterListener(this);
-        CloudNetDriver.getInstance().getEventManager().registerListener(new CloudRankUpdateListener());
-        ProxyServer.getInstance().getPluginManager().registerListener(this, new ChatLogListener());
-        ProxyServer.getInstance().getPluginManager().registerListener(this, new CommandListener());
-        ProxyServer.getInstance().getPluginManager().registerListener(this, new MaxIPListener());
-        ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerListListener());
+    private void registerFriendCommands() {
+        registerCommand(new FriendCommand("friend", null, "friends"));
+        registerCommand(new FriendListCommand("friendlist", "fl"));
+        registerCommand(new MSGCommand("msg"));
+        registerCommand(new ReplyCommand("r"));
+    }
 
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendCommand("friend", null, "friends"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new FriendListCommand("friendlist", "fl"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new DeletePlayerCommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new MSGCommand("msg"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ReplyCommand("r"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new PartyChatCommand("partychat", "pc", "pchat"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new PartyCommand("party", null, "parties"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ReportCommand("report"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ReportStaffCommand("reportstaff"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TokensCommand("tokens"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new JoinMECommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamChatCommand("teamchat", "teamholy.team", "tc"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamCommand("team", "teamholy.team", "teamlist"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TeamNotifyCommand("teamnotify", "teamholy.team", "notify"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new NickListCommand("nicklist", "teamholy.team", "nicks"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new RankCommand("rank", "", "rang"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new OnlinetimeCommand("onlinetime"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new PingCommand("ping"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new BroadcastCommand("broadcast", "teamholy.broadcast", "bc"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new JumpCommand("jump"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new GiveawayCommand("giveaway"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new YoutuberCommand("Youtube", "", "yt", "premium+", "p+"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new HelpCommand("help", "", "hile", "?" , "hilfe"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ChatLogCommand("chatlog"));
-        //ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkCommand("link"));
-        // ProxyServer.getInstance().getPluginManager().registerCommand(this, new RelinkCommand("relink"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new AdminChatCommand("adminchat"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ClanChatCommand("cc", "cchat", "clanc"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new StaffInfoCommand());
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LensCommand("lens"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LinkV2Command("link"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ShopCommand("shop"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new WebsiteCommand("website"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new DiscordCommand("discord"));
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, new ApplyCommand("apply"));
+    private void registerPartyCommands() {
+        registerCommand(new PartyCommand("party", null, "parties"));
+        registerCommand(new PartyChatCommand("partychat", "pc", "pchat"));
+    }
 
+    private void registerStaffCommands() {
+        registerCommand(new TeamCommand("team", "teamholy.team", "teamlist"));
+        registerCommand(new TeamChatCommand("teamchat", "teamholy.team", "tc"));
+        registerCommand(new TeamNotifyCommand("teamnotify", "teamholy.team", "notify"));
+        registerCommand(new AdminChatCommand("adminchat"));
+        registerCommand(new NickListCommand("nicklist", "teamholy.team", "nicks"));
+        registerCommand(new StaffInfoCommand());
+        registerCommand(new ReportCommand("report"));
+        registerCommand(new ReportStaffCommand("reportstaff"));
+        registerCommand(new ChatLogCommand("chatlog"));
+    }
 
-        chatFilterManager.loadFilteredWords();
+    private void registerUtilityCommands() {
+        new CoinsCommand(coreAPI);
+        new StatsCommand(new String[]{"stats", "mstats", "astats", "dstats"}, null);
 
+        registerCommand(new TokensCommand("tokens"));
+        registerCommand(new JoinMECommand());
+        registerCommand(new JumpCommand("jump"));
+        registerCommand(new PingCommand("ping"));
+        registerCommand(new BroadcastCommand("broadcast", "teamholy.broadcast", "bc"));
+        registerCommand(new GiveawayCommand("giveaway"));
+        registerCommand(new DeletePlayerCommand());
+        registerCommand(new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
+        registerCommand(new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
+        registerCommand(new LensCommand("lens"));
+        registerCommand(new LinkV2Command("link"));
+    }
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
+    private void registerInformationCommands() {
+        registerCommand(new RankCommand("rank", "", "rang"));
+        registerCommand(new OnlinetimeCommand("onlinetime"));
+        registerCommand(new YoutuberCommand("Youtube", "", "yt", "premium+", "p+"));
+        registerCommand(new HelpCommand("help", "", "hile", "?", "hilfe"));
+        registerCommand(new NameMCCommand("namemc", "", "vote", "rewards", "like", "premium", "freepremium"));
+        registerCommand(new ShopCommand("shop"));
+        registerCommand(new WebsiteCommand("website"));
+        registerCommand(new DiscordCommand("discord"));
+        registerCommand(new ApplyCommand("apply"));
+    }
 
-            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId()));
-                playerProfile.setOnlineTime(playerProfile.getOnlineTime() + 60000L);
-                BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
-            }
+    private void registerCommand(Object command) {
+        if (command instanceof net.md_5.bungee.api.plugin.Command) {
+            ProxyServer.getInstance().getPluginManager().registerCommand(
+                this,
+                (net.md_5.bungee.api.plugin.Command) command
+            );
+        }
+    }
 
+    private void startScheduledTasks() {
+        startOnlineTimeUpdateTask();
+        startBroadcastTasks();
+        startMetricsTask();
+    }
 
-            coreAPI.getCloudManager().sendCloudMessage("bukkit", "onlineTime_update", null);
+    /**
+     * Starts the online time update task.
+     */
+    private void startOnlineTimeUpdateTask() {
+        ProxyServer.getInstance().getScheduler().schedule(
+            this,
+            this::updateOnlineTimeForAllPlayers,
+            ONLINETIME_UPDATE_INTERVAL,
+            ONLINETIME_UPDATE_INTERVAL,
+            TimeUnit.MINUTES
+        );
+    }
 
+    private void updateOnlineTimeForAllPlayers() {
+        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+            updatePlayerOnlineTime(player);
+        }
 
-            ChatFilterListener.LASTMESSAGES.clear();
+        coreAPI.getCloudManager().sendCloudMessage("bukkit", "onlineTime_update", null);
 
-            CommandListener.COOLDOWNS.clear();
-        }, 1, 1, TimeUnit.MINUTES);
+        clearCooldownMaps();
+    }
 
+    private void clearCooldownMaps() {
+        if (chatFilterManager != null) {
+            chatFilterManager.clearLastMessages();
+        }
+        CommandListener.COOLDOWNS.clear();
+    }
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            //publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
-            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player, "Did you know that you can do {} to get free {}?", "&6/link&7", "&ecoins&7"));
-            }
-        }, 10, 30, TimeUnit.MINUTES);
+    private void updatePlayerOnlineTime(ProxiedPlayer player) {
+        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(
+            player.getUniqueId(),
+            () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId())
+        );
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            //publicBroadcastManager.sendPublicBroadcast("§7Did you know that you can do &6/link &7&7to get free &ecoins&7?", PublicBroadcastManager.BroadcastType.GENERAL, null);
-            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player, "You can change the language using {}", "&6/language&7"));
-            }
-        }, 20, 30, TimeUnit.MINUTES);
+        if (playerProfile != null) {
+            playerProfile.setOnlineTime(playerProfile.getOnlineTime() + 60000L);
+            BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
+        }
+    }
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            //publicBroadcastManager.sendPublicBroadcast("§7Apply for the Team on §6teamholy.de/apply", PublicBroadcastManager.BroadcastType.GENERAL, null);
-            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                publicBroadcastManager.sendGeneral(player, "§7" + BungeeTranslateAPI.translatePlaceholder(player, "Apply on the {} §7page to join the team", "§6teamholy.de/apply"));
-            }
-        }, 30, 30, TimeUnit.MINUTES);
+    private void startBroadcastTasks() {
+        startLinkBroadcast();
+        startLanguageBroadcast();
+        startApplicationBroadcast();
+    }
 
-        ProxyServer.getInstance().getScheduler().schedule(this, () -> {
-            JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
-            coreAPI.getMetricsManager().saveMetric(document);
-        }, 0, 2, TimeUnit.SECONDS);
+    private void startLinkBroadcast() {
+        ProxyServer.getInstance().getScheduler().schedule(
+            this,
+            () -> broadcastToAllPlayers("Did you know that you can do {} to get free {}?", "&6/link&7", "&ecoins&7"),
+            BROADCAST_FIRST_DELAY,
+            BROADCAST_INTERVAL,
+            TimeUnit.MINUTES
+        );
+    }
 
+    private void startLanguageBroadcast() {
+        ProxyServer.getInstance().getScheduler().schedule(
+            this,
+            () -> broadcastToAllPlayers("You can change the language using {}", "&6/language&7"),
+            BROADCAST_FIRST_DELAY + 10,
+            BROADCAST_INTERVAL,
+            TimeUnit.MINUTES
+        );
+    }
+
+    private void startApplicationBroadcast() {
+        ProxyServer.getInstance().getScheduler().schedule(
+            this,
+            () -> broadcastToAllPlayers("Apply on the {} §7page to join the team", "§6teamholy.de/apply"),
+            BROADCAST_FIRST_DELAY + 20,
+            BROADCAST_INTERVAL,
+            TimeUnit.MINUTES
+        );
+    }
+
+    private void broadcastToAllPlayers(String messageKey, String... placeholders) {
+        for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+            String message = "§7" + BungeeTranslateAPI.translatePlaceholder(player, messageKey, placeholders);
+            publicBroadcastManager.sendGeneral(player, message);
+        }
+    }
+
+    private void startMetricsTask() {
+        ProxyServer.getInstance().getScheduler().schedule(
+            this,
+            this::collectAndSaveMetrics,
+            0,
+            METRICS_INTERVAL,
+            TimeUnit.SECONDS
+        );
+    }
+
+    private void collectAndSaveMetrics() {
+        JsonDocument document = helpers.getMetrics(ProxyServer.getInstance());
+        coreAPI.getMetricsManager().saveMetric(document);
     }
 
     public String getPlayerColor(UUID uuid) {
-
         if (playerColorCacheManager.contains(uuid)) {
             return playerColorCacheManager.get(uuid);
-        } else {
-            String color = coreAPI.getCloudManager().getColor(uuid);
-            playerColorCacheManager.put(uuid, color);
-            return color;
         }
 
+        String color = coreAPI.getCloudManager().getColor(uuid);
+        playerColorCacheManager.put(uuid, color);
+        return color;
     }
 
     @Override
     public void onDisable() {
         coreAPI.getMetricsManager().removeMetric(CloudNetDriver.getInstance().getComponentName());
         coreAPI.onDisable();
+
+        getLogger().info("BungeeCore successfully disabled!");
     }
 
     public static CoreAPI getAPI() {

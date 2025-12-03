@@ -5,15 +5,22 @@ import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.Party;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-/* copyright by Yassino */
+/**
+ * PartyListener handles various party-related events for players in a BungeeCord network.
+ * It registers itself as an event listener and reacts to player disconnection
+ * and server switch events to manage party functionality and synchronization.
+ */
 public class PartyListener implements Listener {
 
     public PartyListener() {
@@ -22,40 +29,84 @@ public class PartyListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerDisconnectEvent event) {
-        ProxiedPlayer proxiedPlayer = event.getPlayer();
-        BungeeCore.getInstance().getPartyManager().removePlayerFromParty(proxiedPlayer);
+        ProxiedPlayer player = event.getPlayer();
+        BungeeCore.getInstance().getPartyManager().removePlayerFromParty(player);
     }
 
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        if (event.getFrom() != null && event.getFrom().getName().toLowerCase().contains("bw") && player.getServer().getInfo().getName().toLowerCase().contains("lobby")) {
-            BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "cameFromBw", JsonDocument.newDocument("uuid", player.getUniqueId().toString()));
-        }
-
-        Party party = BungeeCore.getInstance().getPartyManager().getPartyByPlayerUUID(player.getUniqueId());
-
-        if (party == null) return;
-
-        if (!BungeeCore.getInstance().getPartyManager().isPartyLeader(player.getUniqueId())) return;
-
-
-        if (player.getServer().getInfo().getName().contains("Lobby")) return;
-
-        if (player.getServer().getInfo().getName().contains("BW")) {
-            ArrayList<String> uuids = new ArrayList<>();
-            party.getPartyPlayers().forEach(partyPlayer -> uuids.add(partyPlayer.toString()));
-            if (uuids.size() == 1) return;
-            BungeeCore.getAPI().getCloudManager().sendCloudMessage(player.getServer().getInfo().getName().split("-")[0], "autoteam", JsonDocument.newDocument("players", uuids));
-        }
-
-
-        party.getPartyPlayers().forEach(all -> {
-            ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(all);
-            proxiedPlayer.sendMessage("§5Party §8× §7" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The party is trying to join a {} §7server", "§6" + player.getServer().getInfo().getName()));
-            proxiedPlayer.connect(player.getServer().getInfo());
-        });
+        handleBedwarsLeave(event, player);
+        handlePartyFollow(player);
     }
 
+    private void handleBedwarsLeave(ServerSwitchEvent event, ProxiedPlayer player) {
+        if (event.getFrom() == null) {
+            return;
+        }
+
+        String fromServer = event.getFrom().getName().toLowerCase();
+        String currentServer = player.getServer().getInfo().getName().toLowerCase();
+
+        if (fromServer.contains("bw") && currentServer.contains("lobby")) {
+            BungeeCore.getAPI().getCloudManager().sendCloudMessage(
+                "bukkit",
+                "cameFromBw",
+                JsonDocument.newDocument("uuid", player.getUniqueId().toString())
+            );
+        }
+    }
+
+    private void handlePartyFollow(ProxiedPlayer player) {
+        Party party = BungeeCore.getInstance().getPartyManager().getPartyByPlayerUUID(player.getUniqueId());
+
+        if (party == null || !BungeeCore.getInstance().getPartyManager().isPartyLeader(player.getUniqueId())) {
+            return;
+        }
+
+        String serverName = player.getServer().getInfo().getName();
+
+        if (serverName.contains("Lobby")) {
+            return;
+        }
+
+        if (serverName.contains("BW")) {
+            handleBedwarsAutoTeam(party, serverName);
+        }
+
+        movePartyMembers(party, player, serverName);
+    }
+
+    private void handleBedwarsAutoTeam(Party party, String serverName) {
+        List<String> uuids = party.getPartyPlayers().stream()
+            .map(UUID::toString)
+            .collect(Collectors.toList());
+
+        if (uuids.size() <= 1) {
+            return;
+        }
+
+        String gameType = serverName.split("-")[0];
+        BungeeCore.getAPI().getCloudManager().sendCloudMessage(
+            gameType,
+            "autoteam",
+            JsonDocument.newDocument("players", uuids)
+        );
+    }
+
+    private void movePartyMembers(Party party, ProxiedPlayer leader, String serverName) {
+        party.getPartyPlayers().forEach(memberId -> {
+            ProxiedPlayer member = ProxyServer.getInstance().getPlayer(memberId);
+
+            if (member != null) {
+                member.sendMessage(new TextComponent("§5Party §8× §7" + BungeeTranslateAPI.translatePlaceholder(
+                    member,
+                    "The party is trying to join a {} §7server",
+                    "§6" + serverName
+                )));
+                member.connect(leader.getServer().getInfo());
+            }
+        });
+    }
 }
