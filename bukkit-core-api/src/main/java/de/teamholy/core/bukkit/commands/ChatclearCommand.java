@@ -25,6 +25,11 @@ public class ChatclearCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (!(commandSender instanceof Player)) {
+            commandSender.sendMessage(
+                ChatColor.RED + "This command can only be executed by a player.");
+            return false;
+        }
         Player player = (Player) commandSender;
         if (!player.hasPermission("teamholy.chatclear"))
             return false;

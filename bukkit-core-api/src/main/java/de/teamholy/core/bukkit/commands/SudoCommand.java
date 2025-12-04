@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.commands;
 
 import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,6 +22,10 @@ public class SudoCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+        if (!(commandSender instanceof Player)) {
+            commandSender.sendMessage(ChatColor.RED + "This command can only be executed by a player.");
+            return false;
+        }
         Player player = (Player) commandSender;
 
 

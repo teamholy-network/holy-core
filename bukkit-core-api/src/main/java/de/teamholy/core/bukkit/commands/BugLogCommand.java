@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.commands;
 
 import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,11 @@ import java.util.Date;
 public class BugLogCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-
+        if (!(commandSender instanceof Player)) {
+            commandSender.sendMessage(
+                ChatColor.RED + "This command can only be executed by a player.");
+            return false;
+        }
         Player player = (Player) commandSender;
         if (!player.hasPermission("teamholy.team")) return false;
 

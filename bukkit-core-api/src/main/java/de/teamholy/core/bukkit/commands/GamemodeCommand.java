@@ -2,6 +2,7 @@ package de.teamholy.core.bukkit.commands;
 
 import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,6 +14,11 @@ public class GamemodeCommand implements CommandExecutor {
     @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+        if (!(commandSender instanceof Player)) {
+            commandSender.sendMessage(
+                ChatColor.RED + "This command can only be executed by a player.");
+            return false;
+        }
         Player player = (Player) commandSender;
         if (!player.hasPermission("minecraft.command.gamemode")) return false;
         if (args.length == 0) {
