@@ -1,5 +1,7 @@
 package de.teamholy.core.bungee.commands;
 
+import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
+
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.permission.IPermissionGroup;
 import de.dytanic.cloudnet.driver.permission.IPermissionUser;
@@ -18,14 +20,6 @@ import de.teamholy.core.api.utility.UUIDUtility;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import de.teamholy.core.bungee.util.ChatAction;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -33,8 +27,13 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.json.JSONObject;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
@@ -71,7 +70,8 @@ public class LookupCommand extends SenderCommand {
                 }
             } catch (Exception e) {
                 log.error("Error executing lookup command for player {}", player.getName(), e);
-                player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cEin Fehler ist aufgetreten."));
+                player.sendMessage(
+                    new TextComponent(Message.LOOKUP_PREFIX + "§cEin Fehler ist aufgetreten."));
             }
         });
     }
@@ -80,13 +80,15 @@ public class LookupCommand extends SenderCommand {
         UUID uuid = BungeeUtil.parseTargetArgument(target);
         if (uuid == null) {
             player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§c" +
-                BungeeTranslateAPI.translate(player, "Error while fetching Data about") + " §e" + target + "§c!"));
+                BungeeTranslateAPI.translate(player, "Error while fetching Data about") + " §e"
+                + target + "§c!"));
             return;
         }
 
         PlayerProfile playerProfile = loadPlayerProfile(uuid);
         if (playerProfile == null) {
-            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cSpieler nicht gefunden!"));
+            player.sendMessage(
+                new TextComponent(Message.LOOKUP_PREFIX + "§cSpieler nicht gefunden!"));
             return;
         }
 
@@ -107,8 +109,9 @@ public class LookupCommand extends SenderCommand {
             UUID uuid = BungeeUtil.parseTargetArgument(args[1]);
 
             if (uuid == null) {
-                player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cError while fetching UUID from §e" +
-                    args[1] + "§c!"));
+                player.sendMessage(new TextComponent(
+                    Message.LOOKUP_PREFIX + "§cError while fetching UUID from §e" +
+                        args[1] + "§c!"));
                 return;
             }
 
@@ -116,7 +119,8 @@ public class LookupCommand extends SenderCommand {
             PlayerProfile playerProfile = loadPlayerProfile(uuid);
 
             if (playerProfile == null) {
-                player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cSpieler nicht gefunden!"));
+                player.sendMessage(
+                    new TextComponent(Message.LOOKUP_PREFIX + "§cSpieler nicht gefunden!"));
                 return;
             }
 
@@ -132,7 +136,8 @@ public class LookupCommand extends SenderCommand {
         }
     }
 
-    private void handlePunishLookup(ProxiedPlayer player, UUID uuid, String targetName, String[] args) {
+    private void handlePunishLookup(ProxiedPlayer player, UUID uuid, String targetName,
+        String[] args) {
         if (args.length < 3) {
             printUsage(player);
             return;
@@ -145,23 +150,26 @@ public class LookupCommand extends SenderCommand {
 
             banProfile.ifPresentOrElse(
                 profile -> displayPunishmentDetails(player, profile, targetName, "Ban"),
-                () -> player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cThe player §e" +
-                    targetName + "§c isn't banned!"))
+                () -> player.sendMessage(
+                    new TextComponent(Message.LOOKUP_PREFIX + "§cThe player §e" +
+                        targetName + "§c isn't banned!"))
             );
         } else if (punishType.equals("mute")) {
             Optional<MuteProfile> muteProfile = Optional.ofNullable(loadMuteProfile(uuid));
 
             muteProfile.ifPresentOrElse(
                 profile -> displayPunishmentDetails(player, profile, targetName, "Mute"),
-                () -> player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cThe player §e" +
-                    targetName + "§c isn't muted!"))
+                () -> player.sendMessage(
+                    new TextComponent(Message.LOOKUP_PREFIX + "§cThe player §e" +
+                        targetName + "§c isn't muted!"))
             );
         } else {
             printUsage(player);
         }
     }
 
-    private void handleHistoryLookup(ProxiedPlayer player, UUID uuid, String targetName, String[] args) {
+    private void handleHistoryLookup(ProxiedPlayer player, UUID uuid, String targetName,
+        String[] args) {
         if (args.length < 3) {
             printUsage(player);
             return;
@@ -179,15 +187,17 @@ public class LookupCommand extends SenderCommand {
         }
     }
 
-    private void handleAlternateAccounts(ProxiedPlayer player, PlayerProfile playerProfile, String targetName) {
+    private void handleAlternateAccounts(ProxiedPlayer player, PlayerProfile playerProfile,
+        String targetName) {
         List<PlayerProfile> alternateAccounts = BungeeCore.getAPI().getPlayerService()
             .getRepository().findManyByIp(playerProfile.getIp());
 
         int altCount = Math.max(0, alternateAccounts.size() - 1);
 
         if (altCount == 0) {
-            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cNo more accounts found of §e" +
-                targetName + "§c!"));
+            player.sendMessage(
+                new TextComponent(Message.LOOKUP_PREFIX + "§cNo more accounts found of §e" +
+                    targetName + "§c!"));
             return;
         }
 
@@ -211,7 +221,8 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
     }
 
-    private void handleRankHistory(ProxiedPlayer player, PlayerProfile playerProfile, String targetName) {
+    private void handleRankHistory(ProxiedPlayer player, PlayerProfile playerProfile,
+        String targetName) {
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent("§7Ranks of §6" + targetName));
@@ -245,9 +256,9 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayPlayerInfo(ProxiedPlayer player, PlayerProfile playerProfile,
-                                   ClanPlayerProfile clanPlayerProfile, BanProfile banProfile,
-                                   MuteProfile muteProfile, PunishHistoryProfile punishHistoryProfile,
-                                   String country) {
+        ClanPlayerProfile clanPlayerProfile, BanProfile banProfile,
+        MuteProfile muteProfile, PunishHistoryProfile punishHistoryProfile,
+        String country) {
 
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
         player.sendMessage(new TextComponent(""));
@@ -280,14 +291,16 @@ public class LookupCommand extends SenderCommand {
 
         player.sendMessage(new TextComponent(""));
 
-        displayPunishmentInfo(player, playerProfile.getPlayerId(), banProfile, muteProfile, punishHistoryProfile);
+        displayPunishmentInfo(player, playerProfile.getPlayerId(), banProfile, muteProfile,
+            punishHistoryProfile);
 
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
     }
 
     private void displayNameAndUUID(ProxiedPlayer player, PlayerProfile playerProfile) {
-        TextComponent nameComp = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Name") + " §8» ");
+        TextComponent nameComp = new TextComponent(
+            "§7" + BungeeTranslateAPI.translate(player, "Name") + " §8» ");
         nameComp.addExtra(new ChatAction()
             .text(BungeeCore.getInstance().getPlayerColor(playerProfile.getPlayerId()) +
                 playerProfile.getPlayerName())
@@ -298,13 +311,15 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayPremiumStatus(ProxiedPlayer player, PlayerProfile playerProfile) {
-        boolean isPremium = !UUIDUtility.isCracked(playerProfile.getPlayerId(), playerProfile.getPlayerName());
+        boolean isPremium = !UUIDUtility.isCracked(playerProfile.getPlayerId(),
+            playerProfile.getPlayerName());
         String status = isPremium
             ? "§a" + BungeeTranslateAPI.translate(player, "yes")
             : "§c" + BungeeTranslateAPI.translate(player, "no");
 
-        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Premium Account") +
-            " §8» " + status));
+        player.sendMessage(
+            new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Premium Account") +
+                " §8» " + status));
     }
 
     private void displayOnlineStatus(ProxiedPlayer player, PlayerProfile playerProfile) {
@@ -327,11 +342,14 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayPlaytimeAndCurrency(ProxiedPlayer player, PlayerProfile playerProfile) {
-        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Onlinetime") +
-            " §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(), TimeUnit.MILLISECONDS)));
+        player.sendMessage(
+            new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Onlinetime") +
+                " §8» §6" + TimeUtil.beautifyTime(playerProfile.getOnlineTime(),
+                TimeUnit.MILLISECONDS)));
 
         player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Coins") +
-            " §8» §6" + BungeeCore.getAPI().getCoinManager().formatInteger(playerProfile.getCoins())));
+            " §8» §6" + BungeeCore.getAPI().getCoinManager()
+            .formatInteger(playerProfile.getCoins())));
 
         TextComponent tokens = new TextComponent("§7Tokens §8» §6");
         tokens.addExtra(new ChatAction()
@@ -358,8 +376,9 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayCountryInfo(ProxiedPlayer player, String country) {
-        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Country") +
-            " §8» §6" + country));
+        player.sendMessage(
+            new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Country") +
+                " §8» §6" + country));
     }
 
     private void displayAlternateAccountsInfo(ProxiedPlayer player, PlayerProfile playerProfile) {
@@ -377,14 +396,17 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayJoinInfo(ProxiedPlayer player, PlayerProfile playerProfile) {
-        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "First Join") +
-            " §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin())));
-        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Last Join") +
-            " §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin())));
+        player.sendMessage(
+            new TextComponent("§7" + BungeeTranslateAPI.translate(player, "First Join") +
+                " §8» §e" + BungeeUtil.parseDate(playerProfile.getFirstJoin())));
+        player.sendMessage(
+            new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Last Join") +
+                " §8» §e" + BungeeUtil.parseDate(playerProfile.getLastJoin())));
 
         long registeredTime = playerProfile.getLastJoin() - playerProfile.getFirstJoin();
-        player.sendMessage(new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Registered since") +
-            " §8» §6" + TimeUtil.beautifyTime(registeredTime, TimeUnit.MILLISECONDS, true)));
+        player.sendMessage(
+            new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Registered since") +
+                " §8» §6" + TimeUtil.beautifyTime(registeredTime, TimeUnit.MILLISECONDS, true)));
     }
 
     private void displayRankInfo(ProxiedPlayer player, PlayerProfile playerProfile) {
@@ -419,10 +441,12 @@ public class LookupCommand extends SenderCommand {
         TextComponent clanComp = new TextComponent("§7Clan §8» ");
 
         if (clanPlayerProfile != null) {
-            Clan clan = BungeeCore.getAPI().getClanManager().getClanById(clanPlayerProfile.getClanId());
+            Clan clan = BungeeCore.getAPI().getClanManager()
+                .getClanById(clanPlayerProfile.getClanId());
             if (clan != null) {
                 clanComp.addExtra(new ChatAction()
-                    .text("§6" + clan.getName() + " §8┃ " + clanPlayerProfile.getClanRank().getFancy())
+                    .text("§6" + clan.getName() + " §8┃ " + clanPlayerProfile.getClanRank()
+                        .getFancy())
                     .execute("clan info " + clan.getTag())
                     .hover("§7Click to show clan info")
                     .component());
@@ -437,7 +461,7 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayPunishmentInfo(ProxiedPlayer player, UUID uuid, BanProfile banProfile,
-                                       MuteProfile muteProfile, PunishHistoryProfile punishHistoryProfile) {
+        MuteProfile muteProfile, PunishHistoryProfile punishHistoryProfile) {
         TextComponent punishComp = new TextComponent("§7Punish §8» ");
 
         if (banProfile != null) {
@@ -457,13 +481,15 @@ public class LookupCommand extends SenderCommand {
         }
         player.sendMessage(punishComp);
 
-        displayPunishmentHistory(player, uuid, punishHistoryProfile.getBanProfileMap().size(), "Ban", "ban");
+        displayPunishmentHistory(player, uuid, punishHistoryProfile.getBanProfileMap().size(),
+            "Ban", "ban");
 
-        displayPunishmentHistory(player, uuid, punishHistoryProfile.getMuteProfileMap().size(), "Mute", "mute");
+        displayPunishmentHistory(player, uuid, punishHistoryProfile.getMuteProfileMap().size(),
+            "Mute", "mute");
     }
 
     private void displayPunishmentHistory(ProxiedPlayer player, UUID uuid, int count,
-                                          String typeName, String typeCommand) {
+        String typeName, String typeCommand) {
         TextComponent historyComp = new TextComponent("§7" + typeName + "History §8» ");
 
         if (count > 0) {
@@ -480,10 +506,12 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(historyComp);
     }
 
-    private void displayBanHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile, String targetName) {
+    private void displayBanHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile,
+        String targetName) {
         if (historyProfile.getBanProfileMap().isEmpty()) {
-            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
-                targetName + "§c!"));
+            player.sendMessage(
+                new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
+                    targetName + "§c!"));
             return;
         }
 
@@ -491,18 +519,22 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent("§7BanHistory of §6" + targetName));
 
-        historyProfile.getBanProfileMap().values().forEach(banProfile ->
-            displayHistoryEntry(player, banProfile)
-        );
+        historyProfile.getBanProfileMap().values().stream()
+            .sorted((o1, o2) -> Long.compare(o2.getCreateDate(), o1.getCreateDate()))
+            .limit(20).forEach(banProfile ->
+                displayHistoryEntry(player, banProfile)
+            );
 
         displayBackButton(player, targetName);
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
     }
 
-    private void displayMuteHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile, String targetName) {
+    private void displayMuteHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile,
+        String targetName) {
         if (historyProfile.getMuteProfileMap().isEmpty()) {
-            player.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
-                targetName + "§c!"));
+            player.sendMessage(
+                new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
+                    targetName + "§c!"));
             return;
         }
 
@@ -510,7 +542,9 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent("§7MuteHistory of §6" + targetName));
 
-        historyProfile.getMuteProfileMap().values().forEach(muteProfile ->
+        historyProfile.getMuteProfileMap().values().stream()
+            .sorted((o1, o2) -> Long.compare(o2.getCreateDate(), o1.getCreateDate()))
+            .limit(20).forEach(muteProfile ->
             displayHistoryEntry(player, muteProfile)
         );
 
@@ -552,7 +586,8 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(punishComp);
     }
 
-    private void displayPunishmentDetails(ProxiedPlayer player, Object profile, String targetName, String type) {
+    private void displayPunishmentDetails(ProxiedPlayer player, Object profile, String targetName,
+        String type) {
         String author, reason, evidence, until;
 
         if (profile instanceof BanProfile banProfile) {
@@ -606,7 +641,8 @@ public class LookupCommand extends SenderCommand {
 
     private PunishHistoryProfile loadPunishHistoryProfile(UUID uuid) {
         return BungeeCore.getAPI().getPunishHistoryService().getEntity(uuid,
-            () -> BungeeCore.getAPI().getPunishHistoryService().getRepository().findFirstById(uuid));
+            () -> BungeeCore.getAPI().getPunishHistoryService().getRepository()
+                .findFirstById(uuid));
     }
 
     private String fetchCountryInfo(ProxiedPlayer player, String ip) {
@@ -626,7 +662,8 @@ public class LookupCommand extends SenderCommand {
         return "§c" + BungeeTranslateAPI.translate(player, DEFAULT_COUNTRY);
     }
 
-    private long getRankExpirationTime(IPermissionUser permissionUser, IPermissionGroup permissionGroup) {
+    private long getRankExpirationTime(IPermissionUser permissionUser,
+        IPermissionGroup permissionGroup) {
         return permissionUser.getGroups().stream()
             .filter(group -> group.getGroup().equalsIgnoreCase(permissionGroup.getName()))
             .findFirst()
@@ -646,7 +683,7 @@ public class LookupCommand extends SenderCommand {
     }
 
     public void printPunish(ProxiedPlayer player, String name, String type, String author,
-                            String reason, String until, String evidence) {
+        String reason, String until, String evidence) {
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent("§7" + type + " of §6" + name));
