@@ -22,11 +22,14 @@ import de.teamholy.core.bungee.util.BungeeUtil;
 import de.teamholy.core.bungee.util.ChatAction;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -177,11 +180,20 @@ public class LookupCommand extends SenderCommand {
 
         PunishHistoryProfile historyProfile = loadPunishHistoryProfile(uuid);
         String historyType = args[2].toLowerCase();
+        Integer page = 1;
+        if (args.length == 4) {
+            try {
+                page = Integer.parseInt(args[3]);
+            } catch (NumberFormatException e) {
+                printUsage(player);
+                return;
+            }
+        }
 
         if (historyType.equals("ban")) {
-            displayBanHistory(player, historyProfile, targetName);
+            displayBanHistory(player, historyProfile, targetName, page);
         } else if (historyType.equals("mute")) {
-            displayMuteHistory(player, historyProfile, targetName);
+            displayMuteHistory(player, historyProfile, targetName, page);
         } else {
             printUsage(player);
         }
@@ -507,7 +519,7 @@ public class LookupCommand extends SenderCommand {
     }
 
     private void displayBanHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile,
-        String targetName) {
+        String targetName, Integer page) {
         if (historyProfile.getBanProfileMap().isEmpty()) {
             player.sendMessage(
                 new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
@@ -519,18 +531,20 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent("§7BanHistory of §6" + targetName));
 
+        TextComponent historyComp = new TextComponent("");
         historyProfile.getBanProfileMap().values().stream()
             .sorted((o1, o2) -> Long.compare(o2.getCreateDate(), o1.getCreateDate()))
-            .limit(20).forEach(banProfile ->
-                displayHistoryEntry(player, banProfile)
-            );
-
+            .limit(10).skip((page-1)*10L).map(banProfile -> getHistoryEntry(player, banProfile)).forEach(historyEntry -> {
+                historyComp.addExtra(historyEntry);
+                historyComp.addExtra("\n");
+            });
+        player.sendMessage(historyComp);
         displayBackButton(player, targetName);
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
     }
 
     private void displayMuteHistory(ProxiedPlayer player, PunishHistoryProfile historyProfile,
-        String targetName) {
+        String targetName, Integer page) {
         if (historyProfile.getMuteProfileMap().isEmpty()) {
             player.sendMessage(
                 new TextComponent(Message.LOOKUP_PREFIX + "§cNo history found about §e" +
@@ -542,17 +556,20 @@ public class LookupCommand extends SenderCommand {
         player.sendMessage(new TextComponent(""));
         player.sendMessage(new TextComponent("§7MuteHistory of §6" + targetName));
 
+        TextComponent historyComp = new TextComponent("");
         historyProfile.getMuteProfileMap().values().stream()
             .sorted((o1, o2) -> Long.compare(o2.getCreateDate(), o1.getCreateDate()))
-            .limit(20).forEach(muteProfile ->
-            displayHistoryEntry(player, muteProfile)
-        );
-
+            .limit(10).skip((page-1)* 10L).map(muteProfile -> getHistoryEntry(player,
+                muteProfile)).forEach(historyEntry -> {
+                historyComp.addExtra(historyEntry);
+                historyComp.addExtra("\n");
+            });
+        player.sendMessage(historyComp);
         displayBackButton(player, targetName);
         player.sendMessage(new TextComponent(Message.LINE_DOWN));
     }
 
-    private void displayHistoryEntry(ProxiedPlayer player, Object profile) {
+    private TextComponent getHistoryEntry(ProxiedPlayer player, Object profile) {
         String date, reason, evidence;
         UUID authorId;
 
@@ -567,7 +584,7 @@ public class LookupCommand extends SenderCommand {
             authorId = muteProfile.getAuthorId();
             evidence = muteProfile.getEvidence();
         } else {
-            return;
+            return null;
         }
 
         String author = BungeeCore.getInstance().getPlayerColor(authorId) +
@@ -583,7 +600,7 @@ public class LookupCommand extends SenderCommand {
             .suggest(evidence)
             .component());
 
-        player.sendMessage(punishComp);
+        return punishComp;
     }
 
     private void displayPunishmentDetails(ProxiedPlayer player, Object profile, String targetName,
