@@ -19,13 +19,15 @@
 package eu.koboo.markup.wrapper;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers.Difficulty;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
+import com.google.common.base.Preconditions;
 import org.bukkit.WorldType;
 
 public class WrapperPlayServerRespawn extends AbstractPacket {
-    public static final PacketType TYPE = PacketType.Play.Server.RESPAWN;
+    public static final PacketType TYPE = Server.RESPAWN;
 
     public WrapperPlayServerRespawn() {
         super(new PacketContainer(TYPE), TYPE);
@@ -113,7 +115,19 @@ public class WrapperPlayServerRespawn extends AbstractPacket {
      * @param value - new value.
      */
     public void setLevelType(WorldType value) {
-        handle.getWorldTypeModifier().write(0, value);
+        Preconditions.checkNotNull(value, "Level type cannot be null");
+        net.minecraft.server.v1_8_R3.WorldType convertedWorldType;
+        switch (value) {
+            case FLAT -> convertedWorldType = net.minecraft.server.v1_8_R3.WorldType.FLAT;
+            case NORMAL -> convertedWorldType = net.minecraft.server.v1_8_R3.WorldType.NORMAL;
+            case AMPLIFIED -> convertedWorldType = net.minecraft.server.v1_8_R3.WorldType.AMPLIFIED;
+            case CUSTOMIZED -> convertedWorldType = net.minecraft.server.v1_8_R3.WorldType.CUSTOMIZED;
+            case VERSION_1_1 -> convertedWorldType = net.minecraft.server.v1_8_R3.WorldType.NORMAL_1_1;
+            case LARGE_BIOMES -> convertedWorldType = net.minecraft.server.v1_8_R3.WorldType.LARGE_BIOMES;
+            default -> convertedWorldType = null;
+        }
+        handle.getSpecificModifier(net.minecraft.server.v1_8_R3.WorldType.class)
+            .write(0, convertedWorldType);
     }
 
 }

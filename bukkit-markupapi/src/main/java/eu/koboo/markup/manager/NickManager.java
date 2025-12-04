@@ -412,7 +412,9 @@ public class NickManager implements Listener {
      */
     private WrapperPlayServerRespawn createRespawn(Player player) {
         WrapperPlayServerRespawn respawn = new WrapperPlayServerRespawn();
-        respawn.setLevelType(player.getWorld().getWorldType());
+        if (player.getWorld().getWorldType() != null) {
+            respawn.setLevelType(player.getWorld().getWorldType());
+        }
         respawn.setGamemode(EnumWrappers.NativeGameMode.valueOf(player.getGameMode().name()));
         respawn.setDifficulty(EnumWrappers.Difficulty.valueOf(player.getWorld().getDifficulty().name()));
         respawn.setDimension(player.getWorld().getEnvironment().getId());
