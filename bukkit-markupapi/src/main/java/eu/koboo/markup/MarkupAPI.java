@@ -214,7 +214,6 @@ public class MarkupAPI extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        new BukkitUpdaterAPI(this,"b63b7279-ecbd-40f2-bb43-913ba545abc7", "OTEzYmE1NDVhYmM3").setHibernat(true).setOnlyempty(true).setOnlyrestart(true);
         api = this;
 
         CoreAPI coreAPI = new CoreAPI();
