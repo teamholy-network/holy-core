@@ -2,8 +2,10 @@ package de.teamholy.core.bungee.commands.friend;
 
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -21,6 +23,11 @@ public class ReplyCommand extends Command {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
+            return;
+        }
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (strings.length == 0) {

@@ -9,9 +9,11 @@ import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.commands.SenderCommand;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import de.teamholy.core.bungee.util.ChatAction;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -37,13 +39,14 @@ public class ClanCommand extends SenderCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage("Clans are only for users!");
+    public void execute(CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
             return;
         }
         BungeeCore.getAPI().getExecutor().execute(() -> {
-            ProxiedPlayer player = (ProxiedPlayer) sender;
+            ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("delete")) {
@@ -92,14 +95,14 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c"
+                        commandSender.sendMessage(Message.CLAN_PREFIX + "§c"
                                 + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e"
                                 + target + "§c!");
                         return;
                     }
                     ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(uuid);
                     if (targetPlayer == null || !targetPlayer.isConnected()) {
-                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target
+                        commandSender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target
                                 + "§c " + BungeeTranslateAPI.translate(player, "has to be online to get promoted!"));
                         return;
                     }
@@ -108,7 +111,7 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c"
+                        commandSender.sendMessage(Message.CLAN_PREFIX + "§c"
                                 + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e"
                                 + target + "§c!");
                         return;
@@ -131,7 +134,7 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c"
+                        commandSender.sendMessage(Message.CLAN_PREFIX + "§c"
                                 + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e"
                                 + target + "§c!");
                         return;
@@ -142,7 +145,7 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c"
+                        commandSender.sendMessage(Message.CLAN_PREFIX + "§c"
                                 + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e"
                                 + target + "§c!");
                         return;
@@ -150,7 +153,7 @@ public class ClanCommand extends SenderCommand {
 
                     ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(uuid);
                     if (targetPlayer == null || !targetPlayer.isConnected()) {
-                        sender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target
+                        commandSender.sendMessage(Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + target
                                 + "§c " + BungeeTranslateAPI.translate(player, "has to be online to get invited!"));
                         return;
                     }
@@ -162,7 +165,7 @@ public class ClanCommand extends SenderCommand {
                     String target = args[1];
                     UUID uuid = BungeeUtil.parseTargetArgument(target);
                     if (uuid == null) {
-                        sender.sendMessage(Message.CLAN_PREFIX + "§c"
+                        commandSender.sendMessage(Message.CLAN_PREFIX + "§c"
                                 + BungeeTranslateAPI.translate(player, "Error while fetching UUID from") + " §e"
                                 + target + "§c!");
                         return;
@@ -199,7 +202,7 @@ public class ClanCommand extends SenderCommand {
                 }
             } else if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("create")) {
-                    if (BungeeUtil.hasPermission(sender, "teamholy.perk.premium")) {
+                    if (BungeeUtil.hasPermission(commandSender, "teamholy.perk.premium")) {
                         String tag = args[2];
                         String name = args[1];
                         onCreate(player, tag, name);

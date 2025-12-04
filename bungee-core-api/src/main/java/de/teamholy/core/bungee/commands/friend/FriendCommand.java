@@ -3,6 +3,7 @@ package de.teamholy.core.bungee.commands.friend;
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.bungee.BungeeCore;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -29,6 +30,11 @@ public class FriendCommand extends Command {
 
     @Override
     public void execute(CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
+            return;
+        }
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) commandSender;
         if (args.length == 0) {
             sendHelp(proxiedPlayer);

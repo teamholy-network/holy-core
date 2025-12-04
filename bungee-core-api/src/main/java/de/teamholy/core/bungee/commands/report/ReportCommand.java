@@ -6,9 +6,11 @@ import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.api.utility.Report;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.ChatLog;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -30,6 +32,11 @@ public class ReportCommand extends Command {
 
     @Override
     public void execute(CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
+            return;
+        }
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
         if (args.length == 2) {
 

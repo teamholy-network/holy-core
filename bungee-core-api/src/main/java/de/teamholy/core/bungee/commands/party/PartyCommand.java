@@ -10,6 +10,7 @@ import de.teamholy.core.bungee.model.Party;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -56,11 +57,13 @@ public class PartyCommand extends Command {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (!(sender instanceof ProxiedPlayer player)) {
-            sender.sendMessage(new TextComponent("§cDieser Befehl kann nur von Spielern ausgeführt werden!"));
+    public void execute(CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
             return;
         }
+        ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         try {
             if (args.length == 0) {

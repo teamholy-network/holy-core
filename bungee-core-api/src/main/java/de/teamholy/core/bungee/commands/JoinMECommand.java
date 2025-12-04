@@ -6,9 +6,11 @@ import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.PublicBroadcastManager;
 import de.teamholy.core.bungee.model.JoinME;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -32,8 +34,13 @@ public class JoinMECommand extends Command {
 
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+    public void execute(CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
+            return;
+        }
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) commandSender;
 
 
         if (args.length == 0) {

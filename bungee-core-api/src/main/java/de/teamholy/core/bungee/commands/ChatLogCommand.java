@@ -19,24 +19,29 @@ public class ChatLogCommand extends Command {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender commandSender, String[] args) {
+        if (!(commandSender instanceof ProxiedPlayer)) {
+            commandSender.sendMessage(new ComponentBuilder().append("This command can only be executed by a player.").color(
+                ChatColor.RED).create());
+            return;
+        }
 
-        ProxiedPlayer player = (ProxiedPlayer) sender;
+        ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (args.length == 0) {
-            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Please specify a player!") + " §8(§7/chatlog <" + BungeeTranslateAPI.translate(player, "Player") + ">§8)");
+            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Please specify a player!") + " §8(§7/chatlog <" + BungeeTranslateAPI.translate(player, "Player") + ">§8)");
             return;
         }
 
         if (args[0].equalsIgnoreCase(player.getName())) {
-            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Own chatlog is not allowed!"));
+            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Own chatlog is not allowed!"));
             return;
         }
 
         ProxiedPlayer chatlogPlayer = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (chatlogPlayer == null) {
-            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Player not found!"));
+            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Player not found!"));
             return;
         }
 
@@ -44,7 +49,7 @@ public class ChatLogCommand extends Command {
         chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(player.getUniqueId(), chatlogPlayer);
 
         if (chatLog == null) {
-            sender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Chatlog failed to create!"));
+            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Chatlog failed to create!"));
             return;
         }
 
@@ -56,7 +61,7 @@ public class ChatLogCommand extends Command {
         clickText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Click to open the chatlog").create()));
         message.addExtra(clickText);
         message.addExtra("§8)");
-        sender.sendMessage(message);
+        commandSender.sendMessage(message);
 
 
     }
