@@ -431,7 +431,9 @@ public class NickManager implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         PlayerMeta playerMeta = playerMetaMap.remove(event.getPlayer().getUniqueId());
         if (playerMeta != null) {
-            resetPlayer(event.getPlayer(), true);
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                createRemoveInfoNick(false, event.getPlayer(), playerMeta).sendPacket(player);
+            });
             Bukkit.getPluginManager().callEvent(new PlayerPostUnnickEvent(event.getPlayer(), playerMeta));
         }
     }
