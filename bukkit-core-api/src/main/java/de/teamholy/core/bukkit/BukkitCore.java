@@ -77,8 +77,6 @@ public class BukkitCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        new BukkitUpdaterAPI(this,"7a889448-314d-4446-9d51-b06f28ca20af", "YjA2ZjI4Y2EyMGFm").setHibernat(true).setOnlyempty(true).setOnlyrestart(true);
-
         coreAPI = new CoreAPI();
         protocolManager = ProtocolLibrary.getProtocolManager();
         metricsManager = new MetricsManager(this.coreAPI);
