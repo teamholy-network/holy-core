@@ -3,7 +3,6 @@ package eu.koboo.markup;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.mojang.authlib.properties.Property;
-import de.skydb.updater.BukkitUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
 import eu.koboo.markup.adapter.PacketPlayServerNamedEntitySpawnAdapter;
 import eu.koboo.markup.adapter.PacketPlayServerPlayerInfoAdapter;
