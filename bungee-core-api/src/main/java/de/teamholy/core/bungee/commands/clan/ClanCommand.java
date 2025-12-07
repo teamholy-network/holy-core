@@ -778,8 +778,6 @@ public class ClanCommand extends SenderCommand {
     }
 
     public void onKick(ProxiedPlayer player, UUID toKick) {
-        // LEADER can kick all
-        // MOD can kick MEMBER
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(),
                 () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
@@ -799,24 +797,14 @@ public class ClanCommand extends SenderCommand {
         }
         ClanPlayerProfile kickProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(toKick,
                 () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(toKick));
-        if (kickProfile == null) {
+        if (kickProfile == null || !kickProfile.getClanId().equals(clanProfile.getClanId())) {
             player.sendMessage(Message.CLAN_PREFIX + "§c"
                     + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
             return;
         }
-        if (!kickProfile.getClanId().equals(clanProfile.getClanId())) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c"
-                    + BungeeTranslateAPI.translate(player, "The player is not in your clan!"));
-            return;
-        }
-        if (kickProfile.getClanRank() != ClanRank.MEMBER) {
+        if (!clanProfile.canKick(kickProfile.getClanRank())) {
             player.sendMessage(
                     Message.CLAN_PREFIX + "§c" + BungeeTranslateAPI.translate(player, "You can't kick this member."));
-            return;
-        }
-        if (kickProfile.getClanRank() == ClanRank.MOD && clanProfile.getClanRank() == ClanRank.MOD) {
-            player.sendMessage(Message.CLAN_PREFIX + "§c"
-                    + BungeeTranslateAPI.translate(player, "You are not allowed to kick this player!"));
             return;
         }
 
