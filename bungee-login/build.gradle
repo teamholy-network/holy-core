@@ -3,14 +3,9 @@ dependencies {
     compileOnly(libs.redisson)
     compileOnly(libs.jedis)
     compileOnly(libs.jetbrains.annotations)
-    //compileOnly('com.github.bivashy.NanoLimboPlugin:api:1.0.11')
     compileOnly(libs.cloudnet.bridge)
     compileOnly(libs.cloudnet.wrapper.jvm)
     compileOnly(libs.bungeecord.api)
     compileOnly(project(':holy-core-api'))
     compileOnly(project(':bungee-core-api'))
-    implementation(libs.updater.bungee)
-    shadowJar {
-        relocate('de.skydb.updater', 'de.teamholy.bungee.login.updater')
-    }
 }

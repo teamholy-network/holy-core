@@ -11,10 +11,5 @@ dependencies {
     // Add trove4j to provide gnu.trove.map.TObjectIntMap and related classes
     implementation(libs.trove4j)
 
-    implementation(libs.updater.bungee)
-    shadowJar {
-        relocate('de.skydb.updater', 'de.teamholy.core.bungee.updater')
-    }
-
     implementation(project(':holy-core-api'))
 }

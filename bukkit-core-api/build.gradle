@@ -19,11 +19,6 @@ dependencies {
     compileOnly(libs.protocollib.comphenix)
     implementation(libs.jackson.core)
 
-    implementation(libs.updater.bukkit)
-    shadowJar {
-        relocate('de.skydb.updater', 'de.teamholy.core.bukkit.updater')
-    }
-
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))
 }
