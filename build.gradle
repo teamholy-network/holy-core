@@ -2,8 +2,8 @@ import java.text.SimpleDateFormat
 
 plugins {
     id 'java'
-    id 'com.gradleup.shadow' version '8.3.5'
-    id 'net.kyori.blossom' version '1.2.0'
+    alias(libs.plugins.gradleup.shadow)
+    alias(libs.plugins.kyori.blossom)
 }
 
 def HolyRepoUser = project.findProperty("HolyRepoUser")
@@ -11,8 +11,8 @@ def HolyRepoPass = project.findProperty("HolyRepoPass")
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'com.gradleup.shadow'
-    apply plugin: 'net.kyori.blossom'
+    apply plugin: libs.plugins.gradleup.shadow.get().pluginId
+    apply plugin: libs.plugins.kyori.blossom.get().pluginId
     apply plugin: 'maven-publish'
 
     group("$projectGroup")
@@ -111,12 +111,21 @@ subprojects {
 
     shadowJar {
         relocate 'de.skydb.translateapi.bindings', 'de.teamholy.core.translation'
+        
+        doLast {
+            def outputDir = rootProject.file("output")
+            copy {
+                from archiveFile
+                into outputDir
+            }
+            println "Nya~ Copied shiny plugin ${archiveFile.get().asFile.name} to output folder! UwU"
+        }
     }
 
     dependencies {
-        implementation "de.skydb.translationapi:TranslateAPI-Bindings:$translationBindingsVersion"
-        compileOnly "org.projectlombok:lombok:$lombokVersion"
-        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+        implementation libs.translation.bindings
+        compileOnly libs.lombok
+        annotationProcessor libs.lombok
     }
 
     compileJava.options.encoding = 'UTF-8'
@@ -128,18 +137,6 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
         toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-    }
-
-    tasks.register('movePlugin', Copy) {
-        def outputDir = rootProject.projectDir.getAbsolutePath() + "/output/"
-        def targetName = project.name + "-$projectVersion-all.jar"
-        delete(outputDir + targetName)
-        from('build/libs/')
-        into(outputDir)
-        include(targetName)
-    }
-    tasks.named('shadowJar').configure {
-        finalizedBy 'movePlugin'
     }
 
     blossom {

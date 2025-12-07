@@ -1,15 +1,15 @@
 dependencies {
-    compileOnly("eu.koboo:en2do:$en2doVersion")
-    compileOnly("org.redisson:redisson:$redissonVersion")
-    compileOnly('redis.clients:jedis:5.0.1')
-    compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
+    compileOnly(libs.en2do)
+    compileOnly(libs.redisson)
+    compileOnly(libs.jedis)
+    compileOnly(libs.jetbrains.annotations)
     //compileOnly('com.github.bivashy.NanoLimboPlugin:api:1.0.11')
-    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
-    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.2")
+    compileOnly(libs.cloudnet.bridge)
+    compileOnly(libs.cloudnet.wrapper.jvm)
+    compileOnly(libs.bungeecord.api)
     compileOnly(project(':holy-core-api'))
     compileOnly(project(':bungee-core-api'))
-    implementation('de.skydb.updater:Updater-Bungee:0.0.3-SNAPSHOT')
+    implementation(libs.updater.bungee)
     shadowJar {
         relocate('de.skydb.updater', 'de.teamholy.bungee.login.updater')
     }
