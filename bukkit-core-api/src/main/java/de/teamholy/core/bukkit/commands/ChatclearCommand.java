@@ -24,7 +24,7 @@ public class ChatclearCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (!(commandSender instanceof Player)) {
             commandSender.sendMessage(
                 ChatColor.RED + "This command can only be executed by a player.");
@@ -33,11 +33,13 @@ public class ChatclearCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         if (!player.hasPermission("teamholy.chatclear"))
             return false;
-        Bukkit.getOnlinePlayers().forEach(all ->  {
-            if (!all.hasPermission("teamholy.chatclear")) {
-                for (String string : this.strings) {
-                    all.sendMessage(string);
-                }
+        if (args.length > 0) {
+            player.sendMessage(ChatColor.RED + "/clearchat");
+            return false;
+        }
+        Bukkit.getOnlinePlayers().stream().filter(all -> !all.hasPermission("teamholy.chatclear")).forEach(all ->  {
+            for (String string : this.strings) {
+                all.sendMessage(string);
             }
         });
         Bukkit.getOnlinePlayers().forEach(all -> all.sendMessage(BukkitCore.PREFIX + "§6§l"+ BukkitTranslateAPI.translate(all,"The chat was cleared!")));

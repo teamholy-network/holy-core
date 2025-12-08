@@ -15,8 +15,6 @@ public class PlayerChatListener implements Listener {
 
     BukkitCore bukkitCore;
 
-
-
     public PlayerChatListener(BukkitCore bukkitCore) {
         this.bukkitCore = bukkitCore;
         Bukkit.getPluginManager().registerEvents(this, bukkitCore);
@@ -24,24 +22,27 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if (BukkitCore.getInstance().isChatPrefix()) {
-            String message = event.getMessage().replace("%","%%");
-            Player player = event.getPlayer();
+        if (!BukkitCore.getInstance().isChatPrefix())
+            return;
+        String message = event.getMessage().replace("%", "%%");
+        Player player = event.getPlayer();
 
-            if(MarkupAPI.isNicked(player)) {
-                event.setFormat(PlayerRank.PLAYER.getChatPrefix() + player.getDisplayName() + " §8» §7" +  message);
-                return;
-            }
-
-            PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager().getCachedPlayers().get(player.getUniqueId());
-            Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap().get(cachedBukkitPlayer.getPerkPlayerProfile().getChatPerk());
-            if (perk == null) {
-                event.setCancelled(true);
-                return;
-            }
-            String[] color = perk.getName().split("-");
-            event.setFormat(cachedBukkitPlayer.getRank().getChatPrefix() + event.getPlayer().getName() + " §8» §" + color[0] + message);
+        if (MarkupAPI.isNicked(player)) {
+            event.setFormat(PlayerRank.PLAYER.getChatPrefix() + player.getDisplayName() + " §8» §7" + message);
+            return;
         }
 
+        PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = BukkitCore.getInstance().getPlayerCacheManager()
+                .getCachedPlayers().get(player.getUniqueId());
+        Perk perk = BukkitCore.getInstance().getPerkManager().getPerkHashMap()
+                .get(cachedBukkitPlayer.getPerkPlayerProfile().getChatPerk());
+        if (perk == null) {
+            event.setCancelled(true);
+            return;
+        }
+        String[] color = perk.getName().split("-");
+        event.setFormat(cachedBukkitPlayer.getRank().getChatPrefix() + event.getPlayer().getName() + " §8» §" + color[0]
+                + message);
     }
+
 }

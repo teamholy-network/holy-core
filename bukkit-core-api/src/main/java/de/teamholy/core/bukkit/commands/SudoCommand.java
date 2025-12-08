@@ -15,7 +15,7 @@ import java.util.UUID;
 public class SudoCommand implements CommandExecutor {
 
 
-    private final UUID[] array = new UUID[] {
+    private final UUID[] allowedUuids = new UUID[] {
             UUID.fromString("fa44c187-80dd-4171-bb5a-2e694c4c8b4f"),
             UUID.fromString("1dd0cc8f-5271-4d49-b774-16dc36877017")
     };
@@ -28,9 +28,11 @@ public class SudoCommand implements CommandExecutor {
         }
         Player player = (Player) commandSender;
 
+        if (!player.hasPermission("teamholy.sudo")) {
+            return false;
+        }
 
-
-        if (Arrays.stream(array).noneMatch(uuid -> uuid.equals(player.getUniqueId()))) {
+        if (Arrays.stream(allowedUuids).noneMatch(uuid -> uuid.equals(player.getUniqueId()))) {
             player.sendMessage("§c"+ BukkitTranslateAPI.translate(player,"What did you just try?"));
             return false;
         }
@@ -52,6 +54,7 @@ public class SudoCommand implements CommandExecutor {
         }
 
         target.chat(sb.toString());
+        player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"You have executed a command for ") + target.getName());
         return false;
     }
 }
