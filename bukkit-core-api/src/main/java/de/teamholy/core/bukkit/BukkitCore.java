@@ -105,7 +105,6 @@ public class BukkitCore extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("xyz").setExecutor(new XyzCommand(this));
         getCommand("location").setExecutor(new LocationCommand());
         getCommand("clearchat").setExecutor(new ChatclearCommand());
         getCommand("gc").setExecutor(new GcCommand());
