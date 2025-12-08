@@ -699,22 +699,26 @@ public class LookupCommand extends SenderCommand {
         commandSender.sendMessage(new TextComponent(Message.LOOKUP_PREFIX + "§7/lookup (name)"));
     }
 
-    public void printPunish(ProxiedPlayer player, String name, String type, String author,
-        String reason, String until, String evidence) {
-        player.sendMessage(new TextComponent(Message.LINE_DOWN));
-        player.sendMessage(new TextComponent(""));
-        player.sendMessage(new TextComponent("§7" + type + " of §6" + name));
-        player.sendMessage(new TextComponent("§7Author: §6" + author));
-        player.sendMessage(new TextComponent("§7Reason: §6" + reason));
-        player.sendMessage(new TextComponent("§7Until: §6" + until));
-        player.sendMessage(new TextComponent("§7Evidence: §6" + evidence));
-        player.sendMessage(new TextComponent(""));
-        player.sendMessage(new ChatAction()
+    public void printPunish(ProxiedPlayer player, String name, String type, String author, String reason, String until, String evidence) {
+        TextComponent punishComp = new TextComponent(Message.LINE_DOWN);
+        punishComp.addExtra("\n");
+        punishComp.addExtra(new TextComponent("§7" + type + " of §6" + name));
+        punishComp.addExtra(new TextComponent("§7Author: §6" + author));
+        punishComp.addExtra(new TextComponent("§7Reason: §6" + reason));
+        punishComp.addExtra(new TextComponent("§7Until: §6" + until));
+        punishComp.addExtra(new ChatAction()
+            .text("§7Evidence: §6" + evidence)
+            .hover("§7Click to show evidence")
+            .url(evidence)
+            .component());
+        punishComp.addExtra("\n");
+        punishComp.addExtra(new ChatAction()
             .text("  §6§lLOOKUP")
             .hover("§7Click back to lookup")
             .execute("lookup " + name)
             .component());
-        player.sendMessage(new TextComponent(""));
-        player.sendMessage(new TextComponent(Message.LINE_DOWN));
+        punishComp.addExtra("\n");
+        punishComp.addExtra(new TextComponent(Message.LINE_DOWN));
+        player.sendMessage(punishComp);
     }
 }

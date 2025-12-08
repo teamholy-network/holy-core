@@ -38,6 +38,11 @@ public class ChatAction {
         return this;
     }
 
+    public ChatAction url(String url) {
+        this.component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url));
+        return this;
+    }
+
     public TextComponent component() {
         return this.component;
     }
