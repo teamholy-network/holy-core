@@ -702,18 +702,18 @@ public class LookupCommand extends SenderCommand {
     public void printPunish(ProxiedPlayer player, String name, String type, String author, String reason, String until, String evidence) {
         TextComponent punishComp = new TextComponent(Message.LINE_DOWN);
         punishComp.addExtra("\n");
-        punishComp.addExtra(new TextComponent("§7" + type + " of §6" + name));
-        punishComp.addExtra(new TextComponent("§7Author: §6" + author));
-        punishComp.addExtra(new TextComponent("§7Reason: §6" + reason));
-        punishComp.addExtra(new TextComponent("§7Until: §6" + until));
+        punishComp.addExtra(new TextComponent("§7" + type + " of §6" + name + "\n"));
+        punishComp.addExtra(new TextComponent("§7Author: §6" + author + "\n"));
+        punishComp.addExtra(new TextComponent("§7Reason: §6" + reason + "\n"));
+        punishComp.addExtra(new TextComponent("§7Until: §6" + until + "\n"));
         punishComp.addExtra(new ChatAction()
-            .text("§7Evidence: §6" + evidence)
+            .text("§7Evidence: §6" + evidence + "\n")
             .hover("§7Click to show evidence")
             .url(evidence)
             .component());
         punishComp.addExtra("\n");
         punishComp.addExtra(new ChatAction()
-            .text("  §6§lLOOKUP")
+            .text("  §6§lLOOKUP\n")
             .hover("§7Click back to lookup")
             .execute("lookup " + name)
             .component());
