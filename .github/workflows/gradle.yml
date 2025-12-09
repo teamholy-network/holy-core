@@ -23,6 +23,9 @@ jobs:
                   java-version: '17'
                   distribution: 'temurin'
 
+            - name: Make gradlew executable
+              run: chmod +x gradlew
+
             - name: Publish modules to Nexus
               run: |
                   VERSION="${GITHUB_REF_NAME#v}"
