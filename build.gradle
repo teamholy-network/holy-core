@@ -154,27 +154,33 @@ subprojects {
         replaceToken 'PROJECT_VERSION', "$projectVersion"
     }
 
-    publishing {
-        publications {
-            normalJar(MavenPublication) {
-                from components.java
-                groupId = project.group
-                artifactId = project.name
-                version = project.version
+    def publishableProjects = subprojects.findAll {
+        !['bungee-login', 'holy-core-cloudmodule'].contains(it.name)
+    }
+
+    configure(publishableProjects) {
+        publishing {
+            publications {
+                normalJar(MavenPublication) {
+                    from components.java
+                    groupId = project.group
+                    artifactId = project.name
+                    version = project.version
+                }
             }
-        }
-        repositories {
-            maven {
-                url = uri("https://repo.gin1.cc/repository/releases/")
-                credentials {
-                    username = HolyRepoUser
-                    password = HolyRepoPass
+            repositories {
+                maven {
+                    url = uri("https://repo.gin1.cc/repository/releases/")
+                    credentials {
+                        username = HolyRepoUser
+                        password = HolyRepoPass
+                    }
                 }
             }
         }
-    }
 
-    tasks.named("publish") {
-        dependsOn("jar")
+        tasks.named("publish") {
+            dependsOn("jar")
+        }
     }
 }
