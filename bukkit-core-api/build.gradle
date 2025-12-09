@@ -1,21 +1,23 @@
 dependencies {
-    compileOnly("org.spigotmc:spigot-1.8.8:dev:dev@jar")
-
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-
-    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
-    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    compileOnly('com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9')
-
-    compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
-    implementation('com.fasterxml.jackson.core:jackson-core:2.15.2')
-
-    implementation('de.skydb.updater:Updater-Bukkit:0.0.3-SNAPSHOT')
-    shadowJar {
-        relocate('de.skydb.updater', 'de.teamholy.core.bukkit.updater')
+    compileOnly(libs.spigot.full) {
+        artifact {
+            name = 'spigot-1.8.8'
+            classifier = 'dev'
+            extension = 'jar'
+            type = 'jar'
+        }
     }
+
+    implementation(libs.en2do)
+    implementation(libs.redisson)
+    implementation(libs.jetbrains.annotations)
+
+    compileOnly(libs.cloudnet.bridge)
+    compileOnly(libs.cloudnet.wrapper.jvm)
+    compileOnly(libs.holographicdisplays.api)
+
+    compileOnly(libs.protocollib.comphenix)
+    implementation(libs.jackson.core)
 
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))

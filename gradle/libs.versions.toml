@@ -1,0 +1,123 @@
+[versions]
+# Plugin versions
+gradleup-shadow = "8.3.5"
+kyori-blossom = "1.2.0"
+
+# Core library versions
+lombok = "1.18.24"
+jetbrains-annotations = "23.1.0"
+en2do = "3.1.9"
+redisson = "3.19.1"
+
+# Minecraft/Bukkit versions
+spigot-api = "1.8.8-R0.1-SNAPSHOT"
+spigot-full = "dev"
+bungeecord-api = "1.20-R0.2"
+bungeecord-chat = "1.20-R0.2"
+craftbukkit = "R"
+
+# CloudNet versions
+cloudnet = "3.4.0-RELEASE"
+
+# Database/Cache versions
+jedis = "5.0.1"
+mongodb-bson = "4.10.2"
+rabbitmq = "5.21.0"
+trove4j = "3.0.3"
+
+# Utility library versions
+slf4j = "2.0.9"
+jackson-core = "2.15.2"
+yamlbeans = "1.17"
+translation-bindings = "1.0.0"
+
+# ProtocolLib versions
+protocollib-bukkit = "5.3.0"
+protocollib-dmulloy2 = "5.4.0"
+
+# Updater versions
+updater-bukkit = "0.0.3-SNAPSHOT"
+updater-bungee = "0.0.3-SNAPSHOT"
+
+# HolographicDisplays version
+holographicdisplays-api = "2.4.9"
+
+
+[plugins]
+# Gradle plugins
+gradleup-shadow = { id = "com.gradleup.shadow", version.ref = "gradleup-shadow" }
+kyori-blossom = { id = "net.kyori.blossom", version.ref = "kyori-blossom" }
+
+[libraries]
+# Core libraries
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+en2do = { module = "eu.koboo:en2do", version.ref = "en2do" }
+redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
+
+# Minecraft/Bukkit libraries
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
+spigot-full = { module = "org.spigotmc:spigot-1.8.8", version.ref = "spigot-full" }
+bungeecord-api = { module = "net.md-5:bungeecord-api", version.ref = "bungeecord-api" }
+bungeecord-chat = { module = "net.md-5:bungeecord-chat", version.ref = "bungeecord-chat" }
+craftbukkit = { module = "com.github.azbh111:craftbukkit-1.8.8", version.ref = "craftbukkit" }
+
+# CloudNet libraries
+cloudnet-bridge = { module = "de.dytanic.cloudnet:cloudnet-bridge", version.ref = "cloudnet" }
+cloudnet-wrapper-jvm = { module = "de.dytanic.cloudnet:cloudnet-wrapper-jvm", version.ref = "cloudnet" }
+cloudnet-driver = { module = "de.dytanic.cloudnet:cloudnet-driver", version.ref = "cloudnet" }
+cloudnet-core = { module = "de.dytanic.cloudnet:cloudnet", version.ref = "cloudnet" }
+
+# Database/Cache libraries
+jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
+mongodb-bson = { module = "org.mongodb:bson", version.ref = "mongodb-bson" }
+rabbitmq-client = { module = "com.rabbitmq:amqp-client", version.ref = "rabbitmq" }
+trove4j = { module = "net.sf.trove4j:trove4j", version.ref = "trove4j" }
+
+# Utility libraries
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson-core" }
+yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version.ref = "yamlbeans" }
+translation-bindings = { module = "de.skydb.translationapi:TranslateAPI-Bindings", version.ref = "translation-bindings" }
+
+# Protocol libraries
+protocollib-comphenix = { module = "com.comphenix.protocol:ProtocolLib", version.ref = "protocollib-bukkit" }
+protocollib-dmulloy2 = { module = "net.dmulloy2:ProtocolLib", version.ref = "protocollib-dmulloy2" }
+
+# Updater libraries
+updater-bukkit = { module = "de.skydb.updater:Updater-Bukkit", version.ref = "updater-bukkit" }
+updater-bungee = { module = "de.skydb.updater:Updater-Bungee", version.ref = "updater-bungee" }
+
+# HolographicDisplays
+holographicdisplays-api = { module = "com.gmail.filoghost.holographicdisplays:holographicdisplays-api", version.ref = "holographicdisplays-api" }
+
+[bundles]
+# Core dependencies bundle
+core = [
+    "lombok",
+    "jetbrains-annotations",
+    "en2do",
+    "redisson"
+]
+
+# Minecraft platform bundle
+minecraft = [
+    "spigot-api",
+    "bungeecord-api",
+    "bungeecord-chat"
+]
+
+# CloudNet bundle
+cloudnet = [
+    "cloudnet-bridge",
+    "cloudnet-wrapper-jvm",
+    "cloudnet-driver"
+]
+
+# Database bundle
+database = [
+    "jedis",
+    "mongodb-bson",
+    "rabbitmq-client",
+    "trove4j"
+]

@@ -8,7 +8,6 @@ commands:
         aliases: [ wl ]
     reportsgui:
         aliases: [ rgui, reportstaffgui ]
-    xyz:
     stopcore:
         aliases: [stopc, stop]
     sudo:

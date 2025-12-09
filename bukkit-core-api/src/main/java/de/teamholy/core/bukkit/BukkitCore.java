@@ -5,7 +5,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.wrapper.Wrapper;
-import de.skydb.updater.BukkitUpdaterAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.manager.MetricsManager;
 import de.teamholy.core.api.utility.PlayerRank;
@@ -106,7 +105,6 @@ public class BukkitCore extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("xyz").setExecutor(new XyzCommand(this));
         getCommand("location").setExecutor(new LocationCommand());
         getCommand("clearchat").setExecutor(new ChatclearCommand());
         getCommand("gc").setExecutor(new GcCommand());

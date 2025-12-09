@@ -1,11 +1,11 @@
 dependencies {
-    implementation("eu.koboo:en2do:$en2doVersion")
-    implementation("org.redisson:redisson:$redissonVersion")
-    implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-    implementation 'org.mongodb:bson:4.10.2'
-    implementation 'com.rabbitmq:amqp-client:5.21.0'
+    implementation(libs.en2do)
+    implementation(libs.redisson)
+    implementation(libs.jetbrains.annotations)
+    implementation(libs.mongodb.bson)
+    implementation(libs.rabbitmq.client)
 
-    compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$cloudnetVersion")
-    compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:$cloudnetVersion")
-    implementation('com.esotericsoftware.yamlbeans:yamlbeans:1.17')
+    compileOnly(libs.cloudnet.bridge)
+    compileOnly(libs.cloudnet.wrapper.jvm)
+    implementation(libs.yamlbeans)
 }

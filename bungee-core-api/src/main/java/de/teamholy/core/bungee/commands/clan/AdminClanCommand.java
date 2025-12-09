@@ -170,7 +170,7 @@ public class AdminClanCommand extends SenderCommand {
                     BungeeCore.getAPI().getClanPlayerService().saveEntity(clanProfile, true, true);
                     clan.getMembers().add(uuid);
                     BungeeCore.getAPI().getClanManager().updateClan(clan);
-                    BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + "§7 "+BungeeTranslateAPI.translate(author,"joined the clan."));
+                    BungeeCore.getInstance().getBungeePlayerManager().sendClanMessage(clan, Message.CLAN_PREFIX + BungeeCore.getInstance().getPlayerColor(uuid) + BungeeCore.getAPI().getUuidManager().getName(uuid) + " §7 "+BungeeTranslateAPI.translate(author,"joined the clan."));
                     ProxyServer.getInstance().getScheduler().schedule(BungeeCore.getInstance(), () -> BungeeCore.getAPI().getCloudManager().announceClanUpdate(finalUuid1), 2, TimeUnit.SECONDS);
                 } else printUsage(sender);
             } else printUsage(sender);

@@ -61,7 +61,7 @@ public class ChatLogCommand extends Command {
         clickText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Click to open the chatlog").create()));
         message.addExtra(clickText);
         message.addExtra("§8)");
-        commandSender.sendMessage(message);
+        player.sendMessage(message);
 
 
     }
