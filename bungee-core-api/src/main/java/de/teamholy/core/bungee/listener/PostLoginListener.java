@@ -15,6 +15,7 @@ import de.teamholy.core.api.utility.PartyInviteAllowance;
 import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ProxyManager;
+import de.teamholy.core.bungee.util.Pair;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -141,8 +142,9 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
     }
 
     private void handlePlayerProfile(ProxiedPlayer player, String ipAddress) {
-        PlayerProfile playerProfile = loadOrCreatePlayerProfile(player, ipAddress);
-        boolean isNewPlayer = playerProfile.getFirstJoin() == playerProfile.getLastJoin();
+        Pair<PlayerProfile, Boolean> profileLoadResult = loadOrCreatePlayerProfile(player, ipAddress);
+        PlayerProfile playerProfile = profileLoadResult.getLeft();
+        boolean isNewPlayer = profileLoadResult.getRight();
 
         if (!isNewPlayer) {
             if (playerProfile.isOnline()) {
@@ -171,17 +173,18 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         updateReportStatus(player);
     }
 
-    private PlayerProfile loadOrCreatePlayerProfile(ProxiedPlayer player, String ipAddress) {
+    private Pair<PlayerProfile, Boolean> loadOrCreatePlayerProfile(ProxiedPlayer player, String ipAddress) {
         PlayerProfile profile = BungeeCore.getAPI().getPlayerService().getEntity(
             player.getUniqueId(),
             () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(player.getUniqueId())
         );
 
-        if (profile == null) {
+        boolean isNewPlayer = profile == null;
+        if (isNewPlayer) {
             profile = createNewPlayerProfile(player, ipAddress);
         }
 
-        return profile;
+        return new Pair<PlayerProfile, Boolean>(profile, isNewPlayer);
     }
 
     private PlayerProfile createNewPlayerProfile(ProxiedPlayer player, String ipAddress) {
