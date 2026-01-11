@@ -24,6 +24,7 @@ public class PlayerNameTagListener implements Listener {
     private static final UUID WEIBLICHZWOELF_UUID = UUID.fromString("60d97170-3d03-4562-918d-7ff7a493b68e");
     private static final UUID JAVAEXCEPTIONDE_UUID = UUID.fromString("ce397ef0-7973-4ce5-a3b1-3bd6e7fc9970");
     private static final UUID ANGEKLXGTER_UUID = UUID.fromString("7504c806-b491-4303-b6df-9746d4e7b34e");
+    private static final UUID TEST_UUID = UUID.fromString("3a10d668-111c-4473-91d7-90a7bebcec90");
 
     private static final UUID GREGORR_UUID = UUID.fromString("eecc3c44-eaaf-48fe-af23-3af762578446");
     private static final UUID YASSINO_UUID = UUID.fromString("fa44c187-80dd-4171-bb5a-2e694c4c8b4f");
@@ -73,6 +74,8 @@ public class PlayerNameTagListener implements Listener {
             prefix = "§8[§5§lᓚᘏᗢ§8] " + rank.getColorCode();
         } else if (uuid.equals(KOBOO_UUID)) {
             prefix = "§8[§5Koboo§8] §7";
+        } else if (uuid.equals(TEST_UUID)) {
+            prefix = "§5AC-Test §8┃ " + rank.getColorCode();
         }
 
         if (uuid.equals(GREGORR_UUID)) {
