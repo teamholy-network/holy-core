@@ -7,6 +7,7 @@ dependencies {
     compileOnly(libs.cloudnet.bridge)
     compileOnly(libs.cloudnet.wrapper.jvm)
     compileOnly(libs.bungeecord.api)
+    compileOnly(libs.luckperms)
 
     // Add trove4j to provide gnu.trove.map.TObjectIntMap and related classes
     implementation(libs.trove4j)

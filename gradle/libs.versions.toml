@@ -42,6 +42,8 @@ updater-bungee = "0.0.3-SNAPSHOT"
 # HolographicDisplays version
 holographicdisplays-api = "2.4.9"
 
+#Luckperms version
+luckperms = "5.4"
 
 [plugins]
 # Gradle plugins
@@ -90,6 +92,9 @@ updater-bungee = { module = "de.skydb.updater:Updater-Bungee", version.ref = "up
 
 # HolographicDisplays
 holographicdisplays-api = { module = "com.gmail.filoghost.holographicdisplays:holographicdisplays-api", version.ref = "holographicdisplays-api" }
+
+# Luckperms
+luckperms = { module = "net.luckperms:api", version.ref = "luckperms" }
 
 [bundles]
 # Core dependencies bundle
