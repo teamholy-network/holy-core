@@ -1,3 +1,4 @@
 name: bungee-core
 main: de.teamholy.core.bungee.BungeeCore
 version: 1.0
+depends: [ "LuckPerms" ]

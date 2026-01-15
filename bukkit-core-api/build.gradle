@@ -19,6 +19,8 @@ dependencies {
     compileOnly(libs.protocollib.comphenix)
     implementation(libs.jackson.core)
 
+    compileOnly(libs.luckperms)
+
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))
 }

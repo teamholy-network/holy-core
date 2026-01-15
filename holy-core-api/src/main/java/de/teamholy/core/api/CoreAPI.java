@@ -21,6 +21,7 @@ import eu.koboo.en2do.MongoManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import net.luckperms.api.LuckPerms;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -61,6 +62,8 @@ public class CoreAPI {
     StatsProfileService statsProfileService;
     ConfigManager config;
 
+    RankManager rankManager;
+
     public CoreAPI() {
 
         CloudManager cloudManager1;
@@ -87,8 +90,8 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
+        this.rankManager = new RankManager();
         //this.rabbit = new Rabbit(config.getRabbitConnection());
-
         try {
             cloudManager1 = new CloudManager(this, CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class));
         } catch (NoClassDefFoundError error) {
@@ -133,6 +136,7 @@ public class CoreAPI {
         this.perkPlayerService = new PerkPlayerService(this);
         this.bannerService = new BannerService(this);
         this.statsProfileService = new StatsProfileService(this);
+        this.rankManager = new RankManager();
         //this.rabbit = new Rabbit(config.getRabbitConnection());
 
 

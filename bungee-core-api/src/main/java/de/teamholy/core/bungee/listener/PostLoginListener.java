@@ -1,7 +1,5 @@
 package de.teamholy.core.bungee.listener;
 
-import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
@@ -16,6 +14,7 @@ import de.teamholy.core.api.utility.PlayerRank;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.ProxyManager;
 import de.teamholy.core.bungee.util.Pair;
+import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -229,24 +228,18 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
     }
 
     private void updateRankFromPermissions(ProxiedPlayer player, PlayerProfile profile) {
-        IPermissionUser permissionUser = CloudNetDriver.getInstance()
-            .getPermissionManagement()
-            .getUser(player.getUniqueId());
-
-        if (permissionUser != null) {
-            String group = CloudNetDriver.getInstance()
-                .getPermissionManagement()
-                .getHighestPermissionGroup(permissionUser)
-                .getName()
-                .toUpperCase(Locale.ROOT);
-
-            PlayerRank playerRank = PlayerRank.fromString(group);
+        BungeeCore.getAPI().getRankManager().getPrimaryGroup(BungeeCore.getAPI().getRankManager().getLuckPerms().getPlayerAdapter(ProxiedPlayer.class), player)
+        .ifPresent(inheritanceNode -> {
+            String group = inheritanceNode.getGroupName();
+            PlayerRank playerRank = Arrays.stream(PlayerRank.values()).filter(playerRank1 -> playerRank1.getName().equalsIgnoreCase(group)).findFirst().orElse(null);
+            if (playerRank == null) {
+                playerRank = PlayerRank.PLAYER;
+            }
             String normalizedRank = playerRank.name();
-
             if (!normalizedRank.equalsIgnoreCase(profile.getRank())) {
                 profile.setRank(normalizedRank);
             }
-        }
+        });
     }
 
     private FriendProfile loadOrCreateFriendProfile(UUID playerId, boolean isNewPlayer) {

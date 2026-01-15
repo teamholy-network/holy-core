@@ -22,6 +22,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import net.luckperms.api.LuckPermsProvider;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.World;
@@ -77,6 +79,7 @@ public class BukkitCore extends JavaPlugin {
     @Override
     public void onEnable() {
         coreAPI = new CoreAPI();
+        coreAPI.getRankManager().init(LuckPermsProvider.get());
         protocolManager = ProtocolLibrary.getProtocolManager();
         metricsManager = new MetricsManager(this.coreAPI);
         perkManager = new PerkManager(this);

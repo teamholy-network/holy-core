@@ -137,6 +137,7 @@ public class BungeeCore extends Plugin {
 
     private void initializeManagers() {
         coreAPI = new CoreAPI();
+        coreAPI.getRankManager().init();
         bungeePlayerManager = new BungeePlayerManager(coreAPI);
         partyManager = new PartyManager();
         chatLogManager = new ChatLogManager();
@@ -179,8 +180,6 @@ public class BungeeCore extends Plugin {
         new PartyListener();
         new ChatFilterListener(this);
         new CloudMessageListener(coreAPI);
-
-        CloudNetDriver.getInstance().getEventManager().registerListener(new CloudRankUpdateListener());
 
         ProxyServer proxy = ProxyServer.getInstance();
         proxy.getPluginManager().registerListener(this, new ChatLogListener());
@@ -253,7 +252,6 @@ public class BungeeCore extends Plugin {
         registerCommand(new GiveawayCommand("giveaway"));
         registerCommand(new DeletePlayerCommand());
         registerCommand(new ClearPlayerFromCacheCommand("clearfromcache", "cfcp"));
-        registerCommand(new EasyPermissionCommand("easypermission", "", "eperms", "easyperms"));
         registerCommand(new LensCommand("lens"));
         registerCommand(new LinkV2Command("link"));
     }

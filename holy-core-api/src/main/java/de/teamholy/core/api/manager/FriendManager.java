@@ -1,14 +1,14 @@
 package de.teamholy.core.api.manager;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.dytanic.cloudnet.driver.permission.IPermissionUser;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import net.luckperms.api.model.user.User;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -94,27 +94,26 @@ public class FriendManager {
     }
 
     public int getMaxFriendsCount(UUID uuid) {
-        int defaultMaxFriends = 50;
-
-        IPermissionUser permissionUser = CloudNetDriver.getInstance().getPermissionManagement().getUser(uuid);
-
-        if (permissionUser == null) {
-            return defaultMaxFriends;
+        User user = null;
+        try {
+            user = coreAPI.getRankManager().getUser(uuid).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return 50;
         }
 
-        if (CloudNetDriver.getInstance().getPermissionManagement().hasPermission(permissionUser, "teamholy.friend.100")) {
-            defaultMaxFriends = 100;
+        if (user.getCachedData().getPermissionData().checkPermission("teamholy.friend.100").asBoolean()) {
+            return 100;
         }
 
-        if (CloudNetDriver.getInstance().getPermissionManagement().hasPermission(permissionUser, "teamholy.friend.500")) {
-            defaultMaxFriends = 500;
+        if (user.getCachedData().getPermissionData().checkPermission("teamholy.friend.500").asBoolean()) {
+            return 500;
         }
 
-        if (CloudNetDriver.getInstance().getPermissionManagement().hasPermission(permissionUser, "teamholy.friend.1000")) {
-            defaultMaxFriends = 1000;
+        if (user.getCachedData().getPermissionData().checkPermission("teamholy.friend.1000").asBoolean()) {
+            return 1000;
         }
 
-        return defaultMaxFriends;
+        return 50;
     }
 
     public boolean canAddFriendSize(UUID uuid) {
