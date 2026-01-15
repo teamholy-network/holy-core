@@ -12,8 +12,7 @@ public enum PerkRankType {
     VIP("teamholy.perk.vip", "§dVIP"),
     HOLY("teamholy.perk.holy", "§fHoly");
 
-    private String permission;
-    private String rankName;
-
+    private final String permission;
+    private final String rankName;
 
 }
