@@ -22,7 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import net.luckperms.api.LuckPermsProvider;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -223,6 +223,7 @@ public class MarkupAPI extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        coreAPI.getRankManager().init(LuckPermsProvider.get());
 
         saveDefaultConfig();
 
