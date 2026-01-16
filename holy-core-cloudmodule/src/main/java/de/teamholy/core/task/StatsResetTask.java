@@ -73,7 +73,7 @@ public class StatsResetTask implements Runnable {
                     scoredSortedSet.entryRangeReversed(0, 0).forEach(o -> {
                         ScoredEntry<UUID> scoredEntry = (ScoredEntry<UUID>) o;
                         if (!championRanks.contains(scoredEntry.getValue())) championRanks.add(scoredEntry.getValue());
-                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee","command",JsonDocument.newDocument().append("command","cloud perms user " + CloudModuleCore.getCoreAPI().getUuidManager().getName(scoredEntry.getValue()) + " add group Champion 1"));
+                        CloudModuleCore.getCoreAPI().getCloudManager().sendCloudMessage("bungee","command",JsonDocument.newDocument().append("command","lpb user " + scoredEntry.getValue() + " parent addtemp champion 1d"));
                     });
 
                 }

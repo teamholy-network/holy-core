@@ -141,7 +141,11 @@ public class RankCommand extends Command {
                         }
                         sendRankUpdateResult(result, sender, args[1], group.get(), expiryDuration, lifetime);
                         if (result) {
-                            sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(), args[3]);
+                            try {
+                                sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(), args[3]);
+                            }catch (Exception e) {
+                                ProxyServer.getInstance().getLogger().severe("Failed to send webhook: " + e.getMessage());
+                            }
                         }
                     });
                 } else if (args[0].equalsIgnoreCase("add")) {
@@ -152,7 +156,11 @@ public class RankCommand extends Command {
                         }
                         sendRankUpdateResult(result, sender, args[1], group.get(), expiryDuration, lifetime);
                         if (result) {
-                            sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(), args[3]);
+                            try {
+                                sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(), args[3]);
+                            }catch (Exception e) {
+                                ProxyServer.getInstance().getLogger().severe("Failed to send webhook: " + e.getMessage());
+                            }
                         }
                     });
                 }
