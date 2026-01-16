@@ -38,7 +38,6 @@ public class RankCommand extends Command {
         super(name, permission, aliases);
     }
 
-
     @SneakyThrows
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -86,40 +85,63 @@ public class RankCommand extends Command {
                     return;
                 }
 
-                if (user.getCachedData().getPermissionData().checkPermission("teamholy.team") == Tristate.TRUE && !sender.hasPermission("*")) {
-                    sender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "You are not allowed to give this player a rank!"));
+                if (user.getCachedData().getPermissionData().checkPermission("teamholy.team") == Tristate.TRUE
+                        && !sender.hasPermission("*")) {
+                    sender.sendMessage(prefix
+                            + BungeeTranslateAPI.translate(author, "You are not allowed to give this player a rank!"));
                     return;
                 }
 
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[1]);
                 boolean lifetime = group.get().getName().equals("default") || args[3].equalsIgnoreCase("-1");
                 if (target != null) {
-                    target.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(target, " You now have the {}§7 rank!", getRankDisplay(group.get())));
+                    target.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(target,
+                            " You now have the {}§7 rank!", getRankDisplay(group.get())));
                     if (lifetime) {
                         target.sendMessage(prefix + "§8(§4" + BungeeTranslateAPI.translate(target, "Lifetime") + "§8)");
                     } else {
-                        target.sendMessage(prefix + "§8(§c" + args[3] + " " + BungeeTranslateAPI.translate(target, "days") + "§8)");
+                        target.sendMessage(prefix + "§8(§c" + args[3] + " "
+                                + BungeeTranslateAPI.translate(target, "days") + "§8)");
                     }
                 }
 
-                BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "rank_update", JsonDocument.newDocument("uuid", uuid));
-
-                AtomicReference<String> hexColor = new AtomicReference<>(group.get().getCachedData().getMetaData().getMetaValue("hexColor"));
+                AtomicReference<String> hexColor = new AtomicReference<>(
+                        group.get().getCachedData().getMetaData().getMetaValue("hexColor"));
                 if (hexColor.get() == null) {
                     hexColor.set("#FFFFFF");
                 }
 
-                PlayerRank playerRank = Arrays.stream(PlayerRank.values()).filter(playerRank1 -> playerRank1.getName().equalsIgnoreCase(group.get().getName())).findFirst().orElse(null);
-                if (playerRank == null) {
-                    playerRank = PlayerRank.PLAYER;
+                PlayerRank playerRank = PlayerRank.PLAYER;
+                if (args[0].equalsIgnoreCase("add")) {
+                    Optional<InheritanceNode> currentRankNode = BungeeCore.getAPI().getRankManager()
+                            .getPrimaryGroup(user);
+                    Group currentGroup = currentRankNode
+                            .map(node -> BungeeCore.getAPI().getRankManager().getGroup(node.getGroupName()))
+                            .orElse(group.get());
+                    if (currentGroup == null) {
+                        currentGroup = group.get();
+                    }
+                    Group highestGroup = currentGroup.getWeight().orElse(0) > group.get().getWeight().orElse(0)
+                            ? currentGroup
+                            : group.get();
+                    playerRank = Arrays.stream(PlayerRank.values())
+                            .filter(rank -> rank.getName().equalsIgnoreCase(highestGroup.getName()))
+                            .findFirst().orElse(PlayerRank.PLAYER);
+                } else if (args[0].equalsIgnoreCase("set")) {
+                    playerRank = Arrays.stream(PlayerRank.values())
+                            .filter(rank -> rank.getName().equalsIgnoreCase(group.get().getName())).findFirst()
+                            .orElse(PlayerRank.PLAYER);
                 }
-
                 if (target != null) {
-                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getPlayerService().getRepository().findFirstById(target.getUniqueId()));
+                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getEntity(target.getUniqueId(),
+                            () -> BungeeCore.getAPI().getPlayerService().getRepository()
+                                    .findFirstById(target.getUniqueId()));
                     playerProfile.setRank(playerRank.toString());
                     BungeeCore.getAPI().getPlayerService().saveEntity(playerProfile, true, true);
 
-                    StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(target.getUniqueId(), () -> BungeeCore.getAPI().getStaffService().getRepository().findFirstById(target.getUniqueId()));
+                    StaffProfile staffProfile = BungeeCore.getAPI().getStaffService().getEntity(target.getUniqueId(),
+                            () -> BungeeCore.getAPI().getStaffService().getRepository()
+                                    .findFirstById(target.getUniqueId()));
                     if (staffProfile == null) {
                         staffProfile = new StaffProfile();
                         staffProfile.setPlayerId(target.getUniqueId());
@@ -130,39 +152,50 @@ public class RankCommand extends Command {
                         BungeeCore.getAPI().getStaffService().saveEntity(staffProfile, true, true);
                     }
                 }
+                BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "rank_update",
+                        JsonDocument.newDocument("uuid", uuid));
 
                 Integer expiryDuration = Integer.parseInt(args[3]);
-                String groupName = group.get().getDisplayName() == null ? group.get().getName() : group.get().getDisplayName();
+                String groupName = group.get().getDisplayName() == null ? group.get().getName()
+                        : group.get().getDisplayName();
                 if (args[0].equalsIgnoreCase("set")) {
-                    BungeeCore.getAPI().getRankManager().setGroup(user, group.get(), expiryDuration).whenCompleteAsync((result, throwable) -> {
-                        if (throwable != null) {
-                            sender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "Failed to set rank"));
-                            return;
-                        }
-                        sendRankUpdateResult(result, sender, args[1], group.get(), expiryDuration, lifetime);
-                        if (result) {
-                            try {
-                                sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(), args[3]);
-                            }catch (Exception e) {
-                                ProxyServer.getInstance().getLogger().severe("Failed to send webhook: " + e.getMessage());
-                            }
-                        }
-                    });
+                    BungeeCore.getAPI().getRankManager().setGroup(user, group.get(), expiryDuration)
+                            .whenCompleteAsync((result, throwable) -> {
+                                if (throwable != null) {
+                                    sender.sendMessage(
+                                            prefix + BungeeTranslateAPI.translate(author, "Failed to set rank"));
+                                    return;
+                                }
+                                sendRankUpdateResult(result, sender, args[1], group.get(), expiryDuration, lifetime);
+                                if (result) {
+                                    try {
+                                        sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(),
+                                                args[3]);
+                                    } catch (Exception e) {
+                                        ProxyServer.getInstance().getLogger()
+                                                .severe("Failed to send webhook: " + e.getMessage());
+                                    }
+                                }
+                            });
                 } else if (args[0].equalsIgnoreCase("add")) {
-                    BungeeCore.getAPI().getRankManager().addGroup(user, group.get(), expiryDuration).whenCompleteAsync((result, throwable) -> {
-                        if (throwable != null) {
-                            sender.sendMessage(prefix + BungeeTranslateAPI.translate(author, "Failed to add rank"));
-                            return;
-                        }
-                        sendRankUpdateResult(result, sender, args[1], group.get(), expiryDuration, lifetime);
-                        if (result) {
-                            try {
-                                sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(), args[3]);
-                            }catch (Exception e) {
-                                ProxyServer.getInstance().getLogger().severe("Failed to send webhook: " + e.getMessage());
-                            }
-                        }
-                    });
+                    BungeeCore.getAPI().getRankManager().addGroup(user, group.get(), expiryDuration)
+                            .whenCompleteAsync((result, throwable) -> {
+                                if (throwable != null) {
+                                    sender.sendMessage(
+                                            prefix + BungeeTranslateAPI.translate(author, "Failed to add rank"));
+                                    return;
+                                }
+                                sendRankUpdateResult(result, sender, args[1], group.get(), expiryDuration, lifetime);
+                                if (result) {
+                                    try {
+                                        sendWebhook(lifetime, sender.getName(), args[1], groupName, hexColor.get(),
+                                                args[3]);
+                                    } catch (Exception e) {
+                                        ProxyServer.getInstance().getLogger()
+                                                .severe("Failed to send webhook: " + e.getMessage());
+                                    }
+                                }
+                            });
                 }
 
             });
@@ -176,20 +209,24 @@ public class RankCommand extends Command {
         proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(author, "You can only give these ranks") + ":");
         StringBuilder stringBuilder = new StringBuilder();
         List<Group> ranks = BungeeCore.getAPI().getRankManager().getRanks();
-        ranks.sort((o1, o2) -> Integer.compare(BungeeCore.getAPI().getRankManager().getPrefixNode(o2.getName()).getPriority(), BungeeCore.getAPI().getRankManager().getPrefixNode(o1.getName()).getPriority()));
+        ranks.sort((o1, o2) -> Integer.compare(
+                BungeeCore.getAPI().getRankManager().getPrefixNode(o2.getName()).getPriority(),
+                BungeeCore.getAPI().getRankManager().getPrefixNode(o1.getName()).getPriority()));
         ranks.forEach(group -> {
             if (proxiedPlayer.hasPermission("teamholy.rang." + group.getName())) {
                 stringBuilder.append(getRankDisplay(group) + "§7, ");
             }
         });
         proxiedPlayer.sendMessage(stringBuilder.toString());
-        proxiedPlayer.sendMessage(prefix + "/rank set§8/§7add (" + BungeeTranslateAPI.translate(author, "player") + ") (" + BungeeTranslateAPI.translate(author, "rank") + ") (" + BungeeTranslateAPI.translate(author, "time in days") + ", " + BungeeTranslateAPI.translate(author, "Lifetime") + " = -1)");
+        proxiedPlayer.sendMessage(prefix + "/rank set§8/§7add (" + BungeeTranslateAPI.translate(author, "player")
+                + ") (" + BungeeTranslateAPI.translate(author, "rank") + ") ("
+                + BungeeTranslateAPI.translate(author, "time in days") + ", "
+                + BungeeTranslateAPI.translate(author, "Lifetime") + " = -1)");
 
         if (proxiedPlayer instanceof ProxiedPlayer) {
             sendRank((ProxiedPlayer) proxiedPlayer);
         }
     }
-
 
     private void sendRank(ProxiedPlayer proxiedPlayer) {
         UUID author = BungeeUtil.parseAuthorUUID(proxiedPlayer);
@@ -218,7 +255,10 @@ public class RankCommand extends Command {
         } else {
             expiryDuration = "§c" + BungeeTranslateAPI.translate(proxiedPlayer, "EXPIRED");
         }
-        proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You have the {}§7 rank", getRankDisplay(group)) + "§8︳ §7" + BungeeTranslateAPI.translate(proxiedPlayer, "End") + " §8» " + expiryDuration);
+        proxiedPlayer.sendMessage(prefix
+                + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You have the {}§7 rank",
+                        getRankDisplay(group))
+                + "§8︳ §7" + BungeeTranslateAPI.translate(proxiedPlayer, "End") + " §8» " + expiryDuration);
     }
 
     private String getRankDisplay(Group group) {
@@ -226,15 +266,16 @@ public class RankCommand extends Command {
     }
 
     private void sendWebhook(boolean lifetime, String sender, String target, String rank, String hex, String time) {
-        DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
+        DiscordWebhook discordWebhook = new DiscordWebhook(
+                "https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
         discordWebhook.setUsername("Rang update");
         if (lifetime) {
             discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(parseHexColor(hex))
-                .setDescription(sender + " hat " + target + " den Rang " + rank + " LIFETIME gegeben")
-            );
+                    .setDescription(sender + " hat " + target + " den Rang " + rank + " LIFETIME gegeben"));
         } else {
             discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(parseHexColor(hex))
-            .setDescription(sender + " hat " + target + " den Rang " + rank + " für " + time + " Tage gegeben"));
+                    .setDescription(
+                            sender + " hat " + target + " den Rang " + rank + " für " + time + " Tage gegeben"));
         }
         discordWebhook.execute();
     }
@@ -247,13 +288,20 @@ public class RankCommand extends Command {
         }
     }
 
-    private void sendRankUpdateResult(boolean result, CommandSender sender, String target, Group group, Integer expiryDuration, boolean lifetime) {
+    private void sendRankUpdateResult(boolean result, CommandSender sender, String target, Group group,
+            Integer expiryDuration, boolean lifetime) {
         UUID author = BungeeUtil.parseAuthorUUID(sender);
         if (result) {
             if (lifetime) {
-                sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author, "you gave {} the rank {} ", target, getRankDisplay(group)) + " §8(§4" + BungeeTranslateAPI.translate(author, "Lifetime") + "§8)");
+                sender.sendMessage(prefix
+                        + BungeeTranslateAPI.translatePlaceholder(author, "you gave {} the rank {} ", target,
+                                getRankDisplay(group))
+                        + " §8(§4" + BungeeTranslateAPI.translate(author, "Lifetime") + "§8)");
             } else {
-                sender.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(author, "you gave {} the rank {} ", target, getRankDisplay(group)) + " §8(§c" + expiryDuration + " " + BungeeTranslateAPI.translate(author, "Days") + "§8)");
+                sender.sendMessage(prefix
+                        + BungeeTranslateAPI.translatePlaceholder(author, "you gave {} the rank {} ", target,
+                                getRankDisplay(group))
+                        + " §8(§c" + expiryDuration + " " + BungeeTranslateAPI.translate(author, "Days") + "§8)");
             }
         } else {
             sender.sendMessage(prefix + "§c" + BungeeTranslateAPI.translate(author, "Failed to set rank"));
