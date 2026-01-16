@@ -1,6 +1,7 @@
 package de.teamholy.core.bungee.listener.luckperms;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.event.node.NodeAddEvent;
 import net.luckperms.api.event.node.NodeMutateEvent;
 import net.luckperms.api.event.node.NodeRemoveEvent;
+import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
@@ -33,13 +35,27 @@ public class RankUpdateListener {
         if (!event.isUser()) {
             return;
         }
-        User user = (User) event.getTarget();
         if (!(node instanceof InheritanceNode)) {
             return;
         }
-        String group = user.getPrimaryGroup();
-        Optional<PlayerRank> playerRank = Arrays.stream(PlayerRank.values()).filter(rank -> rank.getName().equals(group)).findFirst();
-        playerRank.ifPresent(rank -> BungeeCore.getInstance().getPlayerColorCacheManager().put(user.getUniqueId(), rank.getColorCode()));
+
+        User user = (User) event.getTarget();
+        if (user == null) {
+            return;
+        }
+        Optional<Group> group = event.getDataAfter().stream()
+                .filter(filterNode -> filterNode instanceof InheritanceNode)
+                .map(inheritanceNode1 -> BungeeCore.getAPI().getRankManager().getGroup(((InheritanceNode) inheritanceNode1).getGroupName()))
+                .sorted(Comparator.comparingInt(sortGroup -> sortGroup.getWeight().orElseGet(() -> 0))).findFirst();
+        if (group.isEmpty()) {
+            BungeeCore.getInstance().getPlayerColorCacheManager().put(user.getUniqueId(), PlayerRank.PLAYER.getColorCode());
+            return;
+        }
+        Optional<PlayerRank> playerRank = Arrays.stream(PlayerRank.values())
+                .filter(rank -> rank.getName().equals(group.get().getName())).findFirst();
+        
+        playerRank.ifPresent(rank -> BungeeCore.getInstance().getPlayerColorCacheManager().put(user.getUniqueId(),
+                rank.getColorCode()));
     }
 
 }

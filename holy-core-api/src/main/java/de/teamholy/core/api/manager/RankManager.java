@@ -128,7 +128,7 @@ public class RankManager {
         }
         DataMutateResult dataMutateResult = user.data().add(inheritanceNodeBuilder.build());
         if (!dataMutateResult.wasSuccessful()) {
-            return CompletableFuture.completedFuture(null);
+            return CompletableFuture.completedFuture(false);
         }
         return luckPerms.getUserManager().saveUser(user).thenApply(u -> true);
     }
