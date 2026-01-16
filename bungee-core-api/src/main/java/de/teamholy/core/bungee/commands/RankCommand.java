@@ -229,14 +229,22 @@ public class RankCommand extends Command {
         DiscordWebhook discordWebhook = new DiscordWebhook("https://discord.com/api/webhooks/1061719912730603530/zb7iKpRkLfk0Th9EcfTiBhd1LJ5gI5AV99s3n9aIuOQGrCdalU7QsIjj_YXdtgYpE8Jn");
         discordWebhook.setUsername("Rang update");
         if (lifetime) {
-            discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(Integer.parseInt(hex, 16)))
+            discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(parseHexColor(hex))
                 .setDescription(sender + " hat " + target + " den Rang " + rank + " LIFETIME gegeben")
             );
         } else {
-            discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(new Color(Integer.parseInt(hex, 16)))
+            discordWebhook.addEmbed(new DiscordWebhook.EmbedObject().setColor(parseHexColor(hex))
             .setDescription(sender + " hat " + target + " den Rang " + rank + " für " + time + " Tage gegeben"));
         }
         discordWebhook.execute();
+    }
+
+    private Color parseHexColor(String hex) {
+        try {
+            return Color.decode(hex.startsWith("#") ? hex : "#" + hex);
+        } catch (NumberFormatException e) {
+            return Color.WHITE;
+        }
     }
 
     private void sendRankUpdateResult(boolean result, CommandSender sender, String target, Group group, Integer expiryDuration, boolean lifetime) {

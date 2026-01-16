@@ -15,6 +15,7 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.InheritanceNode;
+import net.luckperms.api.node.types.PermissionNode;
 import net.luckperms.api.node.types.PrefixNode;
 import net.luckperms.api.platform.PlayerAdapter;
 
@@ -146,7 +147,7 @@ public class RankManager {
         }
         DataMutateResult dataMutateResult = user.data().add(inheritanceNodeBuilder.build());
         if (!dataMutateResult.wasSuccessful()) {
-            return CompletableFuture.completedFuture(null);
+            return CompletableFuture.completedFuture(false);
         }
         return luckPerms.getUserManager().saveUser(user).thenApply(u -> true);
     }
@@ -158,6 +159,22 @@ public class RankManager {
         }
         color = color.replaceAll("&", "§");
         return color + (group.getDisplayName() != null ? group.getDisplayName() : group.getName());
+    }
+
+    public CompletableFuture<Boolean> addPermission(UUID uuid, String permission) {
+        return getOrLoadUser(uuid).thenCompose(user -> addPermission(user, permission));
+    }
+
+    public CompletableFuture<Boolean> addPermission(User user, String permission) {
+        provideLuckPermsAPI();
+        if (user == null) {
+            return CompletableFuture.completedFuture(false);
+        }
+        DataMutateResult dataMutateResult = user.data().add(PermissionNode.builder(permission).build());
+        if (!dataMutateResult.wasSuccessful()) {
+            return CompletableFuture.completedFuture(false);
+        }
+        return luckPerms.getUserManager().saveUser(user).thenApply(u -> true);
     }
 
     private CompletableFuture<User> getOrLoadUser(UUID uuid) {

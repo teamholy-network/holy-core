@@ -22,6 +22,7 @@ import redis.clients.jedis.Jedis;
 
 import java.awt.*;
 import java.util.List;
+import java.util.UUID;
 
 
 public class RedisQueueListener {
@@ -104,11 +105,18 @@ public class RedisQueueListener {
                             }
                             case "bypassjoinfilter" -> {
                                 String target = args[1];
-                                CloudNetDriver.getInstance().getPermissionManagement().getUsers(target).forEach(iPermissionUser -> {
-                                    iPermissionUser.addPermission("teamholy.joinfilter.bypass");
-                                    CloudNetDriver.getInstance().getPermissionManagement().updateUser(iPermissionUser);
+                                UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(target);
+                                if (uuid == null) {
+                                    sendDiscordWebhook("Player " + target + " not found");
+                                    continue;
+                                }
+                                BungeeCore.getAPI().getRankManager().addPermission(uuid, "teamholy.joinfilter.bypass").thenAccept(success -> {
+                                    if (!success) {
+                                        sendDiscordWebhook("Failed to give player " + target + " the bypass join filter permission");
+                                        return;
+                                    }
+                                    sendDiscordWebhook(msg);
                                 });
-                                sendDiscordWebhook(msg);
                             }
                             default -> {
                                 ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), msg);
