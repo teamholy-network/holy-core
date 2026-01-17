@@ -20,6 +20,7 @@ import net.md_5.bungee.api.plugin.Command;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -251,7 +252,7 @@ public class RankCommand extends Command {
         if (inheritanceNode.getExpiryDuration() == null) {
             expiryDuration = "§a" + BungeeTranslateAPI.translate(proxiedPlayer, "PERMANENT");
         } else if (inheritanceNode.getExpiryDuration().toMillis() > 0) {
-            expiryDuration = "§e" + simpleDateFormat.format(inheritanceNode.getExpiryDuration().toMillis());
+            expiryDuration = "§e" + simpleDateFormat.format(inheritanceNode.getExpiry().toEpochMilli());
         } else {
             expiryDuration = "§c" + BungeeTranslateAPI.translate(proxiedPlayer, "EXPIRED");
         }

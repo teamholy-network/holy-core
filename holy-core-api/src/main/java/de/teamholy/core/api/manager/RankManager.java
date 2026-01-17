@@ -144,6 +144,7 @@ public class RankManager {
                     .orElseGet(() -> 0L);
             Long newExpiryDuration = lastExpiryDuration + TimeUnit.DAYS.toMillis(expiryDuration);
             inheritanceNodeBuilder.expiry(newExpiryDuration, TimeUnit.MILLISECONDS);
+            inheritanceNode.ifPresent(node -> user.data().remove(node));
         }
         DataMutateResult dataMutateResult = user.data().add(inheritanceNodeBuilder.build());
         if (!dataMutateResult.wasSuccessful()) {
