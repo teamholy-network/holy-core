@@ -38,11 +38,13 @@ import de.teamholy.core.bungee.commands.team.TeamCommand;
 import de.teamholy.core.bungee.commands.team.TeamNotifyCommand;
 import de.teamholy.core.bungee.commands.website.WebsiteCommand;
 import de.teamholy.core.bungee.listener.*;
+import de.teamholy.core.bungee.listener.luckperms.RankUpdateListener;
 import de.teamholy.core.bungee.manager.*;
 import de.teamholy.core.bungee.util.Helpers;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import net.luckperms.api.LuckPermsProvider;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -180,6 +182,7 @@ public class BungeeCore extends Plugin {
         new PartyListener();
         new ChatFilterListener(this);
         new CloudMessageListener(coreAPI);
+        new RankUpdateListener(LuckPermsProvider.get());
 
         ProxyServer proxy = ProxyServer.getInstance();
         proxy.getPluginManager().registerListener(this, new ChatLogListener());

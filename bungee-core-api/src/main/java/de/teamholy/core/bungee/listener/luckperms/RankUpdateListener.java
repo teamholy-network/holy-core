@@ -46,14 +46,13 @@ public class RankUpdateListener {
         Optional<Group> group = event.getDataAfter().stream()
                 .filter(filterNode -> filterNode instanceof InheritanceNode)
                 .map(inheritanceNode1 -> BungeeCore.getAPI().getRankManager().getGroup(((InheritanceNode) inheritanceNode1).getGroupName()))
-                .sorted(Comparator.comparingInt(sortGroup -> sortGroup.getWeight().orElseGet(() -> 0))).findFirst();
+                .sorted(Comparator.comparingInt(sortGroup -> ((Group) sortGroup).getWeight().orElseGet(() -> 0)).reversed()).findFirst();
         if (group.isEmpty()) {
             BungeeCore.getInstance().getPlayerColorCacheManager().put(user.getUniqueId(), PlayerRank.PLAYER.getColorCode());
             return;
         }
         Optional<PlayerRank> playerRank = Arrays.stream(PlayerRank.values())
-                .filter(rank -> rank.getName().equals(group.get().getName())).findFirst();
-        
+                .filter(rank -> rank.getName().equalsIgnoreCase(group.get().getName())).findFirst();
         playerRank.ifPresent(rank -> BungeeCore.getInstance().getPlayerColorCacheManager().put(user.getUniqueId(),
                 rank.getColorCode()));
     }
