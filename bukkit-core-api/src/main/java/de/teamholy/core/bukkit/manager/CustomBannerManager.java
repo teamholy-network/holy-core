@@ -33,12 +33,22 @@ public class CustomBannerManager {
 
             List<Pattern> bukkitPatterns = new ArrayList<>();
 
-            for (CustomBanner.Pattern customPattern : customBanner.getPatterns()) {
-                DyeColor dyeColor = colorMapper(customPattern.getColor().toUpperCase());
-                PatternType patternType = PatternType.valueOf(customPattern.getPatternName().toUpperCase());
+            try {
+                for (CustomBanner.Pattern customPattern : customBanner.getPatterns()) {
+                    DyeColor dyeColor = colorMapper(customPattern.getColor().toUpperCase());
+                    PatternType patternType;
+                    try {
+                        patternType = PatternType.valueOf(customPattern.getPatternName().toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        continue;
+                    }
 
-                Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
-                bukkitPatterns.add(bukkitPattern);
+                    Pattern bukkitPattern = new org.bukkit.block.banner.Pattern(dyeColor, patternType);
+                    bukkitPatterns.add(bukkitPattern);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
             }
 
             new BukkitRunnable() {
@@ -74,13 +84,17 @@ public class CustomBannerManager {
     }
 
     private DyeColor colorMapper(String colorName) {
-        return switch (colorName) {
-            case "LIGHT_PURPLE" -> DyeColor.MAGENTA;
-            case "LIGHT_GRAY" -> DyeColor.SILVER;
-            case "DARK_GRAY" -> DyeColor.GRAY;
-            case "LIGHT_GREEN" -> DyeColor.LIME;
-            default -> DyeColor.valueOf(colorName);
-        };
+        try {
+            return switch (colorName) {
+                case "LIGHT_PURPLE" -> DyeColor.MAGENTA;
+                case "LIGHT_GRAY" -> DyeColor.SILVER;
+                case "DARK_GRAY" -> DyeColor.GRAY;
+                case "LIGHT_GREEN" -> DyeColor.LIME;
+                default -> DyeColor.valueOf(colorName);
+            };
+        } catch (IllegalArgumentException e) {
+            return DyeColor.WHITE;
+        }
     }
 
 

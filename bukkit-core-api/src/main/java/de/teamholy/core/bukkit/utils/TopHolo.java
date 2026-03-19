@@ -109,7 +109,7 @@ public class TopHolo {
 
             int rank = top.size() + 1;
 
-            top.put(rank, new TopPlayer(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), scoredEntry.getScore(), rank));
+            top.put(rank, new TopPlayer(PlayerRank.fromString(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), scoredEntry.getScore(), rank));
         });
 
         return top;

@@ -60,15 +60,22 @@ public class StatsCommand extends SenderCommand {
                 return;
             }
 
-            Gamemodes gamemode = Gamemodes.valueOf(args[1]);
-            if (gamemode == null || gamemode.getRankingKey().isEmpty()) {
+            Gamemodes gamemode;
+            try {
+                gamemode = Gamemodes.valueOf(args[1]);
+            } catch (IllegalArgumentException e) {
+                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find gamemode"));
+                return;
+            }
+            if (gamemode.getRankingKey().isEmpty()) {
                 player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find gamemode"));
                 return;
             }
 
-            StatsType statsType = StatsType.valueOf(args[2]);
-
-            if (statsType == null) {
+            StatsType statsType;
+            try {
+                statsType = StatsType.valueOf(args[2]);
+            } catch (IllegalArgumentException e) {
                 player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find stats time"));
                 return;
             }

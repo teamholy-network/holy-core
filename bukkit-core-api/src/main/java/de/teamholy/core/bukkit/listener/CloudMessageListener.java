@@ -162,14 +162,19 @@ public class CloudMessageListener {
 
 
         } else if (event.getMessage().equalsIgnoreCase("rank_update")) {
-            UUID uuid = UUID.fromString(event.getData().getString("uuid"));
+            UUID uuid;
+            try {
+                uuid = UUID.fromString(event.getData().getString("uuid"));
+            } catch (IllegalArgumentException | NullPointerException e) {
+                return;
+            }
             if (bukkitCore.getPlayerCacheManager().getCachedPlayers().containsKey(uuid)) {
 
                 Bukkit.getScheduler().runTaskLaterAsynchronously(bukkitCore, () -> {
 
                     PlayerProfile playerProfile = BukkitCore.getAPI().getPlayerService().getEntity(uuid, () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(uuid));
                     PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = bukkitCore.getPlayerCacheManager().getCachedPlayers().get(uuid);
-                    cachedBukkitPlayer.setRank(PlayerRank.valueOf(playerProfile.getRank()));
+                    cachedBukkitPlayer.setRank(PlayerRank.fromString(playerProfile.getRank()));
 
                     bukkitCore.getPlayerCacheManager().getCachedPlayers().put(uuid, cachedBukkitPlayer);
                     Bukkit.getScheduler().runTaskLater(bukkitCore, () -> MarkupAPI.updateNameTag(Bukkit.getPlayer(uuid)), 3);
@@ -177,7 +182,12 @@ public class CloudMessageListener {
 
             }
         } else if (event.getMessage().equalsIgnoreCase("clan_update")) {
-            UUID uuid = UUID.fromString(event.getData().getString("uuid"));
+            UUID uuid;
+            try {
+                uuid = UUID.fromString(event.getData().getString("uuid"));
+            } catch (IllegalArgumentException | NullPointerException e) {
+                return;
+            }
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) return;
 

@@ -184,7 +184,7 @@ public class ReportBukkitManager implements CommandExecutor {
             .getEntity(report.getTarget(), () -> BukkitCore.getAPI().getPlayerService().getRepository().findFirstById(report.getTarget()));
         if (playerProfile == null) return;
 
-        Inventory inventory = new Inventory("§8» " + prefix + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), 9 * 3);
+        Inventory inventory = new Inventory("§8» " + prefix + PlayerRank.fromString(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(), 9 * 3);
         for (int i = 0; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
@@ -205,13 +205,13 @@ public class ReportBukkitManager implements CommandExecutor {
 
         inventory.setItem(new ItemBuilder(Material.SKULL_ITEM, 1, (byte) 3)
             .setSkullOwner(playerProfile.getPlayerName())
-            .setName(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
+            .setName(PlayerRank.fromString(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
             .setLore(" ",
                 "§8┃ §7"+BukkitTranslateAPI.translate(player, "State")+" §8» §a" + (report.getViewer() == null ? "§a"+BukkitTranslateAPI.translate(player, "Open") : "§6"+BukkitTranslateAPI.translate(player, "In Progress")),
                 "§8┃ §7"+BukkitTranslateAPI.translate(player, "Date")+" §8» §e" + convertTime(report.getTime()),
                 " ",
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Sender")+" §8» §a" + (reportSender == null ? "§c"+BukkitTranslateAPI.translate(player, "Unknown") : PlayerRank.valueOf(reportSender.getRank()).getColorCode() + reportSender.getPlayerName()),
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Target")+" §8» §c" + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(),
+                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Sender")+" §8» §a" + (reportSender == null ? "§c"+BukkitTranslateAPI.translate(player, "Unknown") : PlayerRank.fromString(reportSender.getRank()).getColorCode() + reportSender.getPlayerName()),
+                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Target")+" §8» §c" + PlayerRank.fromString(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(),
                 "§8┃ §7"+BukkitTranslateAPI.translate(player, "Server")+" §8» §f" + playerProfile.getServerName(),
                 "§8┃ §7"+BukkitTranslateAPI.translate(player, "Reason")+" §8» §c" + report.getReason())
             .build(), 13);
@@ -284,13 +284,13 @@ public class ReportBukkitManager implements CommandExecutor {
 
         if (!playerProfile.isOnline()) {
             itemBuilder = new ItemBuilder(Material.INK_SACK, 1, 1)
-                .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
+                .setName("§8» " + PlayerRank.fromString(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
                 .setLore("§c"+BukkitTranslateAPI.translate(player, "Offline"));
         } else {
             String nick = BukkitCore.getAPI().getNickManager().getNickFromUUID(report.getTarget());
 
             itemBuilder = new ItemBuilder(Material.INK_SACK, 1, report.getViewer() == null ? 10 : 14)
-                .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName() + " " + (nick != null ? "§8(§5§lNICKED §7- §e" + nick + "§8)" : ""))
+                .setName("§8» " + PlayerRank.fromString(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName() + " " + (nick != null ? "§8(§5§lNICKED §7- §e" + nick + "§8)" : ""))
                 .setLore(" ",
                     "§8┃ §7"+BukkitTranslateAPI.translate(player, "State")+" §8» §a" + (report.getViewer() == null ? "§a"+BukkitTranslateAPI.translate(player, "Open") : "§6"+BukkitTranslateAPI.translate(player, "In Progress")),
                     "§8┃ §7"+BukkitTranslateAPI.translate(player, "Date")+" §8» §e" + convertTime(report.getTime()),

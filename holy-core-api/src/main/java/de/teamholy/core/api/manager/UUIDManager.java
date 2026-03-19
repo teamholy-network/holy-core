@@ -34,7 +34,11 @@ public class UUIDManager {
 
         String[] userData = coreAPI.getCloudManager().getUserInfo(name);
         if (userData != null && userData[0] != null && userData[1] != null) {
-            uuid = UUID.fromString(userData[1]);
+            try {
+                uuid = UUID.fromString(userData[1]);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
             remotePlayerUuidMap.put(userData[0], uuid);
             return uuid;
         }
@@ -55,7 +59,7 @@ public class UUIDManager {
         }
 
         String[] userData = coreAPI.getCloudManager().getUserInfo(uuid.toString());
-        if (userData[0] != null && userData[1] != null) {
+        if (userData != null && userData[0] != null && userData[1] != null) {
             String name = userData[0];
             remotePlayerUuidMap.put(name, uuid);
             return name;

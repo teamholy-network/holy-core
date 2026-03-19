@@ -95,7 +95,11 @@ public class CloudManager {
             PlayerProfile playerProfile;
 
             if (nameOrUuid.contains("-")) {
-                playerProfile = coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid));
+                try {
+                    playerProfile = coreAPI.getPlayerService().getRepository().findFirstById(UUID.fromString(nameOrUuid));
+                } catch (IllegalArgumentException ignored) {
+                    playerProfile = null;
+                }
             } else {
                 playerProfile = coreAPI.getPlayerService().getRepository().findFirstByPlayerName(nameOrUuid);
             }

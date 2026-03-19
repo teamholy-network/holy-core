@@ -82,7 +82,7 @@ public class PlayerJoinQuitListener implements Listener {
 
             PlayerCacheManager.CachedBukkitPlayer cachedBukkitPlayer = new PlayerCacheManager.CachedBukkitPlayer(
                 player,
-                PlayerRank.valueOf(playerProfile.getRank()),
+                PlayerRank.fromString(playerProfile.getRank()),
                 new NPCPlayer(player),
                 (clanPlayerProfile == null ? null : bukkitCore.getCoreAPI().getClanManager().getClanById(clanPlayerProfile.getClanId())),
                 perkPlayerProfile
