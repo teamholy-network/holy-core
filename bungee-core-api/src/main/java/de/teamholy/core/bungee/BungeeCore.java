@@ -107,7 +107,7 @@ public class BungeeCore extends Plugin {
     @Getter
     private static BungeeCore instance;
 
-    public static String RESTBASE = "http://185.14.92.243:3004/";
+    public static String RESTBASE = "https://teamholy.de/api/";
 
     CoreAPI coreAPI;
     BungeePlayerManager bungeePlayerManager;

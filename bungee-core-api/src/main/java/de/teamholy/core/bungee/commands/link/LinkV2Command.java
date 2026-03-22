@@ -53,7 +53,7 @@ public class LinkV2Command extends Command {
             return;
         }
 
-        sendAsyncHttpRequest("http://185.14.92.243:3004/holy/link/v2/verify/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd/" + player.getUniqueId().toString() + "/" + code).thenAccept(response -> {
+        sendAsyncHttpRequest("https://teamholy.de/api/holy/link/v2/verify/adasaisuoa2j2j2j2jnvalkooiwuhlkabvd/" + player.getUniqueId().toString() + "/" + code).thenAccept(response -> {
             if (response == null) {
                 commandSender.sendMessage("§c" + BungeeTranslateAPI.translate(player, "Error: An error occurred while processing your request"));
                 return;
