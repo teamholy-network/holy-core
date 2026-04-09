@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.team;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ChatColor;
@@ -45,13 +45,13 @@ public class TeamCommand extends Command {
                 String notify = " §8» §a✔";
                 if (!staffProfile.isNotify()) notify = " §8» §c✘";
 
-                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7" + BungeeTranslateAPI.translate(player, "Notify status of") + " " + name + notify)));
+                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7" + "Notify status of" + " " + name + notify)));
 
                 player.sendMessage(message);
                 i++;
             }
         }
-        player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Online team members") + " §8(§b" + i + "§8)");
+        player.sendMessage(prefix + "Online team members" + " §8(§b" + i + "§8)");
     }
 
 }

@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
@@ -17,6 +17,7 @@ import net.md_5.bungee.event.EventHandler;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /**
  * The PostDisconnectListener class listens for PlayerDisconnectEvent and
@@ -114,11 +115,7 @@ public class PostDisconnectListener implements Listener {
         friendProfile.getFriendList().forEach(friendId -> {
             ProxiedPlayer friend = ProxyServer.getInstance().getPlayer(friendId);
             if (friend != null) {
-                friend.sendMessage(new TextComponent("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(
-                    friend,
-                    "Your friend {} is now §coffline",
-                    playerName + "§7"
-                )));
+                friend.sendMessage(new TextComponent("§6Friend §8× §7" + BungeeUtil.format("Your friend {} is now §coffline", playerName + "§7")));
             }
         });
     }
@@ -143,11 +140,7 @@ public class PostDisconnectListener implements Listener {
                 String targetName = BungeeCore.getInstance().getPlayerColor(report.getTarget())
                     + BungeeCore.getAPI().getUuidManager().getName(report.getTarget());
 
-                viewer.sendMessage(new TextComponent("§c" + BungeeTranslateAPI.translatePlaceholder(
-                    viewer,
-                    "The player {} is now offline",
-                    targetName + "§c"
-                )));
+                viewer.sendMessage(new TextComponent("§c" + BungeeUtil.format("The player {} is now offline", targetName + "§c")));
             }
         }
 
@@ -164,11 +157,7 @@ public class PostDisconnectListener implements Listener {
         String playerName = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
 
         BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffMember -> {
-            staffMember.sendMessage(new TextComponent("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(
-                staffMember,
-                "{} is now §coffline",
-                playerName + "§7"
-            )));
+            staffMember.sendMessage(new TextComponent("§cTeam §8× " + BungeeUtil.format("{} is now §coffline", playerName + "§7")));
         });
     }
 

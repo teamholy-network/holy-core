@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.staff;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
@@ -20,7 +20,7 @@ public class StaffInfoCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         UUID author = BungeeUtil.parseAuthorUUID(sender);
-        String usage = BungeeTranslateAPI.translate(author, "Usage") + ": '/staffinfo ([" + BungeeTranslateAPI.translate(author, "player") + "] [" + BungeeTranslateAPI.translate(author, "days") + "])'";
+        String usage = "Usage" + ": '/staffinfo ([" + "player" + "] [" + "days" + "])'";
         if (!sender.hasPermission("teamholy.team")) {
             BungeeUtil.sendNoPermission(sender);
             return;
@@ -67,7 +67,7 @@ public class StaffInfoCommand extends Command {
 
     private void executeSelf(CommandSender sender, Integer days, String usage, UUID author) {
         if (!(sender instanceof ProxiedPlayer player)) {
-            sender.sendMessage(String.format("%s§7" + BungeeTranslateAPI.translate(author, "You must be a §cplayer §7to execute this command on yourself.") + " %s",
+            sender.sendMessage(String.format("%s§7" + "You must be a §cplayer §7to execute this command on yourself." + " %s",
                 Message.STAFF_INFO_PREFIX, usage));
             return;
         }
@@ -75,7 +75,7 @@ public class StaffInfoCommand extends Command {
         StaffProfile staffProfile = getStaffProfile(player.getUniqueId());
 
         if (staffProfile == null) {
-            sender.sendMessage(Message.STAFF_INFO_PREFIX + BungeeTranslateAPI.translate(author, "Your staff profile §cisn't existing§7."));
+            sender.sendMessage(Message.STAFF_INFO_PREFIX + "Your staff profile §cisn't existing§7.");
             return;
         }
 
@@ -91,7 +91,7 @@ public class StaffInfoCommand extends Command {
         UUID uuid = BungeeUtil.parseTargetArgument(target);
 
         if (uuid == null) {
-            sender.sendMessage(String.format("%s" + BungeeTranslateAPI.translate(author, "Can't find any player with the name") + " §c%s§7.",
+            sender.sendMessage(String.format("%s" + "Can't find any player with the name" + " §c%s§7.",
                 Message.STAFF_INFO_PREFIX, target));
             return;
         }
@@ -99,7 +99,7 @@ public class StaffInfoCommand extends Command {
         StaffProfile staffProfile = getStaffProfile(uuid);
 
         if (staffProfile == null) {
-            sender.sendMessage(String.format("%s" + BungeeTranslateAPI.translate(author, "Can't find staff profile for the player") + " §c%s§7.",
+            sender.sendMessage(String.format("%s" + "Can't find staff profile for the player" + " §c%s§7.",
                 Message.STAFF_INFO_PREFIX, target));
             return;
         }
@@ -123,10 +123,10 @@ public class StaffInfoCommand extends Command {
 
     private String formatStaffProfile(StaffProfile profile, String username, UUID author) {
         StringBuilder builder = new StringBuilder();
-        builder.append(BungeeTranslateAPI.translatePlaceholder(author, "{}Here are the staff stats of §2{}§7:", Message.STAFF_INFO_PREFIX, username));
-        builder.append("\n" + BungeeTranslateAPI.translatePlaceholder(author, "§7Banned players §8» §2{}", String.valueOf(profile.getBanProfileList().size())));
-        builder.append("\n" + BungeeTranslateAPI.translatePlaceholder(author, "§7Muted players §8» §2{}", String.valueOf(profile.getMuteProfileList().size())));
-        builder.append("\n" + BungeeTranslateAPI.translatePlaceholder(author, "§7Finished reports §8» §2{}", String.valueOf(profile.getReportList().size())));
+        builder.append(BungeeUtil.format("{}Here are the staff stats of §2{}§7:", Message.STAFF_INFO_PREFIX, username));
+        builder.append("\n" + BungeeUtil.format("§7Banned players §8» §2{}", String.valueOf(profile.getBanProfileList().size())));
+        builder.append("\n" + BungeeUtil.format("§7Muted players §8» §2{}", String.valueOf(profile.getMuteProfileList().size())));
+        builder.append("\n" + BungeeUtil.format("§7Finished reports §8» §2{}", String.valueOf(profile.getReportList().size())));
 
         return builder.toString();
     }
@@ -136,16 +136,16 @@ public class StaffInfoCommand extends Command {
         long timemillis = (long) days * 24 * 60 * 60 * 1000;
 
         StringBuilder builder = new StringBuilder();
-        builder.append(BungeeTranslateAPI.translatePlaceholder(author, "{}Here are the staff stats of §2{} §7§o(last {}d)§r§8", Message.STAFF_INFO_PREFIX, username, String.valueOf(days)));
-        builder.append("\n" + BungeeTranslateAPI.translatePlaceholder(author, "§7Banned players §8» §2{}", String.valueOf(profile.getBanProfileList()
+        builder.append(BungeeUtil.format("{}Here are the staff stats of §2{} §7§o(last {}d)§r§8", Message.STAFF_INFO_PREFIX, username, String.valueOf(days)));
+        builder.append("\n" + BungeeUtil.format("§7Banned players §8» §2{}", String.valueOf(profile.getBanProfileList()
             .stream()
             .filter(banProfile -> banProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
             .count())));
-        builder.append("\n" + BungeeTranslateAPI.translatePlaceholder(author, "§7Muted players §8» §2{}", String.valueOf(profile.getMuteProfileList()
+        builder.append("\n" + BungeeUtil.format("§7Muted players §8» §2{}", String.valueOf(profile.getMuteProfileList()
             .stream()
             .filter(muteProfile -> muteProfile.getCreateDate() >= (System.currentTimeMillis() - timemillis))
             .count())));
-        builder.append("\n" + BungeeTranslateAPI.translatePlaceholder(author, "§7Finished reports §8» §2{}", String.valueOf(profile.getReportList()
+        builder.append("\n" + BungeeUtil.format("§7Finished reports §8» §2{}", String.valueOf(profile.getReportList()
             .stream()
             .filter(report -> report.getTime() >= (System.currentTimeMillis() - timemillis))
             .count())));

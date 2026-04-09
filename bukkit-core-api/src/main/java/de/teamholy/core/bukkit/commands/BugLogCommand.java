@@ -1,6 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+//import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -33,7 +33,7 @@ public class BugLogCommand implements CommandExecutor {
         File targetFolder = new File("/home/Buglogs", BukkitCore.getInstance().getGroup() + "_logs_" + timeStamp);
 
         if (!logFolder.exists()) {
-            player.sendMessage(BukkitTranslateAPI.translate(player,"Der Log-Ordner existiert nicht!"));
+            player.sendMessage("The log folder does not exist!");
             player.sendMessage(logFolder.getPath());
             return true;
         }
@@ -44,9 +44,9 @@ public class BugLogCommand implements CommandExecutor {
 
         try {
             copyFolder(logFolder.toPath(), targetFolder.toPath());
-            player.sendMessage(BukkitTranslateAPI.translate(player,"Log erfolgreich gespeichert!"));
+            player.sendMessage("Log saved successfully!");
         } catch (IOException e) {
-            player.sendMessage(BukkitTranslateAPI.translate(player,"Fehler beim Kopieren des Log-Ordners."));
+            player.sendMessage("Error copying the log folder.");
             e.printStackTrace();
         }
         return false;

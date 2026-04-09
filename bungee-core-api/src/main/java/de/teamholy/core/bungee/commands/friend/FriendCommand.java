@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.friend;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ChatColor;
@@ -14,6 +14,7 @@ import net.md_5.bungee.api.plugin.Command;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /* copyright by Yassino */
 public class FriendCommand extends Command {
@@ -47,14 +48,14 @@ public class FriendCommand extends Command {
                 BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
                     friendProfile.getFriendReqeustsList().forEach(uuid -> {
                         String nameColor = getColor(uuid) + getName(uuid);
-                        proxiedPlayer.sendMessage(new ComponentBuilder(" §8» " + nameColor + " §8× ").append("§a§l" + BungeeTranslateAPI.translate(proxiedPlayer, "ACCEPT")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + getName(uuid)))
-                            .append(" ").append("§c§l" + BungeeTranslateAPI.translate(proxiedPlayer, "DENY")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + getName(uuid)))
+                        proxiedPlayer.sendMessage(new ComponentBuilder(" §8» " + nameColor + " §8× ").append("§a§l" + "ACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + getName(uuid)))
+                            .append(" ").append("§c§l" + "DENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + getName(uuid)))
                             .create());
                     });
                     if (friendProfile.getFriendReqeustsList().size() == 0) {
                         proxiedPlayer.sendMessage("§c-/-");
                     }
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "Friend request list {}", "§a" + friendProfile.getFriendReqeustsList().size()));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("Friend request list {}", "§a" + friendProfile.getFriendReqeustsList().size()));
                 });
             } else {
                 sendHelp(proxiedPlayer);
@@ -64,37 +65,37 @@ public class FriendCommand extends Command {
                 UUID target = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
 
                 if (target == null) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player does not exist"));
+                    proxiedPlayer.sendMessage(prefix + "This player does not exist");
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().canAddFriendSize(proxiedPlayer.getUniqueId())) {
-                    proxiedPlayer.sendMessage(prefix + "§7" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You reached the §cmax §7friends {}", "§4" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId())));
+                    proxiedPlayer.sendMessage(prefix + "§7" + BungeeUtil.format("You reached the §cmax §7friends {}", "§4" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId())));
                     return;
                 }
 
                 if (BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(), target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You are already friends with {}", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You are already friends with {}", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
                 if (target.toString().equals(proxiedPlayer.getUniqueId().toString())) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "You can't add yourself!"));
+                    proxiedPlayer.sendMessage(prefix + "You can't add yourself!");
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().isFriendRequestAllowed(target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} §7disabled his friend requests", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("The player {} §7disabled his friend requests", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
                 if (BungeeCore.getAPI().getFriendManager().isFriendRequest(proxiedPlayer.getUniqueId(), target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You already send {} §7a friend request", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You already send {} §7a friend request", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().canAddFriendSize(target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} §7has reached the §cmax §7friends", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("The player {} §7has reached the §cmax §7friends", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
@@ -106,16 +107,16 @@ public class FriendCommand extends Command {
                 ProxiedPlayer promotePlayer = ProxyServer.getInstance().getPlayer(target);
                 boolean isOnline = promotePlayer != null && promotePlayer.isConnected();
 
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You sent a friend request to {}", getColor(target) + getName(target) + "§7"));
+                proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You sent a friend request to {}", getColor(target) + getName(target) + "§7"));
                 BungeeCore.getAPI().getFriendManager().sendFriendRequest(proxiedPlayer.getUniqueId(), target, isOnline);
 
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
 
                 if (targetPlayer != null) {
                     targetPlayer.sendMessage("§8§m-----------§f§lFRIEND§8§m------------");
-                    targetPlayer.sendMessage("§7" + BungeeTranslateAPI.translatePlaceholder(targetPlayer, "You got an friend request from {}", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId())));
-                    targetPlayer.sendMessage(new ComponentBuilder("          ").append("§a§l" + BungeeTranslateAPI.translate(targetPlayer, "ACCEPT")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + proxiedPlayer.getName()))
-                        .append("       ").append("§c§l" + BungeeTranslateAPI.translate(targetPlayer, "DENY")).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + proxiedPlayer.getName()))
+                    targetPlayer.sendMessage("§7" + BungeeUtil.format("You got an friend request from {}", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId())));
+                    targetPlayer.sendMessage(new ComponentBuilder("          ").append("§a§l" + "ACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend accept " + proxiedPlayer.getName()))
+                        .append("       ").append("§c§l" + "DENY").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend deny " + proxiedPlayer.getName()))
                         .create());
                     targetPlayer.sendMessage("§8§m-----------------------------");
                 }
@@ -126,12 +127,12 @@ public class FriendCommand extends Command {
                 UUID target = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
                 BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
                 if (target == null) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player does not exist"));
+                    proxiedPlayer.sendMessage(prefix + "This player does not exist");
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(), target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You are not friends with {}", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You are not friends with {}", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
@@ -141,11 +142,11 @@ public class FriendCommand extends Command {
                 BungeeCore.getAPI().getFriendManager().removeFriend(proxiedPlayer.getUniqueId(), target, isOnline);
                 BungeeCore.getAPI().getFriendManager().removeFriend(target, proxiedPlayer.getUniqueId(), true);
 
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You removed {} as your friend", getColor(target) + getName(target) + "§7"));
+                proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You removed {} as your friend", getColor(target) + getName(target) + "§7"));
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
 
                 if (targetPlayer != null) {
-                    targetPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(targetPlayer, "Your friendship with {} has been dissolved!", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()) + "§7"));
+                    targetPlayer.sendMessage(prefix + BungeeUtil.format("Your friendship with {} has been dissolved!", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()) + "§7"));
                 }
 
             } else if (args[0].equalsIgnoreCase("accept")) {
@@ -153,17 +154,17 @@ public class FriendCommand extends Command {
                 UUID target = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
 
                 if (target == null) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player does not exist"));
+                    proxiedPlayer.sendMessage(prefix + "This player does not exist");
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().isFriendRequest(target, proxiedPlayer.getUniqueId())) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} didn't send you a friend request", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("The player {} didn't send you a friend request", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().canAddFriendSize(target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} has reached the §cmax §7friends", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("The player {} has reached the §cmax §7friends", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
@@ -177,11 +178,11 @@ public class FriendCommand extends Command {
                 BungeeCore.getAPI().getFriendManager().addFriend(target, proxiedPlayer.getUniqueId(), true);
                 BungeeCore.getAPI().getFriendManager().removeFriendRequest(target, proxiedPlayer.getUniqueId(), true);
 
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You accepted the friend request from {}", getColor(target) + getName(target) + "§7"));
+                proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You accepted the friend request from {}", getColor(target) + getName(target) + "§7"));
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
 
                 if (targetPlayer != null) {
-                    targetPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You are now friends with {}", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()) + "§7"));
+                    targetPlayer.sendMessage(prefix + BungeeUtil.format("You are now friends with {}", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()) + "§7"));
                 }
 
 
@@ -189,50 +190,50 @@ public class FriendCommand extends Command {
                 UUID target = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
 
                 if (target == null) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player does not exist"));
+                    proxiedPlayer.sendMessage(prefix + "This player does not exist");
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().isFriendRequest(target, proxiedPlayer.getUniqueId())) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} didn't send you a friend requests", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("The player {} didn't send you a friend requests", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
                 BungeeCore.getAPI().getFriendManager().removeFriendRequest(target, proxiedPlayer.getUniqueId(), true);
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You denied the friend request of {}", getColor(target) + getName(target) + "§7"));
+                proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You denied the friend request of {}", getColor(target) + getName(target) + "§7"));
 
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
 
                 if (targetPlayer != null) {
-                    targetPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} has denied your friend request!", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()) + "§7"));
+                    targetPlayer.sendMessage(prefix + BungeeUtil.format("The player {} has denied your friend request!", getColor(proxiedPlayer.getUniqueId()) + getName(proxiedPlayer.getUniqueId()) + "§7"));
                 }
             } else if (args[0].equalsIgnoreCase("jump")) {
                 UUID target = BungeeCore.getAPI().getUuidManager().getUUID(args[1]);
 
                 if (target == null) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player does not exist"));
+                    proxiedPlayer.sendMessage(prefix + "This player does not exist");
                     return;
                 }
 
                 ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(target);
                 if (targetPlayer == null) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "Player not online"));
+                    proxiedPlayer.sendMessage(prefix + "Player not online");
                     return;
                 }
 
                 if (!BungeeCore.getAPI().getFriendManager().isFriend(proxiedPlayer.getUniqueId(), target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You are not friends with {}", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You are not friends with {}", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
 
                 if (!BungeeCore.getAPI().getFriendManager().canJump(target)) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} disabled their friend jump", getColor(target) + getName(target) + "§7"));
+                    proxiedPlayer.sendMessage(prefix + BungeeUtil.format("The player {} disabled their friend jump", getColor(target) + getName(target) + "§7"));
                     return;
                 }
 
                 proxiedPlayer.connect(targetPlayer.getServer().getInfo());
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You jumped to {}", getColor(target) + getName(target) + "§7"));
+                proxiedPlayer.sendMessage(prefix + BungeeUtil.format("You jumped to {}", getColor(target) + getName(target) + "§7"));
             } else {
                 sendHelp(proxiedPlayer);
             }
@@ -251,7 +252,7 @@ public class FriendCommand extends Command {
 
     public static void printFriendList(ProxiedPlayer proxiedPlayer) {
         BungeeCore.getAPI().getFriendService().getEntityAsync(proxiedPlayer.getUniqueId(), () -> BungeeCore.getAPI().getFriendService().getRepository().findFirstById(proxiedPlayer.getUniqueId()), friendProfile -> {
-            proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "Friend list") + " §a" + friendProfile.getFriendList().size() + "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8»");
+            proxiedPlayer.sendMessage(prefix + "Friend list" + " §a" + friendProfile.getFriendList().size() + "§7/§c" + BungeeCore.getAPI().getFriendManager().getMaxFriendsCount(proxiedPlayer.getUniqueId()) + " §8»");
             StringBuilder online = new StringBuilder();
             ;
             AtomicInteger i = new AtomicInteger();
@@ -265,7 +266,7 @@ public class FriendCommand extends Command {
                 proxiedPlayer.sendMessage("§c-/-");
             } else {
                 proxiedPlayer.sendMessage(online.toString());
-                proxiedPlayer.sendMessage("§7... " + BungeeTranslateAPI.translate(proxiedPlayer, "and") + " §a" + (friendProfile.getFriendList().size() - 10) + " §7" + BungeeTranslateAPI.translate(proxiedPlayer, "other"));
+                proxiedPlayer.sendMessage("§7... " + "and" + " §a" + (friendProfile.getFriendList().size() - 10) + " §7" + "other");
             }
         });
     }
@@ -274,14 +275,14 @@ public class FriendCommand extends Command {
         proxiedPlayer.sendMessage(Message.TOPLINE);
         proxiedPlayer.sendMessage("   " + Message.HELP_TITLE_FRIEND);
         proxiedPlayer.sendMessage("");
-        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend add (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
-        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend remove (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
-        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend accept (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
-        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend deny (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
-        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend jump (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend add (" + "name" + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend remove (" + "name" + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend accept (" + "name" + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend deny (" + "name" + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend jump (" + "name" + ")");
         proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend list");
         proxiedPlayer.sendMessage(Message.HELP_BULLET + "/friend requests");
-        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/msg (" + BungeeTranslateAPI.translate(proxiedPlayer,"name") + ") (" + BungeeTranslateAPI.translate(proxiedPlayer,"message") + ")");
+        proxiedPlayer.sendMessage(Message.HELP_BULLET + "/msg (" + "name" + ") (" + "message" + ")");
         proxiedPlayer.sendMessage("");
         proxiedPlayer.sendMessage(Message.LINE_DOWN);
     }

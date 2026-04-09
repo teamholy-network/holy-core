@@ -1,6 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+//import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,7 +31,7 @@ public class LocationCommand implements CommandExecutor {
             }
         } else {
             player.sendMessage(
-                BukkitCore.PREFIX + "/location set (" + BukkitTranslateAPI.translate(player, "name")
+                BukkitCore.PREFIX + "/location set (" + "name"
                     + ")");
         }
 

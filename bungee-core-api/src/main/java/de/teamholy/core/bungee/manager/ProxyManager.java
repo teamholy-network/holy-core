@@ -28,7 +28,7 @@ public class ProxyManager {
 
     private static final String DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1071587864330125372/hvtEqts6aBI7wTWq5DUp13QiWD9byAU-XGEN8hJTsAv1PyEl4tITwSO9kxgADkcMsCC6";
     private static final String API_KEY = "adasaisuoa2j2j2j2jnvalkooiwuhlkabvd";
-    private static final String ASN_CHECK_URL = "http://ipcheck.skydb.de/getinfo?ip=";
+    //private static final String ASN_CHECK_URL = "http://ipcheck.skydb.de/getinfo?ip=";
     private static final int ERROR_CODE_FORBIDDEN = 403;
     private static final int ERROR_CODE_CONFLICT = 409;
 

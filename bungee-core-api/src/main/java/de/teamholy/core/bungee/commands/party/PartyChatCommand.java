@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.party;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.PartyManager;
 import de.teamholy.core.bungee.model.Party;
@@ -37,7 +37,7 @@ public class PartyChatCommand extends Command {
             Party party = partyManager.getPartyByPlayerUUID(player.getUniqueId());
 
             if (party == null) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "You are not in a party!"));
+                player.sendMessage(prefix + "You are not in a party!");
                 return;
             }
 
@@ -51,14 +51,14 @@ public class PartyChatCommand extends Command {
             party.getPartyPlayers().forEach(all -> {
                 ProxiedPlayer partyPlayer = ProxyServer.getInstance().getPlayer(all);
                 if (partyManager.isPartyLeader(player.getUniqueId())) {
-                    partyPlayer.sendMessage(prefix + "§c§l" + BungeeTranslateAPI.translate(partyPlayer, "LEADER") + " " + name + " §8» §7" + sb.toString());
+                    partyPlayer.sendMessage(prefix + "§c§l" + "LEADER" + " " + name + " §8» §7" + sb.toString());
                 } else {
-                    partyPlayer.sendMessage(prefix + "§a§l" + BungeeTranslateAPI.translate(partyPlayer, "MEMBER") + " " + name + " §8» §7" + sb.toString());
+                    partyPlayer.sendMessage(prefix + "§a§l" + "MEMBER" + " " + name + " §8» §7" + sb.toString());
                 }
             });
 
         } else {
-            player.sendMessage(prefix + "/partychat (" + BungeeTranslateAPI.translate(player, "message") + ")");
+            player.sendMessage(prefix + "/partychat (" + "message" + ")");
         }
     }
 

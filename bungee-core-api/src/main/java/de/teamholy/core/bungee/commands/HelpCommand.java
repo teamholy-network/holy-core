@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import net.md_5.bungee.api.CommandSender;
@@ -25,11 +25,11 @@ public class HelpCommand extends Command {
 
         // show main help menu
         TextComponent main = new TextComponent(Message.TOPLINE);
-        TextComponent commandsLabel = new TextComponent("\n"+Message.HELP_BULLET+BungeeTranslateAPI.translate(author, "Alle Befehle") + ":\n");
+        TextComponent commandsLabel = new TextComponent("\n"+Message.HELP_BULLET+"Alle Befehle" + ":\n");
         main.addExtra(commandsLabel);
         
         // Create single hover text instance
-        Text hoverText = new Text("§7» §a" + BungeeTranslateAPI.translate(author, "Click Here") + " §7«");
+        Text hoverText = new Text("§7» §a" + "Click Here" + " §7«");
         
         TextComponent link = new TextComponent(Message.HELP_BULLET + "/link\n");
         link.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/link"));

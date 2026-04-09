@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.game.GameProfile;
@@ -25,6 +25,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.*;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /**
  * The PostLoginListener class handles various actions and profile management
@@ -87,13 +88,12 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
 
     private void sendWelcomeMessage(ProxiedPlayer player) {
         player.sendMessage(new TextComponent(""));
-        player.sendMessage(new TextComponent("          §f§l" + BungeeTranslateAPI.translatePlaceholder(
-            player, "WELCOME ON {}", "§6§lTEAMHOLY") + "          "));
+        player.sendMessage(new TextComponent("          §f§l" + BungeeUtil.format("WELCOME ON {}", "§6§lTEAMHOLY") + "          "));
         player.sendMessage(new TextComponent(" "));
         player.sendMessage(new TextComponent("§3Discord §8» §7https://discord.gg/teamholy"));
         player.sendMessage(new TextComponent("§cStore §8» §7https://shop.teamholy.de/"));
         player.sendMessage(new TextComponent("§6Vote §8» §7https://teamholy.de/vote"));
-        player.sendMessage(new TextComponent("§5" + BungeeTranslateAPI.translate(player, "Website") + " §8» §7https://teamholy.de"));
+        player.sendMessage(new TextComponent("§5" + "Website" + " §8» §7https://teamholy.de"));
         player.sendMessage(new TextComponent(""));
     }
 
@@ -337,11 +337,7 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
 
     private void unlockRainbowClayPerk(ProxiedPlayer player, PerkPlayerProfile perkProfile) {
         perkProfile.getOwnedPerks().add((int) RAINBOW_CLAY_PERK_ID);
-        player.sendMessage(new TextComponent("§6Perk §8× §7" + BungeeTranslateAPI.translatePlaceholder(
-            player,
-            "You have unlocked the {} Clay Perk §7for playing §b80 hours",
-            "§4R§ca§6i§en§ab§2o§bw"
-        )));
+        player.sendMessage(new TextComponent("§6Perk §8× §7" + BungeeUtil.format("You have unlocked the {} Clay Perk §7for playing §b80 hours", "§4R§ca§6i§en§ab§2o§bw")));
     }
 
     private void handleStaffProfile(ProxiedPlayer player) {
@@ -383,11 +379,7 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         String playerName = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
 
         BungeeCore.getInstance().getBungeePlayerManager().getStaffNotifyPlayers().forEach(staffMember -> {
-            staffMember.sendMessage(new TextComponent("§cTeam §8× " + BungeeTranslateAPI.translatePlaceholder(
-                staffMember,
-                "{} §7is now §aonline",
-                playerName
-            )));
+            staffMember.sendMessage(new TextComponent("§cTeam §8× " + BungeeUtil.format("{} §7is now §aonline", playerName)));
         });
     }
 
@@ -408,11 +400,7 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         friendProfile.getFriendList().forEach(friendId -> {
             ProxiedPlayer friend = ProxyServer.getInstance().getPlayer(friendId);
             if (friend != null) {
-                friend.sendMessage(new TextComponent("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(
-                    friend,
-                    "Your friend {} is now §aonline",
-                    playerName + "§7"
-                )));
+                friend.sendMessage(new TextComponent("§6Friend §8× §7" + BungeeUtil.format("Your friend {} is now §aonline", playerName + "§7")));
             }
         });
     }
@@ -431,14 +419,10 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         int count = onlineFriends.size();
         String pluralForm = (count >= 2 ? "s" : "");
         String countText = count == 0
-            ? "§c" + BungeeTranslateAPI.translate(player, "no §7friend")
-            : "§a" + count + " §7" + BungeeTranslateAPI.translate(player, "friend" + pluralForm);
+            ? "§c" + "no §7friend"
+            : "§a" + count + " §7" + "friend" + pluralForm;
 
-        player.sendMessage(new TextComponent("§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(
-            player,
-            "There " + (count <= 1 ? "is" : "are") + " currently " + (count == 0 ? "{}" : "{}") + " online",
-            countText
-        )));
+        player.sendMessage(new TextComponent("§6Friend §8× §7" + BungeeUtil.format("There " + (count <= 1 ? "is" : "are") + " currently " + (count == 0 ? "{}" : "{}") + " online", countText)));
 
         if (!onlineFriends.isEmpty()) {
             player.sendMessage(new TextComponent("§6Friend §8× " + String.join("§7, ", onlineFriends)));
@@ -453,15 +437,11 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         }
 
         String requestWord = requestCount == 1 ? "request" : "requests";
-        String message = "§6Friend §8× §7" + BungeeTranslateAPI.translatePlaceholder(
-            player,
-            "You currently have {} open friend " + requestWord,
-            "§a" + requestCount + "§7"
-        );
+        String message = "§6Friend §8× §7" + BungeeUtil.format("You currently have {} open friend " + requestWord, "§a" + requestCount + "§7");
 
         player.sendMessage(
             new ComponentBuilder(message)
-                .append(" §8(§a§l" + BungeeTranslateAPI.translate(player, "CLICK") + "§8)")
+                .append(" §8(§a§l" + "CLICK" + "§8)")
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friend requests"))
                 .create()
         );

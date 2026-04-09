@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.Party;
 import net.md_5.bungee.api.ProxyServer;
@@ -15,6 +15,7 @@ import net.md_5.bungee.event.EventHandler;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /**
  * PartyListener handles various party-related events for players in a BungeeCord network.
@@ -100,11 +101,7 @@ public class PartyListener implements Listener {
             ProxiedPlayer member = ProxyServer.getInstance().getPlayer(memberId);
 
             if (member != null) {
-                member.sendMessage(new TextComponent("§5Party §8× §7" + BungeeTranslateAPI.translatePlaceholder(
-                    member,
-                    "The party is trying to join a {} §7server",
-                    "§6" + serverName
-                )));
+                member.sendMessage(new TextComponent("§5Party §8× §7" + BungeeUtil.format("The party is trying to join a {} §7server", "§6" + serverName)));
                 member.connect(leader.getServer().getInfo());
             }
         });

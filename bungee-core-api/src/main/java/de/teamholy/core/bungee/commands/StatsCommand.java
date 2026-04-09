@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.game.GameProfile;
 import de.teamholy.core.api.entities.game.StatsType;
@@ -44,7 +44,7 @@ public class StatsCommand extends SenderCommand {
 
             UUID uuid = BungeeUtil.parseTargetArgument(args[0]);
             if (uuid == null) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find player!"));
+                player.sendMessage(prefix + "Couldn't find player!");
                 return;
             }
 
@@ -56,20 +56,20 @@ public class StatsCommand extends SenderCommand {
 
             UUID uuid = BungeeUtil.parseTargetArgument(args[0]);
             if (uuid == null) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find player!"));
+                player.sendMessage(prefix + "Couldn't find player!");
                 return;
             }
 
             Gamemodes gamemode = Gamemodes.valueOf(args[1]);
             if (gamemode == null || gamemode.getRankingKey().isEmpty()) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find gamemode"));
+                player.sendMessage(prefix + "Couldn't find gamemode");
                 return;
             }
 
             StatsType statsType = StatsType.valueOf(args[2]);
 
             if (statsType == null) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "Couldn't find stats time"));
+                player.sendMessage(prefix + "Couldn't find stats time");
                 return;
             }
 
@@ -85,7 +85,7 @@ public class StatsCommand extends SenderCommand {
         String nameColor = BungeeCore.getInstance().getPlayerColor(uuid) + name;
         GameProfile gameProfile = BungeeCore.getAPI().getGameService().getEntity(uuid, () -> BungeeCore.getAPI().getGameService().getRepository().findFirstById(uuid));
         if (!gameProfile.exists(gamemodes.toString())) {
-            player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "This player doesn't have any stats in") + " §" + gamemodes.getColor() + gamemodes.toString().toUpperCase(Locale.ROOT));
+            player.sendMessage(prefix + "This player doesn't have any stats in" + " §" + gamemodes.getColor() + gamemodes.toString().toUpperCase(Locale.ROOT));
             return;
         }
 
@@ -93,12 +93,12 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage("");
         player.sendMessage("      " + nameColor + " §8- §" + gamemodes.getColor() + gamemodes);
         player.sendMessage("");
-        player.sendMessage(" §7" + BungeeTranslateAPI.translate(player, "Ranking") + " §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes, statsType, uuid));
+        player.sendMessage(" §7" + "Ranking" + " §8» §f#" + BungeeCore.getAPI().getRankingManager().getRankFromUUID(gamemodes, statsType, uuid));
         player.sendMessage("");
 
         int elo = (int) gameProfile.getStat(gamemodes.toString(), statsType, "trophies");
 
-        player.sendMessage(" §7" + BungeeTranslateAPI.translate(player, "Trophies") + " §8» §" + gamemodes.getColor() + elo + " §8(" + TrophieLeague.getEloRank(elo).getName() + "§8)");
+        player.sendMessage(" §7" + "Trophies" + " §8» §" + gamemodes.getColor() + elo + " §8(" + TrophieLeague.getEloRank(elo).getName() + "§8)");
         player.sendMessage("");
         gamemodes.getStatKeys().forEach(string -> {
             if (!string.getName().equalsIgnoreCase("trophies")) {
@@ -112,14 +112,14 @@ public class StatsCommand extends SenderCommand {
 
         player.sendMessage("");
         TextComponent textComponent = new net.md_5.bungee.api.chat.TextComponent();
-        textComponent.addExtra(new ChatAction().text((statsType == StatsType.DAILY ? "§a§l" + BungeeTranslateAPI.translate(player, "DAILY") : "§7" + BungeeTranslateAPI.translate(player, "Daily"))).hover(hover(player, StatsType.DAILY, nameColor, gamemodes))
+        textComponent.addExtra(new ChatAction().text((statsType == StatsType.DAILY ? "§a§l" + "DAILY" : "§7" + "Daily")).hover(hover(player, StatsType.DAILY, nameColor, gamemodes))
             .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " DAILY").component());
         textComponent.addExtra(" §8┃ ");
-        textComponent.addExtra(new ChatAction().text((statsType == StatsType.MONTHLY ? "§e§l" + BungeeTranslateAPI.translate(player, "MONTHLY") : "§7" + BungeeTranslateAPI.translate(player, "Monthly"))).hover(hover(player, StatsType.MONTHLY, nameColor, gamemodes))
+        textComponent.addExtra(new ChatAction().text((statsType == StatsType.MONTHLY ? "§e§l" + "MONTHLY" : "§7" + "Monthly")).hover(hover(player, StatsType.MONTHLY, nameColor, gamemodes))
             .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " MONTHLY").component());
 
         textComponent.addExtra(" §8┃ ");
-        textComponent.addExtra(new ChatAction().text((statsType == StatsType.ALLTIME ? "§c§l" + BungeeTranslateAPI.translate(player, "ALLTIME") : "§7" + BungeeTranslateAPI.translate(player, "alltime"))).hover(hover(player, StatsType.ALLTIME, nameColor, gamemodes))
+        textComponent.addExtra(new ChatAction().text((statsType == StatsType.ALLTIME ? "§c§l" + "ALLTIME" : "§7" + "alltime")).hover(hover(player, StatsType.ALLTIME, nameColor, gamemodes))
             .execute("stats " + name + " " + gamemodes.toString().toUpperCase(Locale.ROOT) + " ALLTIME").component());
 
         player.sendMessage(textComponent);
@@ -133,7 +133,7 @@ public class StatsCommand extends SenderCommand {
 
     private String hover(ProxiedPlayer player, StatsType statsType, String nameColor, Gamemodes gamemodes) {
         //return "§7show " + statsType.toBeauty() + " §7stats for " + nameColor + " §7in §" + gamemodes.getColor() + gamemodes.toString();
-        return "§7" + BungeeTranslateAPI.translatePlaceholder(player, "show {}§7 stats for {}§7 in {}", statsType.toBeauty(), nameColor, "§" + gamemodes.getColor() + gamemodes.toString());
+        return "§7" + BungeeUtil.format("show {}§7 stats for {}§7 in {}", statsType.toBeauty(), nameColor, "§" + gamemodes.getColor() + gamemodes.toString());
     }
 
 
@@ -145,11 +145,11 @@ public class StatsCommand extends SenderCommand {
         player.sendMessage("");
         player.sendMessage(Message.TOPLINE);
         player.sendMessage("");
-        player.sendMessage("  §c" + BungeeTranslateAPI.translatePlaceholder(player, "click to show stats of {}§c", nameColor));
+        player.sendMessage("  §c" + BungeeUtil.format("click to show stats of {}§c", nameColor));
         player.sendMessage("");
         for (Gamemodes value : Gamemodes.values()) {
             if (!value.getRankingKey().isEmpty()) {
-                player.sendMessage(new ChatAction().text(" §8» §" + value.getColor() + "§l" + value.toString().toUpperCase(Locale.ROOT)).hover("§7" + BungeeTranslateAPI.translatePlaceholder(player, "click to show stats of {}§7 in {}", nameColor, "§" + value.getColor() + value.toString().toUpperCase(Locale.ROOT)))
+                player.sendMessage(new ChatAction().text(" §8» §" + value.getColor() + "§l" + value.toString().toUpperCase(Locale.ROOT)).hover("§7" + BungeeUtil.format("click to show stats of {}§7 in {}", nameColor, "§" + value.getColor() + value.toString().toUpperCase(Locale.ROOT)))
                     .execute("stats " + name + " " + value.toString() + " " + StatsType.ALLTIME)
                     .component());
             }
@@ -165,19 +165,19 @@ public class StatsCommand extends SenderCommand {
 
         switch (string) {
             case "kills":
-                return BungeeTranslateAPI.translate(player, "Killed");
+                return "Killed";
 
             case "deaths":
-                return BungeeTranslateAPI.translate(player, "Deaths");
+                return "Deaths";
 
             case "played_games":
-                return BungeeTranslateAPI.translate(player, "Played games");
+                return "Played games";
 
             case "won_games":
-                return BungeeTranslateAPI.translate(player, "Won games");
+                return "Won games";
 
             case "destroyed_beds":
-                return BungeeTranslateAPI.translate(player, "Destroyed beds");
+                return "Destroyed beds";
         }
         return "null";
     }

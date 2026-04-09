@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.punish;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
@@ -47,7 +47,7 @@ public class CustomPunishCommand extends SenderCommand {
                 if (uuid == null) {
                     UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(target);
                     if (nickUUID == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7" + "Error while fetching UUID from" + " §c" + target + "§c!");
                         return;
                     }
                     uuid = nickUUID;
@@ -57,7 +57,7 @@ public class CustomPunishCommand extends SenderCommand {
                 boolean isBan = action.equalsIgnoreCase("ban");
 
                 if (!BungeeUtil.hasPermission(sender, "*") && !BungeeCore.getAPI().getCloudManager().isPunishable(uuid)) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "You don't have permissions to ban/mute this player!"));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§c" + "You don't have permissions to ban/mute this player!");
                     return;
                 }
 
@@ -77,7 +77,7 @@ public class CustomPunishCommand extends SenderCommand {
                     BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
                     if (punishProfile != null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author, "§cThe player §e{}§c is already banned!", target));
+                        sender.sendMessage(Message.PUNISH_PREFIX + BungeeUtil.format("§cThe player §e{}§c is already banned!", target));
                         return;
                     }
 
@@ -121,7 +121,7 @@ public class CustomPunishCommand extends SenderCommand {
                     MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
 
                     if (punishProfile != null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(author, "The player §e{}§c is already muted!", target));
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeUtil.format("The player §e{}§c is already muted!", target));
                         return;
                     }
 
@@ -169,6 +169,6 @@ public class CustomPunishCommand extends SenderCommand {
 
     public void printUsage(CommandSender commandSender, UUID author) {
         commandSender.sendMessage(Message.PUNISH_PREFIX + "§7Format §8» §e1s, 2m, 3h, 4d, 5w, §c-1 §7= §4Perma");
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/cpunish (" + BungeeTranslateAPI.translate(author, "name") + ") (ban | mute) (format) [" + BungeeTranslateAPI.translate(author, "evidence") + "] (" + BungeeTranslateAPI.translate(author, "reason") + ")");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/cpunish (" + "name" + ") (ban | mute) (format) [" + "evidence" + "] (" + "reason" + ")");
     }
 }

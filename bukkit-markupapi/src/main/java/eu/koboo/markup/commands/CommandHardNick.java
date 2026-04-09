@@ -1,6 +1,6 @@
 package eu.koboo.markup.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+//import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
 import org.bukkit.Bukkit;
@@ -25,15 +25,15 @@ public class CommandHardNick implements CommandExecutor {
         }
         Player player = (Player) commandSender;
         if (!player.hasPermission("markupapi.hardnick")) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+ BukkitTranslateAPI.translate(player,"You don't have permission to do that!"));
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+ "You don't have permission to do that!");
             return false;
         }
         if (!markupAPI.getPresetManager().isLoad()) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"The nicksystem is currently disabled!"));
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+"The nicksystem is currently disabled!");
             return false;
         }
         if (strings.length != 1) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"Usage")+": §7/hardnick <"+BukkitTranslateAPI.translate(player,"Name")+">");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+"Usage"+": §7/hardnick <"+"Name"+">");
             return false;
         }
 
@@ -42,7 +42,7 @@ public class CommandHardNick implements CommandExecutor {
             String nickName = strings[0];
             Player target = Bukkit.getPlayer(nickName);
             if (target != null) {
-                player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"This nickname is already taken!"));
+                player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+"This nickname is already taken!");
                 return false;
             }
             for (Player online : Bukkit.getOnlinePlayers()) {
@@ -51,7 +51,7 @@ public class CommandHardNick implements CommandExecutor {
                     continue;
                 }
                 if (playerMeta.getRealName().equalsIgnoreCase(nickName)) {
-                    player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"This nickname is already taken!"));
+                    player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+"This nickname is already taken!");
                     return false;
                 }
             }
@@ -59,21 +59,21 @@ public class CommandHardNick implements CommandExecutor {
             try {
                 markupAPI.getPresetManager().loadPreset(nickName, preset -> {
                     if (preset == null) {
-                        player.sendMessage("§c"+BukkitTranslateAPI.translatePlaceholder(player,"Error while getting {} of", "skin")+" §e" + nickName + "§c!");
+                        player.sendMessage("§c"+"Error while getting skin of"+" §e" + nickName + "§c!");
                         return;
                     }
                     Bukkit.getScheduler().runTask(markupAPI, () -> {
                         markupAPI.getNickManager().apply(player, preset.getName(), preset.getUuid(), MarkupAPI.getProperty(preset.getValue(), preset.getSignature()));
-                        player.sendMessage(MarkupAPI.NICK_PREFIX + "§7"+BukkitTranslateAPI.translate(player,"You're now known as")+"§8: §a" + nickName);
+                        player.sendMessage(MarkupAPI.NICK_PREFIX + "§7"+"You're now known as"+"§8: §a" + nickName);
                     });
                 });
             } catch (Exception e) {
-                player.sendMessage("§c"+BukkitTranslateAPI.translatePlaceholder(player,"Error while getting {} of", "skin")+" §e" + nickName + "§c!");
+                player.sendMessage("§c"+"Error while getting skin of"+" §e" + nickName + "§c!");
                 return false;
             }
         } else {
             markupAPI.getNickManager().resetPlayer(player, false);
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§7"+BukkitTranslateAPI.translate(player,"You're now unnicked!"));
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§7"+"You're now unnicked!");
         }
 
         return true;

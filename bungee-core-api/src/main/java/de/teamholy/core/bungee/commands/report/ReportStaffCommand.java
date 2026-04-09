@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.commands.report;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Report;
@@ -55,7 +55,7 @@ public class ReportStaffCommand extends Command {
                 }
 
                 if (report == null) {
-                    player.sendMessage(TextComponent.fromLegacyText(prefix + BungeeTranslateAPI.translate(player, "You dont edit any report!")));
+                    player.sendMessage(TextComponent.fromLegacyText(prefix + "You dont edit any report!"));
                     return;
                 }
 

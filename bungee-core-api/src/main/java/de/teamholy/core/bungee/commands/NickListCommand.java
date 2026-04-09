@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import net.md_5.bungee.api.CommandSender;
@@ -33,9 +33,9 @@ public class NickListCommand extends Command {
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         if (onlineNickMap.isEmpty()) {
-            sender.sendMessage("§c" + BungeeTranslateAPI.translate(author, "There are currently no nicked players"));
+            sender.sendMessage("§c" + "There are currently no nicked players");
         } else {
-            sender.sendMessage(BungeeTranslateAPI.translatePlaceholder(author, "§7There are currently §e{} nicked §7users", String.valueOf(onlineNickMap.size())));
+            sender.sendMessage(BungeeUtil.format("§7There are currently §e{} nicked §7users", String.valueOf(onlineNickMap.size())));
             sender.sendMessage("");
             onlineNickMap.forEach((uuid, s) -> {
                 ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(uuid);

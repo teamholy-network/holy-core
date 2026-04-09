@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.mute;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.mute.MuteProfile;
@@ -65,7 +65,7 @@ public class MuteCommand extends SenderCommand {
             if (uuid == null) {
                 UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(target);
                 if (nickUUID == null) {
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + "Error while fetching UUID from" + " §c" + target + "§c!");
                     return;
                 }
                 uuid = nickUUID;
@@ -76,17 +76,17 @@ public class MuteCommand extends SenderCommand {
 
             Punish.MuteReason banReason = Punish.parseMuteReasonById(reasonId);
             if (banReason == null) {
-                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(author, "Error while fetching reason with id {}", "§e" + reasonId) + "§c!");
+                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeUtil.format("Error while fetching reason with id {}", "§e" + reasonId) + "§c!");
                 return;
             }
 
             if (!BungeeUtil.hasPermission(sender, "teamholy.mute.perma") && banReason.getDuration() == -1) {
-                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "You don't have permission to use this mute-reason!"));
+                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + "You don't have permission to use this mute-reason!");
                 return;
             }
 
             if (!BungeeUtil.hasPermission(sender, "*") && !BungeeCore.getAPI().getCloudManager().isPunishable(uuid)) {
-                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "You don't have permissions to ban this player!"));
+                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + "You don't have permissions to ban this player!");
                 return;
             }
 
@@ -102,7 +102,7 @@ public class MuteCommand extends SenderCommand {
             MuteProfile punishProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(finalUuid));
 
             if (punishProfile != null) {
-                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(author, "The player {} is already muted!", "§e" + target + "§c"));
+                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeUtil.format("The player {} is already muted!", "§e" + target + "§c"));
                 return;
             }
 
@@ -161,12 +161,12 @@ public class MuteCommand extends SenderCommand {
     }
 
     public void printUsage(CommandSender commandSender, UUID author) {
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Reasons") + " §8» ");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7" + "Reasons" + " §8» ");
         for (Punish.MuteReason reason : Punish.getMuteValues()) {
-            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(author, "Permanent");
+            String time = reason.getDuration() != -1 ? TimeUtil.beautifyTime(reason.getDuration(), TimeUnit.MILLISECONDS) : "Permanent";
             commandSender.sendMessage(" §6" + reason.getEnglishText() + " §7- §c" + time + " §7- §c" + reason.getId());
         }
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/mute (" + BungeeTranslateAPI.translate(author, "name") + ") (id)");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/mute (" + "name" + ") (id)");
     }
 
 }

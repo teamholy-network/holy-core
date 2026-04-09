@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -9,6 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
 import java.util.UUID;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /* copyright by Yassino */
 public class DeletePlayerCommand extends Command {
@@ -27,25 +28,25 @@ public class DeletePlayerCommand extends Command {
         }
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) commandSender;
         if (args.length == 0) {
-            proxiedPlayer.sendMessage("§c/resetcringe ("+BungeeTranslateAPI.translate(proxiedPlayer,"Player")+")");
+            proxiedPlayer.sendMessage("§c/resetcringe ("+"Player"+")");
         } else if (args.length == 1) {
             String name = args[0];
             UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(name);
 
             if (uuid == null) {
-                proxiedPlayer.sendMessage("§c"+ BungeeTranslateAPI.translate(proxiedPlayer,"Spieler nicht gefunden!"));
+                proxiedPlayer.sendMessage("§c"+ "Spieler nicht gefunden!");
                 return;
             }
 
 
-            proxiedPlayer.sendMessage("§a"+BungeeTranslateAPI.translatePlaceholder(proxiedPlayer,"Bist du sicher das du die daten von {} §clöschen willst?", BungeeCore.getInstance().getPlayerColor(uuid) + name));
-            proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translate(proxiedPlayer,"Wenn ja dann schreib")+" /resetcringe " + name + " confirm");
+            proxiedPlayer.sendMessage("§a"+BungeeUtil.format("Bist du sicher das du die daten von {} §clöschen willst?", BungeeCore.getInstance().getPlayerColor(uuid) + name));
+            proxiedPlayer.sendMessage("§c"+"Wenn ja dann schreib"+" /resetcringe " + name + " confirm");
         } else if (args.length == 2 && args[1].equalsIgnoreCase("confirm")) {
             String name = args[0];
             UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(name);
 
             if (uuid == null) {
-                proxiedPlayer.sendMessage("§c"+BungeeTranslateAPI.translate(proxiedPlayer,"Spieler nicht gefunden!"));
+                proxiedPlayer.sendMessage("§c"+"Spieler nicht gefunden!");
                 return;
             }
 

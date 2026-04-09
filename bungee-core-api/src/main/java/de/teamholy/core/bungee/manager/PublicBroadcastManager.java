@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.manager;
 
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.Helpers;
 import net.md_5.bungee.api.ProxyServer;
@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /* copyright by Greg */
 
@@ -41,8 +42,8 @@ public class PublicBroadcastManager {
     private void sendJoinMe(ProxiedPlayer receiver, ProxiedPlayer sender) {
 
         receiver.sendMessage("§8§m-------------§f§lJOINME§8§m----------------");
-        receiver.sendMessage("     " + BungeeTranslateAPI.translatePlaceholder(receiver,"{} §7is playing on §d{}",BungeeCore.getInstance().getPlayerColor(sender.getUniqueId()) + sender.getName(), sender.getServer().getInfo().getName()));
-        TextComponent joinMeMessage = new TextComponent("                     §a"+ BungeeTranslateAPI.translate(receiver,"Join Server")+"           ");
+        receiver.sendMessage("     " + BungeeUtil.format("{} §7is playing on §d{}", BungeeCore.getInstance().getPlayerColor(sender.getUniqueId()) + sender.getName(), sender.getServer().getInfo().getName()));
+        TextComponent joinMeMessage = new TextComponent("                     §a"+ "Join Server"+"           ");
         joinMeMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme " + sender.getName()));
         joinMeMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7Play with " + BungeeCore.getInstance().getPlayerColor(sender.getUniqueId()) + sender.getName())));
         receiver.sendMessage(joinMeMessage);

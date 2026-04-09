@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,6 +12,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import java.util.concurrent.TimeUnit;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /**
  * PlayerListListener is a listener class responsible for managing and updating
@@ -40,13 +41,13 @@ public class PlayerListListener implements Listener {
 
     private String buildHeader(ProxiedPlayer player, int onlineCount, String serverName) {
         return "\n§6§lTeamHoly.de§r§8 ┃ §f" + onlineCount + " §7"
-            + BungeeTranslateAPI.translate(player, "players")
-            + "\n§7" + BungeeTranslateAPI.translatePlaceholder(player, "You are on {}", "§e" + serverName)
+            + "players"
+            + "\n§7" + BungeeUtil.format("You are on {}", "§e" + serverName)
             + "\n ";
     }
 
     private String buildFooter(ProxiedPlayer player) {
-        return "\n    §7§o" + BungeeTranslateAPI.translate(player, "Use these commands for help:")
+        return "\n    §7§o" + "Use these commands for help:"
             + "    \n§f/discord §8┃ §f/shop §8┃ §f/report\n\n§7§o";
     }
 

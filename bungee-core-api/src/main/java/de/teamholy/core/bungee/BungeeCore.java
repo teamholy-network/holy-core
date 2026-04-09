@@ -2,7 +2,7 @@ package de.teamholy.core.bungee;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+//import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
@@ -51,6 +51,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import de.teamholy.core.bungee.util.BungeeUtil;
 
 /**
  * Represents the main plugin class for BungeeCore, extending the functionality
@@ -363,7 +364,7 @@ public class BungeeCore extends Plugin {
 
     private void broadcastToAllPlayers(String messageKey, String... placeholders) {
         for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-            String message = "§7" + BungeeTranslateAPI.translatePlaceholder(player, messageKey, placeholders);
+            String message = "§7" + BungeeUtil.format(messageKey, placeholders);
             publicBroadcastManager.sendGeneral(player, message);
         }
     }

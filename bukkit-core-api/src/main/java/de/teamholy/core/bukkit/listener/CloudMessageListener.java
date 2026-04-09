@@ -6,7 +6,7 @@ import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.event.EventListener;
 import de.dytanic.cloudnet.driver.event.events.channel.ChannelMessageReceiveEvent;
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+//import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.perkplayer.PerkPlayerProfile;
 import de.teamholy.core.api.entities.player.PlayerProfile;
@@ -153,9 +153,9 @@ public class CloudMessageListener {
                     customBannerManager.setAndPlaceCustomBanner1(player, customBanner);
 
                 } catch (JsonSyntaxException e) {
-                    player.sendMessage("§c"+ BukkitTranslateAPI.translate(player, "Error applying your Custom Skin!"));
+                    player.sendMessage("§c"+ "Error applying your Custom Skin!");
                 } catch (Exception e) {
-                    player.sendMessage("§c"+BukkitTranslateAPI.translate(player,"Error applying your Custom Skin!"));
+                    player.sendMessage("§c"+"Error applying your Custom Skin!");
                     e.printStackTrace();
                 }
             }

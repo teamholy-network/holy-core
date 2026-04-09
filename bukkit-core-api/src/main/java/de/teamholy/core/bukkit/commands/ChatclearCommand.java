@@ -1,6 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+//import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,7 +42,7 @@ public class ChatclearCommand implements CommandExecutor {
                 all.sendMessage(string);
             }
         });
-        Bukkit.getOnlinePlayers().forEach(all -> all.sendMessage(BukkitCore.PREFIX + "§6§l"+ BukkitTranslateAPI.translate(all,"The chat was cleared!")));
+        Bukkit.getOnlinePlayers().forEach(all -> all.sendMessage(BukkitCore.PREFIX + "§6§l"+ "The chat was cleared!"));
         return false;
     }
 

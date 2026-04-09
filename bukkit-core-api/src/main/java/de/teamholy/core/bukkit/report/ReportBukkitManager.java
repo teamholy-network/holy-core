@@ -2,7 +2,7 @@ package de.teamholy.core.bukkit.report;
 
 import com.google.common.collect.Maps;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+//import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Pagifier;
@@ -41,7 +41,7 @@ public class ReportBukkitManager implements CommandExecutor {
 
         if (!player.hasPermission("teamholy.team")) return false;
         if (reportManager.getAllReports().isEmpty()) {
-            player.sendMessage(prefix + BukkitTranslateAPI.translate(player,"§cThere are no open reports!"));
+            player.sendMessage(prefix + "§cThere are no open reports!");
             return true;
         }
 
@@ -57,7 +57,7 @@ public class ReportBukkitManager implements CommandExecutor {
     }
 
     private void openReportsInventory(Player player, int currentPage) {
-        Inventory inventory = new Inventory("§8» §c"+BukkitTranslateAPI.translate(player,"Reports"), 9 * 4);
+        Inventory inventory = new Inventory("§8» §c"+"Reports", 9 * 4);
 
         for (int i = inventory.getInventory().getSize() - 9; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
@@ -75,7 +75,7 @@ public class ReportBukkitManager implements CommandExecutor {
         });
 
         if (playerReports.getPage(currentPage) == null) {
-            player.sendMessage(prefix + "§c"+BukkitTranslateAPI.translate(player,"There are no more reports!"));
+            player.sendMessage(prefix + "§c"+"There are no more reports!");
             playerPage.remove(player.getUniqueId());
             return;
         }
@@ -101,25 +101,25 @@ public class ReportBukkitManager implements CommandExecutor {
 
         inventory.setItem(new
             ItemBuilder(Material.FISHING_ROD)
-            .setName("§8» §6"+BukkitTranslateAPI.translatePlaceholder(player,"Auto {}report", "§c"))
-            .setLore("", " §7"+BukkitTranslateAPI.translate(player,"Views the report of a random"), BukkitTranslateAPI.translate(player," §7player like §6/reports auto"), "")
+            .setName("§8» §6"+BukkitFormatUtil.format("Auto {}report", "§c"))
+            .setLore("", " §7"+"Views the report of a random", " §7player like §6/reports auto", "")
             .build(), 29, event ->
             sendBungeeCommand(player, "reports auto"));
 
         inventory.setItem(new
             ItemBuilder(Material.LAVA_BUCKET)
-            .setName("§8» §6"+BukkitTranslateAPI.translatePlaceholder(player,"Clear {}reports","§c"))
-            .setLore("", " §7"+BukkitTranslateAPI.translate(player,"Clears all reports"), " §7"+BukkitTranslateAPI.translate(player,"like §6/reports clear"), "")
+            .setName("§8» §6"+BukkitFormatUtil.format("Clear {}reports", "§c"))
+            .setLore("", " §7"+"Clears all reports", " §7"+"like §6/reports clear", "")
             .build(), 30, event ->
             sendBungeeCommand(player, "reports clear"));
 
         inventory.setItem(new
             ItemBuilder(Material.HOPPER)
-            .setName("§8» §6"+BukkitTranslateAPI.translatePlaceholder(player,"Filter {}reports","§c"))
+            .setName("§8» §6"+BukkitFormatUtil.format("Filter {}reports", "§c"))
             .setLore("",
-                " §7"+BukkitTranslateAPI.translatePlaceholder(player,"Filter the {}reports","§c"),
+                " §7"+BukkitFormatUtil.format("Filter the {}reports", "§c"),
                 "",
-                " §7"+BukkitTranslateAPI.translate(player,"Current")+"§8: §a" + getFilterByIdName(player, filterId))
+                " §7"+"Current"+"§8: §a" + getFilterByIdName(player, filterId))
             .build(), 32, event -> {
             int currentFilter = this.filterId.remove(player.getUniqueId());
             if (currentFilter == 4) {
@@ -135,14 +135,14 @@ public class ReportBukkitManager implements CommandExecutor {
 
         inventory.setItem(new
             ItemBuilder(Material.PAPER)
-            .setName("§8» §6"+BukkitTranslateAPI.translatePlaceholder(player,"List {}reports","§c"))
-            .setLore("", " §7"+BukkitTranslateAPI.translatePlaceholder(player, "Lists your current {}reports","§c"), "")
+            .setName("§8» §6"+BukkitFormatUtil.format("List {}reports", "§c"))
+            .setLore("", " §7"+BukkitFormatUtil.format("Lists your current {}reports", "§c"), "")
             .build(), 33, event ->
             openCurrentReports(player));
 
 
         if (currentPage > 1) {
-            inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §c"+BukkitTranslateAPI.translate(player, "Back")).build(), inventory.getInventory().getSize() - 9, event -> {
+            inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §c"+"Back").build(), inventory.getInventory().getSize() - 9, event -> {
                 playerPage.put(player.getUniqueId(), playerPage.remove(player.getUniqueId()) - 1);
                 player.closeInventory();
                 Bukkit.getScheduler().runTaskLater(BukkitCore.getInstance(), () -> {
@@ -153,7 +153,7 @@ public class ReportBukkitManager implements CommandExecutor {
 
         boolean forwardPage = playerReports.getPage(currentPage + 1) != null;
         if (forwardPage) {
-            inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §b"+BukkitTranslateAPI.translate(player, "Forward")).build(),
+            inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §b"+"Forward").build(),
                 inventory.getInventory().getSize() - 1, event -> {
 
                     int playerCurrent = playerPage.remove(player.getUniqueId());
@@ -169,7 +169,7 @@ public class ReportBukkitManager implements CommandExecutor {
     }
 
     private String getFilterByIdName(Player player, int id) {
-        return (id == 0 ? "§a"+BukkitTranslateAPI.translate(player,"Online") : id == 1 ? "§c"+BukkitTranslateAPI.translate(player,"Offline") : id == 2 ? "§e"+BukkitTranslateAPI.translate(player,"Time") : "§6"+BukkitTranslateAPI.translate(player,"All"));
+        return (id == 0 ? "§a"+"Online" : id == 1 ? "§c"+"Offline" : id == 2 ? "§e"+"Time" : "§6"+"All");
     }
 
     private Comparator<Report> getFilterById(int id) {
@@ -190,9 +190,9 @@ public class ReportBukkitManager implements CommandExecutor {
         }
 
         ItemBuilder teleport = new ItemBuilder(playerProfile.isOnline() ? Material.ENDER_PEARL : Material.BARRIER)
-            .setName((playerProfile.isOnline() ? "§8» §6"+BukkitTranslateAPI.translate(player, "Teleport") : "§c"+BukkitTranslateAPI.translate(player, "Offline")));
+            .setName((playerProfile.isOnline() ? "§8» §6"+"Teleport" : "§c"+"Offline"));
 
-        ItemBuilder close = new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§8» §c"+BukkitTranslateAPI.translate(player, "Close Report"));
+        ItemBuilder close = new ItemBuilder(Material.INK_SACK, 1, (byte) 1).setName("§8» §c"+"Close Report");
 
         inventory.setItem(teleport.build(), 11, event -> {
             if (playerProfile.isOnline()) {
@@ -207,13 +207,13 @@ public class ReportBukkitManager implements CommandExecutor {
             .setSkullOwner(playerProfile.getPlayerName())
             .setName(PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
             .setLore(" ",
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "State")+" §8» §a" + (report.getViewer() == null ? "§a"+BukkitTranslateAPI.translate(player, "Open") : "§6"+BukkitTranslateAPI.translate(player, "In Progress")),
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Date")+" §8» §e" + convertTime(report.getTime()),
+                "§8┃ §7"+"State"+" §8» §a" + (report.getViewer() == null ? "§a"+"Open" : "§6"+"In Progress"),
+                "§8┃ §7"+"Date"+" §8» §e" + convertTime(report.getTime()),
                 " ",
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Sender")+" §8» §a" + (reportSender == null ? "§c"+BukkitTranslateAPI.translate(player, "Unknown") : PlayerRank.valueOf(reportSender.getRank()).getColorCode() + reportSender.getPlayerName()),
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Target")+" §8» §c" + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(),
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Server")+" §8» §f" + playerProfile.getServerName(),
-                "§8┃ §7"+BukkitTranslateAPI.translate(player, "Reason")+" §8» §c" + report.getReason())
+                "§8┃ §7"+"Sender"+" §8» §a" + (reportSender == null ? "§c"+"Unknown" : PlayerRank.valueOf(reportSender.getRank()).getColorCode() + reportSender.getPlayerName()),
+                "§8┃ §7"+"Target"+" §8» §c" + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName(),
+                "§8┃ §7"+"Server"+" §8» §f" + playerProfile.getServerName(),
+                "§8┃ §7"+"Reason"+" §8» §c" + report.getReason())
             .build(), 13);
 
         inventory.setItem(close.build(), 15, event -> {
@@ -231,7 +231,7 @@ public class ReportBukkitManager implements CommandExecutor {
                 } else player.performCommand("reportsgui");
             }, 3L);
         });
-        inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §c"+BukkitTranslateAPI.translate(player, "Back")).build(), 18, event -> {
+        inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §c"+"Back").build(), 18, event -> {
             player.closeInventory();
             if (ownReport) {
                 if (!openCurrentReports(player)) {
@@ -245,7 +245,7 @@ public class ReportBukkitManager implements CommandExecutor {
 
     private boolean openCurrentReports(Player player) {
         if (reportManager.getAllReports().isEmpty()) {
-            player.sendMessage(prefix + "§c"+BukkitTranslateAPI.translate(player, "There are no open reports!"));
+            player.sendMessage(prefix + "§c"+"There are no open reports!");
             return false;
         }
 
@@ -256,11 +256,11 @@ public class ReportBukkitManager implements CommandExecutor {
                 if (ownReports.containsItem(report)) ownReports.addItem(report);
         });
 
-        Inventory inventory = new Inventory("§8» " + prefix + "§6"+BukkitTranslateAPI.translate(player, "Your Reports"), 9 * 4);
+        Inventory inventory = new Inventory("§8» " + prefix + "§6"+"Your Reports", 9 * 4);
         for (int i = inventory.getInventory().getSize() - 9; i < inventory.getInventory().getSize(); i++) {
             inventory.setItem(new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 7).setName("§8//").build(), i);
         }
-        inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §c"+BukkitTranslateAPI.translate(player, "Back")).build(), inventory.getInventory().getSize() - 9, event -> {
+        inventory.setItem(new ItemBuilder(Material.ARROW).setName("§8» §c"+"Back").build(), inventory.getInventory().getSize() - 9, event -> {
             player.closeInventory();
             player.performCommand("reportsgui");
         });
@@ -285,16 +285,16 @@ public class ReportBukkitManager implements CommandExecutor {
         if (!playerProfile.isOnline()) {
             itemBuilder = new ItemBuilder(Material.INK_SACK, 1, 1)
                 .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName())
-                .setLore("§c"+BukkitTranslateAPI.translate(player, "Offline"));
+                .setLore("§c"+"Offline");
         } else {
             String nick = BukkitCore.getAPI().getNickManager().getNickFromUUID(report.getTarget());
 
             itemBuilder = new ItemBuilder(Material.INK_SACK, 1, report.getViewer() == null ? 10 : 14)
                 .setName("§8» " + PlayerRank.valueOf(playerProfile.getRank()).getColorCode() + playerProfile.getPlayerName() + " " + (nick != null ? "§8(§5§lNICKED §7- §e" + nick + "§8)" : ""))
                 .setLore(" ",
-                    "§8┃ §7"+BukkitTranslateAPI.translate(player, "State")+" §8» §a" + (report.getViewer() == null ? "§a"+BukkitTranslateAPI.translate(player, "Open") : "§6"+BukkitTranslateAPI.translate(player, "In Progress")),
-                    "§8┃ §7"+BukkitTranslateAPI.translate(player, "Date")+" §8» §e" + convertTime(report.getTime()),
-                    "§8┃ §7"+BukkitTranslateAPI.translate(player, "Reason")+" §8» §e" + report.getReason());
+                    "§8┃ §7"+"State"+" §8» §a" + (report.getViewer() == null ? "§a"+"Open" : "§6"+"In Progress"),
+                    "§8┃ §7"+"Date"+" §8» §e" + convertTime(report.getTime()),
+                    "§8┃ §7"+"Reason"+" §8» §e" + report.getReason());
         }
         if (inventory.getInventory().contains(itemBuilder.build())) {
             inventory.getInventory().remove(itemBuilder.build());

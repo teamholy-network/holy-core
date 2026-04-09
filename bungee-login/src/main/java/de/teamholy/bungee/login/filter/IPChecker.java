@@ -30,53 +30,53 @@ public class IPChecker {
 	ExecutorService threads = Executors.newCachedThreadPool();
 
 	public IPChecker() {
-		scheduler.scheduleAtFixedRate(() -> {
-			threads.execute(() -> {
-				try {
-					RestAPIResponse ipcheckeralive = RestAPI.getInstance().get("http://ipcheck.skydb.de/alive");
-					if (ipcheckeralive.getFailed()) {
-						serviceonline = false;
-					} else {
-						serviceonline = true;
-					}
-					Thread.sleep(60000);
-				} catch (Exception e) {
-				}
-			});
-		}, 0, 1, TimeUnit.MINUTES);
+//		scheduler.scheduleAtFixedRate(() -> {
+//			threads.execute(() -> {
+//				try {
+//					RestAPIResponse ipcheckeralive = RestAPI.getInstance().get("http://ipcheck.skydb.de/alive");
+//					if (ipcheckeralive.getFailed()) {
+//						serviceonline = false;
+//					} else {
+//						serviceonline = true;
+//					}
+//					Thread.sleep(60000);
+//				} catch (Exception e) {
+//				}
+//			});
+//		}, 0, 1, TimeUnit.MINUTES);
 	}
 
 	public boolean isipresidental(String ip) {
 		if (badips.contains(ip)) {
 			return false;
 		}
-		if (serviceonline) {
-			RestAPIResponse isipresidental = RestAPI.getInstance().get("http://ipcheck.skydb.de/residental?ip=" + ip);
-			if (isipresidental.getFailed()) {
-				serviceonline = false;
-			} else {
-				if (isipresidental.getText().contains("false")) {
-					badips.add(ip);
-					return false;
-				} else {
-					return true;
-				}
-			}
-		}
+//		if (serviceonline) {
+//			RestAPIResponse isipresidental = RestAPI.getInstance().get("http://ipcheck.skydb.de/residental?ip=" + ip);
+//			if (isipresidental.getFailed()) {
+//				serviceonline = false;
+//			} else {
+//				if (isipresidental.getText().contains("false")) {
+//					badips.add(ip);
+//					return false;
+//				} else {
+//					return true;
+//				}
+//			}
+//		}
 		return true;
 	}
 
 	public IPCheckerResult getIPInfo(String ip) {
-		if (serviceonline) {
-			RestAPIResponse getIPInfo = RestAPI.getInstance().get("http://ipcheck.skydb.de/getinfo?ip=" + ip);
-			if (getIPInfo.getFailed()) {
-				serviceonline = false;
-			} else {
-				Gson gson = new Gson();
-				return gson.fromJson(getIPInfo.getText(), IPCheckerResult.class);
-			}
-
-		}
+//		if (serviceonline) {
+//			RestAPIResponse getIPInfo = RestAPI.getInstance().get("http://ipcheck.skydb.de/getinfo?ip=" + ip);
+//			if (getIPInfo.getFailed()) {
+//				serviceonline = false;
+//			} else {
+//				Gson gson = new Gson();
+//				return gson.fromJson(getIPInfo.getText(), IPCheckerResult.class);
+//			}
+//
+//		}
 		return null;
 	}
 
