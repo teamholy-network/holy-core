@@ -2,7 +2,7 @@ package de.teamholy.core.bukkit.report;
 
 import com.google.common.collect.Maps;
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+import de.teamholy.core.translation.BukkitTranslateAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Pagifier;

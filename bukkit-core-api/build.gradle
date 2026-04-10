@@ -20,6 +20,9 @@ dependencies {
     implementation(libs.jackson.core)
 
     compileOnly(libs.luckperms)
+    compileOnly(libs.translation.api)
+    compileOnly(libs.bungeecord.api)
+    compileOnly(libs.velocity.api)
 
     implementation(project(':holy-core-api'))
     compileOnly(project(':bukkit-markupapi'))

@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.lens;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

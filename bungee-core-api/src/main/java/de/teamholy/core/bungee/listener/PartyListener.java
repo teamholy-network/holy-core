@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.listener;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.Party;
 import net.md_5.bungee.api.ProxyServer;

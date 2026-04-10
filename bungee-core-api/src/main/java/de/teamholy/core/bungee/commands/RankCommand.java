@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.commands;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;

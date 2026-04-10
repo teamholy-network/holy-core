@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.mute;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.mute.MuteProfile;

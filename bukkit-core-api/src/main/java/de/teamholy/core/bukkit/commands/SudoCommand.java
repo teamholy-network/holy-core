@@ -1,6 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+import de.teamholy.core.translation.BukkitTranslateAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

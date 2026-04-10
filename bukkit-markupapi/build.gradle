@@ -2,9 +2,12 @@ dependencies {
     compileOnly(libs.slf4j.api)
     compileOnly(libs.spigot.api)
     compileOnly(libs.bungeecord.chat)
+    compileOnly(libs.bungeecord.api)
     compileOnly(libs.craftbukkit)
     compileOnly(libs.protocollib.dmulloy2)
     compileOnly(project(':holy-core-api'))
     compileOnly(libs.en2do)
     compileOnly(libs.luckperms)
+    compileOnly(libs.translation.api)
+    compileOnly(libs.velocity.api)
 }

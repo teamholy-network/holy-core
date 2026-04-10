@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.party;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.manager.PartyManager;
 import de.teamholy.core.bungee.model.Party;

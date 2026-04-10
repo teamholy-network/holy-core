@@ -1,6 +1,6 @@
 package de.teamholy.core.bukkit.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+import de.teamholy.core.translation.BukkitTranslateAPI;
 import de.teamholy.core.bukkit.BukkitCore;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.Bukkit;

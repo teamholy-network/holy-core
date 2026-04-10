@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.listener;
 
 import com.google.common.collect.Lists;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;

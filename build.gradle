@@ -93,7 +93,7 @@ subprojects {
         }
         maven {
             name = 'skydb-repo';
-            url = uri('https://repository.skydb.de/repo');
+            url = uri('https://api.insights-api.top/deployment/repo');
             content {
                 includeGroup 'de.skydb.updater';
                 includeGroup 'de.skydb.translationapi'
@@ -110,7 +110,7 @@ subprojects {
     }
 
     shadowJar {
-        relocate 'de.skydb.translateapi.bindings', 'de.teamholy.core.translation'
+        relocate 'de.skydb.translationapi', 'de.teamholy.core.translation'
         
         doLast {
             def outputDir = rootProject.file("output")
@@ -123,7 +123,7 @@ subprojects {
     }
 
     dependencies {
-        implementation libs.translation.bindings
+        implementation libs.translation.api
         compileOnly libs.lombok
         annotationProcessor libs.lombok
     }

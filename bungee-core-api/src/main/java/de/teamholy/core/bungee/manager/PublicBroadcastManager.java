@@ -1,7 +1,7 @@
 package de.teamholy.core.bungee.manager;
 
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.Helpers;
 import net.md_5.bungee.api.ProxyServer;

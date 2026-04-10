@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands.report;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.api.utility.Report;

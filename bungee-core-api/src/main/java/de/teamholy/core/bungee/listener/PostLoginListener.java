@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
 import de.teamholy.core.api.entities.friend.FriendProfile;
 import de.teamholy.core.api.entities.game.GameProfile;

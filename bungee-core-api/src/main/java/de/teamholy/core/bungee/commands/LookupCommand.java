@@ -2,7 +2,7 @@ package de.teamholy.core.bungee.commands;
 
 import static de.teamholy.core.bungee.BungeeCore.RESTBASE;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.clan.Clan;

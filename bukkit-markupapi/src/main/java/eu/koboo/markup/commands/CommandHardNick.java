@@ -1,6 +1,6 @@
 package eu.koboo.markup.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
+import de.teamholy.core.translation.BukkitTranslateAPI;
 import eu.koboo.markup.MarkupAPI;
 import eu.koboo.markup.util.PlayerMeta;
 import org.bukkit.Bukkit;

@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.manager;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.stats.StatsProfile;
 import de.teamholy.core.api.entities.stats.StatsProfileRepository;
 import de.teamholy.core.bungee.BungeeCore;

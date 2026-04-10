@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.ChatLog;
 import net.md_5.bungee.api.ChatColor;

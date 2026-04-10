@@ -1,6 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
+import de.teamholy.core.translation.BungeeTranslateAPI;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
