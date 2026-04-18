@@ -97,6 +97,7 @@ subprojects {
             content {
                 includeGroup 'de.skydb.updater';
                 includeGroup 'de.skydb.translationapi'
+                includeGroup 'com.velocitypowered'
             }
         }
         maven {
