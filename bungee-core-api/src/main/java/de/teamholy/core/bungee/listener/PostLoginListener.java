@@ -420,7 +420,7 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
             ? "§c" + "no §7friend"
             : "§a" + count + " §7" + "friend" + pluralForm;
 
-        player.sendMessage(new TextComponent("§6Friend §8× §7" + "There " + (count <= 1 ? "is" : "are") + " currently " + (count == 0 ? "{}" : "{}") + " online"));
+        player.sendMessage(new TextComponent("§6Friend §8× §7" + "There " + (count <= 1 ? "is" : "are") + " currently " + (count == 0 ? "no" : count) + " online"));
 
         if (!onlineFriends.isEmpty()) {
             player.sendMessage(new TextComponent("§6Friend §8× " + String.join("§7, ", onlineFriends)));
@@ -435,7 +435,7 @@ public record PostLoginListener(ProxyManager proxyManager) implements Listener {
         }
 
         String requestWord = requestCount == 1 ? "request" : "requests";
-        String message = "§6Friend §8× §7" + "You currently have {} open friend " + requestWord;
+        String message = "§6Friend §8× §7" + "You currently have "  + requestCount + " open friend " + requestWord;
 
         player.sendMessage(
             new ComponentBuilder(message)

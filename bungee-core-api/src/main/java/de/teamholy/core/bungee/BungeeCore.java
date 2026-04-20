@@ -326,25 +326,14 @@ public class BungeeCore extends Plugin {
 
     private void startBroadcastTasks() {
         startLinkBroadcast();
-        startLanguageBroadcast();
         startApplicationBroadcast();
     }
 
     private void startLinkBroadcast() {
         ProxyServer.getInstance().getScheduler().schedule(
             this,
-            () -> broadcastToAllPlayers("Did you know that you can do {} to get free {}?", "&6/link&7", "&ecoins&7"),
+            () -> broadcastToAllPlayers("Did you know that you can do §6/link§7 to get free §ecoins§7?"),
             BROADCAST_FIRST_DELAY,
-            BROADCAST_INTERVAL,
-            TimeUnit.MINUTES
-        );
-    }
-
-    private void startLanguageBroadcast() {
-        ProxyServer.getInstance().getScheduler().schedule(
-            this,
-            () -> broadcastToAllPlayers("You can change the language using {}", "&6/language&7"),
-            BROADCAST_FIRST_DELAY + 10,
             BROADCAST_INTERVAL,
             TimeUnit.MINUTES
         );
@@ -353,14 +342,14 @@ public class BungeeCore extends Plugin {
     private void startApplicationBroadcast() {
         ProxyServer.getInstance().getScheduler().schedule(
             this,
-            () -> broadcastToAllPlayers("Apply on the {} §7page to join the team", "§6teamholy.de/apply"),
+            () -> broadcastToAllPlayers("Apply on the §6teamholy.de/apply §7page to join the team"),
             BROADCAST_FIRST_DELAY + 20,
             BROADCAST_INTERVAL,
             TimeUnit.MINUTES
         );
     }
 
-    private void broadcastToAllPlayers(String messageKey, String... placeholders) {
+    private void broadcastToAllPlayers(String messageKey) {
         for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
             String message = "§7" + messageKey;
             publicBroadcastManager.sendGeneral(player, message);
