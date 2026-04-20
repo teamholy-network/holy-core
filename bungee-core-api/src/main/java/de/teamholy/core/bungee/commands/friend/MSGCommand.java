@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.friend;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -31,7 +30,7 @@ public class MSGCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (!(strings.length > 1)) {
-            player.sendMessage(prefix + "/msg (" + BungeeTranslateAPI.translate(player, "player") + ") (" + BungeeTranslateAPI.translate(player, "message") + ")");
+            player.sendMessage(prefix + "/msg (" + "player" + ") (" + "message" + ")");
             return;
         }
 
@@ -39,24 +38,24 @@ public class MSGCommand extends Command {
         UUID target = BungeeCore.getAPI().getUuidManager().getUUID(strings[0]);
 
         if (target == null) {
-            player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "This player does not exist"));
+            player.sendMessage(prefix + "This player does not exist");
             return;
         }
 
         if (!BungeeCore.getAPI().getFriendManager().isFriend(player.getUniqueId(), target) && !player.hasPermission("teamholy.team")) {
-            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "You are not friends with {}", getColor(target) + getName(target) + "§7"));
+            player.sendMessage(prefix + ("You are not friends with " + (getColor(target) + getName(target) + "§7")));
             return;
         }
 
         ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(target);
         if (proxiedPlayer == null) {
-            player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "This player is not online!"));
+            player.sendMessage(prefix + "This player is not online!");
             return;
         }
 
 
         if (target.toString().equals(player.getUniqueId().toString())) {
-            player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "You can't msg yourself!"));
+            player.sendMessage(prefix + "You can't msg yourself!");
             return;
         }
 
@@ -66,7 +65,7 @@ public class MSGCommand extends Command {
         }
 
         if (stringBuilder.toString().isEmpty()) {
-            player.sendMessage(prefix + "/msg (" + BungeeTranslateAPI.translate(player, "player") + ") (" + BungeeTranslateAPI.translate(player, "message") + ")");
+            player.sendMessage(prefix + "/msg (" + "player" + ") (" + "message" + ")");
             return;
         }
 

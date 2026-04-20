@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.util.BungeeUtil;
 import net.md_5.bungee.api.CommandSender;
@@ -19,18 +18,18 @@ public class ClearPlayerFromCacheCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         UUID author = BungeeUtil.parseAuthorUUID(sender);
         if (args.length != 1) {
-            sender.sendMessage("§c" + BungeeTranslateAPI.translate(author, "Please use") + " /clearcache (" + BungeeTranslateAPI.translate(author, "player") + ")");
+            sender.sendMessage("§c" + "Please use" + " /clearcache (" + "player" + ")");
             return;
         }
 
         UUID uuid = BungeeCore.getAPI().getUuidManager().getUUID(args[0]);
         if (uuid == null) {
-            sender.sendMessage(BungeeTranslateAPI.translatePlaceholder(author, "§cThe player §e{} §cwas not found!", args[0]));
+            sender.sendMessage(("§cThe player §e" + (args[0]) + " §cwas not found!"));
         }
 
         ProxiedPlayer player = BungeeCore.getInstance().getProxy().getPlayer(uuid);
         if (player != null) {
-            player.disconnect(BungeeTranslateAPI.translate(author, "§cYou have been kicked from the network!"));
+            player.disconnect("§cYou have been kicked from the network!");
         }
 
         BungeeCore.getAPI().getPlayerService().getRedisCache().remove(uuid);

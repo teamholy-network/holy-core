@@ -2,7 +2,6 @@ package de.teamholy.core.bungee;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.manager.MetricsManager;
@@ -363,7 +362,7 @@ public class BungeeCore extends Plugin {
 
     private void broadcastToAllPlayers(String messageKey, String... placeholders) {
         for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-            String message = "§7" + BungeeTranslateAPI.translatePlaceholder(player, messageKey, placeholders);
+            String message = "§7" + messageKey;
             publicBroadcastManager.sendGeneral(player, message);
         }
     }

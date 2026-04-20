@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.clan;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.clan.Clan;
 import de.teamholy.core.api.entities.clanplayer.ClanPlayerProfile;
@@ -27,13 +26,13 @@ public class ClanChatCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (strings.length == 0) {
-            player.sendMessage(Message.CLAN_PREFIX + "/cc (" + BungeeTranslateAPI.translate(player, "message") + ")");
+            player.sendMessage(Message.CLAN_PREFIX + "/cc (" + "message" + ")");
             return;
         }
 
         ClanPlayerProfile clanProfile = BungeeCore.getAPI().getClanPlayerService().getEntity(player.getUniqueId(), () -> BungeeCore.getAPI().getClanPlayerService().getRepository().findFirstById(player.getUniqueId()));
         if (clanProfile == null) {
-            player.sendMessage(Message.CLAN_PREFIX + "§7" + BungeeTranslateAPI.translate(player, "You don't have a clan!"));
+            player.sendMessage(Message.CLAN_PREFIX + "§7" + "You don't have a clan!");
             return;
         }
 

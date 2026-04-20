@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -24,8 +23,8 @@ public class YoutuberCommand extends Command {
             return;
         }
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
-        player.sendMessage("     §7" + BungeeTranslateAPI.translate(player, "Join our discord to apply"));
-        TextComponent message = new TextComponent("§7" + BungeeTranslateAPI.translate(player, "Bewerben") + " §8» §a§l*" + BungeeTranslateAPI.translate(player, "Click") + "*");
+        player.sendMessage("     §7" + "Join our discord to apply");
+        TextComponent message = new TextComponent("§7" + "Bewerben" + " §8» §a§l*" + "Click" + "*");
         message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "dc.teamholy.de"));
         player.sendMessage(message);
     }

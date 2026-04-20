@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.ban;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.DiscordWebhookLink;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
@@ -38,7 +37,7 @@ public class UnbanCommand extends SenderCommand {
                     UUID author = BungeeUtil.parseAuthorUUID(sender);
 
                     if (uuid == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §c" + target + "§c!");
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§7" + "Error while fetching UUID from" + " §c" + target + "§c!");
                         return;
                     }
 
@@ -47,7 +46,7 @@ public class UnbanCommand extends SenderCommand {
                     BanProfile punishProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(finalUuid));
 
                     if (punishProfile == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(author, "§cThe player §e{}§c is isn't banned!", target));
+                        sender.sendMessage(Message.PUNISH_PREFIX + ("§cThe player §e" + (target) + "§c is isn't banned!"));
                         return;
                     }
 
@@ -92,7 +91,7 @@ public class UnbanCommand extends SenderCommand {
 
     public void printUsage(CommandSender commandSender) {
         UUID author = BungeeUtil.parseAuthorUUID(commandSender);
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban (" + BungeeTranslateAPI.translate(author, "name") + ")");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/unban (" + "name" + ")");
     }
 
 }

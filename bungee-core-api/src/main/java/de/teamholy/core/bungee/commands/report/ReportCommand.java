@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.report;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.manager.ReportManager;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.api.utility.Report;
@@ -47,7 +46,7 @@ public class ReportCommand extends Command {
 
                 UUID nickUUID = BungeeCore.getAPI().getNickManager().getUUIDFromNick(args[0]);
                 if (nickUUID == null) {
-                    player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "This player is not online"));
+                    player.sendMessage(prefix + "This player is not online");
                     return;
                 }
                 isNicked = true;
@@ -65,18 +64,18 @@ public class ReportCommand extends Command {
             }
 
             if (!isValidReason) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "The reason {} is not a valid reason!", "§e" + args[1] + "§7"));
+                player.sendMessage(prefix + ("The reason " + ("§e" + args[1] + "§7") + " is not a valid reason!"));
                 return;
             }
 
             if (target.getName().equals(player.getName())) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "You can't report yourself!"));
+                player.sendMessage(prefix + "You can't report yourself!");
                 return;
             }
 
 
             if (reportHandler.isReported(target.getUniqueId())) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player, "The player is already reported!"));
+                player.sendMessage(prefix + "The player is already reported!");
                 return;
             }
 
@@ -103,7 +102,7 @@ public class ReportCommand extends Command {
             String reported = BungeeCore.getInstance().getPlayerColor(target.getUniqueId()) + target.getName();
             String reporter = BungeeCore.getInstance().getPlayerColor(player.getUniqueId()) + player.getName();
 
-            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player, "You've reported {} for {}", reported + "§7", "§e" + report.getReason()));
+            player.sendMessage(prefix + ("You've reported " + (reported + "§7") + " for " + ("§e" + report.getReason())));
 
             ProxiedPlayer finalTarget = target;
             ChatLog finalChatLog = chatLog;
@@ -112,12 +111,12 @@ public class ReportCommand extends Command {
                 if (!proxiedPlayer.hasPermission("teamholy.team")) return;
                 if (!BungeeCore.getAPI().getStaffManager().canNotify(proxiedPlayer.getUniqueId())) return;
 
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "The player {} §7has reported {} §7for {}", reporter, reported, "§e" + report.getReason()) + " §8(§e" + finalTarget.getServer().getInfo().getName() + "§8) " + (finalIsNicked ? "§8(§5§lNICKED§8)" : ""));
+                proxiedPlayer.sendMessage(prefix + ("The player " + (reporter) + " §7has reported " + (reported) + " §7for " + ("§e" + report.getReason())) + " §8(§e" + finalTarget.getServer().getInfo().getName() + "§8) " + (finalIsNicked ? "§8(§5§lNICKED§8)" : ""));
                 if (finalChatLog != null)
                     proxiedPlayer.sendMessage(prefix + "Chatlog -> https://teamholy.de/chatlog/" + finalChatLog.getChatLogId());
-                TextComponent message = new TextComponent(prefix + "§a§l" + BungeeTranslateAPI.translate(proxiedPlayer, "Accept report"));
+                TextComponent message = new TextComponent(prefix + "§a§l" + "Accept report");
                 message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/reports accept " + finalTarget.getName()));
-                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7" + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "Accept the report of {}", reported))));
+                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§7" + ("Accept the report of " + (reported)))));
                 proxiedPlayer.sendMessage(message);
             });
 
@@ -134,8 +133,8 @@ public class ReportCommand extends Command {
             stringBuilder.append(reportReason + "§7, §e");
         }
 
-        proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "Reasons") + " §8» §e" + stringBuilder.toString());
-        proxiedPlayer.sendMessage(prefix + "/report (" + BungeeTranslateAPI.translate(proxiedPlayer, "name") + ") (" + BungeeTranslateAPI.translate(proxiedPlayer, "reason") + ")");
+        proxiedPlayer.sendMessage(prefix + "Reasons" + " §8» §e" + stringBuilder.toString());
+        proxiedPlayer.sendMessage(prefix + "/report (" + "name" + ") (" + "reason" + ")");
     }
 
 }

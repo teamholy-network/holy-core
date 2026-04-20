@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.util;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.utility.Punish;
 import de.teamholy.core.bungee.BungeeCore;
@@ -25,7 +24,7 @@ public class BungeeUtil {
 
     public void sendNoPermission(CommandSender sender) {
         if ((sender instanceof ProxiedPlayer)) {
-            sender.sendMessage(Message.PREFIX + "§c" + BungeeTranslateAPI.translate((ProxiedPlayer) sender, "You don't have permission to do this."));
+            sender.sendMessage(Message.PREFIX + "§c" + "You don't have permission to do this.");
         } else {
             sender.sendMessage(Message.PREFIX + "§cYou don't have permission to do this.");
         }

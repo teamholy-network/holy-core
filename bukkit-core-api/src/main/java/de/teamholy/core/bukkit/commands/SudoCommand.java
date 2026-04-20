@@ -1,6 +1,5 @@
 package de.teamholy.core.bukkit.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -33,18 +32,18 @@ public class SudoCommand implements CommandExecutor {
         }
 
         if (Arrays.stream(allowedUuids).noneMatch(uuid -> uuid.equals(player.getUniqueId()))) {
-            player.sendMessage("§c"+ BukkitTranslateAPI.translate(player,"What did you just try?"));
+            player.sendMessage("§c"+ "What did you just try?");
             return false;
         }
 
         if (!(args.length > 1)) {
-            player.sendMessage("§c/sudo ("+BukkitTranslateAPI.translate(player,"player")+") ("+BukkitTranslateAPI.translate(player,"message")+")");
+            player.sendMessage("§c/sudo ("+"player"+") ("+"message"+")");
             return false;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage("§c"+BukkitTranslateAPI.translate(player,"the player is not online!"));
+            player.sendMessage("§c"+"the player is not online!");
             return false;
         }
 
@@ -54,7 +53,7 @@ public class SudoCommand implements CommandExecutor {
         }
 
         target.chat(sb.toString());
-        player.sendMessage("§a"+BukkitTranslateAPI.translate(player,"You have executed a command for ") + target.getName());
+        player.sendMessage("§a"+"You have executed a command for " + target.getName());
         return false;
     }
 }

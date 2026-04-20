@@ -1,6 +1,5 @@
 package eu.koboo.markup.commands;
 
-import de.skydb.translateapi.bindings.BukkitTranslateAPI;
 import eu.koboo.markup.MarkupAPI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,16 +23,16 @@ public class CommandReloadPresets implements CommandExecutor {
         }
         Player player = (Player) commandSender;
         if (!player.hasPermission("markupapi.reloadpresets")) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+ BukkitTranslateAPI.translate(player,"You don't have permission to do that!"));
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+ "You don't have permission to do that!");
             return false;
         }
         if (strings.length != 0) {
-            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+BukkitTranslateAPI.translate(player,"Usage")+": §7/reloadpresets");
+            player.sendMessage(MarkupAPI.NICK_PREFIX + "§c"+"Usage"+": §7/reloadpresets");
             return false;
         }
 
         markupAPI.getPresetManager().reloadPresets();
-        player.sendMessage(MarkupAPI.NICK_PREFIX + "§a"+BukkitTranslateAPI.translate(player,"Reloaded player skin-presets!"));
+        player.sendMessage(MarkupAPI.NICK_PREFIX + "§a"+"Reloaded player skin-presets!");
 
         return true;
     }

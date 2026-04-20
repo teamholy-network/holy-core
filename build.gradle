@@ -92,14 +92,6 @@ subprojects {
             }
         }
         maven {
-            name = 'skydb-repo';
-            url = uri('https://repository.skydb.de/repo');
-            content {
-                includeGroup 'de.skydb.updater';
-                includeGroup 'de.skydb.translationapi'
-            }
-        }
-        maven {
             name = 'sonatype-repo';
             url = uri('https://oss.sonatype.org/content/repositories/snapshots');
             content {
@@ -110,8 +102,6 @@ subprojects {
     }
 
     shadowJar {
-        relocate 'de.skydb.translateapi.bindings', 'de.teamholy.core.translation'
-        
         doLast {
             def outputDir = rootProject.file("output")
             copy {
@@ -123,7 +113,6 @@ subprojects {
     }
 
     dependencies {
-        implementation libs.translation.bindings
         compileOnly libs.lombok
         annotationProcessor libs.lombok
     }

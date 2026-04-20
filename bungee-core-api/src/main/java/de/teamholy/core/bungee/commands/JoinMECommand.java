@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.CoreAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.bungee.BungeeCore;
@@ -52,15 +51,15 @@ public class JoinMECommand extends Command {
             int tokens = (int) playerProfile.getJoinMeTokens();
 
             if (tokens == 0 && !proxiedPlayer.hasPermission("teamholy.joinme")) {
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "You currently §cdont §7have any joinme tokens!"));
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "Do you want to buy joinme tokens? §ashop.teamholy.de"));
+                proxiedPlayer.sendMessage(prefix + "You currently §cdont §7have any joinme tokens!");
+                proxiedPlayer.sendMessage(prefix + "Do you want to buy joinme tokens? §ashop.teamholy.de");
             } else {
 
                 if (proxiedPlayer.hasPermission("teamholy.joinme")) {
                     ProxyServer.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, "joinme do it");
                 } else {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(proxiedPlayer, "You currently have §e{} §7joinme {}", String.valueOf(tokens), tokens == 1 ? "token" : "tokens"));
-                    TextComponent message = new TextComponent(prefix + "§a" + BungeeTranslateAPI.translate(proxiedPlayer, "Click to create a Joinme!"));
+                    proxiedPlayer.sendMessage(prefix + ("You currently have §e" + (String.valueOf(tokens)) + " §7joinme " + (tokens == 1 ? "token" : "tokens")));
+                    TextComponent message = new TextComponent(prefix + "§a" + "Click to create a Joinme!");
                     message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/joinme do it"));
 
                     proxiedPlayer.sendMessage(message);
@@ -72,28 +71,28 @@ public class JoinMECommand extends Command {
         } else if (args.length == 1) {
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
             if (target == null) {
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player does not exist!"));
+                proxiedPlayer.sendMessage(prefix + "This player does not exist!");
                 return;
             }
 
             if (!joinMEHashMap.containsKey(target.getUniqueId())) {
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "This player dont have an active joinme!"));
+                proxiedPlayer.sendMessage(prefix + "This player dont have an active joinme!");
                 return;
             }
 
             if (!joinMEHashMap.get(target.getUniqueId()).getServer().equalsIgnoreCase(target.getServer().getInfo().getName())) {
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "The player is not on the joinme server anymore!"));
+                proxiedPlayer.sendMessage(prefix + "The player is not on the joinme server anymore!");
                 return;
             }
 
             if ((joinMEHashMap.get(target.getUniqueId()).getCooldown() < System.currentTimeMillis())) {
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "The Joinme has expired!"));
+                proxiedPlayer.sendMessage(prefix + "The Joinme has expired!");
                 joinMEHashMap.remove(target.getUniqueId());
                 return;
             }
 
             if (joinMEHashMap.get(target.getUniqueId()).getServer().equalsIgnoreCase(proxiedPlayer.getServer().getInfo().getName())) {
-                proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "You are already on the server!"));
+                proxiedPlayer.sendMessage(prefix + "You are already on the server!");
                 return;
             }
 
@@ -102,12 +101,12 @@ public class JoinMECommand extends Command {
             if (args[0].equalsIgnoreCase("do") && args[1].equalsIgnoreCase("it")) {
 
                 if (joinMEHashMap.containsKey(proxiedPlayer.getUniqueId()) && (joinMEHashMap.get(proxiedPlayer.getUniqueId()).getCooldown() > System.currentTimeMillis()) && !proxiedPlayer.hasPermission("teamholy.joinme.bypass")) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "You already have a Joinme!"));
+                    proxiedPlayer.sendMessage(prefix + "You already have a Joinme!");
                     return;
                 }
 
                 if (proxiedPlayer.getServer().getInfo().getName().toLowerCase().contains("lobby")) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "You cannot make a Joinme in the lobby!"));
+                    proxiedPlayer.sendMessage(prefix + "You cannot make a Joinme in the lobby!");
                     return;
                 }
 
@@ -118,7 +117,7 @@ public class JoinMECommand extends Command {
                 int tokens = (int) playerProfile.getJoinMeTokens();
 
                 if (tokens == 0 && !proxiedPlayer.hasPermission("teamholy.joinme")) {
-                    proxiedPlayer.sendMessage(prefix + BungeeTranslateAPI.translate(proxiedPlayer, "You dont have any joinme tokens!"));
+                    proxiedPlayer.sendMessage(prefix + "You dont have any joinme tokens!");
                 } else {
                     if (!proxiedPlayer.hasPermission("teamholy.joinme")) {
                         playerProfile.setJoinMeTokens(playerProfile.getJoinMeTokens() - 1);

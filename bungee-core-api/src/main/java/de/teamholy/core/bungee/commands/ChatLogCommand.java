@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import de.teamholy.core.bungee.model.ChatLog;
 import net.md_5.bungee.api.ChatColor;
@@ -29,19 +28,19 @@ public class ChatLogCommand extends Command {
         ProxiedPlayer player = (ProxiedPlayer) commandSender;
 
         if (args.length == 0) {
-            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Please specify a player!") + " §8(§7/chatlog <" + BungeeTranslateAPI.translate(player, "Player") + ">§8)");
+            commandSender.sendMessage("§cChatlog §8× §7" + "Please specify a player!" + " §8(§7/chatlog <" + "Player" + ">§8)");
             return;
         }
 
         if (args[0].equalsIgnoreCase(player.getName())) {
-            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Own chatlog is not allowed!"));
+            commandSender.sendMessage("§cChatlog §8× §7" + "Own chatlog is not allowed!");
             return;
         }
 
         ProxiedPlayer chatlogPlayer = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (chatlogPlayer == null) {
-            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Player not found!"));
+            commandSender.sendMessage("§cChatlog §8× §7" + "Player not found!");
             return;
         }
 
@@ -49,7 +48,7 @@ public class ChatLogCommand extends Command {
         chatLog = BungeeCore.getInstance().getChatLogManager().createChatlog(player.getUniqueId(), chatlogPlayer);
 
         if (chatLog == null) {
-            commandSender.sendMessage("§cChatlog §8× §7" + BungeeTranslateAPI.translate(player, "Chatlog failed to create!"));
+            commandSender.sendMessage("§cChatlog §8× §7" + "Chatlog failed to create!");
             return;
         }
 

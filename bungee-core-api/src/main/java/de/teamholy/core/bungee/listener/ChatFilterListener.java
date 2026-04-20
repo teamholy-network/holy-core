@@ -1,7 +1,6 @@
 package de.teamholy.core.bungee.listener;
 
 import com.google.common.collect.Lists;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.mute.MuteProfile;
 import de.teamholy.core.api.utility.DiscordWebhook;
 import de.teamholy.core.api.utility.Punish;
@@ -141,7 +140,7 @@ public class ChatFilterListener implements Listener {
         String targetName = args[1].toLowerCase(Locale.ROOT);
 
         if (Arrays.stream(IMITATE_BLACKLIST).anyMatch(blacklisted -> blacklisted.equalsIgnoreCase(targetName))) {
-            String banMessage = "§c" + BungeeTranslateAPI.translate(player, "You have been banned for imitating a staff member");
+            String banMessage = "§c" + "You have been banned for imitating a staff member";
             player.disconnect(new TextComponent(banMessage));
             event.setCancelled(true);
             return true;
@@ -221,10 +220,9 @@ public class ChatFilterListener implements Listener {
 
         logToChatHistory(player, event.getMessage(), matcher.group());
 
-        player.sendMessage(new TextComponent("§cChatFilter §8× §7" + BungeeTranslateAPI.translate(player, "This word is not allowed!")
-            + " §8(§c" + matcher.group() + "§8. §7" + BungeeTranslateAPI.translate(player, "will be reviewed by our team") + ")"));
-        player.sendMessage(new TextComponent("§cChatFilter §8× §7" + BungeeTranslateAPI.translatePlaceholder(player, "You have been Punished for {}",
-            "§c" + Punish.parseMuteReasonById(actionProfile.filterActionId()))));
+        player.sendMessage(new TextComponent("§cChatFilter §8× §7" + "This word is not allowed!"
+            + " §8(§c" + matcher.group() + "§8. §7" + "will be reviewed by our team" + ")"));
+        player.sendMessage(new TextComponent("§cChatFilter §8× §7" + ("You have been Punished for " + ("§c" + Punish.parseMuteReasonById(actionProfile.filterActionId())))));
 
         ProxyServer.getInstance().getPluginManager().dispatchCommand(
             ProxyServer.getInstance().getConsole(),
@@ -266,8 +264,8 @@ public class ChatFilterListener implements Listener {
 
     private void handleWarnAction(ProxiedPlayer player, ChatEvent event, Matcher matcher,
                                   ChatFilterManager.FilterActionProfile actionProfile) {
-        player.sendMessage(new TextComponent("§cChatFilter §8× §7" + BungeeTranslateAPI.translate(player, "This word is not allowed!")
-            + " §8(§c" + matcher.group() + "§8. §7" + BungeeTranslateAPI.translate(player, "will be reviewed by our team") + ")"));
+        player.sendMessage(new TextComponent("§cChatFilter §8× §7" + "This word is not allowed!"
+            + " §8(§c" + matcher.group() + "§8. §7" + "will be reviewed by our team" + ")"));
     }
 
     private boolean handleDomainFilter(ProxiedPlayer player, String message, ChatEvent event) {
@@ -299,8 +297,8 @@ public class ChatFilterListener implements Listener {
                 return false;
             }
 
-            player.sendMessage(new TextComponent("§cChatFilter §8× §7" + BungeeTranslateAPI.translate(player, "This word is not allowed!")
-                + " §8(§c" + domainMatcher.group(0) + "§8. §7" + BungeeTranslateAPI.translate(player, "will be reviewed by our team") + ")"));
+            player.sendMessage(new TextComponent("§cChatFilter §8× §7" + "This word is not allowed!"
+                + " §8(§c" + domainMatcher.group(0) + "§8. §7" + "will be reviewed by our team" + ")"));
 
             event.setCancelled(true);
             sendDiscordWebhookDomainfilter(player, event, domainMatcher);
@@ -346,7 +344,7 @@ public class ChatFilterListener implements Listener {
         }
 
         if (areMessagesSimilar(message, lastMessage)) {
-            player.sendMessage(new TextComponent("§cChatFilter §8× §7" + BungeeTranslateAPI.translate(player, "Your last message is 70% similar")));
+            player.sendMessage(new TextComponent("§cChatFilter §8× §7" + "Your last message is 70% similar"));
             event.setCancelled(true);
             return;
         }

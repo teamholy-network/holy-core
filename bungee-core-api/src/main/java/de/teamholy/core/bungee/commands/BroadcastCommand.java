@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.manager.PublicBroadcastManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -30,7 +29,7 @@ public class BroadcastCommand extends Command {
             return;
 
         if (strings.length == 0) {
-            player.sendMessage("§6Broadcast §8× §7/broadcast (" + BungeeTranslateAPI.translate(player, "message") + ")");
+            player.sendMessage("§6Broadcast §8× §7/broadcast (" + "message" + ")");
             return;
         }
 

@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.punish;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
@@ -39,7 +38,7 @@ public class PunishReduceCommand extends SenderCommand {
             String target = args[0];
             UUID uuid = BungeeUtil.parseTargetArgument(target);
             if (uuid == null) {
-                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "Error while fetching UUID from") + " §e" + target + "§c!");
+                sender.sendMessage(Message.PUNISH_PREFIX + "§c" + "Error while fetching UUID from" + " §e" + target + "§c!");
                 return;
             }
 
@@ -57,7 +56,7 @@ public class PunishReduceCommand extends SenderCommand {
                 if (isBan) {
                     BanProfile banProfile = BungeeCore.getAPI().getBanService().getEntity(uuid, () -> BungeeCore.getAPI().getBanService().getRepository().findFirstById(uuid));
                     if (banProfile == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(author, "The player §e{}§c isn't banned!", target));
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + ("The player §e" + (target) + "§c isn't banned!"));
                         return;
                     }
 
@@ -66,18 +65,18 @@ public class PunishReduceCommand extends SenderCommand {
 
                     long newDuration = banTime == -1 ? reduceBy : banTime - reduceBy;
                     if (newDuration < 0) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "The new ban-time would be less than zero!"));
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + "The new ban-time would be less than zero!");
                         return;
                     }
                     banProfile.setDuration(newDuration);
                     BungeeCore.getAPI().getBanService().saveEntity(banProfile, false, true);
                     String timeLeft = TimeUtil.beautifyTime(banProfile.getMillisLeft(), TimeUnit.MILLISECONDS);
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translatePlaceholder(author, "You changed the ban-time of §e{}§7 to §c{}§7!", target, timeLeft));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + ("You changed the ban-time of §e" + (target) + "§7 to §c" + (timeLeft) + "§7!"));
 
                 } else {
                     MuteProfile muteProfile = BungeeCore.getAPI().getMuteService().getEntity(uuid, () -> BungeeCore.getAPI().getMuteService().getRepository().findFirstById(uuid));
                     if (muteProfile == null) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translatePlaceholder(author, "The player §e{}§c isn't muted!", target));
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + ("The player §e" + (target) + "§c isn't muted!"));
                         return;
                     }
 
@@ -86,13 +85,13 @@ public class PunishReduceCommand extends SenderCommand {
 
                     long newDuration = banTime == -1 ? reduceBy : banTime - reduceBy;
                     if (newDuration < 0) {
-                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + BungeeTranslateAPI.translate(author, "The new mute-time would be less than zero!"));
+                        sender.sendMessage(Message.PUNISH_PREFIX + "§c" + "The new mute-time would be less than zero!");
                         return;
                     }
                     muteProfile.setDuration(newDuration);
                     BungeeCore.getAPI().getMuteService().saveEntity(muteProfile, isOnline, true);
                     String timeLeft = TimeUtil.beautifyTime(muteProfile.getMillisLeft(), TimeUnit.MILLISECONDS);
-                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translatePlaceholder(author, "You changed the mute-time of §e{}§7 to §c{}§7!", target, timeLeft));
+                    sender.sendMessage(Message.PUNISH_PREFIX + "§7" + ("You changed the mute-time of §e" + (target) + "§7 to §c" + (timeLeft) + "§7!"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -104,7 +103,7 @@ public class PunishReduceCommand extends SenderCommand {
 
     public void printUsage(CommandSender commandSender, UUID author) {
         commandSender.sendMessage(Message.PUNISH_PREFIX + "§7Format §8» §e1s, 2m, 3h, 4d, 5w");
-        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/punishreduce (" + BungeeTranslateAPI.translate(author, "name") + ") (ban | mute) (format)");
+        commandSender.sendMessage(Message.PUNISH_PREFIX + "§7/punishreduce (" + "name" + ") (ban | mute) (format)");
     }
 
 }

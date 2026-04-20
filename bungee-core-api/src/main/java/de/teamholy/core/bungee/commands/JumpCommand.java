@@ -1,7 +1,6 @@
 package de.teamholy.core.bungee.commands;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.bungee.BungeeCore;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -34,13 +33,13 @@ public class JumpCommand extends Command {
 
             ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
             if (target == null) {
-                player.sendMessage(prefix + BungeeTranslateAPI.translate(player,"This player isn't online"));
+                player.sendMessage(prefix + "This player isn't online");
                 return;
             }
 
             player.connect(target.getServer().getInfo());
 
-            player.sendMessage(prefix + BungeeTranslateAPI.translatePlaceholder(player,"You jumped to {}" , BungeeCore.getInstance().getPlayerColor(target.getUniqueId()) + target.getName()));
+            player.sendMessage(prefix + ("You jumped to " + (BungeeCore.getInstance().getPlayerColor(target.getUniqueId()) + target.getName())));
             BungeeCore.getAPI().getCloudManager().sendCloudMessage("bukkit", "report", JsonDocument.newDocument("targetUuid", target.getUniqueId())
                 .append("jumperUuid", player.getUniqueId()));
         } else {

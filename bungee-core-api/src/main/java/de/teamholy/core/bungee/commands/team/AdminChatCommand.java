@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.commands.team;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.entities.player.PlayerProfile;
 import de.teamholy.core.api.entities.staff.StaffProfile;
 import de.teamholy.core.bungee.BungeeCore;
@@ -42,12 +41,12 @@ public class AdminChatCommand extends Command {
         }
 
         if (!staffProfile.isNotify()) {
-            player.sendMessage("§c" + BungeeTranslateAPI.translate(player, "You are not logged in!") + " /notify");
+            player.sendMessage("§c" + "You are not logged in!" + " /notify");
             return;
         }
 
         if (args.length == 0) {
-            player.sendMessage("§f§kKLK§r §4§lADMINCHAT §f§kKLK §8× §7/adminchat (" + BungeeTranslateAPI.translate(player, "message") + ")");
+            player.sendMessage("§f§kKLK§r §4§lADMINCHAT §f§kKLK §8× §7/adminchat (" + "message" + ")");
             return;
         }
 

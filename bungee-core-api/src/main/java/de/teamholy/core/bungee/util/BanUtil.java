@@ -1,6 +1,5 @@
 package de.teamholy.core.bungee.util;
 
-import de.skydb.translateapi.bindings.BungeeTranslateAPI;
 import de.teamholy.core.api.constants.Message;
 import de.teamholy.core.api.entities.ban.BanProfile;
 import de.teamholy.core.api.entities.mute.MuteProfile;
@@ -25,50 +24,50 @@ public class BanUtil {
     public TextComponent generateBanMessage(ProxiedPlayer staffmember, BanProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
-        String message = Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has banned {} for {}.", BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7", "§6" + punishProfile.getReason() + "§7");
+        String message = Message.PUNISH_PREFIX + ((BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7") + " has banned " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + " for " + ("§6" + punishProfile.getReason() + "§7") + ".");
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
     public TextComponent generateUnbanMessage(ProxiedPlayer staffmember, String unbanner, BanProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX
-            + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has unbanned {}.", (unbanner.equalsIgnoreCase("console") ? "§4§l" : BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()))
-            + unbanner + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7");
+            + (((unbanner.equalsIgnoreCase("console") ? "§4§l" : BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()))
+            + unbanner + "§7") + " has unbanned " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + ".");
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
     public TextComponent generateUnbanMessage(ProxiedPlayer staffmember, String unbanner, UUID unbannerId, BanProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
         String message = Message.PUNISH_PREFIX
-            + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has unbanned {}.", (unbanner.equalsIgnoreCase("console") ? "§4§l" : BungeeCore.getInstance().getPlayerColor(unbannerId))
-            + unbanner + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7");
+            + (((unbanner.equalsIgnoreCase("console") ? "§4§l" : BungeeCore.getInstance().getPlayerColor(unbannerId))
+            + unbanner + "§7") + " has unbanned " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + ".");
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
     public TextComponent generateMuteMessage(ProxiedPlayer staffmember, MuteProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
-        String message = Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has muted {} for {}.", BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7", "§6" + punishProfile.getReason() + "§7");
+        String message = Message.PUNISH_PREFIX + ((BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7") + " has muted " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + " for " + ("§6" + punishProfile.getReason() + "§7") + ".");
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
     public TextComponent generateCustomMuteMessage(ProxiedPlayer staffmember, MuteProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
-        String message = Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has custom muted {} for {}.{} Time: §e{}", BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7", "§6" + punishProfile.getReason() + "§7", "\n§7", TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS, true));
+        String message = Message.PUNISH_PREFIX + ((BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7") + " has custom muted " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + " for " + ("§6" + punishProfile.getReason() + "§7") + "." + ("\n§7") + " Time: §e" + (TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS, true)));
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
     public TextComponent generateCustomBanMessage(ProxiedPlayer staffmember, BanProfile punishProfile) {
         String authorName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getAuthorId());
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
-        String message = Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has custom banned {} for {}. " + "{} Time: {}", BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7", "§6" + punishProfile.getReason() + "§7", "\n§7", "§e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS, true));
+        String message = Message.PUNISH_PREFIX + ((BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + authorName + "§7") + " has custom banned " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + " for " + ("§6" + punishProfile.getReason() + "§7") + ". " + ("\n§7") + " Time: " + ("§e" + TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS, true)));
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
     public TextComponent generateUnmuteMessage(ProxiedPlayer staffmember, String unmuter, MuteProfile punishProfile) {
         String playerName = BungeeCore.getAPI().getUuidManager().getName(punishProfile.getPlayerId());
-        String message = Message.PUNISH_PREFIX + BungeeTranslateAPI.translatePlaceholder(staffmember, "{} has unmuted {}.", BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + unmuter + "§7", BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7");
+        String message = Message.PUNISH_PREFIX + ((BungeeCore.getInstance().getPlayerColor(punishProfile.getAuthorId()) + unmuter + "§7") + " has unmuted " + (BungeeCore.getInstance().getPlayerColor(punishProfile.getPlayerId()) + playerName + "§7") + ".");
         return generateLookUpComponent(staffmember, playerName, message);
     }
 
@@ -124,12 +123,12 @@ public class BanUtil {
     }
 
     public String generateMuteChatMessage(ProxiedPlayer player, MuteProfile punishProfile) {
-        String time = punishProfile.getDuration() != -1 ? TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS) : BungeeTranslateAPI.translate(player, "Permanent");
-        return Message.PUNISH_PREFIX + "§7" + BungeeTranslateAPI.translatePlaceholder(player, "You're muted for {} ({})", "§6" + punishProfile.getReason() + "§8", "§7" + time + "§8");
+        String time = punishProfile.getDuration() != -1 ? TimeUtil.beautifyTime(punishProfile.getMillisLeft(), TimeUnit.MILLISECONDS) : "Permanent";
+        return Message.PUNISH_PREFIX + "§7" + ("You're muted for " + ("§6" + punishProfile.getReason() + "§8") + " (" + ("§7" + time + "§8") + ")");
     }
 
     private TextComponent generateLookUpComponent(ProxiedPlayer player, String name, String message) {
-        TextComponent component = new ChatAction().text("§8[§eLOOKUP§8]").hover("§7" + BungeeTranslateAPI.translate(player, "Click to lookup") + " " + name).execute("lookup " + name).component();
+        TextComponent component = new ChatAction().text("§8[§eLOOKUP§8]").hover("§7" + "Click to lookup" + " " + name).execute("lookup " + name).component();
         TextComponent mainComp = new TextComponent(message);
         mainComp.addExtra(component);
         return mainComp;
