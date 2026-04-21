@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutionException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FriendManager {
 
-
     CoreAPI coreAPI;
 
     public FriendManager(CoreAPI coreAPI) {
@@ -94,26 +93,26 @@ public class FriendManager {
     }
 
     public int getMaxFriendsCount(UUID uuid) {
+        int friendSize = 50;
         User user = null;
         try {
             user = coreAPI.getRankManager().getUser(uuid).get();
-        } catch (InterruptedException | ExecutionException e) {
-            return 50;
-        }
+        } catch (InterruptedException | ExecutionException ignored) {}
 
+        assert user != null;
         if (user.getCachedData().getPermissionData().checkPermission("teamholy.friend.100").asBoolean()) {
-            return 100;
+            friendSize = 100;
         }
 
         if (user.getCachedData().getPermissionData().checkPermission("teamholy.friend.500").asBoolean()) {
-            return 500;
+            friendSize = 500;
         }
 
         if (user.getCachedData().getPermissionData().checkPermission("teamholy.friend.1000").asBoolean()) {
-            return 1000;
+            friendSize = 1000;
         }
 
-        return 50;
+        return friendSize;
     }
 
     public boolean canAddFriendSize(UUID uuid) {
