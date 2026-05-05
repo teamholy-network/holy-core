@@ -1,10 +1,10 @@
 dependencies {
     compileOnly(libs.spigot.full) {
         artifact {
-            name = 'spigot-1.8.8'
-            classifier = 'dev'
-            extension = 'jar'
-            type = 'jar'
+            name = "spigot-1.8.8"
+            classifier = "dev"
+            extension = "jar"
+            type = "jar"
         }
     }
 
@@ -21,6 +21,6 @@ dependencies {
 
     compileOnly(libs.luckperms)
 
-    implementation(project(':holy-core-api'))
-    compileOnly(project(':bukkit-markupapi'))
+    implementation(project(":holy-core-api"))
+    compileOnly(project(":bukkit-markupapi"))
 }

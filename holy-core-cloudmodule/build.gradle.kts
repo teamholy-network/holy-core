@@ -7,6 +7,6 @@ dependencies {
     compileOnly(libs.cloudnet.bridge)
     compileOnly(libs.cloudnet.driver)
 
-    implementation(project(':holy-core-api'))
+    implementation(project(":holy-core-api"))
     implementation(libs.luckperms)
 }

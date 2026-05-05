@@ -1,10 +1,9 @@
 [versions]
 # Plugin versions
 gradleup-shadow = "8.3.5"
-kyori-blossom = "1.2.0"
 
 # Core library versions
-lombok = "1.18.24"
+lombok = "1.18.40"
 jetbrains-annotations = "23.1.0"
 en2do = "3.1.9"
 redisson = "3.19.1"
@@ -47,7 +46,6 @@ luckperms = "5.4"
 [plugins]
 # Gradle plugins
 gradleup-shadow = { id = "com.gradleup.shadow", version.ref = "gradleup-shadow" }
-kyori-blossom = { id = "net.kyori.blossom", version.ref = "kyori-blossom" }
 
 [libraries]
 # Core libraries

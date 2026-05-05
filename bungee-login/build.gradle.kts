@@ -6,6 +6,6 @@ dependencies {
     compileOnly(libs.cloudnet.bridge)
     compileOnly(libs.cloudnet.wrapper.jvm)
     compileOnly(libs.bungeecord.api)
-    compileOnly(project(':holy-core-api'))
-    compileOnly(project(':bungee-core-api'))
+    compileOnly(project(":holy-core-api"))
+    compileOnly(project(":bungee-core-api"))
 }

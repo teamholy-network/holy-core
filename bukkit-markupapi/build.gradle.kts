@@ -4,7 +4,7 @@ dependencies {
     compileOnly(libs.bungeecord.chat)
     compileOnly(libs.craftbukkit)
     compileOnly(libs.protocollib.dmulloy2)
-    compileOnly(project(':holy-core-api'))
+    compileOnly(project(":holy-core-api"))
     compileOnly(libs.en2do)
     compileOnly(libs.luckperms)
 }

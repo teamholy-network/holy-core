@@ -1,0 +1,7 @@
+rootProject.name = "holy-core"
+include("bukkit-core-api")
+include("bungee-core-api")
+include("holy-core-api")
+include("holy-core-cloudmodule")
+include("bukkit-markupapi")
+include("bungee-login")
