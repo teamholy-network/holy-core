@@ -107,9 +107,6 @@ minecraft = [
 
 # CloudNet bundle
 cloudnet = [
-    "cloudnet-bridge",
-    "cloudnet-wrapper-jvm",
-    "cloudnet-driver"
 ]
 
 # Database bundle
