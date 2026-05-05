@@ -1,7 +1,6 @@
 package de.teamholy.core.api.manager;
 
 import de.dytanic.cloudnet.common.document.gson.JsonDocument;
-import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.channel.ChannelMessage;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import de.teamholy.core.api.CoreAPI;
@@ -117,6 +116,4 @@ public class CloudManager {
         }
         return null;
     }
-
-
 }

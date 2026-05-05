@@ -43,8 +43,6 @@ public class EventListener implements Listener {
 
 
     public EventListener() {
-
-
         ProxyServer.getInstance().getScheduler().schedule(BungeeLogin.getInstance(), () -> {
             crackedipnames.forEach((key, value) -> {
                 if (value.getTime() < System.currentTimeMillis() - 20000) {
@@ -102,12 +100,28 @@ public class EventListener implements Listener {
         } else if (forceCracked) {
             conn.setOnlineMode(false);
             profile.setPremium(false);
+        } else if (conn.isOnlineMode() || profile.isPremium()) {
+            // Already authenticated or cached as premium — keep online mode
+            conn.setOnlineMode(true);
+            profile.setPremium(true);
         } else {
-            if (conn.isOnlineMode()) {
-                conn.setOnlineMode(true);
-            } else {
-                conn.setOnlineMode(profile.isPremium());
-            }
+            // Unknown player on default hostname — check DB before allowing offline login.
+            // Without this, a known premium player whose cache expired would slip through as cracked.
+            String name = conn.getName().toLowerCase(Locale.ROOT);
+            event.registerIntent(BungeeLogin.getInstance());
+            TaskAPI.runAsync(() -> {
+                try {
+                    if (repo.existsById(name)) {
+                        PlayerObject object = repo.findFirstById(name);
+                        if (object.isPremium()) {
+                            conn.setOnlineMode(true);
+                            profile.setPremium(true);
+                        }
+                    }
+                } finally {
+                    event.completeIntent(BungeeLogin.getInstance());
+                }
+            });
         }
     }
 
@@ -120,7 +134,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onHandshake(PlayerHandshakeEvent event) {
         if (event.getHandshake().getRequestedProtocol() == 2) {
-            CrackedProfiles profile = getCrackedProfile(event.getConnection());
+            getCrackedProfile(event.getConnection());
             String hostname = event.getHandshake().getHost().toLowerCase(Locale.ROOT);
             iphostname.put(event.getConnection().getAddress().getAddress().getHostAddress(), hostname);
         }
@@ -129,43 +143,38 @@ public class EventListener implements Listener {
     @EventHandler
     public void onHandle(LoginEvent event) {
         PendingConnection pendingConnection = event.getConnection();
-        String name = pendingConnection.getName();
-        if (!containsLoggedIn(name)) {
-            if (!pendingConnection.isOnlineMode() && !UUIDUtility.isBedrock(pendingConnection.getUniqueId(), name)) {
+        String name = pendingConnection.getName().toLowerCase(Locale.ROOT);
+
+        if (!containsLoggedIn(pendingConnection.getName())) {
+            if (!pendingConnection.isOnlineMode() && !UUIDUtility.isBedrock(pendingConnection.getUniqueId(), pendingConnection.getName())) {
+                // Hold the event so the async check can cancel it if needed.
+                // Without registerIntent the event completes before the DB result arrives.
+                event.registerIntent(BungeeLogin.getInstance());
                 TaskAPI.runAsync(() -> {
-                    PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
+                    try {
+                        PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
 
-                    if (playerProfile != null && !playerProfile.getPlayerId().equals(pendingConnection.getUniqueId())) {
-                        event.setCancelled(true);
+                        if (playerProfile != null && !playerProfile.getPlayerId().equals(pendingConnection.getUniqueId())) {
+                            String alreadyRegistered = buildAlreadyRegisteredMessage();
 
-                        String alreadyRegistered = "§cThis name is registered as a §6§lPremium §7user" +
-                            "\n §cChange your name to play on §6Team§fHoly" +
-                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                            "\n" +
-                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
-
-                        if (repo.existsById(name)) {
-                            PlayerObject object = repo.findFirstById(name);
-
-                            if (object.isPremium()) {
-                                event.setCancelled(true);
-                                pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-                                return;
+                            if (repo.existsById(name)) {
+                                PlayerObject object = repo.findFirstById(name);
+                                if (object.isPremium()) {
+                                    event.setCancelled(true);
+                                    pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
+                                    return;
+                                }
+                            }
+                            if (UUIDUtility.isCracked(pendingConnection.getUniqueId(), pendingConnection.getName())) {
+                                if (UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) {
+                                    event.setCancelled(true);
+                                    pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
+                                    return;
+                                }
                             }
                         }
-                        if (UUIDUtility.isCracked(pendingConnection.getUniqueId(), name)) {
-                            if (UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) {
-                                event.setCancelled(true);
-                                pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-                                return;
-                            }
-                        }
-
-
-//                        event.setCancelReason(TextComponent.fromLegacyText(alreadyRegistered));
-                        //                      pendingConnection.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
-
-                        //                    System.out.println("Cancelled login for " + name + " because of already registered");
+                    } finally {
+                        event.completeIntent(BungeeLogin.getInstance());
                     }
                 });
             }
@@ -195,24 +204,17 @@ public class EventListener implements Listener {
                     PlayerProfile playerProfile = BungeeCore.getAPI().getPlayerService().getRepository().findFirstByPlayerName(name);
 
                     if (playerProfile != null) {
-                        String alreadyRegistered = "§cThis name is registered as a §6§lPremium §7user" +
-                            "\n §cChange your name to play on §6Team§fHoly" +
-                            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                            "\n" +
-                            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
+                        String alreadyRegistered = buildAlreadyRegisteredMessage();
 
                         if (repo.existsById(name)) {
                             PlayerObject object = repo.findFirstById(name);
-
                             if (object.isPremium()) {
-                                event.setCancelled(true);
                                 player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
                                 return;
                             }
                         }
                         if (UUIDUtility.isCracked(player.getUniqueId(), name)) {
                             if (UUIDUtility.isPremium(playerProfile.getPlayerId(), playerProfile.getPlayerName())) {
-                                event.setCancelled(true);
                                 player.disconnect(TextComponent.fromLegacyText(alreadyRegistered));
                                 return;
                             }
@@ -223,14 +225,7 @@ public class EventListener implements Listener {
                         PlayerObject object = repo.findFirstById(name);
 
                         if (object.isPremium()) {
-                            event.setCancelled(true);
-
-                            player.disconnect(TextComponent.fromLegacyText(
-                                "§cThis name is registered as a §6§lPremium §7user" +
-                                    "\n §cChange your name to play on §6Team§fHoly" +
-                                    "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
-                                    "\n" +
-                                    "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support"));
+                            player.disconnect(TextComponent.fromLegacyText(buildAlreadyRegisteredMessage()));
                             return;
                         }
                         for (Entry<String, Long> entry : object.getIps().entrySet()) {
@@ -302,22 +297,22 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-
-
-            System.out.println("Chat is player");
         }
 
         if (!loggedin.contains(event.getSender())) {
             String message = event.getMessage().toLowerCase(Locale.ROOT);
-            if (message.startsWith("/login ")) {
-                return;
-            }
-            if (message.startsWith("/register ")) {
+            if (message.startsWith("/login ") || message.startsWith("/register ")) {
                 return;
             }
             event.setCancelled(true);
         }
+    }
 
+    private static String buildAlreadyRegisteredMessage() {
+        return "§cThis name is registered as a §6§lPremium §7user" +
+            "\n §cChange your name to play on §6Team§fHoly" +
+            "\n §7if you are online with Minecraft premium join on §6§lpremium.teamholy.de " +
+            "\n" +
+            "§7if you have any problems regarding your name or account join §cdc.teamholy.de §7for support";
     }
 }
-
