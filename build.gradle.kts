@@ -4,6 +4,8 @@ plugins {
 
 val holyRepoUser: String? = findProperty("HolyRepoUser") as String?
 val holyRepoPass: String? = findProperty("HolyRepoPass") as String?
+val githubToken: String? = System.getenv("GITHUB_TOKEN") ?: findProperty("GITHUB_TOKEN") as String?
+val githubRepository: String = System.getenv("GITHUB_REPOSITORY") ?: "teamholy-network/holy-core"
 
 // Capture catalog references at root scope — `libs` is not accessible inside subprojects {}
 val shadowPluginId = libs.plugins.gradleup.shadow.get().pluginId
@@ -143,6 +145,14 @@ subprojects {
                     credentials {
                         username = holyRepoUser
                         password = holyRepoPass
+                    }
+                }
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/$githubRepository")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = githubToken
                     }
                 }
             }
