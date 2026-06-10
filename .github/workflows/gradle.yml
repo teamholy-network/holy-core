@@ -32,7 +32,14 @@ jobs:
             - name: Publish modules to GitHub Packages
               run: |
                   if [ "$GITHUB_REF_TYPE" = "tag" ]; then
-                      ./gradlew clean publish -PprojectVersion="${GITHUB_REF_NAME#v}"
+                      VERSION="${GITHUB_REF_NAME#v}"
                   else
-                      ./gradlew clean publish
+                      VERSION=$(grep '^projectVersion=' gradle.properties | cut -d= -f2)
                   fi
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u "$GITHUB_ACTOR:$GITHUB_TOKEN" \
+                      "https://maven.pkg.github.com/teamholy-network/holy-core/de/teamholy/holy-core-api/$VERSION/holy-core-api-$VERSION.pom")
+                  if [ "$STATUS" = "200" ] || [ "$STATUS" = "302" ]; then
+                      echo "Version $VERSION existiert bereits auf GitHub Packages - Publish wird uebersprungen."
+                      exit 0
+                  fi
+                  ./gradlew clean publish -PprojectVersion="$VERSION"
