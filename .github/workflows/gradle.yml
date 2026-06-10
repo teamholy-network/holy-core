@@ -31,5 +31,8 @@ jobs:
 
             - name: Publish modules to GitHub Packages
               run: |
-                  VERSION="${GITHUB_REF_NAME#v}"
-                  ./gradlew clean publish -PprojectVersion="$VERSION"
+                  if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+                      ./gradlew clean publish -PprojectVersion="${GITHUB_REF_NAME#v}"
+                  else
+                      ./gradlew clean publish
+                  fi
