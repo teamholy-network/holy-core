@@ -6,9 +6,6 @@ plugins {
     alias(libs.plugins.kyori.blossom)
 }
 
-def HolyRepoUser = project.findProperty("HolyRepoUser")
-def HolyRepoPass = project.findProperty("HolyRepoPass")
-
 subprojects {
     apply plugin: 'java'
     apply plugin: libs.plugins.gradleup.shadow.get().pluginId
@@ -140,11 +137,7 @@ subprojects {
         replaceToken 'PROJECT_VERSION', "$projectVersion"
     }
 
-    def publishableProjects = subprojects.findAll {
-        !['bungee-login', 'holy-core-cloudmodule'].contains(it.name)
-    }
-
-    configure(publishableProjects) {
+    if (!['bungee-login', 'holy-core-cloudmodule'].contains(project.name)) {
         publishing {
             publications {
                 normalJar(MavenPublication) {
@@ -156,10 +149,11 @@ subprojects {
             }
             repositories {
                 maven {
-                    url = uri("https://repo.gin1.cc/repository/releases/")
+                    name = 'GitHubPackages'
+                    url = uri('https://maven.pkg.github.com/teamholy-network/holy-core')
                     credentials {
-                        username = HolyRepoUser
-                        password = HolyRepoPass
+                        username = project.findProperty('gpr.user') ?: System.getenv('GITHUB_ACTOR')
+                        password = project.findProperty('gpr.key') ?: System.getenv('GITHUB_TOKEN')
                     }
                 }
             }

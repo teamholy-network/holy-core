@@ -1,4 +1,4 @@
-name: Publish holy-core to Nexus
+name: Publish holy-core to GitHub Packages
 
 on:
     push:
@@ -9,9 +9,12 @@ on:
 jobs:
     publish:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
         env:
-            HolyRepoUser: ${{ secrets.HolyRepoUser }}
-            HolyRepoPass: ${{ secrets.HolyRepoPass }}
+            GITHUB_ACTOR: ${{ github.actor }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         steps:
             - name: Checkout
@@ -26,7 +29,7 @@ jobs:
             - name: Make gradlew executable
               run: chmod +x gradlew
 
-            - name: Publish modules to Nexus
+            - name: Publish modules to GitHub Packages
               run: |
                   VERSION="${GITHUB_REF_NAME#v}"
                   ./gradlew clean publish -PprojectVersion="$VERSION"
